@@ -1,0 +1,26 @@
+{
+  "name": "com.tesicnor.tesicnorvrcore",
+  "version": "0.1.0",
+  "displayName": "Tesicnor VR Core",
+  "description": "Core para las aplicaciones VR de Tesicnor",
+  "unity": "2021.2",
+  "unityRelease": "1f19",
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "dependencies": {
+    "com.unity.xr.interaction.toolkit": "2.1.0",
+    "com.unity.xr.oculus": "3.0.2",
+    "com.unity.xr.openxr": "1.3.1"
+  },
+  "keywords": [
+    "keyword1",
+    "keyword2",
+    "keyword3"
+  ],
+  "author": {
+    "name": "Tesicnor",
+    "email": "acanalejas@tesicnor.com",
+    "url": ""
+  }
+}
