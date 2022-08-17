@@ -1,0 +1,660 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RightClosed
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 1d910d447bbb1d649a28fb1d1d3d97cb,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.size
+    value: 26
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[0].x
+    value: 0.00000052718855
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[0].y
+    value: -0.0000014737757
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[0].z
+    value: -0.0000009992468
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[1].x
+    value: 0.00000052718855
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[1].y
+    value: -0.0000014737757
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[1].z
+    value: -0.0000009992468
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[2].x
+    value: -0.011805998
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[2].y
+    value: -0.040691137
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[2].z
+    value: -0.0666576
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[3].x
+    value: 0.025239624
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[3].y
+    value: -0.062650554
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[3].z
+    value: -0.11817054
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[4].x
+    value: 0.00428286
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[4].y
+    value: -0.07086361
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[4].z
+    value: -0.061813563
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[5].x
+    value: -0.008831371
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[5].y
+    value: -0.08685364
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[5].z
+    value: -0.097879484
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[6].x
+    value: -0.023024285
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[6].y
+    value: -0.086878434
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[6].z
+    value: -0.11488935
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[7].x
+    value: -0.043236155
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[7].y
+    value: -0.08422901
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[7].z
+    value: -0.1356864
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[8].x
+    value: -0.040629074
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[8].y
+    value: -0.08477779
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[8].z
+    value: -0.13044873
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[9].x
+    value: 0.021322835
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[9].y
+    value: -0.053827338
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[9].z
+    value: -0.072211996
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[10].x
+    value: 0.011449938
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[10].y
+    value: -0.07058992
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[10].z
+    value: -0.1138576
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[11].x
+    value: -0.009240951
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[11].y
+    value: -0.07204103
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[11].z
+    value: -0.13496052
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[12].x
+    value: -0.029711667
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[12].y
+    value: -0.07138495
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[12].z
+    value: -0.15172952
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[13].x
+    value: 0.0056504253
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[13].y
+    value: 0.005269263
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[13].z
+    value: -0.037611004
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[14].x
+    value: 0.00815865
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[14].y
+    value: -0.01032416
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[14].z
+    value: -0.08887242
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[15].x
+    value: 0.00025440007
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[15].y
+    value: -0.01853241
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[15].z
+    value: -0.12022234
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[16].x
+    value: -0.009125449
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[16].y
+    value: -0.022697985
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[16].z
+    value: -0.13429701
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[17].x
+    value: -0.021078542
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[17].y
+    value: -0.027217783
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[17].z
+    value: -0.14894837
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[18].x
+    value: 0.024549987
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[18].y
+    value: -0.03168732
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[18].z
+    value: -0.0810815
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[19].x
+    value: 0.016929025
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[19].y
+    value: -0.04237579
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[19].z
+    value: -0.11734949
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[20].x
+    value: -0.0004747212
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[20].y
+    value: -0.045525
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[20].z
+    value: -0.13610205
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[21].x
+    value: -0.019506436
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[21].y
+    value: -0.04710356
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[21].z
+    value: -0.15098637
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[22].x
+    value: -0.03331378
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[22].y
+    value: -0.037695482
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[22].z
+    value: -0.017418355
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[23].x
+    value: -0.043121904
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[23].y
+    value: -0.051665243
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[23].z
+    value: -0.045176163
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[24].x
+    value: -0.046407994
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[24].y
+    value: -0.057868328
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[24].z
+    value: -0.07059945
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[25].x
+    value: -0.051038165
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[25].y
+    value: -0.06631382
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesPositions.Array.data[25].z
+    value: -0.10329067
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.size
+    value: 26
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[0].x
+    value: 342.81543
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[0].y
+    value: 219.08908
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[0].z
+    value: 102.91448
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[1].x
+    value: 22.129234
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[1].y
+    value: 65.772385
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[1].z
+    value: 150.20596
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[2].x
+    value: 345.01334
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[2].y
+    value: 68.69872
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[2].z
+    value: 212.30669
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[3].x
+    value: 26.246025
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[3].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[3].z
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[4].x
+    value: 285.1245
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[4].y
+    value: 106.623825
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[4].z
+    value: 47.010574
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[5].x
+    value: -0.0000020130024
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[5].y
+    value: 0.0000040669483
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[5].z
+    value: 330.29587
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[6].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[6].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[6].z
+    value: 353.16678
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[7].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[7].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[7].z
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[8].x
+    value: 6.008114
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[8].y
+    value: 81.666466
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[8].z
+    value: 74.528366
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[9].x
+    value: 279.601
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[9].y
+    value: 18.782536
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[9].z
+    value: 137.80405
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[10].x
+    value: -0.000002423856
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[10].y
+    value: 0.00007786765
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[10].z
+    value: 324.51163
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[11].x
+    value: -3.0673553e-14
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[11].y
+    value: -1.3584192e-14
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[11].z
+    value: 352.45724
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[12].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[12].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[12].z
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[13].x
+    value: 306.22272
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[13].y
+    value: 337.4281
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[13].z
+    value: 8.7776785
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[14].x
+    value: 358.9782
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[14].y
+    value: 357.93933
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[14].z
+    value: 166.51637
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[15].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[15].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[15].z
+    value: 341.05408
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[16].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[16].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[16].z
+    value: 354.6129
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[17].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[17].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[17].z
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[18].x
+    value: 290.8474
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[18].y
+    value: 338.4792
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[18].z
+    value: 176.4508
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[19].x
+    value: -0.00001650933
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[19].y
+    value: 0.000015328376
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[19].z
+    value: 328.3498
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[20].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[20].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[20].z
+    value: 350.36945
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[21].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[21].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[21].z
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[22].x
+    value: 9.512845
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[22].y
+    value: 156.90178
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[22].z
+    value: 13.126352
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[23].x
+    value: -1.9282939e-14
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[23].y
+    value: 1.22932644e-14
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[23].z
+    value: 343.6323
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[24].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[24].y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[24].z
+    value: 0.99933654
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[25].x
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[25].y
+    value: -0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: bonesRotations.Array.data[25].z
+    value: -0
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

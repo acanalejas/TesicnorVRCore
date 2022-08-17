@@ -1,0 +1,116 @@
+CLASES :
+	- GameManager
+	- Gripping hand - se añade a la mano y controla los inputs como el agarre
+	- HandInteraction - se añade a la mano y controla la interaccion con el HUD además de objetos 3D marcados como interactables
+	- HandPoseDetector - se encarga de detectar si la mano realiza alguna pose que esté almacenada en la misma clase, y se puede capturar poses nuevas en runtime con el espacio
+	- OffsetManager - contiene un ScriptableObject con los datos de todos los offset que puedan tener las manos. Sirve para que se tenga facil acceso y bien almacenado todo lo que tenga que ver con los offset (rotacion, posicion, forward, etc.)
+	- PlayerManager - es el que maneja que jugador se va a usar en esta escena, además de detectar si se usan los mandos o las manos y adaptar el player a cada situacion
+	- Task - clase padre de las tareas, heredar de la misma si se quiere hacer una nueva tarea (por ejemplo: agarrar las tijeras)
+	- TaskManager - el manager de las tareas. se encarga de manejar las tareas completadas, así como las restantes, y se encarga de pasar de una a otra e irlas activando y desactivando (similar a maquina de estados)
+	- VR_Interactable - clase para añadir a botones (UI o 3D) para que se pueda interactuar con el. Se necesita el HandInteraction en la mano que se quiere para que funcione
+	- VRCollider - para añadir a los objetos que queramos poder agarrar. Les asigna un Rigidbody y un BoxCollider, y los usa para detectar el agarre.
+	- VRColliderPath- clase heredada con todos los métodos de VRCollider, pero dedicada a trazar un camino en vez de simplemente agarrarlo (ej: puerta, palanca). Sirva tanto para posicion como para rotacion
+	- VRColliderReleaseTarget - clase dedicada a ser el objetivo para soltar un objeto (ej: cerradura con la llave). Cuando el objeto en cuestion entra en su collider, se le asigna la posicion y rotacion de este objeto y por defecto se le suelta.
+ 	- VRGripInterface - interfaz hecha para asegurar la correcta comunicacion de las diferentes clases que tengan que interactuar entre ellos con el agarre. Contiene la interfaz para los objetos agarrables (VRGripInterface) y la de la mano (VRHandInterface)
+
+DESGLOSE DE CADA CLASE:
+	- GameManager:
+		void BadEnd() - Termina la experiencia contando como fallo
+		void GoodEnd()  - Termina la experiencia contando como acierto
+
+	- GrippingHand:
+		void Grab() - Agarra el objeto más cercano si es que hay alguno disponible
+		void Release() - En caso de tener un objeto agarrado, lo suelta
+		void DetectTheInput() - Detecta el Input del jugador (Tanto manos como mandos)
+		bool canGrabSomething() - Si la mano tiene algo que puede agarrar o no
+		GameObject closestObjectToGrab() - Devuelve (en caso de que haya objetos en la zona de agarre) el mas cercano a la mano
+		bool isGrabbing() - Devuelve si la mano esta agarrando algo
+		
+	- HandInteraction:
+		bool isHandControlled - Esta controlado por las manos?
+		float maxDistance - Distancia máxima a la que llega el raycast desde la mano
+		LineRenderer - LineRenderer que nos da feedback visual del Raycast, es requerido por la clase
+		
+		No hay métodos publicos porque no está pensada para comunicación directa, por tanto no es necesario, es un componente plug n play.
+	
+	- HandPoseDetector:
+		void Save() - Guarda la postura en ese frame de la mano y la añade a la lista de gestos
+		Gesture Recognize() - Devuelve una postura vacia si no coincide con ninguna de las almacenadas, sino devuelve con la que coincida la posicion actual de la mano
+
+	- OffsetManager:
+		
+		Esta clase simplente tiene un Singleton para ser accesible desde cualquier sitio, y tiene un ScriptableObject con los datos actuales del offset para poder acceder a ellos desde donde sea
+	
+	- PlayerManager:
+		
+		Esta clase esta más pensada como un detector de si estamos usando mandos o controladores, y cambiar entre los dos tipos de players. Como alguna otra, es plug n play.
+
+	- Task:
+	 	override:
+		
+		IEnumerator countdown() - enumerador que si no tocamos nada, lleva a cabo la cuenta atrás, en caso de que asi lo marquemos en el editor. Sobrescribir para cuenta atrás especiales
+		void OnEnable() - importante mantener el base.OnEnable(), para usar si se necesita añadir algo en la activación de la clase
+		void OnDisable() - importante mantener el base.OnDisable(), para usar si se necesita añadir algo en la desactivacion de la clase
+		void myUpdate() - esta funcion va dentro de un IEnumerator que sirve como update (por optimizacion y control). Hacer override para usar como Update
+		
+		callable from sons:
+
+		void CompleteTask() - se encarga de comunicarse con el TaskManager para decirle que se ha completado la tarea y pasar a la siguiente
+		void FailTask() - se encarga de comunicarse con el TaskManager para decirle que se ha fallado en la tarea y volver a la anterior
+
+	- TaskManager:
+		Tiene un singleton por lo que es accesible desde cualquier lado.
+		Tiene dos modos {en orden, sin orden} se refiere a si la lista allTasks está ordenada, en caso contrario desactivar el bool isInOrder, y rellenar la lista orderOfIndexes, con los índices de allTasks en orden de tarea
+
+		void GoToNextTask() - nos manda hacia la siguiente tarea, partiendo desde la actual.
+		void GoToLastTask() - nos manda hacia la anterior tarea, partiendo desde la actual
+		bool AllTasksCompleted() - nos devuelve si se han completado ya todas las tareas disponibles
+		void CheckAllTasksCompleted - funcion para comprobar si se han completado todas las tareas y lanzar una accion
+
+	- VR_Interactable:
+		UnityEvent onClick - Para asignar en el editor. Como si fuese un boton, añadir aqui lo que queremos que se lance cuando interactue con el boton
+		UnityEvent onHover - Para asignar en el editor. Como si fuese un boton, añadir aqui lo que queremos que se lance cuando el rayo este por encima del boton sin pulsar
+		UnityEvent onRelease - Para asignar en el editor. Como si fuese un boton, añadir aqui lo que queremos que se lance cuando el jugador suelte el boton.
+
+		void OnClick() - Para llamar al evento de onClick.
+		void OnHovered() - Para llamar al evento de onHover.
+		void OnRelease() - Para llamar al evento onRelease.
+		bool GetIsClicking() - Devuelve si el boton esta siendo pulsado
+		bool GetIsHovered() - Devuelve si el boton está con el 'puntero' encima
+
+	- VRCollider:
+		override:
+	
+		void Grab(GrippingHand hand) - Input - La mano con la que se agarra este objeto - Funcion dedicada a que este objeto sea agarrado. Sobrescribir si queremos añadir cosas al agarre (manteniendo el base.Grab(hand)).
+		void Release() - Funcion que se usa para que el objeto sea soltado en caso de que este siendo agarrado. Sobreescribir solo si se quiere añadir algo cuando se suelta (manteniendo el base.Release())
+		IEnumerator Attach() - IEnumerator que funciona como "Update", ejecutandose cada frame para ligar el objeto a la mano
+		
+		protected(usar en hijos):
+		
+		void SetPhysicsOnGrab() - Funcion dedicada a desactivar las fisicas cuando el objeto es agarrado
+		void SetParamsOnGrab() - Asigna los valores de ciertas variables necesarias cuando se agarra
+
+		public:
+		
+		void RepositionOnGrab() - Reposiciona al objeto cuando este es agarrado. 
+				Tiene 3 overloads:
+					sin inputs - simplemente asigna al objeto como hijo de la mano para que la siga
+					Vector3 offset - la rotación se mantiene respecto al momento de agarrar, pero la posicion se le asigna una especifica teniendo como referencia la mano
+					Vector3 positionOffset, Vector3 rotationOffset - asigna una posicion y una rotacion especificas respecto a la mano, sin importar en que zona lo has agarrado
+
+		bool canBeGrabbed() - devuelve true si el objeto se puede agarrar
+		bool canBeReleased() - devuelve si puede ser soltado sin mas, o en cambio tiene condiciones para poder ser soltado
+		bool isGrabbed() - devuelve true si el objeto esta siendo agarrado
+		GrippingHand GetGrippingHand() - devuelve la mano que esta agarrando este objeto (null si no esta siendo agarrado)
+		void SetSimulateOnDrop() - En caso de que tengamos marcado que el objeto tenga físicas al ser soltado, setea esas fisicas para que funcionen bien.
+		bool SetGrabbable(bool value) - setea la variable grabbable (la que maneja si se puede agarrar), y devuelve el valor asignado
+
+	- VRColliderPath:
+		bool isPathCompleted() - devuelve si el camino marcado está completado
+
+	- VRColliderReleaseTarget:
+		bool conditionCompleted - si la condicion para poder soltar se ha completado o no
+		bool DisableWhenRelease - Indica si queremos que se desactive el objeto al llegar al target
+		no tiene metodos publicos ya que es Plug n Play
+
+

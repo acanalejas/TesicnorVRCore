@@ -1,0 +1,37 @@
+GUIA DE USUARIO DEL SISTEMA PC DEBUG:
+
+REQUERIMIENTOS:
+	-> HandInteraction.cs , script del core que maneja la interacción con botones tanto 3D como UI
+	-> GrippingHand.cs , script del core que maneja la interaccion con objetos agarrables en cada mano
+
+
+SETEO EN UNITY:
+	-> Crear dos objetos tipo GameObjects vacíos
+	-> Nombrar a uno PC_DEBUG y al otro PC_DEBUG_PLAYER
+	-> En el GameObject PC_DEBUG añadirle en componente con el mismo nombre, y hacer lo mismo en el PC_DEBUG_PLAYER
+	-> Coger el prefab de la geometria del mando que queramos usar (en este caso el de UnityEngine.XR.Interaction)
+		y añadir dentro de jerarquia al PC_DEBUG_PLAYER uno para la mando derecha y otro para el izquierdo.
+	->Dentro del PC_DEBUG_PLAYER creaer un GameObject vacía con un componente Camera
+	->Rellenar ambos componentes con lo necesario (PC_DEBUG & PC_DEBUG_PLAYER)
+	
+	->Listo! Siempre que este activado el bool usingDebugPlayer este seteado como true
+
+FUNCIONAMIENTO:
+
+	->PC_DEBUG:
+
+		Es un DontDestroyOnLoad asi que solo necesitaremos colocarlo en la escena que queramos empezar
+		Tiene un Singleton, no por accesibilidad, sino por seguridad de que siempre haya un solo objeto de este tipo en cada escena
+		
+		- SetTestPlayer() -> Desactiva todas las cámaras menos las del jugador de testeo para asegurarnos de que podemos testear en PC
+
+	->PC_DEBUG_PLAYER:
+		Es un DontDestroyOnLoad asi que solo necesitaremos colocarlo en la escena inicial
+		Tiene un Singleton, no por accesibilidad, sino por la seguridad de que siempre haya un solo objeto de este tipo en cada escena
+
+		->SetupPlayer() -> Setea todo lo necesario para que funcione como un jugador con el core actual, añadiendo los componentes HandInteraction y GrippingHand
+			que serán los necesarios para interactuar con el escenario.
+		->SetControllersPositions() -> Setea la posicion de los mandos respecto a la cámara en el update
+		->CheckInput() -> Checkea en cada frame el input del jugador para asi lanzar diferentes funciones dependiendo del input.
+		->RotatePlayer() -> Rota la camara en funcion de cómo el jugador interactua con el raton, con una regla de tres en la altura, y sumando frame a frame en el ancho
+		->MovePlayer(Vector3 direction) -> Mueve al jugador en cada frame con una interpolacion sencilla en funcion de la direccion que le pasemos
