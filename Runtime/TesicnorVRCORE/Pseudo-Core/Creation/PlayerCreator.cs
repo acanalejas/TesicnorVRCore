@@ -11,7 +11,7 @@ using Oculus;
 public static class PlayerCreator
 {
     //FOR PLAYER CONTROLLERS
-    static string handMeshPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Models/fully_gloved.fbx";
+    static string handMeshPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Models/Hands & Controllers/fully_gloved.fbx";
     static string rightOpenedSOPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/ScriptableObjects/Hand Poses/RightController_Opened.asset";
     static string rightClosedSOPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/ScriptableObjects/Hand Poses/RightController_Closed.asset";
     static string leftOpenedSOPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/ScriptableObjects/Hand Poses/LeftController_Opened.asset";
@@ -69,6 +69,7 @@ public static class PlayerCreator
         rightGripping.isController = true;
         rightGripping.handType = GrippingHand.HandType.right;
         rightGripping.colliderRadius = 0.05f;
+        rightGripping.colliderBone = rightController.transform;
         rightGripping.player = playerControllers.transform;
         rightGripping.hideOnGrab = false;
         rightGripping.handController = rightController.GetComponent<XRController>();
@@ -101,6 +102,7 @@ public static class PlayerCreator
         leftGripping.isController = true;
         leftGripping.handType = GrippingHand.HandType.left;
         leftGripping.colliderRadius = 0.05f;
+        leftGripping.colliderBone = leftController.transform;
         leftGripping.player = playerControllers.transform;
         leftGripping.hideOnGrab = false;
         leftGripping.handController = leftController.GetComponent<XRController>();

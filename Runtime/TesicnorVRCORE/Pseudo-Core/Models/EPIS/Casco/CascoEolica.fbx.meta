@@ -1,0 +1,141 @@
+fileFormatVersion: 2
+guid: 79eef94f9e825de4ead831298b52b9c7
+ModelImporter:
+  serializedVersion: 21202
+  internalIDToNameTable:
+  - first:
+      74: -1538374446374435564
+    second: Plastic_Helmet|Back_Fastener|Take 001|Layer 001
+  - first:
+      74: -8466061909737525273
+    second: Plastic_Helmet|Camera|Take 001|Layer 001
+  - first:
+      74: 6476849924480630554
+    second: Plastic_Helmet|Directional Light|Take 001|Layer 001
+  - first:
+      74: -6774918724385201258
+    second: Plastic_Helmet|Front_Protector|Take 001|Layer 001
+  - first:
+      74: -2355340124351698116
+    second: Plastic_Helmet|Helmet_TextureGroup|Take 001|Layer 001
+  - first:
+      74: -2768920057033361017
+    second: Plastic_Helmet|Ind_Helmet|Take 001|Layer 001
+  - first:
+      74: 4862106997060371038
+    second: Plastic_Helmet|Inner_Fasteners|Take 001|Layer 001
+  - first:
+      74: -5035467792752082330
+    second: Plastic_Helmet|InnerStraps|Take 001|Layer 001
+  - first:
+      74: -4990628012526063472
+    second: Plastic_Helmet|Plastic_Helmet|Take 001|Layer 001
+  - first:
+      74: -7219452176148319220
+    second: Plastic_Helmet|Stickers|Take 001|Layer 001
+  - first:
+      74: -5303480215030697924
+    second: Plastic_Helmet|Strap_Support|Take 001|Layer 001
+  - first:
+      74: -2575476291825729276
+    second: Plastic_Helmet|Strap|Take 001|Layer 001
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 1
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

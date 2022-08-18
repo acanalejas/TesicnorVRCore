@@ -7,28 +7,28 @@ public class Rana : VRCollider
 { 
     #region PARAMETERS
     [Header("El mosqueton de la rana")]
-    [SerializeField] Transform mosqueton;
+    public Transform mosqueton;
 
     [Header("El origen del cable")]
-    [SerializeField] Transform cableOrigen;
+    public Transform cableOrigen;
 
     [Header("El holder del mosqueton")]
-    [SerializeField] Transform mosqueton_holder;
+    public Transform mosqueton_holder;
 
     [Header("El holder del origen del cable")]
-    [SerializeField] Transform cableOrigen_holder;
+    public Transform cableOrigen_holder;
 
     [Header("El holder de la rana")]
-    [SerializeField] Transform rana_holder;
+    public Transform rana_holder;
 
     [Header("El target del LineRenderer")]
-    [SerializeField] Transform cable_target;
+    public Transform cable_target;
 
     [Header("El origen del cable")]
-    [SerializeField] Transform cable_origen;
+    public Transform cable_origen;
 
     [Header("El arnes")]
-    [SerializeField] Transform arnes;
+    public Transform arnes;
     #endregion
 
     #region FUNCTIONS
