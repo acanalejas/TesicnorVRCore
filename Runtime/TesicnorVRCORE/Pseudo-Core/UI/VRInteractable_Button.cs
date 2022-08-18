@@ -18,7 +18,7 @@ public class VRInteractable_Button : VR_Interactable
     public static void Create()
     {
         GameObject self = new GameObject("VRButton", typeof(VRInteractable_Button));
-        if (Selection.gameObjects[0]) self.transform.parent = Selection.gameObjects[0].transform;
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
         self.transform.localPosition = Vector3.zero;
         self.transform.localScale = Vector3.one;
         self.transform.localRotation = Quaternion.Euler(Vector3.zero);

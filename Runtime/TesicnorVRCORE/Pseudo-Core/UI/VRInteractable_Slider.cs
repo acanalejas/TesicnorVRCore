@@ -145,7 +145,7 @@ public class VRInteractable_Slider : MonoBehaviour
         self = new GameObject("VRSlider", typeof(VRInteractable_Slider));
 
         //Se establecem los valores de su Transform
-        if (Selection.gameObjects[0]) self.transform.parent = Selection.gameObjects[0].transform;
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
         self.transform.localPosition = Vector3.zero;
         self.transform.localScale = Vector3.one;
 

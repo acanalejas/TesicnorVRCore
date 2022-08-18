@@ -132,7 +132,7 @@ public class VRInteractable_Dropdown : VR_Interactable
         vl.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.UpperCenter;
         GameObject textGo = new GameObject("TMP", typeof(TextMeshProUGUI));
 
-        if(Selection.gameObjects[0])thisGO.transform.parent = Selection.gameObjects[0].transform;
+        if(Selection.gameObjects.Length > 0)thisGO.transform.parent = Selection.gameObjects[0].transform;
         thisGO.transform.localPosition = Vector3.zero;
         thisGO.transform.localScale = Vector3.one;
         thisGO.transform.localRotation = Quaternion.Euler(Vector3.zero);

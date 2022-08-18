@@ -27,7 +27,7 @@ public class VRInteractable_Toggle : VR_Interactable
     {
         //Crea el GameObject principal
         GameObject self = new GameObject("VRToggle", typeof(VRInteractable_Toggle));
-        if (Selection.gameObjects[0]) self.transform.parent = Selection.gameObjects[0].transform;
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
         self.transform.localPosition = Vector3.zero;
         self.transform.localScale = Vector3.one;
 

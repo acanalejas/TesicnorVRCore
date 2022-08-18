@@ -23,7 +23,7 @@ public class VRInteractable_Scrollbar : MonoBehaviour
     {
         //Creamos el GameObject principal
         GameObject self = new GameObject("Scrollbar", typeof(VRInteractable_Scrollbar), typeof(HorizontalLayoutGroup));
-        if (Selection.gameObjects[0]) self.transform.parent = Selection.gameObjects[0].transform;
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
         self.transform.localPosition = Vector3.zero;
         self.transform.localScale = Vector3.one;
 
