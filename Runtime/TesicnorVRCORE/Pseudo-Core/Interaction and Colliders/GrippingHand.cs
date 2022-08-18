@@ -20,7 +20,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     /// <summary>
     /// Si se desactiva la geometria de la mano al agarrar
     /// </summary>
-    [Header("Si se desactiva la geometrÌa de la mano al agarrar")]
+    [Header("Si se desactiva la geometr√≠a de la mano al agarrar")]
     [HideInInspector]public bool hideOnGrab = false;
 
     /// <summary>
@@ -48,18 +48,13 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     [Header("Controlador de la mano")]
     [HideInInspector]public XRController handController;
 
-    /// <summary>
-    /// El componente OVRHand de esta mano
-    /// </summary>
-    [Header("============= HANDS ATRIBUTES ==============")]
-    [Space(10)]
-    [Header("El componente OVRHand de esta mano")]
-    [HideInInspector]public OVRHand ovrHand;
-
+   
     /// <summary>
     /// OPCIONAL : Hueso al que enganchar el collider
     /// </summary>
     [Header("OPCIONAL : Hueso al que enganchar el collider")]
+    [Header("============= HANDS ATRIBUTES ==============")]
+    [Space(10)]
     [HideInInspector]public Transform colliderBone;
 
     /// <summary>
@@ -88,7 +83,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     [HideInInspector] public GameObject grippedObject;
 
     /// <summary>
-    /// Devuelve si est· agarrando
+    /// Devuelve si est√° agarrando
     /// </summary>
     [HideInInspector] public bool isGripping = false;
 
@@ -146,11 +141,11 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     {
         foreach(GameObject go in overlappingObjects)
         {
-            ///Para saber si un punto est· dentro de una esfera
+            ///Para saber si un punto est√° dentro de una esfera
             ///centro de la esfera -> c = (cx, cy, cz)
             ///punto -> p = (x,y,z)
             ///
-            ///EcuaciÛn -> (x - cx)^2 + (y - cy)^2 + (z - cz)^2 < radius
+            ///Ecuaci√≥n -> (x - cx)^2 + (y - cy)^2 + (z - cz)^2 < radius
 
             Vector3 center = gameObject.transform.position;
             Vector3 point = go.GetComponent<BoxCollider>().ClosestPoint(gameObject.transform.position);
@@ -259,7 +254,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     }
     #region VRHandInterface
     /// <summary>
-    /// Usar en el update, detecta el input del botÛn con el que queramos agarrar
+    /// Usar en el update, detecta el input del bot√≥n con el que queramos agarrar
     /// </summary>
     public void DetectTheInput()
     {
@@ -286,7 +281,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     }
 
     /// <summary>
-    /// Busca de los objetos disponibles para agarrar, cual est· m·s cerca de esta mano
+    /// Busca de los objetos disponibles para agarrar, cual est√° m√°s cerca de esta mano
     /// </summary>
     /// <returns></returns>
     public GameObject closestObjectToGrab()
@@ -332,7 +327,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             if (lastTrackedPosition != Vector3.zero && lastTrackedRotation != Vector3.zero)
             {
                 Vector3 posDif = this.transform.position - lastTrackedPosition;
-                if (posDif.magnitude > 0.1f || !ovrHand.IsTracked) this.transform.position = lastTrackedPosition;
+                if (posDif.magnitude > 0.1f) this.transform.position = lastTrackedPosition;
                 else this.transform.localPosition = Vector3.zero;
             }
             lastTrackedPosition = this.transform.position;

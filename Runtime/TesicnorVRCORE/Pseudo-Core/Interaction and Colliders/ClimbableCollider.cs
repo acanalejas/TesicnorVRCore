@@ -11,19 +11,19 @@ public class ClimbableCollider : VRCollider
     [Header("=========== CLIMBABLE PARAMETERS ============")]
     [Space(10)]
     [Tooltip("Altura del suelo")]
-    [Header("La altura mÌnima a la que puede bajar el jugador")]
+    [Header("La altura m√≠nima a la que puede bajar el jugador")]
     [SerializeField] float minHeight = 0;
 
-    [Header("La altura m·xima a la que puede subir el jugador")]
+    [Header("La altura m√°xima a la que puede subir el jugador")]
     [SerializeField] float maxHeight = 1;
 
     [Header("El offset en la altura")]
     [SerializeField] float heightOffset = 0;
 
-    [Header("El threshold para saber si se est· arriba")]
+    [Header("El threshold para saber si se est√° arriba")]
     public float threshold_top = 0.3f;
 
-    [Header("El threshold para saber si se est· abajo")]
+    [Header("El threshold para saber si se est√° abajo")]
     public float threshold_bottom = 0.4f;
 
     [Header("Al soltar el jugador se cae?")]
@@ -35,8 +35,8 @@ public class ClimbableCollider : VRCollider
     private bool canBeClimbed = true;
 
     /// <summary>
-    /// Clase que se aÒade al personaje cuando se quiere que este caiga.
-    /// Asignarle el HeighOffset, y los dem·s par·metros que puedan ser necesarios
+    /// Clase que se a√±ade al personaje cuando se quiere que este caiga.
+    /// Asignarle el HeighOffset, y los dem√°s par√°metros que puedan ser necesarios
     /// </summary>
     public class Fall : MonoBehaviour
     {
@@ -192,6 +192,15 @@ public class ClimbableCollider : VRCollider
     public bool GetCanBeClimbed()
     {
         return canBeClimbed;
+    }
+    
+     /// <summary>
+    /// Devuelve la altura actual a la que se encuentra el jugador
+    /// </summary>
+    /// <returns></returns>
+    public float GetCurrentHeight()
+    {
+        return player.position.y - heightOffset;
     }
     #endregion
 }
