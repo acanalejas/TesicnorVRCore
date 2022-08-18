@@ -146,7 +146,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
         private void OnTriggerExit(Collider other)
         {
-            if(other.gameObject.tag == "Interactable")
+            VRInteractableInterface interactable = other.GetComponent<VRInteractableInterface> ();
+            if(interactable != null)
             {
                 if (hand.interactingObject != null) hand.interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
                 hand.interactingObject = null;

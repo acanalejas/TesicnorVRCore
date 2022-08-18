@@ -9,9 +9,9 @@ public static class MainMenuCreation
 {
 #if UNITY_EDITOR
 
-    static string sideSpritePath = "Assets/Scripts/Pseudo-Core/UI/Sprites/Back.png";
-    static string menuMatPath = "Assets/Scripts/Pseudo-Core/MainMenu/Room Materials/MainMenuRoom_Mat.mat";
-    static string gridMatPath = "Assets/Scripts/Pseudo-Core/MainMenu/Room Materials/Grid.mat";
+    static string sideSpritePath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/UI/Sprites/Back.png";
+    static string menuMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/MainMenu/Room Materials/MainMenuRoom_Mat.mat";
+    static string gridMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/MainMenu/Room Materials/Grid.mat";
 
     [MenuItem("Tesicnor/MENU/MainMenu")]
     public static void Create_GameObject()

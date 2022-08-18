@@ -26,6 +26,9 @@ public class VRColliderReleaseTarget : MonoBehaviour
 
     [Header("Necesita estar agarrado?")]
     public bool needsGrabbing = false;
+
+    private bool wasUsingGravity;
+    private bool wasKinematic;
     #endregion
     #region FUNCTIONS
     private void Awake()
@@ -53,13 +56,13 @@ public class VRColliderReleaseTarget : MonoBehaviour
         if (go.GetComponent<VRCollider>())
         {
             VRCollider collider = go.GetComponent<VRCollider>();
-            if(collider.target == this && canReleaseObject && (!needsGrabbing || (needsGrabbing && collider.isGrabbed())))
+            if(collider.target == this && canReleaseObject && collider.hasTarget && (!needsGrabbing || (needsGrabbing && collider.isGrabbed())))
             {
                 conditionCompleted = true;
                 if (collider.DropTeleport)
                 {
                     if(collider.GetGrippingHand())collider.GetGrippingHand().Release();
-                    collider.Release();
+                    //collider.Release();
                     collider.SetGrabbable(false);
                     if (DisableWhenRelease)
                     {
@@ -68,6 +71,17 @@ public class VRColliderReleaseTarget : MonoBehaviour
                     if (seeksTarget)
                     {
                         collider.transform.parent = this.transform;
+
+                        if (collider.GetComponent<Rigidbody>())
+                        {
+                            Rigidbody rb = collider.GetComponent<Rigidbody>();
+
+                            wasKinematic = rb.isKinematic;
+                            wasUsingGravity = rb.useGravity;
+
+                            rb.useGravity = false;
+                            rb.isKinematic = true;
+                        }
                     }
                 }
             }
@@ -81,6 +95,12 @@ public class VRColliderReleaseTarget : MonoBehaviour
             if(go.GetComponent<VRCollider>().target == this)
             {
                 if(canBeCanceled) conditionCompleted = false;
+
+                if (go.GetComponent<Rigidbody>())
+                {
+                    go.GetComponent<Rigidbody>().useGravity = wasUsingGravity;
+                    go.GetComponent<Rigidbody>().isKinematic = wasKinematic;
+                }
             }
         }
     }

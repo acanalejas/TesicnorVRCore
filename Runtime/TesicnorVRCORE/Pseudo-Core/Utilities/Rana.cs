@@ -35,6 +35,8 @@ public class Rana : VRCollider
 
     private void Start()
     {
+        release = releaseType.holder;
+        holder = rana_holder;
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
@@ -48,7 +50,8 @@ public class Rana : VRCollider
 
             //this.transform.localPosition = new Vector3(this.transform.localPosition.x, 0, this.transform.localPosition.z);
 
-            if(!this.isGrabbed()) this.transform.position = new Vector3(this.transform.position.x, rana_holder.position.y, this.transform.position.z);
+            if(!this.isGrabbed() && target && target.conditionCompleted) this.transform.position = new Vector3(this.transform.position.x, rana_holder.position.y, this.transform.position.z);
+            else { this.transform.position = rana_holder.position; this.transform.rotation = rana_holder.rotation; }
 
             SetLineRenderer();
     }

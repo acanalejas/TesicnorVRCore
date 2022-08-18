@@ -32,6 +32,12 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Controla si se puede soltar sin más, o necesita alguna condición")]
     [HideInInspector] public bool canRelease = false;
 
+    /// <summary>
+    /// Controla si tiene un target donde soltarlo
+    /// </summary>
+    [Header("Controla si tiene un target donde soltarlo")]
+    [HideInInspector] public bool hasTarget = false;
+
     public enum AttachmentMode { Normal, positionOffset, rotationAndPositionOffset, Animation, None};
 
     /// <summary>
@@ -166,7 +172,8 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     /// </summary>
     protected void SetPhysicsOnGrab()
     {
-        if (rigidbody) rigidbody.useGravity = false;
+        if (rigidbody) { rigidbody.useGravity = false; rigidbody.isKinematic = true; }
+
 
         //SOLO POR SEGURIDAD
         //if (GetComponent<Rigidbody>()) Destroy(GetComponent<Rigidbody>());
@@ -238,7 +245,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     {
         NormalRelease();
 
-        if (target && target.conditionCompleted)
+        if (target && target.conditionCompleted && hasTarget)
         {
             this.transform.position = target.gameObject.transform.position;
             this.transform.rotation = target.gameObject.transform.rotation;
@@ -387,6 +394,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
 
         rigidbody.useGravity = true;
+        rigidbody.isKinematic = false;
         rigidbody.freezeRotation = false;
         rigidbody.mass = mass;
 
@@ -469,6 +477,11 @@ public class VRColliderEditor : Editor
 
         GUILayout.Space(10);
 
+        GUILayout.Label("Tiene un objetivo donde soltarse?", EditorStyles.boldLabel);
+        collider.hasTarget = GUILayout.Toggle(collider.hasTarget, "Has a target?");
+
+        GUILayout.Space(10);
+
         GUILayout.Label("El modo en el que se añade a la mano al ser agarrado", EditorStyles.boldLabel);
         collider.attachmentMode = (VRCollider.AttachmentMode)EditorGUILayout.EnumPopup(collider.attachmentMode);
 
@@ -482,11 +495,16 @@ public class VRColliderEditor : Editor
         GUILayout.Label("Offset en la rotación local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
         collider.rotationOffset = EditorGUILayout.Vector3Field("Rotation offset", collider.rotationOffset);
 
-        if (!collider.canRelease)
+        if (collider.hasTarget)
         {
             SerializedProperty target = serializedObject.FindProperty("target");
             EditorGUILayout.PropertyField(target, new GUIContent("Target"));
 
+            GUILayout.Space(10);
+        }
+
+        if (!collider.canRelease)
+        {
             GUILayout.Label("Se teletransporta al soltar?", EditorStyles.boldLabel);
             collider.DropTeleport = GUILayout.Toggle(collider.DropTeleport, "Drop Teleport");
 

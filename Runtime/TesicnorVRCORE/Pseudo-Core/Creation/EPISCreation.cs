@@ -11,6 +11,8 @@ public static class EPISCreation
 
     static string CascoMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Models/EPIS/Casco/Casco_mat.mat";
     static string ArnesMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Models/EPIS/Arnes/Arnes_Mat.mat";
+
+    static string CableMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Materials/Cable_mat.mat";
 #if UNITY_EDITOR
     #region FUNCTIONS
     [MenuItem("Tesicnor/EPIS/Casco")]
@@ -61,17 +63,20 @@ public static class EPISCreation
     [MenuItem("Tesicnor/EPIS/Rana")]
     public static void Create_Rana()
     {
+        GameObject rana_parent = new GameObject("Rana");
+        
         Object rana_obj = (Object)AssetDatabase.LoadAssetAtPath(RanaFBXPath, typeof(Object));
         GameObject rana_GO = (GameObject)GameObject.Instantiate(rana_obj);
+        rana_GO.transform.parent = rana_parent.transform;
 
-        if(Selection.gameObjects.Length > 0) rana_GO.transform.parent = Selection.gameObjects[0].transform;
+        if(Selection.gameObjects.Length > 0) rana_parent.transform.parent = Selection.gameObjects[0].transform;
 
         GameObject arnes = GameObject.Find("ArnesSinPiernas(Clone)");
         if (arnes == null) arnes = GameObject.Find("ArnesSinPiernas");
         if (arnes == null) arnes = GameObject.Find("Arnes");
         if (arnes == null) arnes = GameObject.Find("arnes");
 
-        if (arnes) rana_GO.transform.parent = arnes.transform;
+        if (arnes) rana_parent.transform.parent = arnes.transform;
 
         rana_GO.transform.localPosition = new Vector3(-0.1323f, 0.102f, 0.011f);
         rana_GO.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -129,12 +134,14 @@ public static class EPISCreation
 
         rana_rana.mosqueton = mosqueton;
         rana_rana.mosqueton_holder = mosqueton_holder.transform;
-        rana_rana.arnes = arnes.transform;
+        if(arnes)rana_rana.arnes = arnes.transform;
         rana_rana.cableOrigen = leva;
         rana_rana.cableOrigen_holder = leva_holder.transform;
         rana_rana.cable_origen = cable_origen.transform;
         rana_rana.cable_target = cable_final.transform;
         rana_rana.rana_holder = rana_holder.transform;
+        rana_rana.release = VRCollider.releaseType.holder;
+        rana_rana.holder = rana_holder.transform;
 
         LineRenderer lineRenderer = rana_GO.GetComponent<LineRenderer>();
         lineRenderer.startWidth = 0.010f;
@@ -142,17 +149,20 @@ public static class EPISCreation
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, cable_origen.transform.position);
         lineRenderer.SetPosition(0, cable_final.transform.position);
+        lineRenderer.material = (Material) AssetDatabase.LoadAssetAtPath(CableMatPath, typeof(Material));
 
     }
 
     public static void Create_Rana(GameObject arnes)
     {
+        GameObject rana_parent = new GameObject("Rana");
         Object rana_obj = (Object)AssetDatabase.LoadAssetAtPath(RanaFBXPath, typeof(Object));
         GameObject rana_GO = (GameObject)GameObject.Instantiate(rana_obj);
+        rana_GO.transform.parent = rana_parent.transform;
 
-        if (Selection.gameObjects.Length > 0) rana_GO.transform.parent = Selection.gameObjects[0].transform;
+        if (Selection.gameObjects.Length > 0) rana_parent.transform.parent = Selection.gameObjects[0].transform;
 
-        if (arnes) rana_GO.transform.parent = arnes.transform;
+        if (arnes) rana_parent.transform.parent = arnes.transform;
 
         rana_GO.transform.localPosition = new Vector3(-0.1323f, 0.102f, 0.011f);
         rana_GO.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -223,6 +233,7 @@ public static class EPISCreation
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, cable_origen.transform.position);
         lineRenderer.SetPosition(0, cable_final.transform.position);
+        lineRenderer.material = (Material)AssetDatabase.LoadAssetAtPath(CableMatPath, typeof(Material));
     }
     #endregion
 #endif

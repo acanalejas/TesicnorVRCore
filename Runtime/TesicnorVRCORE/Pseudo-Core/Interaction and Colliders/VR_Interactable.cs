@@ -67,7 +67,7 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
 
     public virtual void Awake()
     {
-        this.gameObject.tag = "Interactable";
+        //this.gameObject.tag = "Interactable";
 
         GetComponent<Rigidbody>().useGravity = false;
         GetComponent<Rigidbody>().isKinematic = true;

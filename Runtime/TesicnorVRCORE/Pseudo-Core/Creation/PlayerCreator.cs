@@ -21,6 +21,8 @@ public static class PlayerCreator
     static string rightHandPrefabPath = "Assets/Oculus/VR/Prefabs/OVRCustomHandPrefab_R.prefab";
     static string leftHandPrefabPath = "Assets/Oculus/VR/Prefabs/OVRCustomHandPrefab_L.prefab";
 
+    static string lineRendererMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Materials/LineRenderer_Mat.mat";
+
 #if UNITY_EDITOR
     #region FUNCTIONS
     [MenuItem("Tesicnor/Players/PlayerControllers")]
@@ -53,7 +55,7 @@ public static class PlayerCreator
 
         GameObject bodyHolder = new GameObject("Body Holder", typeof(SnapToBody));
         bodyHolder.transform.parent = playerControllers.transform;  
-        bodyHolder.transform.localPosition = Vector3.zero;  
+        bodyHolder.transform.localPosition = new Vector3(0,-0.34f,0);  
         bodyHolder.transform.localRotation = Quaternion.Euler(Vector3.zero);
         bodyHolder.transform.localScale = Vector3.one;
 
@@ -89,6 +91,7 @@ public static class PlayerCreator
         lineRenderer_right.startWidth = 0.010f;
         lineRenderer_right.endWidth = 0.015f;
         lineRenderer_right.enabled = false;
+        lineRenderer_right.material = (Material)AssetDatabase.LoadAssetAtPath(lineRendererMatPath, typeof(Material));
 
         //=============================================================================================================
 
@@ -123,6 +126,7 @@ public static class PlayerCreator
         lineRenderer_left.startWidth = 0.010f;
         lineRenderer_left.endWidth = 0.015f;
         lineRenderer_left.enabled = false;
+        lineRenderer_left.material = (Material)AssetDatabase.LoadAssetAtPath(lineRendererMatPath, typeof(Material));
 
         //=============================================================================================================
 
@@ -316,6 +320,7 @@ public static class PlayerCreator
         rightInteraction.lineRenderer.startWidth = 0.010f;
         rightInteraction.lineRenderer.endWidth = 0.015f;
         rightInteraction.lineRenderer.enabled = false;
+        rightInteraction.lineRenderer.material = (Material)AssetDatabase.LoadAssetAtPath(lineRendererMatPath, typeof(Material));
         rightInteraction.poseDetector = poseDetector_right;
 
         //FOR LEFT HAND
@@ -350,6 +355,7 @@ public static class PlayerCreator
         leftInteraction.lineRenderer.startWidth = 0.010f;
         leftInteraction.lineRenderer.endWidth = 0.015f;
         leftInteraction.lineRenderer.enabled = false;
+        leftInteraction.lineRenderer.material = (Material)AssetDatabase.LoadAssetAtPath(lineRendererMatPath, typeof(Material));
         leftInteraction.poseDetector = poseDetector_left;
     }
     #endregion
