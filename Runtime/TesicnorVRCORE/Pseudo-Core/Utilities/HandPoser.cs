@@ -12,49 +12,49 @@ public class HandPoser : MonoBehaviour
     /// El padre del rigging
     /// </summary>
     [Header("El padre del rigging")]
-    [SerializeField] private Transform rig;
+    public Transform rig;
 
     /// <summary>
     /// El padre que modifica la escala
     /// </summary>
     [Header("El padre que modifica la escala")]
-    [SerializeField] private Transform parent;
+    public Transform parent;
 
     /// <summary>
     /// El SO con la posición abierta
     /// </summary>
     [Header("El SO con la posición abierta")]
-    [SerializeField] private HandPose_SO openedPose;
+    public HandPose_SO openedPose;
 
     /// <summary>
     /// El SO con la posición cerrada
     /// </summary>
     [Header("El SO con la posición cerrada")]
-    [SerializeField] private HandPose_SO closedPose;
+    public HandPose_SO closedPose;
 
     /// <summary>
     /// El componente XRController del mando
     /// </summary>
     [Header("El componente XRController del mando")]
-    [SerializeField] private XRController controller;
+    public XRController controller;
 
     /// <summary>
     /// La tecla con la que se guarda la pose abierta
     /// </summary>
     [Header("La tecla con la que se guarda la pose abierta")]
-    [SerializeField] private KeyCode openCode = KeyCode.RightAlt;
+    public KeyCode openCode = KeyCode.RightAlt;
 
     /// <summary>
     /// La tecla con la que se guarda la pose cerrada
     /// </summary>
     [Header("La tecla con la que se guarda la pose cerrada")]
-    [SerializeField] private KeyCode closeCode = KeyCode.RightShift;
+    public KeyCode closeCode = KeyCode.RightShift;
 
     /// <summary>
     /// Se tienen que aplicar las poses?
     /// </summary>
     [Header("Se tienen que aplicar las poses?")]
-    [SerializeField] private bool applyPoses = true;
+    public bool applyPoses = true;
 
     /// <summary>
     /// La lista que contiene todos los huesos del rig

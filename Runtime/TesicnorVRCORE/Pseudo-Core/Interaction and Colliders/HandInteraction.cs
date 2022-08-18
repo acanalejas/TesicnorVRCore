@@ -196,8 +196,13 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     {
         Vector3 origin = _origin.position;
         Vector3 originalDirection = _origin.forward;
-        Vector3 direction = OffsetManager.Instance.currentHandsOffset.GetForward(originalDirection, isLeftHand);
-        if (isHandControlled) direction = OffsetManager.Instance.currentHandsOffset.GetForwardFromLeftVector(originalDirection, _origin.up);
+        Vector3 direction = Vector3.zero;
+        if (OffsetManager.Instance)
+        {
+            direction = OffsetManager.Instance.currentHandsOffset.GetForward(originalDirection, isLeftHand);
+            if (isHandControlled) direction = OffsetManager.Instance.currentHandsOffset.GetForwardFromLeftVector(originalDirection, _origin.up);
+        }
+        else direction = originalDirection;
         Ray ray = new Ray(origin, direction);
 
         lineRenderer.positionCount = 2;
@@ -298,14 +303,16 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (usesRay) lineRenderer.enabled = true;
         if(usesRay)getRaycastHit(indice);
 
-
-        if (poseDetector.Recognize().GestureName == "Click")
+        if (poseDetector)
         {
-            Click();
-        }
-        else if (handPressed)
-        {
-            Release();
+            if (poseDetector.Recognize().GestureName == "Click")
+            {
+                Click();
+            }
+            else if (handPressed)
+            {
+                Release();
+            }
         }
     }
     

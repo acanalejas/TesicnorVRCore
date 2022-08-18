@@ -14,7 +14,7 @@ public class VRInteractable_Button : VR_Interactable
 
     #region FUNCTIONS
 #if UNITY_EDITOR
-    [MenuItem("GameObject/UI/VRButton")]
+    [MenuItem("Tesicnor/VR UI/VRButton")]
     public static void Create()
     {
         GameObject self = new GameObject("VRButton", typeof(VRInteractable_Button));

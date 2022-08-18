@@ -6,7 +6,7 @@ public class SnapToBody : MonoBehaviour
 {
     #region PARAMETES
     [Header("La cámara que actúa como cabeza del jugador")]
-    [SerializeField] private Transform camera;
+    public Transform camera;
 
     private Vector3 initialDistance;
     #endregion

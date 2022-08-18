@@ -427,11 +427,6 @@ public class GrippingEditor : Editor
 
             GUILayout.Space(10);
 
-            SerializedProperty ovrHand = serializedObject.FindProperty("ovrHand");
-            EditorGUILayout.PropertyField(ovrHand, new GUIContent("OVR Hand Component"));
-
-            GUILayout.Space(10);
-
             SerializedProperty colliderBone = serializedObject.FindProperty("colliderBone");
             EditorGUILayout.PropertyField(colliderBone, new GUIContent("Collider Parent"));
         }

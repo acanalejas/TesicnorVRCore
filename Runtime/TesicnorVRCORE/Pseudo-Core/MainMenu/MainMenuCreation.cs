@@ -13,7 +13,7 @@ public static class MainMenuCreation
     static string menuMatPath = "Assets/Scripts/Pseudo-Core/MainMenu/Room Materials/MainMenuRoom_Mat.mat";
     static string gridMatPath = "Assets/Scripts/Pseudo-Core/MainMenu/Room Materials/Grid.mat";
 
-    [MenuItem("GameObject/UI/MainMenu")]
+    [MenuItem("Tesicnor/MENU/MainMenu")]
     public static void Create_GameObject()
     {
         GameObject self = new GameObject("Main Menu Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(MainMenuRCP));
@@ -234,7 +234,7 @@ public static class MainMenuCreation
         // ====================================================================================
     }
 
-    [MenuItem("GameObject/UI/MainMenu_Room")]
+    [MenuItem("Tesicnor/MENU/MainMenu_Room")]
     public static void Create_MainMenu_Room()
     {
         GameObject self = new GameObject("Main Menu Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster), typeof(MainMenuRCP));
@@ -526,7 +526,7 @@ public static class MainMenuCreation
         ceilingMesh.material = (Material)AssetDatabase.LoadAssetAtPath(menuMatPath, typeof(Material));
     }
 
-    [MenuItem("GameObject/UI/EscenesScreen")]
+    [MenuItem("Tesicnor/MENU/EscenesScreen")]
     public static void Create_EscenesScreen()
     {
         GameObject middleSection = new GameObject("Middle Section", typeof(HorizontalLayoutGroup));

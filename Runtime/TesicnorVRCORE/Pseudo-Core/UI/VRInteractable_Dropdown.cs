@@ -123,7 +123,7 @@ public class VRInteractable_Dropdown : VR_Interactable
     /// <summary>
     /// Funcion para crear dropdown desde el menu de GameObjects
     /// </summary>
-    [MenuItem("GameObject/UI/VRDropdown")]
+    [MenuItem("Tesicnor/VR UI/VRDropdown")]
     static void Create()
     {
         GameObject empty = null;

@@ -18,7 +18,7 @@ public class VRInteractable_Scrollbar : MonoBehaviour
 
     #region FUNCTIONS
 #if UNITY_EDITOR
-    [MenuItem("GameObject/UI/VRScrollbar")]
+    [MenuItem("Tesicnor/VR UI/VRScrollbar")]
     static void Create()
     {
         //Creamos el GameObject principal

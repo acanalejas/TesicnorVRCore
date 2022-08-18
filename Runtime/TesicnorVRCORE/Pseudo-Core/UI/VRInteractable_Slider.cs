@@ -137,7 +137,7 @@ public class VRInteractable_Slider : MonoBehaviour
     /// <summary>
     /// Crea el objeto usando el menu de la ruta de pestañas que pone en los parentesis
     /// </summary>
-    [MenuItem("GameObject/UI/VRSlider")]
+    [MenuItem("Tesicnor/VR UI/VRSlider")]
     public static void Create()
     {
         //Se crea el GameObject principal

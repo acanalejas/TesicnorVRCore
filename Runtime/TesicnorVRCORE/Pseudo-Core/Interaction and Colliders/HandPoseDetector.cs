@@ -19,7 +19,7 @@ public class HandPoseDetector : MonoBehaviour
     [Header("Margen de error entre posicion de cada hueso")]
     [SerializeField] float Threshold = 0.1f;
     [Header("El esqueleto de la mano")]
-    [SerializeField] OVRCustomSkeleton skeleton;
+    public OVRCustomSkeleton skeleton;
     [Header("Lista de gestos disponibles")]
     [SerializeField] List<Gesture> gestures;
     private List<OVRBone> fingersBones;

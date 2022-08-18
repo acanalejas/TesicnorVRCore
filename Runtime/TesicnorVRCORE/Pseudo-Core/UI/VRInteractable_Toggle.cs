@@ -22,7 +22,7 @@ public class VRInteractable_Toggle : VR_Interactable
 
     #region FUNCTIONS
 #if UNITY_EDITOR
-    [MenuItem("GameObject/UI/VRToggle")]
+    [MenuItem("Tesicnor/VR UI/VRToggle")]
     static void Create()
     {
         //Crea el GameObject principal
