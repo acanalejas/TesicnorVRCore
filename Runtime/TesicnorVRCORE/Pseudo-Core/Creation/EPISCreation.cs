@@ -16,10 +16,11 @@ public static class EPISCreation
 #if UNITY_EDITOR
     #region FUNCTIONS
     [MenuItem("Tesicnor/EPIS/Casco")]
-    public static GameObject Create_Casco()
+    public static void Create_Casco()
     {
         Object casco_obj = (Object)AssetDatabase.LoadAssetAtPath(CascoFBXPath, typeof(Object));
         GameObject casco_GO = (GameObject)GameObject.Instantiate(casco_obj);
+        casco_GO.gameObject.name = "Casco";
 
         if (Selection.gameObjects.Length > 0) casco_GO.transform.parent = Selection.gameObjects[0].transform;
         casco_GO.transform.localPosition = Vector3.zero;
@@ -27,6 +28,7 @@ public static class EPISCreation
         casco_GO.transform.localScale = new Vector3(12, 12, 12);
 
         VRCollider casco_collider = casco_GO.AddComponent<VRCollider>();
+
         casco_collider.simulateOnDrop = true;
         casco_collider.canRelease = false;
         casco_collider.DropTeleport = false;
@@ -35,11 +37,11 @@ public static class EPISCreation
         MeshRenderer cascoMesh = casco_GO.GetComponent<MeshRenderer>();
         cascoMesh.material = cascoMat;
 
-        return casco_GO;
+        //return casco_GO;
     }
 
     [MenuItem("Tesicnor/EPIS/Arnes")]
-    public static GameObject Create_Arnes()
+    public static void Create_Arnes()
     {
         Object arnes_obj = (Object)AssetDatabase.LoadAssetAtPath(ArnesFBXPath, typeof(Object));
         GameObject arnes_GO = (GameObject)GameObject.Instantiate(arnes_obj);
@@ -61,7 +63,7 @@ public static class EPISCreation
 
         Create_Rana(arnes_GO);
 
-        return arnes_GO;
+        //return arnes_GO;
     }
 
     [MenuItem("Tesicnor/EPIS/Rana")]
@@ -250,8 +252,10 @@ public static class EPISCreation
     [MenuItem("Tesicnor/EPIS/Todos con misiones")]
     public static void Create_TodosConMisiones()
     {
-        GameObject casco_GO = Create_Casco();
-        GameObject arnes_GO = Create_Arnes();
+        Create_Casco();
+        GameObject casco_GO = GameObject.Find("Casco");
+        Create_Arnes();
+        GameObject arnes_GO = GameObject.Find("Arnes");
         GameObject rana_GO = arnes_GO.GetComponentInChildren<Rana>().gameObject;
 
         
