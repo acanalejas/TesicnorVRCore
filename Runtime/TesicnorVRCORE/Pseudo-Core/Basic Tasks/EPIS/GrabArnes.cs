@@ -6,7 +6,7 @@ public class GrabArnes : VR_Task
 {
     #region PARAMETERS
     [Header("El componente VRCollider del arnes")]
-    [SerializeField] VRCollider arnesCollider;
+    public VRCollider arnesCollider;
     #endregion
 
     #region FUNCTIONS

@@ -1,0 +1,137 @@
+
+Esta carpeta contiene los archivos necesarios para la interacción, tanto de botones como de objetos que se puedan agarrar.
+
+Interfaces:
+	
+	VRGripInterface:
+		Contiene dos interfaces <VRGripInterface> que contiene los métodos necesarios para los objetos agarrables, y <VRHandInterface> que contiene
+		los métodos para la mano que hacen posible el agarre.
+
+	VRInteractionInterface:
+		Contiene dos interfaces <VRInteractionInterface> que contiene los métodos para que la mano pueda interactuar con los objetos
+		y <VRInteractableInterface> que contiene los métodos para que un objeto pueda responder a la interacción.
+
+	VRCollider:
+		Clase básica que añade un trigger al objeto al que se asigne, y contiene la interfaz <VRGripInterface>.
+		Toda comunicación con esta case es preferible hacerla por VRGripInterface en vez de referencias para evitar dependencias innecesarias
+
+		- grabSound & releaseSound sonidos opcionales, que en caso de asignarse, sonarán en el momento de agarrar o soltar.
+		- simulateOnDrop el objeto tiene físicas al soltarlo?
+		- canRelease el objeto se puede soltar normal?
+		- hasTarget el objeto tiene un objetivo donde deba soltarse?
+		- attachmentMode el modo en el que se adiere a la mano al agarrarse
+		- positionOffset el offset en la posición respecto a la mano que tiene el objeto cuando se agarra
+		- rotationOffset el offset en la rotación que tiene el objeto cuando se agarra
+		- onGrab evento que se dispara cuando el objeto es agarrado
+		- mass masa del objeto usada en las físicas cuando este se suelta
+		- target el objetivo (en caso de tener uno) en el que se debe soltar este objeto
+		- dropTeleport se teletransporta el objeto al soltarlo?
+		- release el tipo de reposicionamiento que tiene el objeto al ser soltado, en caso de que no se pueda soltar normal
+		- holder el holder al que se adiere este objeto en caso de que su tipo de release sea releaseType.Holder
+		
+		- SetPhysicsOnGrab() desactiva las físicas cuando el objeto es agarrado
+		- SetParamsOnGrab() setea diferentes parámetros necesarios cuando el objeto es agarrado
+		- SetSoundOnGrab() & SetSoundOnRelease() en caso de haberlos, lanzan los sonidos en el agarre y cuando se suelta
+		- AddImpulseAtRelease() añade un impulso dependiendo de la velocidad de la mano a la hora de soltar, en caso de que se simulen físicas al soltar
+		- ConditionsRelease() si no se puede soltar normal, dependiendo de varios parámetros, ejecuta el release normal del objeto y setea su reposicionamiento
+
+		VRGripInterface
+		- Grab() - se lanza cuando el objeto es agarrado
+		- RepositionOnGrab() reposiciona el objeto cuando este es agarrado
+		- Release() hace que se suelte el objeto
+		- canBeGrabbed() devuelve si el objeto se puede agarrar
+		- canBeReleased() devuelve si el objeto se puede soltar de manera normal
+		- isGrabbed() se está agarrando en este momento el objeto?
+		- GetGrippingHand() devuelve la mano que lo esté agarrando en ese instante, sino devuelve null
+		- SetSimulateOnDrop() setea los valores para poder simular físicas en el release
+		- Attach() coroutine dedicada a setear la posición del objeto durante el agarre
+		- SetGrabbable(bool value) setea si el objeto se puede o no agarrar
+	
+	VRColliderReleaseTarget:
+		Clase que hace de objetivo en el que soltar un objeto de clase VRCollider.
+
+		- DisableWhenRelease el objeto VRCollider se desactiva y desaparece al entrar en el target?
+		- canReleaseObject se puede soltar ya el objeto en el objetivo?
+		- SeeksTarget se adiere al target cuando llega a el?
+		- canBeCanceled si sale del trigger, cuenta como objetivo incumplido de nuevo?
+		- needsGrabbing necesita estar siendo agarrado para que cuente como objetivo cumplido?
+
+		- SetCollider() por si acaso, setea valores del collider en el Awake() para asegurarse de que se puede llevar a cabo la detección
+		- CheckVRCollider() checkea si entra al trigger un VRCollider, y en función de los parámetros de la clase, lo modifica
+		- CheckVRColliderExit() checkea se sale del trigger un VRCollider
+
+	VRColliderPath:
+		Clase hija de VRCollider, pero destinada a seguir un camino prefijado cuando esta es agarrada.
+		
+		- pathType el tipo de camino que debe seguir
+		- pointNumber en caso de ser de tipo posición, en cuantos puntos se divide el camino
+		- pathPoints la lista de puntos en posiciones globales del camino
+		- currentPoint el índice de la lista anterior en el que nos encontramos actualmente
+		- initOnPosition el objeto debe empezar en el punto inicial del camino?
+		- initialPosition si es de posición, la posición inicial
+		- finalPosition si es de posición, la posición final
+		- initOnRotation si es de rotación, debe empezar con los ángulos iniciales?
+		- initialRotation ángulos con los que empieza el objeto
+		- finalRotation ángulos con los que acaba el objeto
+		- Threshold el margen de error para detectar si ha llegado al objetivo
+		- rotationPivot el pivote que debemos rotar
+		- isPositive si la rotación es positiva o negativa
+
+		- SetPathPoints() distribuye los puntos a lo largo del camino.
+		- SetPositionPath() en caso de ser de posición, setea los puntos para el camino
+		- SelectCoroutine() elige la coroutine que tener de Update cuando se agarra, en función del tipo de camino
+		- AttachPosition() coroutine que se ejecuta como update mientras se agarra si el camino es de tipo posición
+		- AttachRotation() coroutine que se ejecuta como update mientras se agarra si el camino es de tipo rotación
+		- pointToMove() devuelve el indice del punto en la lista en el que debemos estar en funcion de la posicion de la mano, en caso de que sea de tipo posición
+				se fija en el punto actual, el siguiente y el anterior
+		- anglesToMove() devuelve los ángulos actuales que debe tener el objeto en caso de ser de tipo rotación
+		- GetAxis() devuelve un vector director del eje en el que debemos rotar el objeto, según el eje elegido
+		- isPathCompleted() se ha llegado al punto final del camino?
+
+	ClimbableCollider:
+		Clase hija de VRCollider, dedicada a ser un objeto que se pueda escalar, como por ejemplo una escalera
+		
+		- minHeight la altura mínima a la que se puede bajar
+		- maxHeight la altura máxima a la que se puede subir
+		- heightOffset el offset en la altura, es decir, la altura del player inicial en la escena
+		- threshold_top margen de error para detectar si se ha llegado a la cima
+		- threshold_bottom margen de error para detectar si se ha llegado al fondo
+		- playerFalls el jugador se cae en caso de soltar el objeto?
+		- isPlayerAtTop el jugador ha llegado a la cima?
+		- isPlayerAtBottom el jugador ha llegado al fondo?
+		- canBeClimbed se puede subir?
+		- class Fall clase temporal que se añade al jugador para darle las físicas de la caida hasta que llegue al suelo y se destruya a si misma
+
+	GrippingHand:
+		Clase que se añade a la mano para que esta pueda agarrar objetos
+
+		- isController es un mando o una mano? 
+		- hideOnGrab se oculta la geometría al agarrar?
+		- handRenderer en caso de que se oculte, el renderer que debemos desactivar
+		- positionOffset el offset en la posición del collider de agarre
+		- colliderRadius el radio del SphereCollider que detecta los objetos
+		- handController componente XRController que debe llevar el GO de la mano en caso de que sea un mando
+		- colliderBone en caso de ser una mano, el hueso del rig al que debe ir unido el collider
+		- player el transform general del player
+		- velocity la velocidad en ese instante de la mano
+		- handType es la mano derecha o izquierda?
+		- grippedObject el objeto que estamos agarrando en ese momento, null si no está agarrando
+		- isGripping está la mano agarrando?
+		- PC_Debug_editor se está usando desde un player de tipo PC_DEBUG_PLAYER?
+
+		- SetTrigger() setea valores del trigger que detecta los objetos en el Awake() para asegurarse de que en tiempo de ejecución todo funcione correctamente
+		- CalculateVelocity() calcula la velocidad en cada frame de la mano
+		- CheckListSecurity() checkea que no haya repetidos en la lista de objetos disponibles para agarrar
+		- SetRendererEnable(bool value) activa o desactiva el renderer de la mano/mando
+		- CheckIfControllerGrabs() checkea que en caso de usar un mando, si se intenta agarrar dependiendo del input del grip
+		- CheckIfControllerGrabs_Trigger() checkea que en caso de usar un mando, si se intenta agarrar dependiendo dle input del trigger
+		
+		VRHandInterface
+		- Grab() método para agarrar un objeto
+		- Release() método para soltar un objeto
+		- DetectTheInput() checkea el input, indiferentemente de si es una mano o un mando
+		- canGrabSomething() hay algún objeto al alcance que podamos agarrar en este instante?
+		- closestObjectToGrab() si hay objetos disponibles para agarrar, devuelve el más cercano a la mano
+		- isGrabbing() esta la mano agarrando algo?
+		- SetHandsTracking() recoge valores de la mano, para que no desaparezca cuando se pierde el tracking
+		

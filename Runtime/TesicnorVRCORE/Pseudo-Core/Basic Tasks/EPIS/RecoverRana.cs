@@ -6,10 +6,10 @@ public class RecoverRana : VR_Task
 {
     #region PARAMETERS
     [Header("El collider de la rana")]
-    [SerializeField] private VRCollider rana_collider;
+    public VRCollider rana_collider;
 
     [Header("El target de la rana")]
-    [SerializeField] private VRColliderReleaseTarget rana_target;
+    public VRColliderReleaseTarget rana_target;
     #endregion
 
     #region FUNCTIONS

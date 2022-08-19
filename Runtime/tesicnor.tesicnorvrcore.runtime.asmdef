@@ -1,6 +1,6 @@
 {
     "name": "tesicnor.tesicnorvrcore.runtime",
-    "rootNamespace": "",
+    "rootNamespace": "TesicnorVR",
     "references": [
         "GUID:4af21795022437d4bb139a86514b9ff9",
         "GUID:fe685ec1767f73d42b749ea8045bfe43",
@@ -31,7 +31,9 @@
     ],
     "allowUnsafeCode": false,
     "overrideReferences": false,
-    "precompiledReferences": [],
+    "precompiledReferences": [
+        ""
+    ],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],

@@ -81,6 +81,11 @@ public interface VRGripInterface
 }
 public interface VRHandInterface
 {
+
+    public void Grab();
+
+    public void Release();
+
     /// <summary>
     /// Detecta el input del mando para agarrar
     /// </summary>

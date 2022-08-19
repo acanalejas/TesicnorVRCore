@@ -202,7 +202,6 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         float treleased = 0;
         
         handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out tpressed);
-        Debug.Log(tpressed);
         if (tpressed > 0.4f)
         {
             Grab();
@@ -216,7 +215,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             lastPressed = false;
         }
     }
-
+    #region VRHandInterface
     /// <summary>
     /// Funcion que sirve para agarrar un objeto
     /// </summary>
@@ -252,7 +251,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         if (grippedObject) grippedObject = null;
         isGripping = false;
     }
-    #region VRHandInterface
+    
     /// <summary>
     /// Usar en el update, detecta el input del botón con el que queramos agarrar
     /// </summary>
@@ -356,9 +355,6 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             Debug.Log("Removed a grippable object from the list with name  :  " + other.gameObject.name);
         }
     }
-
-    #endregion
-    #region Editor
 
     #endregion
     #endregion

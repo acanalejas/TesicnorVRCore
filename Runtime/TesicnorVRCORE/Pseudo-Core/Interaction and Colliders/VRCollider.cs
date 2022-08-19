@@ -485,15 +485,25 @@ public class VRColliderEditor : Editor
         GUILayout.Label("El modo en el que se añade a la mano al ser agarrado", EditorStyles.boldLabel);
         collider.attachmentMode = (VRCollider.AttachmentMode)EditorGUILayout.EnumPopup(collider.attachmentMode);
 
-        GUILayout.Space(10);
+        if(collider.attachmentMode == VRCollider.AttachmentMode.positionOffset)
+        {
+            GUILayout.Space(10);
 
-        GUILayout.Label("Offset en la posición local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
-        collider.positionOffset = EditorGUILayout.Vector3Field("Position offset", collider.positionOffset);
+            GUILayout.Label("Offset en la posición local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
+            collider.positionOffset = EditorGUILayout.Vector3Field("Position offset", collider.positionOffset);
+        }
+        else if(collider.attachmentMode == VRCollider.AttachmentMode.rotationAndPositionOffset)
+        {
+            GUILayout.Space(10);
 
-        GUILayout.Space(10);
+            GUILayout.Label("Offset en la posición local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
+            collider.positionOffset = EditorGUILayout.Vector3Field("Position offset", collider.positionOffset);
 
-        GUILayout.Label("Offset en la rotación local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
-        collider.rotationOffset = EditorGUILayout.Vector3Field("Rotation offset", collider.rotationOffset);
+            GUILayout.Space(10);
+
+            GUILayout.Label("Offset en la rotación local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
+            collider.rotationOffset = EditorGUILayout.Vector3Field("Rotation offset", collider.rotationOffset);
+        }
 
         if (collider.hasTarget)
         {

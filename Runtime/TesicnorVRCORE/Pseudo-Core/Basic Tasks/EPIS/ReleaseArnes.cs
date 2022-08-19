@@ -6,10 +6,10 @@ public class ReleaseArnes : VR_Task
 { 
     #region PARAMETERS
     [Header("El componente VRCollider del arnes")]
-    [SerializeField] VRCollider arnesCollider;
+    public VRCollider arnesCollider;
 
     [Header("El VRColliderReleaseTarget al que debemos llevar el arnes")]
-    [SerializeField] VRColliderReleaseTarget arnesColliderTarget;
+    public VRColliderReleaseTarget arnesColliderTarget;
     #endregion
 
     #region FUNCTIONS

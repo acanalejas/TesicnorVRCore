@@ -6,10 +6,10 @@ public class ReleaseHelmet : VR_Task
 {
     #region PARAMETERS
     [Header("El componente VRCollider del casco")]
-    [SerializeField] VRCollider helmetCollider;
+    public VRCollider helmetCollider;
 
     [Header("El VRColliderReleaseTarget donde debemos llevar el casco")]
-    [SerializeField] VRColliderReleaseTarget helmetColliderTarget;
+    public VRColliderReleaseTarget helmetColliderTarget;
     #endregion
 
     #region FUNCTIONS

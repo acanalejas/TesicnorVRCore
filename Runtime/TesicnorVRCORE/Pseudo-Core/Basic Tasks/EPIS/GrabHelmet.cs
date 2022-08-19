@@ -6,7 +6,7 @@ public class GrabHelmet : VR_Task
 {
     #region PARAMETERS
     [Header("El componente VRCollider que debe llevar el casco")]
-    [SerializeField] VRCollider helmetCollider;
+    public VRCollider helmetCollider;
     #endregion
 
     #region FUNCTIONS
