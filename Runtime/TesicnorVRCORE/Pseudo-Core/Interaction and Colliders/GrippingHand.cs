@@ -148,7 +148,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             ///Ecuación -> (x - cx)^2 + (y - cy)^2 + (z - cz)^2 < radius
 
             Vector3 center = gameObject.transform.position;
-            Vector3 point = go.GetComponent<BoxCollider>().ClosestPoint(gameObject.transform.position);
+            Vector3 point = go.GetComponent<Collider>().ClosestPoint(gameObject.transform.position);
 
             bool ecuation = (point.x - center.x) * (point.x - center.x) + (point.y - center.y) * (point.y - center.y) + (point.z - center.z) * (point.z - center.z) < colliderRadius;
 
@@ -291,7 +291,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         foreach (GameObject Object in overlappingObjects)
         {
             Vector3 handCenter = transform.TransformVector(GetComponent<SphereCollider>().center);
-            Vector3 otherCenter = transform.TransformVector(Object.GetComponent<BoxCollider>().center);
+            Vector3 otherCenter = transform.TransformVector(Object.GetComponent<Collider>().bounds.center);
 
             float distance = Vector3.Distance(handCenter, otherCenter);
 

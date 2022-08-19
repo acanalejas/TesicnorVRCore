@@ -1,0 +1,32 @@
+
+Las clases de esta carpeta se usan con el fin de añadir a la interfaz de Unity menús desde los cuales crear objetos predefinidos.
+Se tratan todas de clases estáticas por lo que no podrán añadirse a ningun GO, además de no derivar ninguna de Monobehaviour.
+
+	EPISCreation:
+		Se encarga de crear los objetos predefinidos de los EPIS y sus misiones (Casco, Arnes y Rana)
+	
+		- CascoFBXPath el directorio en el proyecto del FBX que contiene el modelado del casco de seguridad
+		- ArnesFBXPath el directorio en el proyecto del FBX que contiene el modelado del arnes
+		- RanaFBXPath el directorio en el proyecto del FBX que contiene el modelado de la rana
+		- CascoMatPath el directorio en el proyecto del material que se le asigna al casco
+		- ArnesMatPath el directorio en el proyecto del material que se le asigna al arnes
+		- CableMatPath el directorio en el proyecto del material que se le asigna al LineRenderer de la Rana
+
+		- Create_Casco() método que se encarga de crear un casco de seguridad con componente VRCollider y su debido material
+		- Create_Arnes() método que se encarga de crear un arnes de seguridad con componente VRCollider y su debido material
+		- Create_Rana() método que se encarga de crear la rana, así como todos los holders necesarios para que funcione correctamente
+		- Create_Todos() método que se encarga de crear todos los objetos de los EPIS
+		- Create_TodosConMisiones() método que se encarga de crear todos los objetos de los EPIS, asi como un TaskManager (en caso de que no haya en la escena) y las debidas tareas de los EPIS
+						con todo asignado para que sea perfectamente funcional desde el momento que se añaden
+		- Create_Misiones() método que se encarga de crear el TaskManager (en caso de no haber ninguno ya en la escena) y todas las misiones correspondientes con sus valores asignados para que sea funcional
+
+	GrippablesPrimitivesCreation:
+		Se encarga de crear objetos primitivos de Unity (cubo, esfera, cilindro, etc) que sean agarrables e interactuables
+
+		- Create_VRCube() método que crea un cubo con componente VRCollider
+		- Create_VRCapsule() método que crea una cápsula con componente VRCollider
+		- Create_VRCylinder() método que crea un cilindro con componente VRCollider
+		- Create_VRPlane() método que crea un plano con componente VRCollider
+		- Create_VRQuad() método que crea un quad con componente VRCollider
+		- Create_VRSphere() método que crea una esfera con componente VRCollider
+		- Create_BasicVRTarget() método que crea un objeto básico vacío con un componente VRColliderReleaseTarget

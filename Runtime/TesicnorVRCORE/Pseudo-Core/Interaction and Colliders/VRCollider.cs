@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 
-[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(Collider))]
 public class VRCollider : MonoBehaviour, VRGripInterface
 {
     #region PARAMETERS
@@ -74,7 +74,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     /// Collider usado para tener colisión con el escenario
     /// cuando el objeto se suelta y se cae
     /// </summary>
-    private BoxCollider dropCollider;
+    private Collider dropCollider;
 
     /// <summary>
     /// Rigidbody de este objeto
@@ -157,7 +157,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
 
     public virtual void Awake()
     {
-        gameObject.GetComponent<BoxCollider>().isTrigger = true;
+        gameObject.GetComponent<Collider>().isTrigger = true;
         rigidbody = gameObject.GetComponent<Rigidbody>();
         if (!rigidbody) rigidbody = gameObject.AddComponent<Rigidbody>();
 
@@ -398,7 +398,16 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         rigidbody.freezeRotation = false;
         rigidbody.mass = mass;
 
-        if (!dropCollider) dropCollider = gameObject.AddComponent<BoxCollider>();
+        Collider actualCollider = GetComponent<Collider>();
+
+        if (!dropCollider)
+        {
+            if (actualCollider.GetType() == typeof(BoxCollider)) dropCollider = gameObject.AddComponent<BoxCollider>();
+            else if (actualCollider.GetType() == typeof(MeshCollider)) dropCollider = gameObject.AddComponent<MeshCollider>();
+            else if (actualCollider.GetType() == typeof(SphereCollider)) dropCollider = gameObject.AddComponent<SphereCollider>();
+            else if (actualCollider.GetType() == typeof(CapsuleCollider)) dropCollider = gameObject.AddComponent<CapsuleCollider>();
+            else dropCollider = gameObject.AddComponent<BoxCollider>();
+        }
 
         AddImpulseAtRelease();
     }

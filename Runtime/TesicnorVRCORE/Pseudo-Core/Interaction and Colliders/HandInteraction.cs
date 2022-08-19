@@ -125,6 +125,12 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             rb.useGravity = false;
             hand = _hand;
         }
+
+        private void Awake()
+        {
+            interactionCollider = GetComponent<BoxCollider>();
+            interactionCollider.isTrigger = true;
+        }
         /*private void Start()
         {
             if (!rb) rb = GetComponent<Rigidbody>();
@@ -201,7 +207,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (OffsetManager.Instance)
         {
             direction = OffsetManager.Instance.currentHandsOffset.GetForward(originalDirection, isLeftHand);
-            if (isHandControlled) direction = OffsetManager.Instance.currentHandsOffset.GetForwardFromLeftVector(originalDirection, _origin.up);
+            //if (isHandControlled) direction = OffsetManager.Instance.currentHandsOffset.GetForwardFromLeftVector(originalDirection, _origin.up);
         }
         else direction = originalDirection;
         Ray ray = new Ray(origin, direction);

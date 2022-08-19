@@ -32,8 +32,6 @@ public static class GrippablesPrimitivesCreation
         self.transform.localRotation = Quaternion.Euler(Vector3.zero);
         self.transform.localScale = Vector3.one;
 
-        GameObject.DestroyImmediate(self.GetComponent<CapsuleCollider>());
-
         VRCollider collider = self.AddComponent<VRCollider>();
         collider.simulateOnDrop = true;
         collider.canRelease = true;
@@ -48,8 +46,6 @@ public static class GrippablesPrimitivesCreation
         self.transform.localPosition = Vector3.zero;
         self.transform.localRotation = Quaternion.Euler(Vector3.zero);
         self.transform.localScale = Vector3.one;
-
-        GameObject.DestroyImmediate(self.GetComponent<CapsuleCollider>());
 
         VRCollider collider = self.AddComponent<VRCollider>();
         collider.simulateOnDrop = true;
@@ -66,8 +62,6 @@ public static class GrippablesPrimitivesCreation
         self.transform.localRotation = Quaternion.Euler(Vector3.zero);
         self.transform.localScale = Vector3.one;
 
-        GameObject.DestroyImmediate(self.GetComponent<MeshCollider>());
-
         VRCollider collider = self.AddComponent<VRCollider>();
         collider.simulateOnDrop = true;
         collider.canRelease = true;
@@ -83,8 +77,6 @@ public static class GrippablesPrimitivesCreation
         self.transform.localRotation = Quaternion.Euler(Vector3.zero);
         self.transform.localScale = Vector3.one;
 
-        GameObject.DestroyImmediate(self.GetComponent<MeshCollider>());
-
         VRCollider collider = self.AddComponent<VRCollider>();
         collider.simulateOnDrop = true;
         collider.canRelease = true;
@@ -99,8 +91,6 @@ public static class GrippablesPrimitivesCreation
         self.transform.localPosition = Vector3.zero;
         self.transform.localRotation = Quaternion.Euler(Vector3.zero);
         self.transform.localScale = Vector3.one;
-
-        GameObject.DestroyImmediate(self.GetComponent<SphereCollider>());
 
         VRCollider collider = self.AddComponent<VRCollider>();
         collider.simulateOnDrop = true;
@@ -126,6 +116,124 @@ public static class GrippablesPrimitivesCreation
 
         self.GetComponent<Rigidbody>().useGravity = false;
         self.GetComponent<BoxCollider>().isTrigger = true;
+    }
+
+    [MenuItem("Tesicnor/Primitives/VRCube Interactable")]
+    public static void Create_VRCubeInteractable()
+    {
+        GameObject self = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
+        self.transform.localPosition = Vector3.zero;
+        self.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        self.transform.localScale = Vector3.one;
+
+        VR_Interactable interactable = self.AddComponent<VR_Interactable>();
+        interactable.is3DObject = true;
+        interactable.hasToFollow = true;
+        interactable.changesColor = false;
+        interactable.canBePressed = true;
+        interactable.normalPosition = self.transform.localPosition;
+        interactable.pressedPosition = -self.transform.InverseTransformDirection(self.transform.forward);
+    }
+
+    [MenuItem("Tesicnor/Primitives/VRCapsule Interactable")]
+    public static void Create_VRCapsuleInteractable()
+    {
+        GameObject self = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
+        self.transform.localPosition = Vector3.zero;
+        self.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        self.transform.localScale = Vector3.one;
+
+        VR_Interactable interactable = self.AddComponent<VR_Interactable>();
+        interactable.is3DObject = true;
+        interactable.hasToFollow = true;
+        interactable.changesColor = false;
+        interactable.canBePressed = true;
+        interactable.normalPosition = self.transform.localPosition;
+        interactable.pressedPosition = -self.transform.InverseTransformDirection(self.transform.forward);
+
+        GameObject.DestroyImmediate(self.GetComponent<CapsuleCollider>());
+    }
+
+    [MenuItem("Tesicnor/Primitives/VRCylinder Interactable")]
+    public static void Create_VRCylinderInteractable()
+    {
+        GameObject self = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
+        self.transform.localPosition = Vector3.zero;
+        self.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        self.transform.localScale = Vector3.one;
+
+        VR_Interactable interactable = self.AddComponent<VR_Interactable>();
+        interactable.is3DObject = true;
+        interactable.hasToFollow = true;
+        interactable.changesColor = false;
+        interactable.canBePressed = true;
+        interactable.normalPosition = self.transform.localPosition;
+        interactable.pressedPosition = -self.transform.InverseTransformDirection(self.transform.forward);
+
+        GameObject.DestroyImmediate(self.GetComponent<CapsuleCollider>());
+    }
+
+    [MenuItem("Tesicnor/Primitives/VRPlane Interactable")]
+    public static void Create_VRPlaneInteractable()
+    {
+        GameObject self = GameObject.CreatePrimitive(PrimitiveType.Plane);
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
+        self.transform.localPosition = Vector3.zero;
+        self.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        self.transform.localScale = Vector3.one;
+
+        VR_Interactable interactable = self.AddComponent<VR_Interactable>();
+        interactable.is3DObject = true;
+        interactable.hasToFollow = true;
+        interactable.changesColor = false;
+        interactable.canBePressed = true;
+        interactable.normalPosition = self.transform.localPosition;
+        interactable.pressedPosition = -self.transform.InverseTransformDirection(self.transform.forward);
+
+        GameObject.DestroyImmediate(self.GetComponent<MeshCollider>());
+    }
+
+    [MenuItem("Tesicnor/Primitives/VRQuad Interactable")]
+    public static void Create_VRQuadInteractable()
+    {
+        GameObject self = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
+        self.transform.localPosition = Vector3.zero;
+        self.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        self.transform.localScale = Vector3.one;
+
+        VR_Interactable interactable = self.AddComponent<VR_Interactable>();
+        interactable.is3DObject = true;
+        interactable.hasToFollow = true;
+        interactable.changesColor = false;
+        interactable.canBePressed = true;
+        interactable.normalPosition = self.transform.localPosition;
+        interactable.pressedPosition = -self.transform.InverseTransformDirection(self.transform.forward);
+
+        GameObject.DestroyImmediate(self.GetComponent<MeshCollider>());
+    }
+
+    [MenuItem("Tesicnor/Primitives/VRSphere Interactable")]
+    public static void Create_VRSphereInteractable()
+    {
+        GameObject self = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        if (Selection.gameObjects.Length > 0) self.transform.parent = Selection.gameObjects[0].transform;
+        self.transform.localPosition = Vector3.zero;
+        self.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        self.transform.localScale = Vector3.one;
+
+        VR_Interactable interactable = self.AddComponent<VR_Interactable>();
+        interactable.is3DObject = true;
+        interactable.hasToFollow = true;
+        interactable.changesColor = false;
+        interactable.canBePressed = true;
+        interactable.normalPosition = self.transform.localPosition;
+        interactable.pressedPosition = -self.transform.InverseTransformDirection(self.transform.forward);
+
+        GameObject.DestroyImmediate(self.GetComponent<SphereCollider>());
     }
     #endregion
 #endif

@@ -134,4 +134,87 @@ Interfaces:
 		- closestObjectToGrab() si hay objetos disponibles para agarrar, devuelve el más cercano a la mano
 		- isGrabbing() esta la mano agarrando algo?
 		- SetHandsTracking() recoge valores de la mano, para que no desaparezca cuando se pierde el tracking
+
+	HandInteraction:
+		Clase que se añade a la mano para que pueda interactuar con objetos tipo botón, desplegables, etc. Contiene la interfaz VRInteractionInterface
+		Para comunicarse con esta clase es preferible usar la interfaz siempre que se pueda
 		
+		- isHandControlled el GO al que pertenece es una mano o un mando?
+		- maxDistance la distancia máxima a la que va a detectar objetos
+		- isLeftHand es la mano izquierda?
+		- usesRay usa un raycast para interactuar?
+		- lineRenderer el componente LineRenderer que nos da feedback visual del raycast
+		- nonDetectedColor el color del rayo cuando no detecta ningún objeto interactuable
+		- detectedColor el color del rayo cuando detecta algún objeto interactuable
+		- interactionOrigin en caso de usar mandos, el Transform que se usa para el forward y posicion de inicio del raycast, asi como de hueso del collider
+		- handController componente XRController del mando que se está usando
+		- dedoGordo el hueso de la falange del dedo gordo cuando se usa la mano
+		- indice el hueso de la falange del dedo índice cuando se usa la mano
+		- dedoCorazon el hueso de la falange del dedo corazón cuando se usa la mano
+		- dedoAnular el hueso de la falange del dedo anular cuando se usa la mano
+		- dedoMenique el hueso de la falange del dedo meñique cuando se usa la mano
+		- poseDetector el detector de poses cuando se usa la mano
+		- fingerCube el Vector3 que nos marca el tamaño del collider que se usará para detectar la interacción
+
+		- class dedo la clase que se usa tanto con manos como con mandos para los GO con colliders de interacción. Esta clase es autónoma y simplemente se añade al hueso del origen de la interacción
+
+		- DetectInteraction() detecta el input de la interaccion 
+		- SetLineRendererColor() setea el color del lineRenderer en función de si encuentra algo con el raycast o no
+		- getRaycastHit() devuelve el RaycastHit del raycast que se encarga de detectar los objetos interactables
+		- GetOrigin() devuelve el origen que se esté usando para el raycast
+		- DetectInteraction_Controllers() detecta el input de los mandos
+		- DetectInteraction_Hands() detecta el input de las manos
+		- SetupControllerCollider() asigna valores a las variables del collider en caso de usar el mando
+		- SetupFingers() setea los colliders de los dedos de la mano 
+		- Click() función llamada cuando se hace click sobre algún objeto o se intenta
+		- Release() función llamada cuando se deja de hacer click
+		- isFingerPressing3DObject() está el dedo pulsando algún objeto en 3D?
+		- GetRaycastHit() devuelve el RaycastHit del rayo de detección
+
+	VR_Interactable:
+		Clase que se añade a los botones y demás objetos interactuables para que reaccionen. Contiene la interfaz VRInteractableInterface
+		Para comunicarse con esta clase es mejor usar la interfaz siempre que se pueda
+		
+		- is3DObject es un objeto en 3D?
+		- usesRay se puede interactuar con el a través del input con el rayo?
+		- canvasTransform en caso de ser UI, el canvas que lo contiene
+		- changesColor cambia de color cuando se le apunta?
+		- NormalColor en caso de cambiar de color, este seria el color normal o idle
+		- HoverColor en caso de cambiar de color, este sería cuando el puntero está sobre la imagen sin pulsar
+		- PressedColor en caso de cambiar de color, este sería cuando el puntero está clickando sobre la imagen
+		- onClick evento que se lanza cuando el puntero hace click sobre este objeto
+		- onHover evento que se lanza cuando el puntero esta sobre este objeto
+		- onRelease evento que se lanza cuando se termina de hacer click sobre este objeto
+		- canBePressed se puede apretar este objeto?
+		- hasToFollow debe seguir al dedo cuando se pulsa?
+		- normalPosition en caso de tener que seguirle, la posición normal o idle del objeto
+		- pressedPosition en caso de tener que seguirle, la posición máxima de pulsado
+		- hasBeenClicked ha sido pulsado? incluso aunque no se pueda, si se ha intentado se vuelve true
+
+		- SetupUICollider() setea los valores necesarios del collider en caso de que sea una imagen
+		- OnClick() función usada para hacer click sobre el objeto
+		- OnHovered() función usada cuando el puntero está sobre el objeto
+		- OnRelease() función usada para soltar el objeto
+		- GetIsClicking() se está pulsando el objeto?
+		- GetIsHovered() está el puntero sobre el objeto?
+		- SetHand() setea el valor de la mano que está interactuando con este objeto
+		- GetHand() devuelve la mano que está interactuando con el objeto, null en caso de no estar interactuando con nada
+		- ChangeColor() cambia el color del objeto en función de en que estado esté
+		- SetCanBePressed() le asigna el valor al bool que maneja si se puede pulsar o no
+		- GetCanBePressed() devuelve el valor del bool que maneja si se puede pulsar o no
+		- follow() en caso de seguir al dedo, coroutine que se encarga de update para seguirlo
+		- SetPath() prepara el camino por el que va a tener que moverse el botón en caso de tener que seguir al dedo
+		- currentPoint() devuelve el punto actual comparando el punto actual, el anterior y el siguiente en función de la distancia que se mueve el dedo desde que se empieza a pulsar
+			
+	HandPoseDetector:
+		Clase que se encarga, en caso de usar las manos, de almacenar y reconocer las diferentes poses que usemos
+		
+		- Threshold margen de error en la posición relativa a la mano de los huesos para detectar las poses
+		- skeleton el componente OVRCustomSkeleton que se use en la mano
+		- gestures lista de las poses almacenadas que tengamos
+		- fingersBones la lista total de huesos que sacaremos del skeleton
+		
+		- Save() función que se usa para guardar una pose
+		- Recognize() devuelve un pose vacía en caso de no reconocerla, o la pose específica en caso de que coincida con alguna guardada
+		- ForceGesture()(No implementado) fuerza la mano a una posición específica
+	
