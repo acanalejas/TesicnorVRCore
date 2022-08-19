@@ -1,0 +1,91 @@
+
+En esta carpeta tenemos clases que nos dan funcionalidades con utilidades específicas variadas.
+Aquí se encuentran las clases que no podemos clasificar como otra cosa más que como utilidades puntuales.
+
+	AnimatedHand:
+		Esta clase hace que podamos mover una mano por animación para cerrar o abrir la mano
+		
+		- animator el componente Animator que se asocia a esta mano
+		- triggerName el nombre del parámetro del animator para cuando presionamos el trigger
+		- gripName el nombre del parámetro del animator para cuando presionamos el grip
+		- xrController el componente XRController asociado a esta mano
+		
+		- CheckTrigger() checkea si se presiona el trigger
+		- CheckGrip() checkea si se presiona el grip
+
+	HandPoser:
+		Esta clase hace que se anime la mano por programación, a través de unos SO con las posiciones y rotaciones relativas de cada uno de los huesos almacenados en cada una de las poses
+
+		- rig el padre del rigging en jerarquía, es decir, el primer hueso, el root
+		- parent el padre que modifica la escala del rigging, es decir el GO general
+		- openedPose el SO que contiene la información para la pose de la mano abierta
+		- closedPose el SO que contiene la información para la pose de la mano cerrada
+		- controller el componente XRController asociado a esta mano
+		- openCode la tecla con la que queremos guardar los datos en runtime de la pose abierta
+		- closeCode la tecla con la que queremos guardar los datos en runtime de la pose cerrada
+		- applyPoses Se tienen que aplicar las poses? Se usa para cuando queremos modificarlas y volverlas a guardar
+		- AllBones la lista total de huesos del rigging de la mano
+
+		- CheckInputEditor() Checkea el Input seleccionado para el guardado de la información de los huesos
+		- SaveBones() guarda la información de los huesos en el SO que le digamos
+		- CheckInput() checkea el input para saber en que posición debe poner la mano
+		- CheckInput_Trigger() checkea específicamente el trigger
+		- currentBonePositions() devuelve la lista completa de la posición  en la que deberían estar ahora los huesos de la mano
+		- currentBoneRotations() devuelve la lista completa de la rotación en la que deberían estar ahora los huesos de la mano
+		- SetPose() aplica la pose a la mano
+
+	HealthComponent:
+		Componente genérico de vida que usa la Interface HealthInterface.
+
+		- maxHealth vida máxima del componente
+		- Health vida actual
+		- HealthIMG imagen que nos da feedback visual de la vida restante
+		- HealthText texto que nos da feedback visual de la vida restante
+		- onDeath evento que se dispara cuando el componente muere
+		- onRecover evento que se dispara cuando el componente resucita
+		- isDead esta actualmente muerto?
+		- isAlive esta actualmente vivo?
+
+		- ChangeHealth() cambia la vida en función de la cantidad que le digamos
+		- Death() función que se ejecuta al morir
+		- IsAlive() está vivo?
+		- IsDead() está muerto?
+		- Recover() función que se ejecuta para revivir
+		- SetInitialHealth() Setea la vida inicial del componente
+		- TakeDamage() Hace que el componente reciba daño
+		- HealDamage() Hace que el componente se cure
+		- ShowHealth() Hace que se muestre el feedback visual de la vida
+
+	HealthComponent_Animator:	
+		Deriva de HealthComponent
+		
+		- animator Componente Animator del GO
+		- deadParameter El parámetro del animator que lanza el trigger de muerte
+		- recoverParameter El parámetro del animator que lanza el trigger de resurrección
+
+	HealthComponent_Desappear:
+		Deriva de HealthComponent
+
+		- desappear El GO que queremos hacer desaparecer con la muerte
+
+	LocomotionComponent:
+		Componente que se añade a la mano para poder usar locomoción con el joystick del mando
+		
+		- controllerType si el mando va a usarse para moverse o rotar
+		- playerSpeed la velocidad de movimiento del jugador
+		- playerRotationSpeed la velocidad de rotación del jugador
+		- camera la cámara que usa este personaje
+		- player el transform general del player
+		- controller componente XRController de la mano
+		
+		- MovePlayer() Mueve al jugador
+		- RotatePlayer() Rota al jugador
+		- GetDirection() Devuelve la dirección adaptada a la local de la camara dependiendo del joystick
+
+	SnapToBody:
+		Se usa para tener un holder donde colcar cosas en el "cuerpo" del jugador
+
+		- camera el transform de la camara principal del jugador
+		
+		- Snap() Engancha el GO a la cámara
+		- SnapByDistance() Engancha el GO a la cámara dependiendo de la distancia inicial entre ambos

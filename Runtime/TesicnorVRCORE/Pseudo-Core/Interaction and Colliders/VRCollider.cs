@@ -221,8 +221,8 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     {
         if (rigidbody && grippingHand)
         {
-            Vector3 force = grippingHand.velocity;
-            rigidbody.AddForce(force, ForceMode.VelocityChange);
+            Vector3 force = (grippingHand.velocity/0.5f) * mass;
+            rigidbody.AddForce(force, ForceMode.Impulse);
         }
     }
 

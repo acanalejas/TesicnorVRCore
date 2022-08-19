@@ -1,0 +1,65 @@
+
+Esta carpeta contiene las clases propias de la UI compatible con este core de VR, tanto para su funcionamiento como su creación desde menú.
+
+	VRInteractable_Button:
+		Clase que nos sirve como botón funcional, así como de su creación por menú. Deriva del VR_Interactable.
+
+		- Create_GameObject() Crea el botón funcional como un GameObject independiente
+		- Create_Component() Crea el botón funcional como un componente de un GameObject seleccionado
+
+	VRInteractable_Dropdown:
+		Clase que nos sirve como Dropdown funcional, asi como de su creación por menú. Deriva del VR_Interactable.
+
+		- options_Sprites lista de Sprites que se asignarán a las imágenes de las diferentes opciones
+		- options_Texts lista de los diferentes textos que se asignarán a las opciones
+		- spacing número de píxeles en el canvas que se dejarán de distancia entre las opciones
+		- onValueChanged<int> evento que se lanza cuando el valor seleccionado del dropdown cambia
+		- vl GO que contiene el VerticalLayoutGroup que engloba a las opciones
+		- image la imagen del dropdown
+		- text el texto del dropdown
+		- currentOption la opción que está actualmente seleccionada
+		- class DropdownItem deriva de VR_Interactable y se usa como clase independiente asignada a cada opción del dropdown como componente
+		- items la lista completa de los items
+		
+		- Create() crea el dropdown como un GO independiente
+		- CreateComponent() crea el dropdown como un componente de un GO seleccionado
+		- OpenDropdown() despliega o esconde las opciones del dropdown
+		- SetupDropdown() setea los valores iniciales necesarios para que el dropdown funcione correctamente
+		- ChangeValue() cambia el valor del dropdown
+
+	VRInteractable_Scrollbar:
+		Clase que nos sirve como scrollbar funcional, asi como de su creación por menú. Deriva de VR_Interactable
+		
+		- mask GO con la máscara, en cuyo interior colocaremos el contenido que queremos desplazar
+		- content Go que nos servirá de padre para el contenido
+		- slider el GO que contiene el slider que nos permite deslizar el contenido
+		- slider_inter el componente VRSlider del GO slider
+
+		- Create() crea el scrollbar como un GO independiente
+		- scrollPosition() devuelve la posición en la que se debe encontrar en ese frame el contenido
+		- allChildsHeight() devuelve la altura total combinada del contenido
+		
+
+	VRInteractable_Slider:
+		Clase que nos sirve como slider funcional, asi como de su creación por menú. Deriva de VR_Interactable
+
+		- onValueChanged<float> evento que se lanza cuando cambia de valor
+		- isHorizontal se desplaza en horizontal el slider o en vertical?
+		- dot_interactable El componente dot : VRInteractable del punto que se desplaza dentro del slider
+		- selfIMG la imagen propia del BG del slider
+		- currentValue el valor actual que tiene el slider
+		- class dot clase que deriva de VR_Interactable y que se añade con funcionalidad independiente al punto desplazable del slider
+		
+		- Create() Crea un slider como GO independiente
+		- Create_Component() Crea un slider como componente de un GO seleccionado
+		- ValueChanges() checkea si el valor del slider se ha modificado
+
+	VRInteractable_Toggle:
+		Clase que nos sirve como toggle funcional, asi como de su creación por menú. Deriva de VR_Interactable
+
+		- checkPath el directorio dentro del proyecto donde se encuentra la imagen que queremos usar como sprite del check
+		- onValueChanged<bool> evento que se lanza cuando el toggle cambia de valor
+		- check el GO que contiene la marca del check
+
+		- Create() crea un toggle funcional como GO independiente
+		- ChangeValue() cambia el valor actual del toggle

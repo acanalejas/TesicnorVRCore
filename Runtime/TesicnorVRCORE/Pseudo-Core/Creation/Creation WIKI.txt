@@ -30,3 +30,36 @@ Se tratan todas de clases estáticas por lo que no podrán añadirse a ningun GO
 		- Create_VRQuad() método que crea un quad con componente VRCollider
 		- Create_VRSphere() método que crea una esfera con componente VRCollider
 		- Create_BasicVRTarget() método que crea un objeto básico vacío con un componente VRColliderReleaseTarget
+		- Create_VRCubeInteractable() método que crea un cubo con un componente VR_Interactable
+		- Create_VRCapsuleInteractable() método que crea un cubo con un componente VR_Interactable
+		- Create_VRCylinderInteractable() método que crea un cilindro con un componente VR_Interactable
+		- Create_VRPlaneInteractable() método que crea un plano con un componente VR_Interactable
+		- Create_VRQuadInteractable() método que crea un plano con un componente VR_Interactable
+		- Create_VRSphereInteractable() método que crea una esfera con un componente VR_Interactable
+
+	MainMenuCreation:
+		Esta clase añade métodos para crear todo lo relacionado con el menú principal
+		
+		- sideSpritePath el directorio donde se encuentra el sprite que usan los botones para desplazare lateralmente en el menú principal
+		- menuMatPath el directorio donde se encuentra el material que usan las paredes de la habitación cúbica del menú
+		- gridMatPath el directorio donde se encuentra el material con rejilla que se usa en el suelo de la habitación cúbica del menú
+		
+		- Create_GameObject() Crea una pantalla estándar de menú principal con 4 escenarios
+		- Create_MainMenu_Room() Crea una pantalla estándar de menú principal con 4 escenarios dentro de una habitación cúbica
+		- Create_EscenesScreen() Crea una sección de 4 escenarios dentro del menú
+		- Create_EscenesScreen_Component() Crea una sección de 4 escenarios dentro del menú pero como componente
+
+	PlayerCreation:
+		Esta clase se encarga de crear tanto el Player que usa los mandos como el Player que usa las manos con todo seteado para que se pueda usar directamente
+		
+		- handMeshPath el directorio dentro del proyecto donde se encuentra la geometría que usaremos para simular las manos con el jugador de los controladores
+		- rightOpenSOPath el directorio dentro del proyecto donde se encuentra el SO que contiene los datos de los huesos de la mano para la pose abierta en la mano derecha
+		- rightClosedSOPath el directorio dentro del proyecto donde se encuentra el SO que contiene los datos de los huesos de la mano derecha para la pose cerrada
+		- leftOpenSOPath el directorio dentro del proyecto donde se encuentra el SO que contiene los datos de los huesos de la mano izquierda para la pose abierta
+		- leftClosedSOPath el directorio dentro del proyecto donde se encuentra el SO que contiene los datos de los huesos de la mano izquierda para la pose cerrada
+		- rightHandPrefabPath el directorio dentro del proyecto donde se encuentra el prefab del plugin Oculus Integration con la mano derecha
+		- leftHandPrefabPath el directorio dentro del proyecto donde se encuentra el prefab del plugin Oculus Integration con la mano izquierda
+		- lineRendererMatPath el directorio dentro del proyecto donde se encuentra el material que se usara en el lineRenderer del HandInteraction
+
+		- CreatePlayerControllers() crea un Player que usa los mandos perfectamente funcional con ya añadidas las clases GrippingHand y HandInteraction
+		- CreatePlayerHands() crea un Player que usa las manos perfectamente funcional con ya añadidas las clases GrippingHand, HandInteraction y HandPoseDetector, solo hay que hacerle las poses
