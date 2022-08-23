@@ -22,14 +22,13 @@ public class HandPoseDetector : MonoBehaviour
     public OVRCustomSkeleton skeleton;
     [Header("Lista de gestos disponibles")]
     [SerializeField] List<Gesture> gestures;
-    private List<OVRBone> fingersBones;
     private Gesture previousGesture;
     #endregion
 
     #region FUNCTIONS
     private void Start()
     {
-        fingersBones = new List<OVRBone>(skeleton.Bones);
+        //Debug.Log("Finger Bones Count : " + fingersBones.Count);
         previousGesture = new Gesture();
     }
 
@@ -39,6 +38,8 @@ public class HandPoseDetector : MonoBehaviour
         {
             Save();
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift)) ForceGesture("Grab");
 
         Gesture newGesture = Recognize();
         bool hasRecognized = !newGesture.Equals(new Gesture());
@@ -115,15 +116,21 @@ public class HandPoseDetector : MonoBehaviour
 
         foreach(var _gesture in gestures)
         {
-            if (_gesture.GestureName == gestureName) gesture = _gesture;
+            if (_gesture.GestureName == gestureName) {
+                gesture = _gesture;
+                gesture.fingersPositions = _gesture.fingersPositions; };
         }
-        //Si no se encuentra con ese nombre, devuelve nulo 
-        if (gesture.fingersPositions.Count == 0) return;
 
+        Debug.Log("Gesture Finger Positions : " + gesture.fingersPositions.Count);
+        //Si no se encuentra con ese nombre, devuelve nulo 
+        if (gesture.fingersPositions.Count == 0) { return; }
+        Debug.Log("After Return");
         int i = 0;
-        foreach(var bone in fingersBones)
+        foreach (OVRBone bone in skeleton.Bones) 
         {
-            bone.Transform.localPosition = gesture.fingersPositions[i];
+            Vector3 position = skeleton.transform.TransformPoint(gesture.fingersPositions[i]);
+            bone.Transform.position = position;
+            Debug.Log("Se intenta posicionar la mano");
             i++;
         }
     }
