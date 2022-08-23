@@ -17,6 +17,8 @@ public static class PlayerCreator
     static string leftOpenedSOPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/ScriptableObjects/Hand Poses/LeftController_Opened.asset";
     static string leftClosedSOPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/ScriptableObjects/Hand Poses/LeftController_Closed.asset";
 
+    static string quest2ControllerPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Models/Hands & Controllers/Quest2Controller .fbx";
+
     //FOR PLAYER HANDS
     static string rightHandPrefabPath = "Assets/Oculus/VR/Prefabs/OVRCustomHandPrefab_R.prefab";
     static string leftHandPrefabPath = "Assets/Oculus/VR/Prefabs/OVRCustomHandPrefab_L.prefab";
@@ -25,8 +27,8 @@ public static class PlayerCreator
 
 #if UNITY_EDITOR
     #region FUNCTIONS
-    [MenuItem("Tesicnor/Players/PlayerControllers")]
-    public static void CreatePlayerControllers()
+    [MenuItem("Tesicnor/Players/PlayerControllers_Hands")]
+    public static void CreatePlayerControllers_Hands()
     {
         GameObject playerControllers = new GameObject("PlayerControllers", typeof(CameraOffset));
         if (Selection.gameObjects.Length > 0) playerControllers.transform.parent = Selection.gameObjects[0].transform;
@@ -219,6 +221,163 @@ public static class PlayerCreator
         leftHandPoser.controller = leftController.GetComponent<XRController>();
         
         
+        // =============================================================================================================
+    }
+
+    [MenuItem("Tesicnor/Players/PlayerControllers_Controllers")]
+    public static void CreatePlayerControllers_Controllers()
+    {
+        GameObject playerControllers = new GameObject("PlayerControllers", typeof(CameraOffset));
+        if (Selection.gameObjects.Length > 0) playerControllers.transform.parent = Selection.gameObjects[0].transform;
+        playerControllers.transform.localPosition = Vector3.zero;
+        playerControllers.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        playerControllers.transform.localScale = Vector3.one;
+
+        // ================================== CREANDO LOS HIJOS DIRECTOS ==============================================
+        GameObject cameraOffset = new GameObject("Camera Offset");
+        cameraOffset.transform.parent = playerControllers.transform;
+        cameraOffset.transform.localPosition = Vector3.zero;
+        cameraOffset.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        cameraOffset.transform.localScale = Vector3.one;
+
+        GameObject rightController = new GameObject("Right Controller", typeof(TrackedPoseDriver), typeof(UnityEngine.XR.Interaction.Toolkit.XRController), typeof(HandInteraction), typeof(GrippingHand));
+        rightController.transform.parent = playerControllers.transform;
+        rightController.transform.localPosition = Vector3.zero;
+        rightController.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        rightController.transform.localScale = Vector3.one;
+
+        GameObject leftController = new GameObject("Left Controller", typeof(TrackedPoseDriver), typeof(UnityEngine.XR.Interaction.Toolkit.XRController), typeof(HandInteraction), typeof(GrippingHand));
+        leftController.transform.parent = playerControllers.transform;
+        leftController.transform.localPosition = Vector3.zero;
+        leftController.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        leftController.transform.localScale = Vector3.one;
+
+        GameObject bodyHolder = new GameObject("Body Holder", typeof(SnapToBody));
+        bodyHolder.transform.parent = playerControllers.transform;
+        bodyHolder.transform.localPosition = new Vector3(0, -0.34f, 0);
+        bodyHolder.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        bodyHolder.transform.localScale = Vector3.one;
+
+        //=============================================================================================================
+
+        // ============================= SETEANDO EL MANDO DERECHO ====================================================
+
+        TrackedPoseDriver rightPose = rightController.GetComponent<TrackedPoseDriver>();
+        rightPose.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, TrackedPoseDriver.TrackedPose.RightPose);
+
+        //Seteando la clase GrippingHand
+        GrippingHand rightGripping = rightController.GetComponent<GrippingHand>();
+        rightGripping.isController = true;
+        rightGripping.handType = GrippingHand.HandType.right;
+        rightGripping.colliderRadius = 0.05f;
+        rightGripping.colliderBone = rightController.transform;
+        rightGripping.player = playerControllers.transform;
+        rightGripping.hideOnGrab = false;
+        rightGripping.handController = rightController.GetComponent<XRController>();
+
+        //Seteando la clase HandInteraction
+        HandInteraction rightInteraction = rightController.GetComponent<HandInteraction>();
+        rightInteraction.isHandControlled = false;
+        rightInteraction.isLeftHand = false;
+        rightInteraction.usesRay = true;
+        rightInteraction.lineRenderer = rightController.GetComponent<LineRenderer>();
+        rightInteraction.interactionOrigin = rightController.transform;
+        rightInteraction.nonDetectedColor = new Color(255, 35, 35, 255);
+        rightInteraction.detectedColor = new Color(255, 149, 25, 255);
+        rightInteraction.handController = rightController.GetComponent<XRController>();
+
+        LineRenderer lineRenderer_right = rightController.GetComponent<LineRenderer>();
+        lineRenderer_right.startWidth = 0.010f;
+        lineRenderer_right.endWidth = 0.015f;
+        lineRenderer_right.enabled = false;
+        lineRenderer_right.material = (Material)AssetDatabase.LoadAssetAtPath(lineRendererMatPath, typeof(Material));
+
+        //=============================================================================================================
+
+        // ================================ SETEANDO LA MANO IZQUIERDA ================================================
+
+        TrackedPoseDriver leftPose = leftController.GetComponent<TrackedPoseDriver>();
+        leftPose.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRController, TrackedPoseDriver.TrackedPose.LeftPose);
+
+        //Seteando el componente GrippingHand
+        GrippingHand leftGripping = leftController.GetComponent<GrippingHand>();
+        leftGripping.isController = true;
+        leftGripping.handType = GrippingHand.HandType.left;
+        leftGripping.colliderRadius = 0.05f;
+        leftGripping.colliderBone = leftController.transform;
+        leftGripping.player = playerControllers.transform;
+        leftGripping.hideOnGrab = false;
+        leftGripping.handController = leftController.GetComponent<XRController>();
+        leftGripping.handController.controllerNode = XRNode.LeftHand;
+
+        //Seteando el componente HandInteraction
+        HandInteraction leftInteraction = leftController.GetComponent<HandInteraction>();
+        leftInteraction.isHandControlled = false;
+        leftInteraction.isLeftHand = true;
+        leftInteraction.usesRay = true;
+        leftInteraction.lineRenderer = leftController.GetComponent<LineRenderer>();
+        leftInteraction.interactionOrigin = leftController.transform;
+        leftInteraction.nonDetectedColor = new Color(255, 35, 35, 255);
+        leftInteraction.detectedColor = new Color(255, 149, 25, 255);
+        leftInteraction.handController = leftController.GetComponent<XRController>();
+
+        LineRenderer lineRenderer_left = leftController.GetComponent<LineRenderer>();
+        lineRenderer_left.startWidth = 0.010f;
+        lineRenderer_left.endWidth = 0.015f;
+        lineRenderer_left.enabled = false;
+        lineRenderer_left.material = (Material)AssetDatabase.LoadAssetAtPath(lineRendererMatPath, typeof(Material));
+
+        //=============================================================================================================
+
+        //====================================== SETEANDO LA CAMARA ===================================================
+        GameObject mainCamera = new GameObject("Main Camera", typeof(Camera), typeof(AudioListener), typeof(TrackedPoseDriver));
+        mainCamera.transform.parent = cameraOffset.transform;
+        mainCamera.transform.localPosition = Vector3.zero;
+        mainCamera.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        mainCamera.transform.localScale = Vector3.one;
+
+        TrackedPoseDriver cameraPose = mainCamera.GetComponent<TrackedPoseDriver>();
+        cameraPose.SetPoseSource(TrackedPoseDriver.DeviceType.GenericXRDevice, TrackedPoseDriver.TrackedPose.Center);
+
+        Camera camera = mainCamera.GetComponent<Camera>();
+        camera.nearClipPlane = 0.01f;
+        camera.farClipPlane = 1000;
+
+        SnapToBody snap = bodyHolder.GetComponent<SnapToBody>();
+        snap.camera = mainCamera.transform;
+
+        // =============================================================================================================
+
+        // ================================ SETEANDO LA GEOMETRIA DE LAS MANOS =========================================
+
+        Object rightMesh = AssetDatabase.LoadAssetAtPath(quest2ControllerPath, typeof(Object)) as Object;
+        GameObject BothControllers = (GameObject)GameObject.Instantiate(rightMesh);
+
+        Transform[] controllers = BothControllers.GetComponentsInChildren<Transform>();
+
+        GameObject leftMesh_GO = null;
+        GameObject rightMesh_GO = null;
+        foreach (Transform controller in controllers)
+        {
+            if (controller.name == "OculusQuest2ControllerLeft") leftMesh_GO = controller.gameObject;
+            else if (controller.name == "OculusQuest2ControllerRight") rightMesh_GO = controller.gameObject;
+        }
+
+        leftMesh_GO.transform.parent = leftController.transform;
+        leftMesh_GO.transform.localPosition = Vector3.zero;
+        leftMesh_GO.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        leftMesh_GO.transform.localScale = new Vector3(10, 10, 10);
+
+        rightMesh_GO.transform.parent = rightController.transform;
+        rightMesh_GO.transform.localPosition = Vector3.zero;
+        rightMesh_GO.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        rightMesh_GO.transform.localScale = new Vector3(10, 10, 10);
+
+        GameObject.DestroyImmediate(BothControllers.gameObject);
+        // =============================================================================================================
+
+
+
         // =============================================================================================================
     }
 

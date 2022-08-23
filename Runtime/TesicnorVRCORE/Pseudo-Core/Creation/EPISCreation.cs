@@ -27,11 +27,14 @@ public static class EPISCreation
         casco_GO.transform.localRotation = Quaternion.Euler(Vector3.zero);
         casco_GO.transform.localScale = new Vector3(12, 12, 12);
 
-        VRCollider casco_collider = casco_GO.AddComponent<VRCollider>();
+        casco_GO.AddComponent<BoxCollider>();
+        VRCollider casco_collider2 = casco_GO.AddComponent<VRCollider>();
+        //casco_collider = new VRCollider();
 
-        casco_collider.simulateOnDrop = true;
-        casco_collider.canRelease = false;
-        casco_collider.DropTeleport = false;
+        if (casco_collider2 == null) Debug.Log("is null");
+        casco_collider2.simulateOnDrop = true;
+        casco_collider2.canRelease = false;
+        casco_collider2.DropTeleport = false;
 
         Material cascoMat = (Material)AssetDatabase.LoadAssetAtPath(CascoMatPath, typeof(Material));
         MeshRenderer cascoMesh = casco_GO.GetComponent<MeshRenderer>();
@@ -52,6 +55,7 @@ public static class EPISCreation
         arnes_GO.transform.localScale = Vector3.one;
         arnes_GO.name = "Arnes";
 
+        arnes_GO.AddComponent<BoxCollider>();
         VRCollider arnes_collider = arnes_GO.AddComponent<VRCollider>();
         arnes_collider.simulateOnDrop = true;
         arnes_collider.canRelease = false;
@@ -135,7 +139,7 @@ public static class EPISCreation
         cable_final.transform.parent = rana_GO.transform;
         cable_final.transform.localPosition = new Vector3(-0.02955414f, -0.007746905f, -0.008347806f);
 
-
+        rana_GO.AddComponent<BoxCollider>();
         Rana rana_rana = rana_GO.AddComponent<Rana>();
 
         rana_rana.mosqueton = mosqueton;
@@ -221,7 +225,7 @@ public static class EPISCreation
         cable_final.transform.parent = rana_GO.transform;
         cable_final.transform.localPosition = new Vector3(-0.02955414f, -0.007746905f, -0.008347806f);
 
-
+        rana_GO.AddComponent<BoxCollider>();
         Rana rana_rana = rana_GO.AddComponent<Rana>();
 
         rana_rana.mosqueton = mosqueton;
