@@ -128,7 +128,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         Vector3 position = this.transform.position;
         if (lastFramePosition == Vector3.zero) lastFramePosition = position;
 
-        velocity = (position - lastFramePosition) / Time.deltaTime;
+        velocity = (position - lastFramePosition) / Time.fixedDeltaTime;
 
         lastFramePosition = position;
     }

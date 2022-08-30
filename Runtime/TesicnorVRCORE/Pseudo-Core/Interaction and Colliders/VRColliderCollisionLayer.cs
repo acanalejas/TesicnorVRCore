@@ -23,24 +23,37 @@ namespace TesicnorVR
             else if (collider.GetType() == typeof(MeshCollider)) gameObject.AddComponent<MeshCollider>();
             else if (collider.GetType() == typeof(CapsuleCollider)) gameObject.AddComponent<CapsuleCollider>();
             else gameObject.AddComponent<BoxCollider>();
+
+            GetComponent<Rigidbody>().mass = mass;
             
         }
 
+        Vector3 localRotation = Vector3.zero;
+        Vector3 localPosition = Vector3.zero;
         public override void Grab(GrippingHand hand)
         {
             onGrab?.Invoke();
             SetParamsOnGrab(hand);
-            GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<Rigidbody>().useGravity = false;
             SetSoundOnGrab();
             if (gameObject.activeSelf) StartCoroutine("Attach");
+            localRotation = this.transform.localRotation.eulerAngles;
+            localPosition = this.transform.localPosition;
         }
 
         public override IEnumerator Attach()
         {
-            GetComponent<Rigidbody>().velocity = grippingHand.velocity;
             return base.Attach();
         }
-
+        public void FixedUpdate()
+        {
+            if(GetGrippingHand() != null && GetComponent<Rigidbody>())
+            {
+                GetComponent<Rigidbody>().velocity = GetGrippingHand().velocity;
+                this.transform.localRotation = Quaternion.Euler(localRotation);
+                this.transform.localPosition = localPosition;
+            }
+        }
         private void OnCollisionEnter(Collision collision)
         {
             if (GetComponent<Rigidbody>() && !grippingHand)
@@ -55,6 +68,7 @@ namespace TesicnorVR
                 rb.useGravity = true;
             }
         }
+
         #endregion
     }
 }
