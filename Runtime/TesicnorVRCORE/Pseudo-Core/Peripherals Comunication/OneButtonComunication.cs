@@ -32,6 +32,7 @@ public class OneButtonComunication : MonoBehaviour
     public void  ReceiveData(string incomingData)
     {
         int result;
+        Debug.Log(incomingData);
         int.TryParse(incomingData, out result);
 
         if (result == 0)

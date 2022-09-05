@@ -20,6 +20,9 @@ public class SerialManager : MonoBehaviour
 
     void OnEnable()
     {
+#if UNITY_ANDROID
+        comPort = "/dev/ttyS16";
+#endif
         port = new SerialPort(comPort, 9600); //1
         port.Open();//1
         port.DiscardOutBuffer(); //1
