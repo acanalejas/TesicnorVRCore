@@ -462,7 +462,7 @@ public static class PlayerCreator
         foreach (Transform child in allChilds) if (child.gameObject.name == "r_middle_mcp_fe_axis_marker") rightGripping.colliderBone = child;
 
         rightInteraction.isHandControlled = true;
-        rightInteraction.usesRay = true;
+        rightInteraction.usesRay = false;
         rightInteraction.isLeftHand = false;
         rightInteraction.fingerCube = new Vector3(0.03f, 0.03f, 0.03f);
         rightInteraction.lineRenderer = rightHand_GO.GetComponent<LineRenderer>();
@@ -497,7 +497,7 @@ public static class PlayerCreator
         foreach (Transform child in allChilds) if (child.gameObject.name == "l_middle_mcp_fe_axis_marker") leftGripping.colliderBone = child;
 
         leftInteraction.isHandControlled = true;
-        leftInteraction.usesRay = true;
+        leftInteraction.usesRay = false;
         leftInteraction.isLeftHand = true;
         leftInteraction.fingerCube = new Vector3(0.03f, 0.03f, 0.03f);
         leftInteraction.lineRenderer = leftHand_GO.GetComponent<LineRenderer>();

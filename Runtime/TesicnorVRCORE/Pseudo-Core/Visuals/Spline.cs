@@ -81,7 +81,7 @@ public class SplinePoint_Editor: Editor
                 multiplier = Mathf.Clamp(multiplier, 0.01f, 1);
                 p.transform.localPosition += moved * multiplier;
 
-                p.transform.localRotation = Quaternion.Euler(-rotated * multiplier + _class.transform.localRotation.eulerAngles);
+                p.transform.localRotation = Quaternion.Euler(-rotated * multiplier * 3 + _class.transform.localRotation.eulerAngles);
             }
         }
 
