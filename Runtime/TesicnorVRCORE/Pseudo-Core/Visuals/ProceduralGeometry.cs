@@ -113,7 +113,7 @@ public class ProceduralGeometry : MonoBehaviour
     /// <param name="_triangles">Lista completa de triángulos de la sección</param>
     /// <param name="_normals">Lista completa de las normales de la sección</param>
     /// <param name="_uvs">Lista completa de las UVs de la sección</param>
-    public virtual void SetSection(int index, List<Vector3> _vertices , List<int> _triangles, List<Vector3> _normals ,List<Vector4> _tangents , List<Vector2> _uvs )
+    public virtual void SetSection(int index, List<Vector3> _vertices , List<int> _triangles, List<Vector3> _normals ,List<Vector4> _tangents , List<Vector2> _uvs, MeshFilter _meshFilter = null)
     {
         if (!meshFilter) meshFilter = GetComponent<MeshFilter>();
 
@@ -176,8 +176,8 @@ public class ProceduralGeometry : MonoBehaviour
         //newMesh.RecalculateNormals();
         //newMesh.RecalculateTangents();
 
-
-        meshFilter.mesh = newMesh;
+        if (_meshFilter == null) meshFilter.mesh = newMesh;
+        else _meshFilter.mesh = newMesh;
         //meshFilter.mesh.RecalculateUVDistributionMetrics();
         //meshFilter.mesh.RecalculateNormals();
         //meshFilter.mesh.RecalculateTangents();

@@ -31,24 +31,107 @@ public class SplinePoint_Class : MonoBehaviour
 {
     public SplinePoint point;
 
-    [HideInInspector]public bool SoftSelection;
+    [HideInInspector] public bool SoftSelection = false;
+    [HideInInspector] public float SoftSelection_Distance = 1;
+
+    [HideInInspector] public bool drawGizmos = false;
+    public void OnDrawGizmosSelected()
+    {
+        if (drawGizmos)
+        {
+            Gizmos.color = new Color(255, 0, 0, 0.5f);
+            Gizmos.DrawSphere(this.transform.position, SoftSelection_Distance);
+        }
+    }
 
 }
 #if UNITY_EDITOR
 [CustomEditor(typeof(SplinePoint_Class), true)]
 public class SplinePoint_Editor: Editor
 {
+    Vector3 lastPosition = Vector3.zero;
+    Quaternion lastRotation = Quaternion.identity;
+    void SoftSelectionMovement(SplinePoint_Class _class)
+    {
+        SplinePoint_Class[] SplinePoints = GameObject.FindObjectsOfType<SplinePoint_Class>();
+        List<SplinePoint_Class> AffectedPoints = new List<SplinePoint_Class>();
+
+        Debug.Log("Spline points found  :  " + SplinePoints.Length);
+
+        if(lastPosition == Vector3.zero) { lastPosition = _class.transform.localPosition; }
+
+        Vector3 moved = _class.transform.localPosition - lastPosition;
+        if (lastRotation == Quaternion.identity) lastRotation = _class.transform.localRotation;
+        Vector3 rotated = _class.transform.localRotation.eulerAngles - lastRotation.eulerAngles;
+        Debug.Log("Entered here");
+        if (SplinePoints.Length > 0)
+        {
+            foreach (SplinePoint_Class p in SplinePoints)
+            {
+                Debug.Log("Checking Points");
+                float distance = Vector3.Distance(p.transform.position, _class.transform.position);
+                if (distance < _class.SoftSelection_Distance && _class != p) AffectedPoints.Add(p);
+            }
+
+            foreach (SplinePoint_Class p in AffectedPoints)
+            {
+                Debug.Log("MOVING AFFECTED POINTS");
+                float distance = Vector3.Distance(p.transform.position, _class.transform.position);
+                float multiplier = 1 - (distance / _class.SoftSelection_Distance);
+                multiplier = Mathf.Clamp(multiplier, 0.01f, 1);
+                p.transform.localPosition += moved * multiplier;
+
+                p.transform.localRotation = Quaternion.Euler(-rotated * multiplier + _class.transform.localRotation.eulerAngles);
+            }
+        }
+
+        Debug.Log(lastPosition);
+        lastPosition = _class.transform.localPosition;
+        lastRotation = _class.transform.localRotation;
+    }
     private void OnSceneGUI()
     {
         SplinePoint_Class _class = target as SplinePoint_Class;
         Vector3 localRotation = _class.transform.localRotation.eulerAngles;
         Spline _spline = _class.GetComponentInParent<Spline>();
+
         if (_spline) {
+            if (_class.SoftSelection) SoftSelectionMovement(_class);
             _spline.UpdatePoints();
         }
         else
         {
             _class.transform.localRotation = Quaternion.Euler(localRotation);
+        }
+
+        //PARA MODIFICAR LA ZONA DE AFECTACIÓN DE LA SELECCIÓN SUAVE
+        Event e = Event.current;
+        switch (e.type)
+        {
+            case EventType.KeyDown:
+
+                if(e.keyCode == KeyCode.B)
+                {
+                    _class.drawGizmos = true;
+                    _class.SoftSelection = true;
+
+                    Ray ray = SceneView.currentDrawingSceneView.camera.ScreenPointToRay(e.mousePosition);
+
+                    float distance = (_class.gameObject.transform.position - SceneView.currentDrawingSceneView.camera.transform.position).magnitude;
+                    Vector3 mouseDistance = ray.GetPoint(distance);
+
+                    _class.SoftSelection_Distance = Vector3.Distance(_class.transform.position, mouseDistance);
+                }
+
+                break;
+            case EventType.KeyUp:
+
+                if(e.keyCode == KeyCode.B)
+                {
+                    _class.drawGizmos = false;
+                }
+
+                break;
         }
     }
 
@@ -56,8 +139,14 @@ public class SplinePoint_Editor: Editor
     {
         base.OnInspectorGUI();
         SplinePoint_Class _class = target as SplinePoint_Class;
+
         GUILayout.Label("Se está realizando una selección suave?", EditorStyles.boldLabel);
         _class.SoftSelection = EditorGUILayout.Toggle(_class.SoftSelection);
+
+        GUILayout.Space(10);
+
+        GUILayout.Label("La distancia en la que afecta la selección suave");
+        _class.SoftSelection_Distance = EditorGUILayout.FloatField("Soft Selection Distance", _class.SoftSelection_Distance);
     }
 }
 #endif
@@ -117,6 +206,10 @@ public class Spline : ProceduralGeometry
     {
         //GetSection(0);
     }
+
+    /// <summary>
+    /// Añade una sección al final del spline
+    /// </summary>
     public void Extrude()
     {
         Points += 1;
@@ -131,10 +224,10 @@ public class Spline : ProceduralGeometry
         //Guardamos todos los hijos
         Transform[] allChilds = this.gameObject.GetComponentsInChildren<Transform>();
 
-        if (allChilds.Length != this.points)
+        if (allChilds.Length - 1 != this.points)
         {
             //Si hay menos hijos que numero de puntos introducidos, añade hijos
-            if (this.Points > allChilds.Length)
+            if (this.Points > allChilds.Length - 1)
             {
                 for (int i = allChilds.Length; i <= this.points; i++)
                 {
@@ -276,7 +369,6 @@ public class Spline : ProceduralGeometry
         SetBaseAndTop(Sections[0]);
         //splineNormals = GetNormals(splineTriangles, splineVertices);
         this.SetSection(0, splineVertices, splineTriangles, splineNormals, Sections[0].tangents, Sections[0].uvs);
-        Debug.Log(Sections[0].vertices.Count);
 
     }
 
@@ -486,7 +578,7 @@ public class SplineEditor : Editor
 {
     private Spline spline;
 
-
+    
 
     public override void OnInspectorGUI()
     {
@@ -517,7 +609,9 @@ public class SplineEditor : Editor
         GUILayout.Label("Se muestran los puntos en la escena?");
         spline.DrawDebug = EditorGUILayout.Toggle(spline.DrawDebug);
 
-        
+        GUILayout.Space(20);
+
+        if (GUILayout.Button("EXTRUDE")) spline.Extrude();
         /*SerializedProperty _sections = serializedObject.FindProperty("Sections");
         EditorGUILayout.PropertyField(_sections);*/
     }
