@@ -76,7 +76,7 @@ public class SelectionObject : MonoBehaviour
         lastPos = this.transform.position;
     }
 }
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(SelectionObject), true)]
 public class SelectionObject_Editor : Editor
 {
@@ -87,6 +87,7 @@ public class SelectionObject_Editor : Editor
         obj.cube.UpdateSection(obj.section);
     }
 }
+#endif
 
 public class ModelFromCube : ProceduralGeometry
 {
@@ -270,6 +271,7 @@ public class ModelFromCube : ProceduralGeometry
     /// <summary>
     /// Elige una cara en el editor de la escena
     /// </summary>
+    #if UNITY_EDITOR
     public Face SelectFace(Vector3 mousePosition)
     {
         Debug.Log("Clicked");
@@ -334,8 +336,8 @@ public class ModelFromCube : ProceduralGeometry
 
         return so;
     }
-
-    #endregion
+#endif
+#endregion
 }
 
 #if UNITY_EDITOR
