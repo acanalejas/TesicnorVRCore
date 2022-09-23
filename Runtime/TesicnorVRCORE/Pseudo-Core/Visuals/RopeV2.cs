@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(LineRenderer))]
 public class RopeV2 : MonoBehaviour
 {
-    #region PARAMETERS
+#region PARAMETERS
     /// <summary>
     /// Numero de secciones en las que se divide la cuerda
     /// </summary>
@@ -85,17 +88,17 @@ public class RopeV2 : MonoBehaviour
 
     private List<List<Vector3>> allVertexPositions = new List<List<Vector3>>();
 
-    #endregion
+#endregion
 
-    #region FUNCTIONS
+#region FUNCTIONS
 
-    private void Start()
+    public void Start()
     {
         coeficent = Mathf.Clamp(coeficent, 1, 10);
         SetupRope();
     }
 
-    private void Update()
+    public void Update()
     {
         CheckStrecthAndCompression();
         AttachLineToSections();
@@ -105,6 +108,45 @@ public class RopeV2 : MonoBehaviour
     {
         GetAllPositions();
     }
+
+    #region Creation
+
+#if UNITY_EDITOR
+
+    [MenuItem("Tesicnor/Visuals/Cuerda")]
+    public static void CreateRope()
+    {
+        GameObject parent = new GameObject("Rope", typeof(RopeV2));
+        if (Selection.gameObjects.Length > 0) parent.transform.parent = Selection.gameObjects[0].transform;
+
+        parent.transform.localPosition =    Vector3.zero;
+        parent.transform.localRotation =    Quaternion.identity;
+        parent.transform.localScale =       Vector3.one;
+
+        GameObject it = new GameObject("Initial Transform Rope");
+        it.transform.parent =           parent.transform;
+        it.transform.localPosition =    Vector3.zero;
+        it.transform.localRotation =    Quaternion.identity;
+        it.transform.localScale =       Vector3.one;
+
+        GameObject ft = new GameObject("Final Transform Rope");
+        ft.transform.parent =           parent.transform;
+        ft.transform.localPosition =    new Vector3(0,-1,0);
+        ft.transform.localRotation =    Quaternion.identity;
+        ft.transform.localScale =       Vector3.one;
+
+        LineRenderer lr = parent.GetComponent<LineRenderer>();
+        lr.startWidth = 0.01f; lr.endWidth = 0.02f;
+
+        RopeV2 rope = parent.GetComponent<RopeV2>();
+        rope.initialTransform = it.transform;
+        rope.finalTransform = ft.transform;
+        rope.line = lr;
+    }
+
+#endif
+
+#endregion
 
     #region Setup
     /// <summary>
@@ -174,10 +216,10 @@ public class RopeV2 : MonoBehaviour
         return totalDistance / ropeSections;
     }
 
-    #endregion
+#endregion
 
 
-    #region Simulation
+#region Simulation
     /// <summary>
     /// Devuelve el sumatorio de fuerzas de cada seccion
     /// </summary>
@@ -333,9 +375,9 @@ public class RopeV2 : MonoBehaviour
     }
 
     
-    #endregion
+#endregion
 
-    #region Visuals
+#region Visuals
     /// <summary>
     /// Setea la posicion de cada punto del LineRenderer para que cuadre con la posicion de cada seccion
     /// </summary>
@@ -424,6 +466,6 @@ public class RopeV2 : MonoBehaviour
 
         return result;
     }
-    #endregion
-    #endregion
+#endregion
+#endregion
 }

@@ -253,12 +253,12 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         }
         else
         {
-            if (release == releaseType.start)
+            if (release == releaseType.onGrab)
             {
                 this.transform.position = positionOnGrab;
                 this.transform.rotation = Quaternion.Euler(rotationOnGrab);
             }
-            else if (release == releaseType.onGrab)
+            else if (release == releaseType.start)
             {
                 this.transform.position = startPosition;
                 this.transform.rotation = Quaternion.Euler(startRotation);

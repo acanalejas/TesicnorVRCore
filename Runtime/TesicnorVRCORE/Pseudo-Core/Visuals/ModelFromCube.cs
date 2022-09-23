@@ -62,7 +62,7 @@ public class SelectionObject : MonoBehaviour
     public int[] selectedVertices;
 
     Vector3 lastPos = Vector3.zero;
-    private void Update()
+    public void update()
     {
         if(lastPos != Vector3.zero)
         {
@@ -70,6 +70,7 @@ public class SelectionObject : MonoBehaviour
             
             for(int i = 0; i < selectedVertices.Length; i++)
             {
+                if (cube.sectionsVertices[section] != null && cube.sectionsVertices[section].Count > 0)
                 cube.sectionsVertices[section][selectedVertices[i]] += dif;
             }
         }
@@ -84,6 +85,7 @@ public class SelectionObject_Editor : Editor
     {
         SelectionObject obj = target as SelectionObject;
 
+        obj.update();
         obj.cube.UpdateSection(obj.section);
     }
 }
@@ -98,6 +100,9 @@ public class ModelFromCube : ProceduralGeometry
 
     [HideInInspector] public List<List<Vector3>> sectionsVertices = new List<List<Vector3>>();
     [HideInInspector] public List<List<int>> sectionsTriangles = new List<List<int>>();
+    [HideInInspector] public List<List<Vector2>> sectionsUVs = new List<List<Vector2>>();
+    [HideInInspector] public List<List<Vector3>> sectionsNormals = new List<List<Vector3>>();
+    [HideInInspector] public List<List<Vector3>> sectionsTangents = new List<List<Vector3>>();
     [HideInInspector] public List<List<Face>> sectionsFaces = new List<List<Face>>();
 
     [HideInInspector] public SelectionObject selectedObject;
@@ -151,6 +156,20 @@ public class ModelFromCube : ProceduralGeometry
                 sectionsTriangles.Add(new List<int>());
             }
         }
+        if(section > sectionsUVs.Count - 1)
+        {
+            while(section > sectionsUVs.Count - 1)
+            {
+                sectionsUVs.Add(new List<Vector2>());
+            }
+        }
+        if(section > sectionsNormals.Count - 1)
+        {
+            while(section > sectionsNormals.Count - 1)
+            {
+                sectionsNormals.Add(new List<Vector3>());
+            }
+        }
         if(section > sectionsFaces.Count - 1)
         {
             while(section > sectionsFaces.Count - 1)
@@ -162,6 +181,8 @@ public class ModelFromCube : ProceduralGeometry
         Sections[section].vertices.Clear();
         Sections[section].triangles.Clear();
         sectionsTriangles[section].Clear();
+        sectionsUVs[section].Clear();
+        sectionsNormals[section].Clear();
         sectionsVertices[section].Clear();
 
         Vector3[] initialVertex = new Vector3[8];
@@ -251,7 +272,16 @@ public class ModelFromCube : ProceduralGeometry
         sectionsTriangles[section].AddRange(firstTriangle_d); sectionsTriangles[section].AddRange(secondTriangle_d);
         sectionsTriangles[section].AddRange(firstTriangle_u); sectionsTriangles[section].AddRange(secondTriangle_u);
 
-        SetSection(section, sectionsVertices[section], sectionsTriangles[section], Sections[section].normals, Sections[section].tangents, Sections[section].uvs, allChilds[section + 1].GetComponent<MeshFilter>());
+        sectionsUVs[section].Add(new Vector2(0, 0.75f));
+        sectionsUVs[section].Add(new Vector2(0, 0.25f));
+        sectionsUVs[section].Add(new Vector2(1, 0.75f));
+        sectionsUVs[section].Add(new Vector2(1, 0.25f));
+        sectionsUVs[section].Add(new Vector2(0, 1));
+        sectionsUVs[section].Add(new Vector2(0, 0));
+        sectionsUVs[section].Add(new Vector2(1, 1));
+        sectionsUVs[section].Add(new Vector2(1, 0));
+
+        SetSection(section, sectionsVertices[section], sectionsTriangles[section], Sections[section].normals, Sections[section].tangents, sectionsUVs[section], allChilds[section + 1].GetComponent<MeshFilter>());
     }
 
     /// <summary>
@@ -268,10 +298,20 @@ public class ModelFromCube : ProceduralGeometry
         DestroyImmediate(allChilds[section + 1].gameObject);
     }
 
+    public override void UpdateSection(int sectionIndex)
+    {
+        Sections[sectionIndex].vertices = sectionsVertices[sectionIndex];
+        Sections[sectionIndex].triangles = sectionsTriangles[sectionIndex];
+
+        //base.UpdateSection(sectionIndex);
+        Transform[] allChilds = this.transform.GetComponentsInChildren<Transform>();
+        SetSection(section, sectionsVertices[section], sectionsTriangles[section], Sections[section].normals, Sections[section].tangents, Sections[section].uvs, allChilds[section + 1].GetComponent<MeshFilter>());
+    }
+
     /// <summary>
     /// Elige una cara en el editor de la escena
     /// </summary>
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
     public Face SelectFace(Vector3 mousePosition)
     {
         Debug.Log("Clicked");
@@ -309,6 +349,8 @@ public class ModelFromCube : ProceduralGeometry
             i++;
         }
         selectedFace.section = section;
+
+        Debug.Log(selectedFace);
         return selectedFace;
     }
 
@@ -318,6 +360,7 @@ public class ModelFromCube : ProceduralGeometry
 
         if(selectedFace.faceVertex.Length == 0 || sectionsVertices.Count- 1 < selectedFace.section || sectionsVertices[selectedFace.section].Count < 4) { if (this.selectedObject.gameObject != null) DestroyImmediate(selectedObject.gameObject); return null; }
 
+        if (selectedObject) DestroyImmediate(selectedObject.gameObject);
         GameObject go = new GameObject("XYZ", typeof(SelectionObject));
 
         Vector3 v0 = this.transform.TransformPoint(this.sectionsVertices[selectedFace.section][selectedFace.faceVertex[0]]);
@@ -327,6 +370,8 @@ public class ModelFromCube : ProceduralGeometry
 
         Vector3 center = (v0 + v1 + v2 + v3) / 4;
 
+        go.transform.position = center;
+
         SelectionObject so = go.GetComponent<SelectionObject>();
         
         so.section = selectedFace.section;
@@ -334,6 +379,7 @@ public class ModelFromCube : ProceduralGeometry
 
         so.cube = this;
 
+        selectedObject = so;
         return so;
     }
 #endif

@@ -207,6 +207,24 @@ public class Spline : ProceduralGeometry
         //GetSection(0);
     }
 
+#if UNITY_EDITOR
+
+    [MenuItem("Tesicnor/Visuals/Spline")]
+    public static void CreateSpline()
+    {
+        GameObject parent = new GameObject("Spline", typeof(Spline));
+        if (Selection.gameObjects.Length > 0) parent.transform.parent = Selection.gameObjects[0].transform;
+
+        parent.transform.localPosition = Vector3.zero;
+        parent.transform.localRotation = Quaternion.identity;
+        parent.transform.localScale = Vector3.one;
+
+        Spline sp = parent.GetComponent<Spline>();
+        sp.radius = 0.2f;
+    }
+
+#endif
+
     /// <summary>
     /// Añade una sección al final del spline
     /// </summary>
@@ -549,6 +567,10 @@ public class Spline : ProceduralGeometry
         return verts;
     }
 
+    /// <summary>
+    /// Actualiza la posición de los vértices
+    /// </summary>
+    /// <returns></returns>
     public List<Vector3> UpdateVertices()
     {
         List<Vector3> result = new List<Vector3>();
@@ -560,6 +582,7 @@ public class Spline : ProceduralGeometry
 
         return result;
     }
+
 
     private void OnDrawGizmos()
     {

@@ -118,8 +118,11 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     {
         DetectTheInput();
         CalculateVelocity();
-        CheckListSecurity();
         SetHandsTracking();
+    }
+    private void Update()
+    {
+        CheckListSecurity();
     }
 
     Vector3 lastFramePosition = Vector3.zero;
