@@ -246,7 +246,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     {
         if (grippedObject)
         {
-            //if (overlappingObjects.Contains(grippedObject)) overlappingObjects.Remove(grippedObject);
+            if (overlappingObjects.Contains(grippedObject)) overlappingObjects.Remove(grippedObject);
         }
         if (isGrabbing()) grippedObject.GetComponent<VRGripInterface>().Release();
         if(hideOnGrab) SetRendererEnable(true);
