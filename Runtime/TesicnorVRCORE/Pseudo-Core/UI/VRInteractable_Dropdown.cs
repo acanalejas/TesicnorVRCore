@@ -63,7 +63,7 @@ public class VRInteractable_Dropdown : VR_Interactable
     /// La clase que se añade a cada opción del dropdown
     /// </summary>
     [RequireComponent(typeof(Image))]
-    private class Dropdown_Item : VR_Interactable
+    public class Dropdown_Item : VR_Interactable
     {
         public VRInteractable_Dropdown dropdown;
         public Image image;
