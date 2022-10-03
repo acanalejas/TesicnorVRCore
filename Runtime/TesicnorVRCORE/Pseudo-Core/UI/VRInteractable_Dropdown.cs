@@ -74,6 +74,7 @@ public class VRInteractable_Dropdown : VR_Interactable
         {
             base.Awake();
             image = GetComponent<Image>();
+            image.maskable = false;
 
             GameObject text_GO = new GameObject("TMP", typeof(TextMeshProUGUI));
             text_GO.transform.parent = this.gameObject.transform;
@@ -83,6 +84,7 @@ public class VRInteractable_Dropdown : VR_Interactable
 
             text = text_GO.GetComponent<TextMeshProUGUI>();
             text.color = Color.black;
+            text.maskable = false;
 
             PressedColor = Color.white * 0.5f;
             HoverColor = Color.white * 0.75f;
