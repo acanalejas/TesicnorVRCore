@@ -85,6 +85,7 @@ public class VRInteractable_Dropdown : VR_Interactable
             text = text_GO.GetComponent<TextMeshProUGUI>();
             text.color = Color.black;
             text.maskable = false;
+            text.raycastTarget = false;
 
             PressedColor = Color.white * 0.5f;
             HoverColor = Color.white * 0.75f;
@@ -195,6 +196,7 @@ public class VRInteractable_Dropdown : VR_Interactable
         base.Awake();
         SetupDropdown();
         text = GetComponentInChildren<TextMeshProUGUI>();
+        text.raycastTarget = false;
         vl.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.UpperCenter;
         vl.GetComponent<VerticalLayoutGroup>().spacing = spacing;
         vl.GetComponent<RectTransform>().localPosition -= new Vector3(0, image.rectTransform.sizeDelta.y, 0);
