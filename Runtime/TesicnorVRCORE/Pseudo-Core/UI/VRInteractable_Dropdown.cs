@@ -260,7 +260,7 @@ public class VRInteractable_Dropdown : VR_Interactable
     {
         currentOption = position;
         //text.text = options_Texts[position];
-        OpenDropdown();
+        //OpenDropdown();
         onValueChanged?.Invoke(position);
     }
     #endregion
