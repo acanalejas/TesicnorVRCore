@@ -111,7 +111,7 @@ public class VRInteractable_Dropdown : VR_Interactable
         public override void OnRelease()
         {
             base.OnRelease();
-            dropdown.ChangeValue(position);
+            if(this.gameObject.activeSelf || this.gameObject.activeInHierarchy)dropdown.ChangeValue(position);
         }
     }
 
