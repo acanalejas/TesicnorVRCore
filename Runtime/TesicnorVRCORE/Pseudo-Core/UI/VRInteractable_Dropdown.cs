@@ -255,7 +255,7 @@ public class VRInteractable_Dropdown : VR_Interactable
     void ChangeValue(int position)
     {
         currentOption = position;
-        text.text = options_Texts[position];
+        //text.text = options_Texts[position];
         OpenDropdown();
         onValueChanged?.Invoke(position);
     }
