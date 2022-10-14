@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR;
 
 [RequireComponent(typeof(LineRenderer))]
 public class TestExtinguisher : MonoBehaviour
@@ -20,7 +21,12 @@ public class TestExtinguisher : MonoBehaviour
         GetComponent<LineRenderer>().SetPositions(positions);
 
         TesicFire.FireObject[] allFires = GameObject.FindObjectsOfType<TesicFire.FireObject>();
+        
         int index = 0;
-        foreach (var fires in allFires) {fires.ExtinguishWithRaycast(ray);}
+        bool pressed = false;
+        if(GetComponent<XRController>().inputDevice.TryGetFeatureValue(CommonUsages.primaryButton, out pressed) && pressed)
+        {
+            foreach (var fires in allFires) { fires.ExtinguishWithCone(this.transform.position, this.transform.forward); }
+        }
     }
 }

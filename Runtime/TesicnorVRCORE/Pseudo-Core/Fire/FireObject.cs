@@ -28,42 +28,45 @@ namespace TesicFire
         /// <summary>
         /// Prefab de las partículas de fuego
         /// </summary>
-        [HideInInspector] public ParticleSystem fire_SystemPrefab;
+        [SerializeField][HideInInspector] public FireParticles fire_SystemPrefab;
         /// <summary>
         /// El sistema de partículas del fuego
         /// </summary>
-        [HideInInspector] public ParticleSystem fire_System;
+        [SerializeField][HideInInspector] public ParticleSystem fire_System;
 
         /// <summary>
         /// El GameObject de las partículas del fuego
         /// </summary>
-        [HideInInspector] public GameObject fire_GO;
+        [SerializeField][HideInInspector] public GameObject fire_GO;
 
         /// <summary>
         /// El meshRenderer del fuego
         /// </summary>
-        [HideInInspector] public MeshRenderer fire_MR;
+        [SerializeField][HideInInspector] public MeshRenderer fire_MR;
         /// <summary>
         /// El sistema de partículas del humo
         /// </summary>
-        [HideInInspector] public ParticleSystem smoke_System;
+        [SerializeField][HideInInspector] public ParticleSystem smoke_System;
 
         /// <summary>
         /// El GameObject de las partículas del humo
         /// </summary>
-        [HideInInspector] public GameObject smoke_GO;
+        [SerializeField][HideInInspector] public GameObject smoke_GO;
 
-        [HideInInspector] public bool InitialFire = false;
-        [HideInInspector] public bool UsesSmoke = true;
-        [HideInInspector] public bool UsesSparks = true;
+        [SerializeField]
+        [HideInInspector] public ParticleSystem sparks_System;
+
+        [SerializeField][HideInInspector] public bool InitialFire = false;
+        [SerializeField][HideInInspector] public bool UsesSmoke = true;
+        [SerializeField][HideInInspector] public bool UsesSparks = true;
         #region Para el fuego
-        [HideInInspector] public float Delay = 4;
-        [HideInInspector] public float FireSpeed { get { return fireSpeed; } set { fireSpeed = value; fireSpeed = Mathf.Clamp(fireSpeed, 0.05f, 10f); } }
-        private float fireSpeed = 1;
-        [HideInInspector] public float PropDistance = 1;
-        [HideInInspector] public float MaxTimeToExtinguish = 2;
-        [HideInInspector] public float TimeToExtinguish = 2;
-        [HideInInspector] public Vector3 PropOffset = Vector3.zero;
+        [SerializeField][HideInInspector] public float Delay = 4;
+        [SerializeField][HideInInspector] public float FireSpeed { get { return fireSpeed; } set { fireSpeed = value; fireSpeed = Mathf.Clamp(fireSpeed, 0.05f, 10f); } }
+        [SerializeField][HideInInspector] private float fireSpeed = 1;
+        [SerializeField][HideInInspector] public float PropDistance = 1;
+        [SerializeField][HideInInspector] public float MaxTimeToExtinguish = 2;
+        [SerializeField][HideInInspector] public float TimeToExtinguish = 2;
+        [SerializeField][HideInInspector] public Vector3 PropOffset = Vector3.zero;
 
         private float timeOnFire = 0;
 
@@ -99,8 +102,10 @@ namespace TesicFire
         }
         private void Awake()
         {
-            fire_GO.GetComponent<ParticleSystem>().playOnAwake = false;
             fire_GO.GetComponent<ParticleSystem>().Stop();
+            if (smoke_GO && !smoke_System) smoke_System = smoke_GO.GetComponent<ParticleSystem>();
+            if(smoke_System)smoke_System.Stop();
+            if (sparks_System) sparks_System.Stop();
 
             fire_MR = fire_GO.GetComponent<MeshRenderer>();
             InitializeStructures();
@@ -119,18 +124,19 @@ namespace TesicFire
 
         IEnumerator construct()
         {
-            fire_mesh.Add(FireMesh(Vector3.zero, "FireMesh50", 20));
+            if(completeFire) { StopCoroutine("construct"); }
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh50", 3));
             //yield return new WaitForSeconds(0.3f);
-            fire_mesh.Add(FireMesh(Vector3.zero, "FireMesh40", 10));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh40", 2));
             //yield return new WaitForSeconds(0.3f);
-            fire_mesh.Add(FireMesh(Vector3.zero, "FireMesh30", 8));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh30", 1));
             //yield return new WaitForSeconds(0.3f);
-            fire_mesh.Add(FireMesh(Vector3.zero, "FireMesh20", 1));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh20", 0.5f));
             //yield return new WaitForSeconds(0.3f);
-            fire_mesh.Add(FireMesh(Vector3.zero, "FireMesh", 0.01f));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh", 0.01f));
 
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
-
+            if(InitialFire) yield return new WaitForSeconds(Delay);
             yield return new WaitForSeconds(0.1f);
             //string read = File.ReadAllText("Assets/FireMesh20.txt");
             //Mesh mesh = FireUtilsMethods.StringToMesh(read);
@@ -138,23 +144,32 @@ namespace TesicFire
             reconstructing = true;
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[0];
             fire_System.Play();
-            yield return new WaitForSeconds(2/FireSpeed);
+
+            var shape = fire_System.shape;
+            shape.mesh = fire_mesh[0];
+
+            /*yield return new WaitForSeconds(2/FireSpeed);
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[1];
+            shape.mesh = fire_mesh[1];
             yield return new WaitForSeconds(2/FireSpeed);
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[2];
+            shape.mesh = fire_mesh[2];
             yield return new WaitForSeconds(2/FireSpeed);
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[3];
+            shape.mesh = fire_mesh[3];
             yield return new WaitForSeconds(2/FireSpeed);
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[4];
+            shape.mesh = fire_mesh[4];
             yield return new WaitForSeconds(2/FireSpeed);
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[5];
-
+            shape.mesh = fire_mesh[5];*/
+            //yield return new WaitForSeconds(10 / FireSpeed);
             reconstructing = false;
             completeFire = true;
 
         }
 
-        bool reconstructing = false;
+        [HideInInspector]public bool reconstructing = false;
         IEnumerator reconstruct()
         {
             reconstructing = true;
@@ -173,7 +188,11 @@ namespace TesicFire
             {
                 yield return new WaitForSeconds(2/FireSpeed);
                 mf.mesh = fire_mesh[i + 1];
+                var shape = fire_System.shape;
+                shape.mesh = fire_mesh[i + 1];
                 TimeToExtinguish = timePerSection * (i + 1);
+                if (i == fire_mesh.Count - 2) completeFire = true;
+                else completeFire = false;
             }
 
             StopCoroutine("reconstruct");
@@ -197,15 +216,24 @@ namespace TesicFire
             meshData_original.normals.Clear();
             meshData_original.normals.AddRange(mesh.normals);
 
+            var sol = fire_System.sizeOverLifetime;
+            sol.sizeMultiplier = 1;
+
+            var shape = fire_System.shape;
+            shape.scale = Vector3.one;
+            shape.meshRenderer = fire_GO.GetComponent<MeshRenderer>();
+
             onFire = true;
             initialFirePoint = initialPoint;
-            FireSpeed = 3;
+
+            TimeToExtinguish = MaxTimeToExtinguish;
 
             StartCoroutine("construct");
             StartCoroutine("burning");
 
             fire_System.Play();
             if (UsesSmoke && smoke_System) smoke_System.Play();
+            if(UsesSparks && sparks_System) sparks_System.Play();
         }
 
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
@@ -216,15 +244,17 @@ namespace TesicFire
                 UpdateFire(initialFirePoint);
                 if(this.OnFire())ParticleSize();
                 if(this.OnFire())Propagate();
+                if (this.OnFire()) { AdaptSmoke(); AdaptSparks(); }
                 if (this.OnFire())
                 {
                     if (!this.IsExtinguising() && fire_GO.GetComponent<MeshFilter>().mesh != GetComponent<MeshFilter>().mesh)
                     {
-                        Reconstruct();
+                        //Reconstruct();
                     }
                 }
 
                 if (this.IsExtinguising()) StopCoroutine("reconstruct");
+                else Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
 
                 yield return frame;
@@ -250,15 +280,13 @@ namespace TesicFire
         {
             PropDistance = fire_MR.localBounds.size.magnitude/1.2f;
 
-            var shape = fire_System.shape;
-            shape.scale = fire_MR.bounds.size;
+            //var shape = fire_System.shape;
+            //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
 
-            if (maxSize) return;
 
             BoxCollider bc = GetComponent<BoxCollider>();
             bc.size = fire_MR.localBounds.size + PropOffset;
 
-            if (completeFire) maxSize = true;
         }
 
         public bool Extinguished()
@@ -286,6 +314,8 @@ namespace TesicFire
             {
                 extinguished = true;
                 fire_System.Stop();
+                if (smoke_System) smoke_System.Stop();
+                if(sparks_System) sparks_System.Stop();
             }
 
             StopCoroutine("reconstruct");
@@ -309,6 +339,25 @@ namespace TesicFire
         public void ExtinguishWithParticles()
         {
             ExtinguishFire();
+        }
+
+        public void ExtinguishWithCone(Vector3 origin, Vector3 forward)
+        {
+            Vector3 destiny = this.transform.position;
+            Vector3 distance = destiny - origin;
+
+            float dot = Vector3.Dot(distance.normalized, forward);
+            Debug.Log("DOT : " + dot);
+
+            Ray ray = new Ray(origin, distance.normalized);
+            RaycastHit hit;
+            Physics.Raycast(ray, out hit, 7);
+
+            if(dot > 0.8f && hit.collider == GetComponent<Collider>())
+            {
+                ExtinguishFire();
+            }
+            else { Reconstruct(); }
         }
 
 
@@ -422,13 +471,13 @@ namespace TesicFire
 
         public Mesh FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
         {
-            Mesh mesh = new Mesh();
             Mesh fireMesh = new Mesh();
 
             //Creating the sphere to detect the points
             Vector3 center = initialFirePoint;
-            float radius = mesh_original.bounds.size.magnitude / radiusMultiplier + timeOnFire * FireSpeed;
-
+            float radius = GetComponent<MeshRenderer>().bounds.extents.magnitude / radiusMultiplier + timeOnFire * FireSpeed;
+            int i = 0;
+            List<int> VertexInside = new List<int>();
             foreach (Vector3 p in meshData_original.vertex)
             {
                 //(x?cx)2+(y?cy)2+(z?cz)2<r2 .
@@ -436,29 +485,33 @@ namespace TesicFire
 
                 bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
 
-                if (inside) meshData_current.vertex.Add(p);
+                if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
+                i++;
             }
 
             //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
-            for (int i = 0; i < meshData_original.triangles.Count - 3; i += 3)
+            for (int j = 0; j < meshData_original.triangles.Count - 3; j += 3)
             {
                 bool validTriangle = true;
 
-                if (meshData_original.triangles[i] > meshData_current.vertex.Count - 1 || meshData_original.triangles[i + 1] > meshData_current.vertex.Count - 1 || meshData_original.triangles[i + 2] > meshData_current.vertex.Count - 1) validTriangle = false;
+                if (!VertexInside.Contains(meshData_original.triangles[j]) || !VertexInside.Contains(meshData_original.triangles[j + 1]) || !VertexInside.Contains(meshData_original.triangles[j + 2])) validTriangle = false;
 
-                if (validTriangle) { meshData_current.triangles.Add(meshData_original.triangles[i]); meshData_current.triangles.Add(meshData_original.triangles[i + 1]); meshData_current.triangles.Add(meshData_original.triangles[i + 2]); }
+                if (validTriangle) { meshData_current.triangles.Add(meshData_original.triangles[VertexInside.IndexOf(meshData_original.triangles[j])]); meshData_current.triangles.Add(VertexInside.IndexOf(meshData_original.triangles[j + 1])); meshData_current.triangles.Add(VertexInside.IndexOf(meshData_original.triangles[j + 2])); }
             }
 
             int h = 0;
             foreach (Vector3 v in meshData_current.vertex)
             {
-                if(h < meshData_original.normals.Count) meshData_current.normals.Add(meshData_original.normals[h]);
+                if(h < VertexInside.Count)
+                if (VertexInside[h] < meshData_original.normals.Count) meshData_current.normals.Add(meshData_original.normals[VertexInside[h]]);
                 h++;
             }
 
             fireMesh.SetVertices(meshData_current.vertex);
-            fireMesh.SetTriangles(new int[0], 0);
-            //if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
+            fireMesh.SetTriangles(meshData_current.triangles, 0);
+            fireMesh.UploadMeshData(false);
+            //AssetDatabase.CreateAsset(fireMesh, "Assets/" + assetName + ".asset");
+            if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
 
             return fireMesh;
         }
@@ -477,17 +530,52 @@ namespace TesicFire
         {
             MeshRenderer mr = fire_MR;
             var sbl = fire_System.sizeOverLifetime;
-            sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.localBounds.size.magnitude/1.8f , Time.deltaTime);
+            sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.bounds.size.magnitude/1.5f , Time.deltaTime);
             sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.5f);
+
+            var main = fire_System.main;
+            //main.startSizeMultiplier = Mathf.Lerp(main.startSpeedMultiplier, mr.localBounds.size.magnitude /3f, Time.deltaTime * 2);
             
             return Vector2.zero;
+        }
+
+        public void AdaptSmoke()
+        {
+            if (!smoke_System || !UsesSmoke) return;
+
+            var fire_shape = fire_System.shape;
+            var smoke_shape = smoke_System.shape;
+
+            //smoke_shape.scale = fire_shape.scale;
+            smoke_shape.shapeType = ParticleSystemShapeType.Box;
+            if (fire_shape.mesh)
+            {
+                smoke_shape.scale = fire_shape.mesh.bounds.size;
+                smoke_System.transform.localPosition = new Vector3(0, fire_shape.mesh.bounds.size.y / 2, 0);
+            }
+
+            var fire_sol = fire_System.sizeOverLifetime;
+            var smoke_sol = smoke_System.sizeOverLifetime;
+
+            smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier*1.5f;
+        }
+        public void AdaptSparks()
+        {
+            if (!sparks_System || !UsesSparks) return;
+
+            var fire_shape = fire_System.shape;
+            var sparks_shape = sparks_System.shape;
+
+            sparks_shape.scale = fire_shape.scale;
+            sparks_shape.shapeType = fire_shape.shapeType;
+            sparks_shape.meshRenderer = fire_shape.meshRenderer;
         }
 
         public void OnDrawGizmos()
         {
             Gizmos.DrawWireCube(GetComponent<MeshRenderer>().bounds.center, GetComponent<MeshRenderer>().bounds.size + PropOffset);
         }
-        public void OnTriggerEnter(Collider other)
+        /*public void OnTriggerEnter(Collider other)
         {
             FireUtils fireUtils = other.GetComponent<FireUtils>();
 
@@ -496,7 +584,7 @@ namespace TesicFire
                 if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
                 fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
             }
-        }
+        }*/
 
         public void OnTriggerStay(Collider other)
         {
@@ -579,8 +667,7 @@ namespace TesicFire
             if (fireSettings)
             {
                 GUILayout.Label("El prefab de las partículas de fuego");
-                SerializedObject obj = new SerializedObject(manager);
-                SerializedProperty firePrefab = obj.FindProperty("fire_SystemPrefab");
+                SerializedProperty firePrefab = serializedObject.FindProperty("fire_SystemPrefab");
                 EditorGUILayout.PropertyField(firePrefab);
 
                 GUILayout.Space(10);
@@ -613,6 +700,17 @@ namespace TesicFire
                 GUILayout.Label("El offset en el collider para la propagación del fuego", EditorStyles.boldLabel);
                 manager.PropOffset = EditorGUILayout.Vector3Field("Propagation Offset", manager.PropOffset);
 
+                GUILayout.Space(20);
+
+                if(GUILayout.Button("Reset Fire", EditorStyles.miniButton))
+                {
+                    Transform fire = manager.transform.Find("Fire");
+                    if (fire)
+                    {
+                        DestroyImmediate(fire.gameObject);
+                    }
+                }
+
             }
             #region CheckIfHasFire
             Transform[] _children = manager.GetComponentsInChildren<Transform>();
@@ -631,13 +729,14 @@ namespace TesicFire
                 GameObject fire = new GameObject("Fire", typeof(ParticleSystem), typeof(MeshFilter), typeof(MeshRenderer));
                 fire.transform.parent = manager.transform;
                 fire.transform.localPosition = Vector3.zero;
-                fire.transform.localRotation = Quaternion.identity;
+                fire.transform.localRotation = Quaternion.Euler(Vector3.zero);
                 fire.transform.localScale = Vector3.one;
+                //fire.transform.forward = Vector3.up;
+                fire.GetComponent<MeshRenderer>().enabled = false;
                 manager.fire_System = fire.GetComponent<ParticleSystem>();
                 manager.fire_GO = fire;
-                var shape = manager.fire_System.shape;
-                shape.shapeType = ParticleSystemShapeType.Box;
-                shape.meshRenderer = fire.GetComponent<MeshRenderer>();
+
+                CopyParticles(manager.fire_SystemPrefab.fire_System, manager.fire_System);
             }
             var _shape = manager.fire_System.shape;
             if (_shape.meshRenderer != manager.fire_GO.GetComponent<MeshRenderer>()) _shape.meshRenderer = manager.fire_GO.GetComponent<MeshRenderer>();
@@ -651,18 +750,34 @@ namespace TesicFire
                 GUILayout.Label("Se usa el humo?", EditorStyles.boldLabel);
                 manager.UsesSmoke = EditorGUILayout.Toggle(manager.UsesSmoke, EditorStyles.toggle);
 
-                Transform[] children = manager.gameObject.GetComponentsInChildren<Transform>();
-                bool smokeCreated = false;
-                foreach(Transform child in children) { if (child.gameObject.name == "Smoke") smokeCreated = true; }
-
-                if(!smokeCreated && manager.UsesSmoke)
+                GUILayout.Space(20);
+                
+                if(GUILayout.Button("Reset Smoke"))
                 {
-                    GameObject smoke_go = new GameObject("Smoke", typeof(ParticleSystem));
-                    smoke_go.transform.parent = manager.transform;
-                    smoke_go.hideFlags = HideFlags.NotEditable;
-                    manager.smoke_System = smoke_go.GetComponent<ParticleSystem>();
-                    manager.smoke_System.hideFlags = HideFlags.HideInInspector;
+                    Transform smoke = manager.transform.Find("Smoke");
+                    if (smoke) DestroyImmediate(smoke.gameObject);
                 }
+            }
+
+            Transform[] children = manager.gameObject.GetComponentsInChildren<Transform>();
+            bool smokeCreated = false;
+            foreach (Transform child in children) { if (child.gameObject.name == "Smoke") smokeCreated = true; }
+
+            if (!smokeCreated && manager.UsesSmoke)
+            {
+                GameObject smoke_go = new GameObject("Smoke", typeof(ParticleSystem));
+                smoke_go.transform.parent = manager.transform;
+                smoke_go.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                smoke_go.transform.localScale = Vector3.one;
+                //smoke_go.hideFlags = HideFlags.NotEditable;
+                manager.smoke_System = smoke_go.GetComponent<ParticleSystem>();
+
+                CopyParticles(manager.fire_SystemPrefab.smoke_System, manager.smoke_System);
+            }
+            else if (smokeCreated && !manager.UsesSmoke)
+            {
+                Transform smoke_go = manager.transform.Find("Smoke");
+                DestroyImmediate(smoke_go.gameObject);
             }
             #endregion
 
@@ -671,18 +786,136 @@ namespace TesicFire
             {
                 GUILayout.Label("Se usan chispas?", EditorStyles.boldLabel);
                 manager.UsesSparks = EditorGUILayout.Toggle(manager.UsesSparks, EditorStyles.toggle);
-            }
-            #endregion
 
-            if(GUILayout.Button("DELETE SMOKE"))
+                GUILayout.Space(20);
+
+                GUILayout.Button("Reset Sparks", EditorStyles.miniButton);
+            }
+
+            Transform sparks = manager.transform.Find("Sparks");
+
+            if(manager.UsesSparks && !sparks)
             {
-                Transform[] children = manager.GetComponentsInChildren<Transform>();
+                GameObject sparks_go = new GameObject("Sparks", typeof(ParticleSystem));
+                sparks_go.transform.parent = manager.transform;
+                sparks_go.transform.localPosition = Vector3.zero;
+                sparks_go.transform.localRotation = Quaternion.identity;
+                sparks_go.transform.localScale = Vector3.one;
+                sparks_go.hideFlags = HideFlags.HideInHierarchy;
+                manager.sparks_System = sparks_go.GetComponent<ParticleSystem>();
 
-                foreach(Transform child in children) { if (child.gameObject.name == "Smoke") DestroyImmediate(child.gameObject); }
+                CopyParticles(manager.fire_SystemPrefab.sparks_System, manager.sparks_System);
             }
+            else if(!manager.UsesSparks && sparks)
+            {
+                DestroyImmediate(sparks.gameObject);
+            }
+
+            #endregion
 
             GUILayout.EndVertical();
+            serializedObject.ApplyModifiedProperties();
             #endregion
+        }
+        
+        void CopyParticles(ParticleSystem ps, ParticleSystem _target)
+        {
+            FireObject manager = (FireObject)target;
+
+            var main = _target.main;
+            var main_p = ps.main;
+            main.duration = main_p.duration;
+            main.startLifetime = main_p.startLifetime;
+            main.simulationSpace = main_p.simulationSpace;
+            main.cullingMode = main_p.cullingMode;
+            main.emitterVelocityMode = main_p.emitterVelocityMode;
+            main.emitterVelocity = main_p.emitterVelocity;
+            main.gravityModifier = main_p.gravityModifier;
+            main.maxParticles = main_p.maxParticles;
+            main.gravityModifierMultiplier = main_p.gravityModifierMultiplier;
+            main.playOnAwake = main_p.playOnAwake;
+            main.prewarm = main_p.prewarm;
+            main.startRotation = main_p.startRotation;
+            main.loop = main_p.loop;
+            main.flipRotation = main_p.flipRotation;
+            main.scalingMode = main_p.scalingMode;
+            main.startColor = main_p.startColor;
+            main.startDelay = main_p.startDelay;
+            main.startSize = main_p.startSize;
+            main.startSpeed = main_p.startSpeed;
+
+
+            var shape = _target.shape;
+            shape.shapeType = ParticleSystemShapeType.Mesh;
+            shape.meshShapeType = ParticleSystemMeshShapeType.Edge;
+            shape.meshRenderer = _target.GetComponent<MeshRenderer>();
+
+            var col = _target.colorOverLifetime;
+            var col_p = ps.colorOverLifetime;
+            col.color = col_p.color;
+            col.enabled = col_p.enabled;
+
+            var emission = _target.emission;
+            var emission_p = ps.emission;
+            emission.burstCount = emission_p.burstCount;
+            emission.rateMultiplier = emission_p.rateMultiplier;
+            emission.rateOverTimeMultiplier = emission_p.rateOverTimeMultiplier;
+            emission.rateOverDistanceMultiplier = emission_p.rateOverDistanceMultiplier;
+            emission.rate = emission_p.rate;
+            emission.rateOverDistance = emission_p.rateOverDistance;
+            emission.rateOverTime = emission_p.rateOverTime;
+            emission.type = emission_p.type;
+
+            var sol = _target.sizeOverLifetime;
+            var sol_p = ps.sizeOverLifetime;
+            sol.size = sol_p.size;
+            sol.sizeMultiplier = sol_p.sizeMultiplier;
+            sol.separateAxes = sol_p.separateAxes;
+            sol.x = sol_p.x; sol.y = sol_p.y; sol.z = sol_p.z;
+            sol.xMultiplier = sol_p.zMultiplier; sol.yMultiplier = sol_p.yMultiplier; sol.zMultiplier = sol_p.zMultiplier;
+            sol.enabled = sol_p.enabled;
+
+            Renderer renderer = _target.GetComponent<Renderer>();
+            Renderer renderer_p = ps.GetComponent<Renderer>();
+            renderer.sharedMaterial = renderer_p.sharedMaterial;
+
+            var tsa = _target.textureSheetAnimation;
+            var tsa_p = ps.textureSheetAnimation;
+            tsa.fps = tsa_p.fps;
+            tsa.animation = tsa_p.animation;
+            tsa.mode = tsa_p.mode;
+            tsa.rowMode = tsa_p.rowMode;
+            tsa.cycleCount = tsa_p.cycleCount;
+            tsa.frameOverTime = tsa_p.frameOverTime;
+            tsa.startFrame = tsa_p.startFrame;
+            tsa.speedRange = tsa_p.speedRange;
+            tsa.enabled = tsa_p.enabled;
+            tsa.numTilesX = tsa_p.numTilesX;
+            tsa.numTilesY = tsa_p.numTilesY;
+
+            var noise = _target.noise;
+            var noise_p = ps.noise;
+            noise.damping = noise_p.damping;
+            noise.frequency = noise_p.frequency;
+            noise.octaveScale = noise_p.octaveScale;
+            noise.octaveMultiplier = noise_p.octaveMultiplier;
+            noise.quality = noise_p.quality;
+            noise.enabled = noise_p.enabled;
+            noise.strength = noise_p.strength;
+
+            var vol = _target.velocityOverLifetime;
+            var vol_p = ps.velocityOverLifetime;
+            vol.orbitalX = vol_p.orbitalX;
+            vol.orbitalY = vol_p.orbitalY;
+            vol.orbitalZ = vol_p.orbitalZ;
+            vol.space = vol_p.space;
+            vol.x = vol_p.x; vol.y = vol_p.y; vol.z = vol_p.z;
+            vol.radial = vol_p.radial;
+            vol.orbitalOffsetX = vol_p.orbitalOffsetX;
+            vol.orbitalOffsetY = vol_p.orbitalOffsetY;
+            vol.orbitalOffsetZ = vol_p.orbitalOffsetZ;
+            vol.speedModifier = vol_p.speedModifier;
+            vol.enabled = vol_p.enabled;
         }
 
         public void OnSceneGUI()

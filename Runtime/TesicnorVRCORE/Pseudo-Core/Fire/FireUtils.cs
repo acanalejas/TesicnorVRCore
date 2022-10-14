@@ -14,6 +14,8 @@ namespace TesicFire
 
         public void ExtinguishWithRaycast(Ray raycast);
 
+        public void ExtinguishWithCone(Vector3 origin, Vector3 forward);
+
         public void ExtinguishWithParticles();
 
         public void Propagate();

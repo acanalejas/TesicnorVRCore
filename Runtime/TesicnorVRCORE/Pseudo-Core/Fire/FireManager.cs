@@ -21,12 +21,16 @@ namespace TesicFire
         /// <summary>
         /// Es aleatorio el comienzo del fuego?
         /// </summary>
-        [HideInInspector] public bool RandomInitialFire = false;
+        [SerializeField][HideInInspector] public bool RandomInitialFire = false;
 
         /// <summary>
         /// Tiempo que tarda en empezar el fuego
         /// </summary>
-        [HideInInspector] public float Delay = 4;
+        [SerializeField][HideInInspector] public float Delay = 4;
+
+        public FireUtils[] AllFires { get { return allFires; } }
+
+        private FireObject[] allFires;
 
         #endregion
 
@@ -34,6 +38,38 @@ namespace TesicFire
         private void Awake()
         {
             CheckSingleton();
+        }
+
+        private void Start()
+        {
+            SearchAllFires();
+        }
+
+        private void SearchAllFires()
+        {
+            allFires = GameObject.FindObjectsOfType<FireObject>();
+        }
+
+        bool noneOnFire = true;
+        bool noneExtinguished = true;
+        public bool Finished()
+        {
+            foreach(var fire in allFires)
+            {
+                if (fire.OnFire()) noneOnFire = false;
+                if (fire.Extinguished()) noneExtinguished = false;
+            }
+            if (noneOnFire && !noneExtinguished) return true;
+            else return false;
+        }
+
+        public bool Started()
+        {
+            foreach(var fire in allFires)
+            {
+                if (fire.fire_System.isPlaying || fire.Extinguished()) return true;
+            }
+            return false;
         }
         #endregion
     }
