@@ -917,16 +917,6 @@ namespace TesicFire
             vol.speedModifier = vol_p.speedModifier;
             vol.enabled = vol_p.enabled;
         }
-
-        public void OnSceneGUI()
-        {
-            FireObject manager = (FireObject)target;
-
-            if (Selection.gameObjects.Length > 0 && manager.smoke_System)
-            {
-                if (Selection.gameObjects[0] == manager.gameObject) manager.smoke_System.Simulate(0.001f, true, false);
-            }
-        }
     }
 #endif
 }
