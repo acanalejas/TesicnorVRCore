@@ -285,7 +285,7 @@ namespace TesicFire
 
 
             BoxCollider bc = GetComponent<BoxCollider>();
-            bc.size = fire_MR.localBounds.size + PropOffset;
+            bc.size = fire_MR.bounds.size + PropOffset;
 
         }
 
