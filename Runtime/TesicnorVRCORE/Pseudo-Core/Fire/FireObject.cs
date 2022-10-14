@@ -196,7 +196,7 @@ namespace TesicFire
                 else
                 {
                     var shape = fire_System.shape;
-                    shape.scale = GetComponent<MeshFilter>().mesh.bounds.size / (fire_mesh.Count - i);
+                    shape.scale = GetComponent<MeshRenderer>().bounds.size / (fire_mesh.Count - i);
                 }
                 
                 TimeToExtinguish = timePerSection * (i + 1);
