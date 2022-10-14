@@ -501,7 +501,7 @@ namespace TesicFire
             if (!mesh_original.isReadable) return fireMesh;
 
             //Creating the sphere to detect the points
-            Vector3 center = initialFirePoint;
+            Vector3 center = GetComponent<MeshRenderer>().bounds.center;
             float radius = GetComponent<MeshRenderer>().bounds.extents.magnitude / radiusMultiplier + timeOnFire * FireSpeed;
             int i = 0;
             List<int> VertexInside = new List<int>();
