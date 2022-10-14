@@ -300,11 +300,17 @@ namespace TesicFire
 
             //var shape = fire_System.shape;
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
-
-
             BoxCollider bc = GetComponent<BoxCollider>();
-            bc.size = fire_MR.bounds.size + PropOffset;
 
+            if (mesh_original.isReadable)
+            {
+                bc.size = fire_MR.bounds.size + PropOffset;
+            }
+            else
+            {
+                var shape = fire_System.shape;
+                bc.size = shape.scale + PropOffset;
+            }
         }
 
         public bool Extinguished()
