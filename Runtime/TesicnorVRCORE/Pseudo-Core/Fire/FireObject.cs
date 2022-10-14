@@ -187,9 +187,18 @@ namespace TesicFire
             for(int i = index; i < fire_mesh.Count - 1; i++)
             {
                 yield return new WaitForSeconds(2/FireSpeed);
-                mf.mesh = fire_mesh[i + 1];
-                var shape = fire_System.shape;
-                shape.mesh = fire_mesh[i + 1];
+                if (mesh_original.isReadable)
+                {
+                    mf.mesh = fire_mesh[i + 1];
+                    var shape = fire_System.shape;
+                    shape.mesh = fire_mesh[i + 1];
+                }
+                else
+                {
+                    var shape = fire_System.shape;
+                    shape.scale = GetComponent<MeshFilter>().mesh.bounds.size / (fire_mesh.Count - i);
+                }
+                
                 TimeToExtinguish = timePerSection * (i + 1);
                 if (i == fire_mesh.Count - 2) completeFire = true;
                 else completeFire = false;
@@ -206,22 +215,31 @@ namespace TesicFire
             //Obtenemos la mesh del objeto
             Mesh mesh = GetComponent<MeshFilter>().mesh;
             mesh_original = mesh;
-            //Almacenamos sus vértices y triángulos
-            meshData_original.vertex.Clear();
-            meshData_original.vertex.AddRange(mesh.vertices);
 
-            meshData_original.triangles.Clear();
-            meshData_original.triangles.AddRange(mesh.triangles);
+            if (mesh.isReadable)
+            {
+                //Almacenamos sus vértices y triángulos
+                meshData_original.vertex.Clear();
+                meshData_original.vertex.AddRange(mesh.vertices);
 
-            meshData_original.normals.Clear();
-            meshData_original.normals.AddRange(mesh.normals);
+                meshData_original.triangles.Clear();
+                meshData_original.triangles.AddRange(mesh.triangles);
 
-            var sol = fire_System.sizeOverLifetime;
-            sol.sizeMultiplier = 1;
+                meshData_original.normals.Clear();
+                meshData_original.normals.AddRange(mesh.normals);
 
-            var shape = fire_System.shape;
-            shape.scale = Vector3.one;
-            shape.meshRenderer = fire_GO.GetComponent<MeshRenderer>();
+                var sol = fire_System.sizeOverLifetime;
+                sol.sizeMultiplier = 1;
+
+                var shape = fire_System.shape;
+                shape.scale = Vector3.one;
+                shape.meshRenderer = fire_GO.GetComponent<MeshRenderer>();
+            }
+            else
+            {
+                var shape = fire_System.shape;
+                shape.shapeType = ParticleSystemShapeType.Box;
+            }
 
             onFire = true;
             initialFirePoint = initialPoint;
@@ -471,7 +489,10 @@ namespace TesicFire
 
         public Mesh FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
         {
+
             Mesh fireMesh = new Mesh();
+
+            if (!mesh_original.isReadable) return fireMesh;
 
             //Creating the sphere to detect the points
             Vector3 center = initialFirePoint;
