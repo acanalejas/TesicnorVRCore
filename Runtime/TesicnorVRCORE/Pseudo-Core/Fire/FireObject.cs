@@ -557,7 +557,15 @@ namespace TesicFire
         {
             MeshRenderer mr = fire_MR;
             var sbl = fire_System.sizeOverLifetime;
-            sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.bounds.size.magnitude/1.5f , Time.deltaTime);
+            if (GetComponent<MeshFilter>().mesh.isReadable)
+            {
+                sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.bounds.size.magnitude / 1.5f, Time.deltaTime);
+            }
+            else
+            {
+                var shape = fire_System.shape;
+                sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, shape.scale.magnitude / 1.5f, Time.deltaTime);
+            }
             sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.5f);
 
             var main = fire_System.main;
