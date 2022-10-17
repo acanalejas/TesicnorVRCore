@@ -436,7 +436,6 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(HandInteraction), true)]
-[CanSelectMultiple]
 [CanEditMultipleObjects]
 public class InteractionEditor : Editor
 {
