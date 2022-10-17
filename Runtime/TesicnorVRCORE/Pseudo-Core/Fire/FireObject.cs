@@ -201,7 +201,11 @@ namespace TesicFire
                     var shape = fire_System.shape;
                     shape.scale = (GetComponent<MeshRenderer>().bounds.extents) / (fire_mesh.Count - i);
                 }
-                
+                ParticleSize();
+                AdaptSmoke();
+                AdaptSparks();
+                Propagate();
+
                 TimeToExtinguish = timePerSection * (i + 1);
                 if (i == fire_mesh.Count - 2) completeFire = true;
                 else completeFire = false;
@@ -265,10 +269,10 @@ namespace TesicFire
                 UpdateFire(initialFirePoint);
                 if ((this.OnFire()))
                 {
-                    ParticleSize();
-                    Propagate();
-                    AdaptSmoke();
-                    AdaptSparks();
+                    //ParticleSize();
+                    //Propagate();
+                    //AdaptSmoke();
+                    //AdaptSparks();
 
                 }
 
@@ -334,9 +338,13 @@ namespace TesicFire
             {
                 float currentSectionTime = timePerSection * i;
                 if(TimeToExtinguish >= currentSectionTime) fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[i];
+                ParticleSize();
+                AdaptSmoke();
+                AdaptSparks();
+                Propagate();
             }
 
-            if(TimeToExtinguish <= 0)
+            if (TimeToExtinguish <= 0)
             {
                 extinguished = true;
                 fire_System.Stop();
@@ -620,7 +628,8 @@ namespace TesicFire
         {
             Gizmos.DrawWireCube(GetComponent<MeshRenderer>().bounds.center, GetComponent<MeshRenderer>().bounds.size + PropOffset);
         }
-        public void OnTriggerEnter(Collider other)
+
+        public void OnTriggerStay(Collider other)
         {
             FireUtils fireUtils = other.GetComponent<FireUtils>();
 
