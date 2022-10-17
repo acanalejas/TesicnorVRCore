@@ -140,32 +140,15 @@ namespace TesicFire
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
             if(InitialFire) yield return new WaitForSeconds(Delay);
             yield return new WaitForSeconds(0.1f);
-            //string read = File.ReadAllText("Assets/FireMesh20.txt");
-            //Mesh mesh = FireUtilsMethods.StringToMesh(read);
-            //AssetDatabase.CreateAsset(mesh, "Assets/mesh.asset");
             reconstructing = true;
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[0];
             fire_System.Play();
+            if (UsesSmoke && smoke_System) smoke_System.Play();
+            if (UsesSparks && sparks_System) sparks_System.Play();
+            onFire = true;
 
             var shape = fire_System.shape;
             shape.mesh = fire_mesh[0];
-
-            /*yield return new WaitForSeconds(2/FireSpeed);
-            fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[1];
-            shape.mesh = fire_mesh[1];
-            yield return new WaitForSeconds(2/FireSpeed);
-            fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[2];
-            shape.mesh = fire_mesh[2];
-            yield return new WaitForSeconds(2/FireSpeed);
-            fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[3];
-            shape.mesh = fire_mesh[3];
-            yield return new WaitForSeconds(2/FireSpeed);
-            fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[4];
-            shape.mesh = fire_mesh[4];
-            yield return new WaitForSeconds(2/FireSpeed);
-            fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[5];
-            shape.mesh = fire_mesh[5];*/
-            //yield return new WaitForSeconds(10 / FireSpeed);
             reconstructing = false;
             completeFire = true;
 
@@ -248,7 +231,7 @@ namespace TesicFire
                 shape.shapeType = ParticleSystemShapeType.Box;
             }
 
-            onFire = true;
+            
             initialFirePoint = initialPoint;
 
             TimeToExtinguish = MaxTimeToExtinguish;
@@ -256,9 +239,7 @@ namespace TesicFire
             StartCoroutine("construct");
             StartCoroutine("burning");
 
-            fire_System.Play();
-            if (UsesSmoke && smoke_System) smoke_System.Play();
-            if(UsesSparks && sparks_System) sparks_System.Play();
+            
         }
 
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
