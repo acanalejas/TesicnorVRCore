@@ -140,6 +140,9 @@ namespace TesicFire
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
             if(InitialFire) yield return new WaitForSeconds(Delay);
             yield return new WaitForSeconds(0.1f);
+            fire_System.Play();
+            if (UsesSmoke && smoke_System) smoke_System.Play();
+            if (UsesSparks && sparks_System) sparks_System.Play();
             reconstructing = true;
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[0];
 
@@ -225,9 +228,6 @@ namespace TesicFire
                 shape.shapeType = ParticleSystemShapeType.Box;
             }
 
-            fire_System.Play();
-            if (UsesSmoke && smoke_System) smoke_System.Play();
-            if (UsesSparks && sparks_System) sparks_System.Play();
             onFire = true;
             initialFirePoint = initialPoint;
 
