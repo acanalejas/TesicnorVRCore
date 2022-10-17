@@ -632,7 +632,7 @@ namespace TesicFire
                 }
             }
         }
-    }
+    
 
         /*public void OnTriggerStay(Collider other)
         {
