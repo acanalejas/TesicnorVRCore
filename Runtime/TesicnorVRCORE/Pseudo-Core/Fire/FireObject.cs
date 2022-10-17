@@ -271,16 +271,6 @@ namespace TesicFire
                     AdaptSparks();
 
                 }
-                /*if(this.OnFire())ParticleSize();
-                if(this.OnFire())Propagate();
-                if (this.OnFire()) { AdaptSmoke(); AdaptSparks(); }
-                if (this.OnFire())
-                {
-                    if (!this.IsExtinguising() && fire_GO.GetComponent<MeshFilter>().mesh != GetComponent<MeshFilter>().mesh)
-                    {
-                        //Reconstruct();
-                    }
-                }*/
 
                 if (this.IsExtinguising()) StopCoroutine("reconstruct");
                 else Reconstruct();
@@ -288,6 +278,7 @@ namespace TesicFire
 
                 yield return frame;
             }
+            StopCoroutine("burning");
         }
         public void UpdateFire(Vector3 initialPoint)
         {
@@ -629,18 +620,21 @@ namespace TesicFire
         {
             Gizmos.DrawWireCube(GetComponent<MeshRenderer>().bounds.center, GetComponent<MeshRenderer>().bounds.size + PropOffset);
         }
-        /*public void OnTriggerEnter(Collider other)
+        public void OnTriggerEnter(Collider other)
         {
             FireUtils fireUtils = other.GetComponent<FireUtils>();
 
-            if(fireUtils != null)
+            if (fireUtils != null)
             {
                 if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
-                fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
+                {
+                    fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
+                }
             }
-        }*/
+        }
+    }
 
-        public void OnTriggerStay(Collider other)
+        /*public void OnTriggerStay(Collider other)
         {
             FireUtils fireUtils = other.GetComponent<FireUtils>();
 
@@ -651,7 +645,7 @@ namespace TesicFire
                     fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
                 }
             }
-        }
+        }*/
 
         #endregion
         #endregion
