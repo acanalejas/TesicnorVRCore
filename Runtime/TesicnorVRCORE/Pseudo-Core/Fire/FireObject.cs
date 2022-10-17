@@ -169,6 +169,7 @@ namespace TesicFire
             reconstructing = false;
             completeFire = true;
 
+            StopCoroutine("construct");
         }
 
         [HideInInspector]public bool reconstructing = false;
@@ -262,7 +263,15 @@ namespace TesicFire
             while (this.onFire)
             {
                 UpdateFire(initialFirePoint);
-                if(this.OnFire())ParticleSize();
+                if ((this.OnFire()))
+                {
+                    ParticleSize();
+                    Propagate();
+                    AdaptSmoke();
+                    AdaptSparks();
+
+                }
+                /*if(this.OnFire())ParticleSize();
                 if(this.OnFire())Propagate();
                 if (this.OnFire()) { AdaptSmoke(); AdaptSparks(); }
                 if (this.OnFire())
@@ -271,7 +280,7 @@ namespace TesicFire
                     {
                         //Reconstruct();
                     }
-                }
+                }*/
 
                 if (this.IsExtinguising()) StopCoroutine("reconstruct");
                 else Reconstruct();
