@@ -147,6 +147,7 @@ namespace TesicFire
             if (UsesSparks && sparks_System) sparks_System.Play();
             onFire = true;
 
+            StartCoroutine("reconstruct");
             var shape = fire_System.shape;
             shape.mesh = fire_mesh[0];
             //reconstructing = false;
@@ -237,8 +238,6 @@ namespace TesicFire
 
             StartCoroutine("construct");
             StartCoroutine("burning");
-
-            
         }
 
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
