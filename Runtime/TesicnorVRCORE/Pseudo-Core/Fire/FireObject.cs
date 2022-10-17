@@ -160,7 +160,6 @@ namespace TesicFire
         {
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
-            if (mf.mesh == GetComponent<MeshFilter>()) yield return null;
 
             int index = 0;
             for(int i = 0; i < fire_mesh.Count; i++)
