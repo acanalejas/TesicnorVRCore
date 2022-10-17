@@ -13,25 +13,25 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     #region PARAMETERS
     #region Common
     [Header("Esta controlado por manos?")]
-    [HideInInspector]public bool isHandControlled = true;
+    [SerializeField][HideInInspector]public bool isHandControlled = true;
 
     [Header("Distancia m�xima del Raycast de deteccion")]
-    [HideInInspector] public float maxDistance = 10;
+    [SerializeField][HideInInspector] public float maxDistance = 10;
 
     [Header("Es la mano izquierda?")]
-    [HideInInspector] public bool isLeftHand = false;
+    [SerializeField][HideInInspector] public bool isLeftHand = false;
 
     [Header("Usa el rayo o solo colision?")]
-    [HideInInspector] public bool usesRay = true;
+    [SerializeField][HideInInspector] public bool usesRay = true;
 
     [Header("LineRenderer que nos da feedback visual de la interaccion")]
-    [HideInInspector] public LineRenderer lineRenderer;
+    [SerializeField][HideInInspector] public LineRenderer lineRenderer;
 
     [Header("Color del LineRenderer cuando no apunta a nada")]
-    [HideInInspector] public Color nonDetectedColor;
+    [SerializeField][HideInInspector] public Color nonDetectedColor;
 
     [Header("Color del LineRenderer cuando detecta algun interactable")]
-    [HideInInspector] public Color detectedColor;
+    [SerializeField][HideInInspector] public Color detectedColor;
 
     /// <summary>
     /// El objeto con el que esta interactuando la mano
@@ -55,33 +55,33 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     #region Controllers
     [Header("============ CUANDO SE USAN MANDOS =================")][Space(10)]
     [Header("El punto desde el que se lanza el rayo")]
-    [HideInInspector] public Transform interactionOrigin;
+    [SerializeField][HideInInspector] public Transform interactionOrigin;
     [Header("El componente XRController de la mano")]
-    [HideInInspector] public XRController handController;
+    [SerializeField][HideInInspector] public XRController handController;
     #endregion
 
     #region Hands
     [Header("============= CUANDO SE USAN LAS MANOS ===============")][Space(10)]
     [Header("Hueso de la falange del dedo gordo")]
-    [HideInInspector] public Transform dedoGordo;
+    [SerializeField][HideInInspector] public Transform dedoGordo;
 
     [Header("Hueso de la falange del dedo indice")]
-    [HideInInspector] public Transform indice;
+    [SerializeField][HideInInspector] public Transform indice;
 
     [Header("Hueso de la falange del dedo corazon")]
-    [HideInInspector] public Transform dedoCorazon;
+    [SerializeField][HideInInspector] public Transform dedoCorazon;
 
     [Header("Hueso de la falange del dedo anular")]
-    [HideInInspector] public Transform dedoAnular;
+    [SerializeField][HideInInspector] public Transform dedoAnular;
 
     [Header("Hueso de la falange del dedo me�ique")]
-    [HideInInspector] public Transform dedoMenique;
+    [SerializeField][HideInInspector] public Transform dedoMenique;
 
     [Header("HandPoseDetector encargado de comprobar la mano")]
-    [HideInInspector] public HandPoseDetector poseDetector;
+    [SerializeField][HideInInspector] public HandPoseDetector poseDetector;
 
     [Header("'Cubo' de deteccion de colision")]
-    [HideInInspector] public Vector3 fingerCube;
+    [SerializeField][HideInInspector] public Vector3 fingerCube;
 
     private BoxCollider meniqueCollider;
     private BoxCollider anularCollider;
@@ -436,6 +436,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(HandInteraction), true)]
+[CanSelectMultiple]
+[CanEditMultipleObjects]
 public class InteractionEditor : Editor
 {
     [HideInInspector] public HandInteraction handInteraction;
