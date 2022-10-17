@@ -143,7 +143,6 @@ namespace TesicFire
             reconstructing = true;
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[0];
 
-            ParticleSize(); Propagate(); AdaptSmoke(); AdaptSparks();
             var shape = fire_System.shape;
             shape.mesh = fire_mesh[0];
             //reconstructing = false;
@@ -236,6 +235,8 @@ namespace TesicFire
 
             StartCoroutine("construct");
             StartCoroutine("burning");
+
+            ParticleSize(); Propagate(); AdaptSmoke(); AdaptSparks();
         }
 
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
