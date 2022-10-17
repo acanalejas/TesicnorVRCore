@@ -142,8 +142,8 @@ namespace TesicFire
             yield return new WaitForSeconds(0.1f);
             reconstructing = true;
             fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[0];
-            
 
+            ParticleSize(); Propagate(); AdaptSmoke(); AdaptSparks();
             var shape = fire_System.shape;
             shape.mesh = fire_mesh[0];
             //reconstructing = false;
