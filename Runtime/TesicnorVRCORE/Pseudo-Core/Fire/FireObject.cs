@@ -66,6 +66,8 @@ namespace TesicFire
         [SerializeField][HideInInspector] public float PropDistance = 1;
         [SerializeField][HideInInspector] public float MaxTimeToExtinguish = 2;
         [SerializeField][HideInInspector] public float TimeToExtinguish = 2;
+        [SerializeField][HideInInspector] public float MaxEmission = 80;
+        [SerializeField][HideInInspector] public float MaxSize = 4;
         [SerializeField][HideInInspector] public Vector3 PropOffset = Vector3.zero;
 
         private float timeOnFire = 0;
@@ -568,8 +570,16 @@ namespace TesicFire
             }
             sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.5f);
 
-            var main = fire_System.main;
-            //main.startSizeMultiplier = Mathf.Lerp(main.startSpeedMultiplier, mr.localBounds.size.magnitude /3f, Time.deltaTime * 2);
+            var emission = fire_System.emission;
+            Vector3 size = Vector3.zero;
+
+            size = fire_GO.GetComponent<MeshRenderer>().bounds.size;
+            float maxSize = MaxSize;
+            float maxEmission = MaxEmission;
+            float currentSize = size.magnitude;
+            float currentEmission = (maxEmission * currentSize) / maxSize;
+
+            emission.rate = currentEmission;
             
             return Vector2.zero;
         }
@@ -734,6 +744,16 @@ namespace TesicFire
 
                 GUILayout.Label("El offset en el collider para la propagación del fuego", EditorStyles.boldLabel);
                 manager.PropOffset = EditorGUILayout.Vector3Field("Propagation Offset", manager.PropOffset);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("La emissión de referencia", EditorStyles.boldLabel);
+                manager.MaxEmission = EditorGUILayout.FloatField(manager.MaxEmission, EditorStyles.miniTextField);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("El tamaño de referencia", EditorStyles.boldLabel);
+                manager.MaxSize = EditorGUILayout.FloatField(manager.MaxSize, EditorStyles.miniTextField);
 
                 GUILayout.Space(20);
 
