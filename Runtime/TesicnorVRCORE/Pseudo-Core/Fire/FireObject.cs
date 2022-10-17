@@ -149,7 +149,7 @@ namespace TesicFire
 
             var shape = fire_System.shape;
             shape.mesh = fire_mesh[0];
-            reconstructing = false;
+            //reconstructing = false;
             completeFire = true;
 
             StopCoroutine("construct");
