@@ -12,6 +12,8 @@ public struct Gesture
     public string GestureName;
     public List<Vector3> fingersPositions;
     public UnityEvent OnRecognizeGesture;
+    public bool forGrab;
+    public bool forRelease;
 }
 public class HandPoseDetector : MonoBehaviour
 {
@@ -44,7 +46,7 @@ public class HandPoseDetector : MonoBehaviour
         Gesture newGesture = Recognize();
         bool hasRecognized = !newGesture.Equals(new Gesture());
 
-        if (hasRecognized && newGesture.OnRecognizeGesture.GetPersistentMethodName(0) != previousGesture.OnRecognizeGesture.GetPersistentMethodName(0))
+        if (hasRecognized && !bothGrab(newGesture, previousGesture) && !bothRelease(newGesture, previousGesture))
         {
             previousGesture = newGesture;
             newGesture.OnRecognizeGesture.Invoke();
@@ -53,6 +55,16 @@ public class HandPoseDetector : MonoBehaviour
         }
     }
 
+    bool bothRelease(Gesture _new, Gesture old)
+    {
+        if (_new.forRelease && old.forRelease) return true;
+        else return false;
+    }
+    bool bothGrab(Gesture _new, Gesture old)
+    {
+        if (_new.forGrab && old.forGrab) return true;
+        return false;
+    }
     /// <summary>
     /// Usado para guardar gestos nuevos en runtime
     /// </summary>
