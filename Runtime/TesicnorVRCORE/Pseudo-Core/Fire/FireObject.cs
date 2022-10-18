@@ -638,6 +638,8 @@ namespace TesicFire
             
             FireObject manager = (FireObject)target;
 
+           manager.fire_SystemPrefab = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/ScriptableObjects/Fire Particles.asset", typeof(FireParticles)) as FireParticles;
+
             #region Titulo
             GUILayout.BeginHorizontal();
             GUILayout.Label("FIRE OBJECT", EditorStyles.miniButtonMid, GUILayout.ExpandHeight(true));
