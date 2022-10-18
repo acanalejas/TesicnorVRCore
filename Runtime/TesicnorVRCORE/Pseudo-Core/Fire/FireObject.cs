@@ -628,7 +628,6 @@ namespace TesicFire
         void OnEnable()
         {
             FireObject manager = (FireObject)target;
-            manager.fire_SystemPrefab = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/ScriptableObjects/Fire Particles.asset", typeof(FireParticles)) as FireParticles;
         }
 
         [InitializeOnEnterPlayMode]
@@ -638,8 +637,8 @@ namespace TesicFire
             base.OnInspectorGUI();
             
             FireObject manager = (FireObject)target;
+            manager.fire_SystemPrefab = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/ScriptableObjects/Fire Particles.asset", typeof(FireParticles)) as FireParticles;
 
-           
 
             #region Titulo
             GUILayout.BeginHorizontal();
