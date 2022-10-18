@@ -199,8 +199,8 @@ namespace TesicFire
             var sol = fire_System.sizeOverLifetime;
             sol.sizeMultiplier = 0;
 
-            var main = fire_System.main;
-            main.startSize = 0;
+            //var main = fire_System.main;
+            //main.startSize = 0;
 
             if (mesh.isReadable)
             {
