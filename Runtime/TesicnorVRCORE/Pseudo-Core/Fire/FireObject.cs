@@ -128,13 +128,9 @@ namespace TesicFire
         {
             if(completeFire) { StopCoroutine("construct"); }
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh50", 3));
-            //yield return new WaitForSeconds(0.3f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh40", 2));
-            //yield return new WaitForSeconds(0.3f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh30", 1));
-            //yield return new WaitForSeconds(0.3f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh20", 0.5f));
-            //yield return new WaitForSeconds(0.3f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh", 0.01f));
 
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
@@ -244,16 +240,6 @@ namespace TesicFire
         {
             while (this.onFire)
             {
-                UpdateFire(initialFirePoint);
-                if ((this.OnFire()))
-                {
-                    //ParticleSize();
-                    //Propagate();
-                    //AdaptSmoke();
-                    //AdaptSparks();
-
-                }
-
                 if (this.IsExtinguising()) StopCoroutine("reconstruct");
                 else Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
@@ -489,8 +475,8 @@ namespace TesicFire
             if (!mesh_original.isReadable) return fireMesh;
 
             //Creating the sphere to detect the points
-            Vector3 center = GetComponent<MeshRenderer>().bounds.center;
-            float radius = GetComponent<MeshRenderer>().bounds.extents.magnitude / radiusMultiplier + timeOnFire * FireSpeed;
+            Vector3 center = GetComponent<MeshRenderer>().localBounds.center;
+            float radius = GetComponent<MeshRenderer>().localBounds.extents.magnitude / radiusMultiplier + timeOnFire * FireSpeed;
             int i = 0;
             List<int> VertexInside = new List<int>();
             foreach (Vector3 p in meshData_original.vertex)
@@ -587,7 +573,11 @@ namespace TesicFire
 
             var fire_sol = fire_System.sizeOverLifetime;
             var smoke_sol = smoke_System.sizeOverLifetime;
+            var fire_emission = fire_System.emission;
+            var smoke_emission = smoke_System.emission;
 
+            if (fire_emission.rateMultiplier == 0) smoke_emission.rateMultiplier = 0;
+            else smoke_emission.rateMultiplier = 7;
             smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier*1.5f;
         }
         public void AdaptSparks()
@@ -619,21 +609,6 @@ namespace TesicFire
                 }
             }
         }
-    
-
-        /*public void OnTriggerStay(Collider other)
-        {
-            FireUtils fireUtils = other.GetComponent<FireUtils>();
-
-            if(fireUtils != null)
-            {
-                if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
-                {
-                    fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
-                }
-            }
-        }*/
-
         #endregion
         #endregion
     }
