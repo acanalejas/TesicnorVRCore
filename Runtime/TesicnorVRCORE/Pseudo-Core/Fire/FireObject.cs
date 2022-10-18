@@ -761,8 +761,6 @@ namespace TesicFire
 
                 CopyParticles(manager.fire_SystemPrefab.fire_System, manager.fire_System);
             }
-            var _shape = manager.fire_System.shape;
-            if (_shape.meshRenderer != manager.fire_GO.GetComponent<MeshRenderer>()) _shape.meshRenderer = manager.fire_GO.GetComponent<MeshRenderer>();
 
             #endregion
             #endregion
