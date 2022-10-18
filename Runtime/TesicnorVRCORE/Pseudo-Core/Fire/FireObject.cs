@@ -196,6 +196,12 @@ namespace TesicFire
             Mesh mesh = GetComponent<MeshFilter>().mesh;
             mesh_original = mesh;
 
+            var sol = fire_System.sizeOverLifetime;
+            sol.sizeMultiplier = 0;
+
+            var main = fire_System.main;
+            main.startSize = 0;
+
             if (mesh.isReadable)
             {
                 //Almacenamos sus vértices y triángulos
@@ -208,12 +214,8 @@ namespace TesicFire
                 meshData_original.normals.Clear();
                 meshData_original.normals.AddRange(mesh.normals);
 
-                var sol = fire_System.sizeOverLifetime;
-                sol.sizeMultiplier = 1;
-
                 var shape = fire_System.shape;
                 shape.scale = Vector3.one;
-                shape.meshRenderer = fire_GO.GetComponent<MeshRenderer>();
             }
             else
             {
@@ -529,13 +531,13 @@ namespace TesicFire
         {
             MeshRenderer mr = fire_MR;
             var sbl = fire_System.sizeOverLifetime;
+            var shape = fire_System.shape;
             if (GetComponent<MeshFilter>().mesh.isReadable)
             {
                 sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.bounds.size.magnitude / 1.5f, Time.deltaTime);
             }
             else
             {
-                var shape = fire_System.shape;
                 sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, shape.scale.magnitude / 1.5f, Time.deltaTime);
             }
             sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.5f);
@@ -548,6 +550,9 @@ namespace TesicFire
             float maxEmission = MaxEmission;
             float currentSize = size.magnitude;
             float currentEmission = (maxEmission * currentSize) / maxSize;
+
+            var main = fire_System.main;
+            main.startSize = Mathf.Lerp(main.startSize.constant, GetComponent<BoxCollider>().size.magnitude, Time.deltaTime);
 
             emission.rateOverTime = Mathf.Lerp(emission.rateOverTime.constant, currentEmission, Time.deltaTime);
             
