@@ -44,7 +44,7 @@ public class HandPoseDetector : MonoBehaviour
         Gesture newGesture = Recognize();
         bool hasRecognized = !newGesture.Equals(new Gesture());
 
-        if (hasRecognized && !newGesture.Equals(previousGesture))
+        if (hasRecognized && newGesture.OnRecognizeGesture.GetPersistentMethodName(0) != previousGesture.OnRecognizeGesture.GetPersistentMethodName(0))
         {
             previousGesture = newGesture;
             newGesture.OnRecognizeGesture.Invoke();
@@ -74,8 +74,6 @@ public class HandPoseDetector : MonoBehaviour
     /// Compara la postura de la mano con los gestos almacenados y devuelve si coincide con alguno
     /// </summary>
     /// <returns></returns>
-    /// 
-    Gesture lastGesture = new Gesture();
     public Gesture Recognize()
     {
         Gesture currentGesture = new Gesture();
@@ -104,9 +102,7 @@ public class HandPoseDetector : MonoBehaviour
                 currentGesture = gesture;
             }
         }
-        if (currentGesture.OnRecognizeGesture.GetPersistentMethodName(0) == lastGesture.OnRecognizeGesture.GetPersistentMethodName(0)) return new Gesture();
 
-        lastGesture = currentGesture;
         return currentGesture;
     }
 
