@@ -288,7 +288,7 @@ namespace TesicFire
 
             if (mesh_original.isReadable)
             {
-                bc.size = fire_MR.bounds.size + PropOffset;
+                bc.size = fire_MR.localBounds.size + PropOffset;
             }
             else
             {
