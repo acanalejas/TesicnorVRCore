@@ -119,23 +119,20 @@ namespace TesicFire
         }
         private void Start()
         {
-            //BeginFire(GetComponent<MeshFilter>().mesh.bounds.center);
             mesh_original = GetComponent<MeshFilter>().mesh;
-            if (InitialFire) BeginFire(Vector3.zero);
+            if (InitialFire) BeginFire(/*GetComponent<MeshRenderer>().localBounds.center*/ mesh_original.bounds.center);
         }
 
         IEnumerator construct()
         {
             if(completeFire) { StopCoroutine("construct"); }
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh50", 3));
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh40", 2));
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh30", 1));
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh20", 0.5f));
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh", 0.01f));
-
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh50", 4));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh40", 3));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh30", 2));
+            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh20", 1f));
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
-            if(InitialFire) yield return new WaitForSeconds(Delay);
-            yield return new WaitForSeconds(0.1f);
+
+            yield return new WaitForSeconds(Delay);
             fire_System.Play();
             if (UsesSmoke && smoke_System) smoke_System.Play();
             if (UsesSparks && sparks_System) sparks_System.Play();
@@ -203,7 +200,7 @@ namespace TesicFire
             {
                 //Almacenamos sus vértices y triángulos
                 meshData_original.vertex.Clear();
-                meshData_original.vertex.AddRange(mesh.vertices);
+                mesh.GetVertices(meshData_original.vertex);
 
                 meshData_original.triangles.Clear();
                 meshData_original.triangles.AddRange(mesh.triangles);
@@ -240,6 +237,7 @@ namespace TesicFire
         {
             while (this.onFire)
             {
+                ParticleSize();
                 if (this.IsExtinguising()) StopCoroutine("reconstruct");
                 else Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
@@ -476,7 +474,7 @@ namespace TesicFire
 
             //Creating the sphere to detect the points
             Vector3 center = transform.InverseTransformPoint(initialFirePoint);
-            float radius = GetComponent<MeshRenderer>().localBounds.extents.magnitude / radiusMultiplier + timeOnFire * FireSpeed;
+            float radius = GetComponent<MeshRenderer>().localBounds.size.magnitude / radiusMultiplier /*+ timeOnFire * FireSpeed*/;
             int i = 0;
             List<int> VertexInside = new List<int>();
             foreach (Vector3 p in meshData_original.vertex)
@@ -489,7 +487,7 @@ namespace TesicFire
                 if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
                 i++;
             }
-
+            Debug.Log(meshData_current.vertex.Count);
             //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
             for (int j = 0; j < meshData_original.triangles.Count - 3; j += 3)
             {
@@ -551,7 +549,7 @@ namespace TesicFire
             float currentSize = size.magnitude;
             float currentEmission = (maxEmission * currentSize) / maxSize;
 
-            emission.rate = currentEmission;
+            emission.rateOverTime = Mathf.Lerp(emission.rateOverTime.constant, currentEmission, Time.deltaTime);
             
             return Vector2.zero;
         }
