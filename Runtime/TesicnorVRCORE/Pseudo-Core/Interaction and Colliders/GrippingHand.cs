@@ -313,7 +313,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     /// <returns></returns>
     public bool isGrabbing()
     {
-        return grippedObject && isGripping;
+        return grippedObject != null && isGripping;
     }
 
     Vector3 lastTrackedPosition;
