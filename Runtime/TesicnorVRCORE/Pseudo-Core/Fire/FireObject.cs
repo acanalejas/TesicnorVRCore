@@ -551,8 +551,8 @@ namespace TesicFire
             float currentSize = size.magnitude;
             float currentEmission = (maxEmission * currentSize) / maxSize;
 
-            var main = fire_System.main;
-            main.startSize = Mathf.Lerp(main.startSize.constant, GetComponent<BoxCollider>().size.magnitude, Time.deltaTime);
+            //var main = fire_System.main;
+            //main.startSize = Mathf.Lerp(main.startSize.constant, GetComponent<BoxCollider>().size.magnitude, Time.deltaTime);
 
             emission.rateOverTime = Mathf.Lerp(emission.rateOverTime.constant, currentEmission, Time.deltaTime);
             
