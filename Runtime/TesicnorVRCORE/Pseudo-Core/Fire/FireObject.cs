@@ -133,7 +133,7 @@ namespace TesicFire
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
             yield return new WaitForSeconds(Delay);
-            onFire = true;
+            
             fire_System.Play();
             if (UsesSmoke && smoke_System) smoke_System.Play();
             if (UsesSparks && sparks_System) sparks_System.Play();
@@ -224,7 +224,7 @@ namespace TesicFire
                 shape.shapeType = ParticleSystemShapeType.Box;
             }
 
-            
+            onFire = true;
             initialFirePoint = initialPoint;
 
             TimeToExtinguish = MaxTimeToExtinguish;
