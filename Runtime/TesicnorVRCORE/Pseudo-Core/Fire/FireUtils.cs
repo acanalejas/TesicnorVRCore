@@ -21,6 +21,8 @@ namespace TesicFire
         public void Propagate();
         public bool OnFire();
 
+        public bool FireStarted();
+
         public bool CompleteFire();
         public bool Extinguished();
 
