@@ -520,7 +520,7 @@ namespace TesicFire
 
         public bool OnFire()
         {
-            return onFire;
+            return fire_System.particleCount > 0;
         }
         
         public bool CompleteFire()
