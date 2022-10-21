@@ -20,6 +20,12 @@ public class PlayerManager : MonoBehaviour
     [Header("El canvas que enseña el mensaje de los mandos")]
     [SerializeField] private GameObject useControllersCanvas;
 
+    [Header("El GameObject del escenario")]
+    [SerializeField] private GameObject scenario;
+
+    [Header("El GameObject de la sala blanca")]
+    [SerializeField] private GameObject room;
+
     /// <summary>
     /// El punto al que se quiere llevar el canvas del mensaje de las manos
     /// </summary>
@@ -139,8 +145,8 @@ public class PlayerManager : MonoBehaviour
             rightHandAnchor.SetActive(false);
             leftHandAnchor.SetActive(false);
 
-            useHandsCanvas.transform.position = Vector3.Lerp(useHandsCanvas.transform.position, handsCanvasParent.position, Time.deltaTime * 2);
-            useHandsCanvas.transform.LookAt(mainCamera);
+            //useHandsCanvas.transform.position = Vector3.Lerp(useHandsCanvas.transform.position, handsCanvasParent.position, Time.deltaTime * 2);
+            //useHandsCanvas.transform.LookAt(mainCamera);
             alreadyUsingHands = false;
         }
         else
@@ -153,6 +159,8 @@ public class PlayerManager : MonoBehaviour
             if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true; Debug.Log("RECENTERING FROM PLAYER MANAGER"); }
             //playerControllers.SetActive(false);
         }
+        scenario.SetActive(!useHandsCanvas.activeSelf);
+        room.SetActive(useHandsCanvas.activeSelf);
     }
 
     bool alreadyChanged = false;
@@ -174,8 +182,8 @@ public class PlayerManager : MonoBehaviour
             rightController.SetActive(false);
             leftController.SetActive(false);
 
-            useControllersCanvas.transform.position = Vector3.Lerp(useControllersCanvas.transform.position, handsCanvasParent.position, Time.deltaTime * 2);
-            useControllersCanvas.transform.LookAt(mainCamera);
+            //useControllersCanvas.transform.position = Vector3.Lerp(useControllersCanvas.transform.position, handsCanvasParent.position, Time.deltaTime * 2);
+            //useControllersCanvas.transform.LookAt(mainCamera);
         }
 
         else
@@ -184,6 +192,9 @@ public class PlayerManager : MonoBehaviour
             rightController.SetActive(true);
             leftController.SetActive(true);
         }
+
+        scenario.SetActive(!useControllersCanvas.activeSelf);
+        room.SetActive(useControllersCanvas.activeSelf);
     }
     #endregion
 }
