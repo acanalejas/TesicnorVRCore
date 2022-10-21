@@ -618,7 +618,7 @@ namespace TesicFire
             Gizmos.DrawWireCube(GetComponent<MeshRenderer>().bounds.center, GetComponent<MeshRenderer>().bounds.size + PropOffset);
         }
 
-        public void OnTriggerEnter(Collider other)
+        public void OnTriggerStay(Collider other)
         {
             FireUtils fireUtils = other.GetComponent<FireUtils>();
 
