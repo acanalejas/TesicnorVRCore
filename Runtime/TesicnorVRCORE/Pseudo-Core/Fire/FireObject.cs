@@ -501,6 +501,7 @@ namespace TesicFire
             for(int k = numVertex - 1; k >= 0; k--)
             {
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
+                VertexInside.Add(distances[k].index);
             }
             //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
             for (int j = 0; j < meshData_original.triangles.Count - 3; j += 3)
