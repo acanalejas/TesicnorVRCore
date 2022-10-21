@@ -498,7 +498,7 @@ namespace TesicFire
             distances = distances.OrderByDescending(x => x.distance).ToList();
             Debug.Log(meshData_current.vertex.Count);
 
-            for(int k = 0; k < numVertex; k++)
+            for(int k = numVertex - 1; k >= 0; k--)
             {
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
                 VertexInside.Add(distances[k].index);
@@ -626,7 +626,7 @@ namespace TesicFire
             {
                 if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
                 {
-                    fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
+                    fireUtils.BeginFire(other.ClosestPoint(transform.position));
                 }
             }
         }
