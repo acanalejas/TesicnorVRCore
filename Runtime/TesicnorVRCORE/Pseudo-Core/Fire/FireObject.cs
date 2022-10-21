@@ -313,6 +313,9 @@ namespace TesicFire
                 fire_System.Stop();
                 if (smoke_System) smoke_System.Stop();
                 if(sparks_System) sparks_System.Stop();
+
+                Collider[] colliders = GetComponents<Collider>();
+                foreach(Collider col in colliders) col.enabled = false;
             }
 
             StopCoroutine("reconstruct");
