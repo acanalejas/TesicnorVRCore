@@ -475,7 +475,7 @@ namespace TesicFire
             if (!mesh_original.isReadable) return fireMesh;
 
             //Creating the sphere to detect the points
-            Vector3 center = transform.InverseTransformPoint(initialFirePoint);
+            Vector3 center = /*transform.InverseTransformPoint(initialFirePoint)*/ initialFirePoint;
             float radius = GetComponent<MeshRenderer>().localBounds.size.magnitude / radiusMultiplier /*+ timeOnFire * FireSpeed*/;
             int numVertex = (int)(mesh_original.vertices.Length / radiusMultiplier);
             List<vertex> distances = new List<vertex>();
@@ -489,7 +489,7 @@ namespace TesicFire
                 //bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
                 vertex _vertex = new vertex();
                 _vertex.index = i;
-                _vertex.distance = Vector3.Distance(p, center);
+                _vertex.distance = Vector3.Distance(center, transform.TransformPoint(p));
                 distances.Add(_vertex);
 
                 //if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
@@ -626,7 +626,7 @@ namespace TesicFire
             {
                 if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
                 {
-                    fireUtils.BeginFire(other.ClosestPoint(transform.position));
+                    fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
                 }
             }
         }
