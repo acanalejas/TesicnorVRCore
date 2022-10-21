@@ -495,10 +495,10 @@ namespace TesicFire
                 //if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
                 i++;
             }
-            distances = distances.OrderByDescending(x => x).ToList();
+            distances = distances.OrderByDescending(x => x.index).ToList();
             Debug.Log(meshData_current.vertex.Count);
 
-            for(int k = 0; k < numVertex; k++)
+            for(int k = numVertex - 1; k >= 0; k--)
             {
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
             }
