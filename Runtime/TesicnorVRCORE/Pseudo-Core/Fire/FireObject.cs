@@ -498,7 +498,7 @@ namespace TesicFire
             distances = distances.OrderByDescending(x => x).ToList();
             Debug.Log(meshData_current.vertex.Count);
 
-            for(int k = 0; k < distances.Count; k++)
+            for(int k = 0; k < numVertex; k++)
             {
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
             }
