@@ -59,6 +59,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
             if(collider.target == this && canReleaseObject && collider.hasTarget && (!needsGrabbing || (needsGrabbing && collider.isGrabbed())))
             {
                 conditionCompleted = true;
+                if (collider.targetSound != null) {collider.targetSound.loop = false; collider.targetSound.Play();}
                 if (collider.DropTeleport)
                 {
                     if(collider.GetGrippingHand())collider.GetGrippingHand().Release();

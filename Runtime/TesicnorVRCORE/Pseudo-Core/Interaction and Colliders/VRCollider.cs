@@ -21,6 +21,12 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [HideInInspector] public AudioSource releaseSound;
 
     /// <summary>
+    /// El sonido que hace al llegar al target
+    /// </summary>
+    [Header("El sonido que hace al llegar al target")]
+    [HideInInspector] public AudioSource targetSound;
+
+    /// <summary>
     /// Controla si al soltarlo cae, o se mantiene estático
     /// </summary>
     [Header("Controla si al soltarlo cae, o se mantiene estático")]
@@ -518,6 +524,11 @@ public class VRColliderEditor : Editor
         {
             SerializedProperty target = serializedObject.FindProperty("target");
             EditorGUILayout.PropertyField(target, new GUIContent("Target"));
+
+            GUILayout.Space(10);
+
+            SerializedProperty targetSound = serializedObject.FindProperty("targetSound");
+            EditorGUILayout.PropertyField(targetSound, new GUIContent("Target Sound"));
 
             GUILayout.Space(10);
         }

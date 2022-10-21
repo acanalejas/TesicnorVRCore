@@ -5,9 +5,7 @@ using UnityEditor;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Linq;
 
 namespace TesicFire
 {
@@ -468,6 +466,7 @@ namespace TesicFire
             return fireMesh;
         }
 
+        struct vertex { public float distance; public int index; }
         public Mesh FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
         {
 
@@ -478,6 +477,8 @@ namespace TesicFire
             //Creating the sphere to detect the points
             Vector3 center = transform.InverseTransformPoint(initialFirePoint);
             float radius = GetComponent<MeshRenderer>().localBounds.size.magnitude / radiusMultiplier /*+ timeOnFire * FireSpeed*/;
+            int numVertex = (int)(mesh_original.vertices.Length / radiusMultiplier);
+            List<vertex> distances = new List<vertex>();
             int i = 0;
             List<int> VertexInside = new List<int>();
             foreach (Vector3 p in meshData_original.vertex)
@@ -485,12 +486,22 @@ namespace TesicFire
                 //(x?cx)2+(y?cy)2+(z?cz)2<r2 .
                 //Check if point is inside a sphere
 
-                bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
+                //bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
+                vertex _vertex = new vertex();
+                _vertex.index = i;
+                _vertex.distance = Vector3.Distance(p, center);
+                distances.Add(_vertex);
 
-                if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
+                //if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
                 i++;
             }
+            distances = distances.OrderByDescending(x => x).ToList();
             Debug.Log(meshData_current.vertex.Count);
+
+            for(int k = 0; k < distances.Count; k++)
+            {
+                meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
+            }
             //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
             for (int j = 0; j < meshData_original.triangles.Count - 3; j += 3)
             {
