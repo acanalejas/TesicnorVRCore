@@ -110,7 +110,11 @@ namespace TesicFire
             fire_MR = fire_GO.GetComponent<MeshRenderer>();
             InitializeStructures();
 
-            BoxCollider bc = GetComponent<BoxCollider>();
+            BoxCollider[] bcs = GetComponents<BoxCollider>();
+            BoxCollider bc = new BoxCollider();
+            bool isTrigger = false;
+            foreach(BoxCollider col in bcs) if(col.isTrigger) isTrigger = true;
+            if (!isTrigger) bc = bcs[0];
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
             bc.center = fire_MR.localBounds.center;
@@ -269,7 +273,9 @@ namespace TesicFire
 
             //var shape = fire_System.shape;
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
-            BoxCollider bc = GetComponent<BoxCollider>();
+            BoxCollider[] bcs = GetComponents<BoxCollider>();
+            BoxCollider bc = new BoxCollider();
+            foreach (BoxCollider col in bcs) if (col.isTrigger) bc = col;
 
             if (mesh_original.isReadable)
             {
