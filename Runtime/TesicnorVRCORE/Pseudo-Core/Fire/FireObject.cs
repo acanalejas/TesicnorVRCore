@@ -162,6 +162,7 @@ namespace TesicFire
 
             for(int i = index; i < fire_mesh.Count - 1; i++)
             {
+                if (this.extinguishing) break;
                 if (mesh_original.isReadable)
                 {
                     mf.mesh = fire_mesh[i + 1];
