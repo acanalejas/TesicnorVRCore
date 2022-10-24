@@ -162,7 +162,7 @@ namespace TesicFire
 
             for(int i = index; i < fire_mesh.Count - 1; i++)
             {
-                if (this.extinguishing) break;
+                if (this.extinguishing) yield break;
                 if (mesh_original.isReadable)
                 {
                     mf.mesh = fire_mesh[i + 1];
@@ -378,6 +378,7 @@ namespace TesicFire
             if (framesChecked > 10) return false;
 
             if (valueToCheck == TimeToExtinguish) framesChecked++;
+            else framesChecked = 0;
 
             valueToCheck = TimeToExtinguish;
 
