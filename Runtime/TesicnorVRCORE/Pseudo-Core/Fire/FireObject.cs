@@ -188,16 +188,12 @@ namespace TesicFire
             StopCoroutine("reconstruct");
         }
         */
+        int index = 0;
         void reconstruct()
         {
+            if (index == fire_mesh.Count - 1) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
-
-            int index = 0;
-            for (int i = 0; i < fire_mesh.Count; i++)
-            {
-                if (mf.mesh == fire_mesh[i]) index = i;
-            }
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
 
@@ -220,6 +216,7 @@ namespace TesicFire
                 TimeToExtinguish = timePerSection * (index + 1);
                 if (index == fire_mesh.Count - 2) completeFire = true;
                 else completeFire = false;
+            index++;
         }
         public void BeginFire(Vector3 initialPoint)
         {
@@ -345,7 +342,7 @@ namespace TesicFire
             for(int i = 0; i < fire_mesh.Count; i++)
             {
                 float currentSectionTime = timePerSection * i;
-                if(TimeToExtinguish >= currentSectionTime) fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[i];
+                if (TimeToExtinguish >= currentSectionTime) { fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[i]; index = i; }
                 ParticleSize();
                 AdaptSmoke();
                 AdaptSparks();
