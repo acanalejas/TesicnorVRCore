@@ -196,7 +196,7 @@ namespace TesicFire
             int index = 0;
             for (int i = 0; i < fire_mesh.Count; i++)
             {
-                if (mf.mesh.GetHashCode() == fire_mesh[i].GetHashCode()) index = i;
+                if (mf.mesh == fire_mesh[i]) index = i;
             }
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
