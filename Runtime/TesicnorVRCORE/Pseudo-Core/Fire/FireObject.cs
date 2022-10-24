@@ -139,10 +139,6 @@ namespace TesicFire
             fire_System.Play();
             if (UsesSmoke && smoke_System) smoke_System.Play();
             if (UsesSparks && sparks_System) sparks_System.Play();
-            fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[0];
-
-            var shape = fire_System.shape;
-            shape.mesh = fire_mesh[0];
             //reconstructing = false;
 
             StopCoroutine("construct");
