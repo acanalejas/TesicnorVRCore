@@ -539,12 +539,7 @@ namespace TesicFire
 
         public bool FireStarted()
         {
-            MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
-            foreach(Mesh mesh in fire_mesh)
-            {
-                if (mf.mesh == mesh) return true;
-            }
-            return false;
+            return fire_System.particleCount > 0;
         }
         
         public bool CompleteFire()
