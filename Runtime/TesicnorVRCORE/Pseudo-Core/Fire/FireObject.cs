@@ -214,7 +214,7 @@ namespace TesicFire
                 Propagate();
 
                 TimeToExtinguish = timePerSection * (index);
-                if (index == fire_mesh.Count - -1) completeFire = true;
+                if (index == fire_mesh.Count - 1) completeFire = true;
                 else completeFire = false;
             index++;
         }
