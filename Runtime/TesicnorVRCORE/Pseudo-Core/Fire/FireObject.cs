@@ -426,7 +426,7 @@ namespace TesicFire
             if (reconstructing) return;
             extinguishing = false;
 
-            InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
+            InvokeRepeating(nameof(reconstruct), 0.1f, 2/FireSpeed);
         }
 
         public Mesh FireMesh(Vector3 initialFirePoint)
