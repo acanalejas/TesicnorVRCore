@@ -330,7 +330,7 @@ namespace TesicFire
         public void ExtinguishWithRaycast(Ray raycast)
         {
             RaycastHit hit;
-            
+            extinguishing = true;
             if (Physics.Raycast(raycast, out hit, 8))
             {
                 if (hit.collider == GetComponent<Collider>())
