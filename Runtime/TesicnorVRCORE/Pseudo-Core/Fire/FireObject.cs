@@ -384,6 +384,7 @@ namespace TesicFire
 
         public void Reconstruct()
         {
+            if (reconstructing) return;
             extinguishing = false;
 
             StartCoroutine("reconstruct");
