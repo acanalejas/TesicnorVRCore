@@ -191,7 +191,7 @@ namespace TesicFire
         int index = 0;
         void reconstruct()
         {
-            if (index == fire_mesh.Count - 1) return;
+            if (index == fire_mesh.Count) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
 
@@ -199,9 +199,9 @@ namespace TesicFire
 
                 if (mesh_original.isReadable)
                 {
-                    mf.mesh = fire_mesh[index + 1];
+                    mf.mesh = fire_mesh[index];
                     var shape = fire_System.shape;
-                    shape.mesh = fire_mesh[index + 1];
+                    shape.mesh = fire_mesh[index];
                 }
                 else
                 {
@@ -213,8 +213,8 @@ namespace TesicFire
                 AdaptSparks();
                 Propagate();
 
-                TimeToExtinguish = timePerSection * (index + 1);
-                if (index == fire_mesh.Count - 2) completeFire = true;
+                TimeToExtinguish = timePerSection * (index);
+                if (index == fire_mesh.Count - -1) completeFire = true;
                 else completeFire = false;
             index++;
         }
@@ -423,7 +423,7 @@ namespace TesicFire
             if (reconstructing) return;
             extinguishing = false;
 
-            InvokeRepeating(nameof(reconstruct), 0.1f, 2/FireSpeed);
+            InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
         }
 
         public Mesh FireMesh(Vector3 initialFirePoint)
