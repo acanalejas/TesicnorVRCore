@@ -147,6 +147,7 @@ namespace TesicFire
         }
 
         [HideInInspector]public bool reconstructing = false;
+        /*
         IEnumerator reconstruct()
         {
             reconstructing = true;
@@ -185,6 +186,40 @@ namespace TesicFire
                 yield return new WaitForSeconds(2 / FireSpeed);
             }
             StopCoroutine("reconstruct");
+        }
+        */
+        void reconstruct()
+        {
+            reconstructing = true;
+            MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
+
+            int index = 0;
+            for (int i = 0; i < fire_mesh.Count; i++)
+            {
+                if (mf.mesh.GetHashCode() == fire_mesh[i].GetHashCode()) index = i;
+            }
+
+            float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
+
+                if (mesh_original.isReadable)
+                {
+                    mf.mesh = fire_mesh[index + 1];
+                    var shape = fire_System.shape;
+                    shape.mesh = fire_mesh[index + 1];
+                }
+                else
+                {
+                    var shape = fire_System.shape;
+                    shape.scale = (GetComponent<MeshRenderer>().bounds.extents) / (fire_mesh.Count - index);
+                }
+                ParticleSize();
+                AdaptSmoke();
+                AdaptSparks();
+                Propagate();
+
+                TimeToExtinguish = timePerSection * (index + 1);
+                if (index == fire_mesh.Count - 2) completeFire = true;
+                else completeFire = false;
         }
         public void BeginFire(Vector3 initialPoint)
         {
@@ -247,7 +282,7 @@ namespace TesicFire
             while (this.onFire)
             {
                 ParticleSize();
-                if (this.IsExtinguising()) StopCoroutine("reconstruct");
+                if (this.IsExtinguising()) CancelInvoke(nameof(reconstruct));
                 else Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
 
@@ -391,7 +426,7 @@ namespace TesicFire
             if (reconstructing) return;
             extinguishing = false;
 
-            StartCoroutine("reconstruct");
+            InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
         }
 
         public Mesh FireMesh(Vector3 initialFirePoint)
