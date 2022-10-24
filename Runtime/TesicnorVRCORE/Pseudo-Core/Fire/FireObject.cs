@@ -118,6 +118,7 @@ namespace TesicFire
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
             bc.center = fire_MR.localBounds.center;
+            bc.enabled = false;
         }
         private void Start()
         {
@@ -232,6 +233,11 @@ namespace TesicFire
             StartCoroutine("construct");
 
             ParticleSize(); Propagate(); AdaptSmoke(); AdaptSparks();
+
+            BoxCollider[] bcs = GetComponents<BoxCollider>();
+            BoxCollider bc = new BoxCollider();
+            foreach (BoxCollider col in bcs) if (col.isTrigger) {bc = col; }
+            bc.enabled = true;
         }
 
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
@@ -368,7 +374,7 @@ namespace TesicFire
         float valueToCheck = 0;
         public bool IsExtinguising()
         {
-            if (framesChecked > 2) return false;
+            if (framesChecked > 10) return false;
 
             if (valueToCheck == TimeToExtinguish) framesChecked++;
 
