@@ -186,7 +186,7 @@ namespace TesicFire
                 if (i == fire_mesh.Count - 2) completeFire = true;
                 else completeFire = false;
             }
-
+            reconstructing = false;
             StopCoroutine("reconstruct");
         }
         public void BeginFire(Vector3 initialPoint)
