@@ -365,8 +365,6 @@ namespace TesicFire
         float valueToCheck = 0;
         public bool IsExtinguising()
         {
-            return extinguishing;
-            
             if (framesChecked > 2) return false;
 
             if (valueToCheck == TimeToExtinguish) framesChecked++;
