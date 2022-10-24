@@ -161,7 +161,6 @@ namespace TesicFire
 
             for(int i = index; i < fire_mesh.Count - 1; i++)
             {
-                yield return new WaitForSeconds(2/FireSpeed);
                 if (mesh_original.isReadable)
                 {
                     mf.mesh = fire_mesh[i + 1];
@@ -181,6 +180,7 @@ namespace TesicFire
                 TimeToExtinguish = timePerSection * (i + 1);
                 if (i == fire_mesh.Count - 2) completeFire = true;
                 else completeFire = false;
+                yield return new WaitForSeconds(2 / FireSpeed);
             }
             StopCoroutine("reconstruct");
         }
