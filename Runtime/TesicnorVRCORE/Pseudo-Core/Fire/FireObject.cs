@@ -139,6 +139,7 @@ namespace TesicFire
             fire_System.Play();
             if (UsesSmoke && smoke_System) smoke_System.Play();
             if (UsesSparks && sparks_System) sparks_System.Play();
+            StartCoroutine("burning");
             //reconstructing = false;
 
             StopCoroutine("construct");
@@ -226,7 +227,6 @@ namespace TesicFire
             TimeToExtinguish = MaxTimeToExtinguish;
 
             StartCoroutine("construct");
-            StartCoroutine("burning");
 
             ParticleSize(); Propagate(); AdaptSmoke(); AdaptSparks();
         }
