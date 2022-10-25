@@ -20,6 +20,7 @@ namespace TesicFire
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Rigidbody))]
     public sealed class FireObject : MonoBehaviour, FireUtils
     {
         #region PARAMETERS
@@ -119,6 +120,8 @@ namespace TesicFire
             bc.isTrigger = true;
             bc.center = fire_MR.localBounds.center;
             bc.enabled = false;
+
+            GetComponent<Rigidbody>().isKinematic = true;
         }
         private void Start()
         {
