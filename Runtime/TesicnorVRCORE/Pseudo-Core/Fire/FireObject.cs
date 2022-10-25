@@ -117,7 +117,7 @@ namespace TesicFire
             if (!isTrigger) bc = bcs[0];
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
-            bc.center = fire_MR.bounds.center;
+            bc.center = fire_MR.localBounds.center;
             bc.enabled = false;
         }
         private void Start()
