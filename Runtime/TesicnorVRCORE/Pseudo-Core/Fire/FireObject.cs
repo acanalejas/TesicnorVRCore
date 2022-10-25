@@ -114,12 +114,12 @@ namespace TesicFire
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
             bool isTrigger = false;
-            foreach (BoxCollider col in bcs) if (col.isTrigger) { isTrigger = true; bc = col; }
+            foreach (BoxCollider col in bcs) { if (col.isTrigger) { isTrigger = true; bc = col; } }
             if (!isTrigger) bc = bcs[0];
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
             //bc.center = Vector3.zero;
-            bc.enabled = false;
+            //bc.enabled = false;
 
             GetComponent<Rigidbody>().isKinematic = true;
         }
