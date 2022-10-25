@@ -118,7 +118,7 @@ namespace TesicFire
             if (!isTrigger) bc = bcs[0];
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
-            //bc.center = fire_MR.localBounds.center;
+            bc.center = Vector3.zero;
             bc.enabled = false;
 
             GetComponent<Rigidbody>().isKinematic = true;
