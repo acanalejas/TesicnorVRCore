@@ -644,7 +644,7 @@ namespace TesicFire
             {
                 smoke_shape.scale = fire_shape.mesh.bounds.size;
             }
-            smoke_System.transform.localPosition = fire_MR.bounds.center + new Vector3(0,fire_MR.bounds.size.y/2,0);
+            smoke_System.transform.localPosition = fire_MR.bounds.center;
 
             var fire_sol = fire_System.sizeOverLifetime;
             var smoke_sol = smoke_System.sizeOverLifetime;
