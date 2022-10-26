@@ -669,7 +669,7 @@ namespace TesicFire
 
         public void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(trigger.bounds.center, trigger.transform.TransformDirection(new Vector3(trigger.size.x + PropOffset.x, trigger.size.y + PropOffset.y, trigger.size.z + PropOffset.z)));
+            Gizmos.DrawWireCube(trigger.bounds.center, fire_MR.localBounds.size + PropOffset);
         }
 
         public void OnTriggerStay(Collider other)
