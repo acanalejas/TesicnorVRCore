@@ -909,6 +909,7 @@ namespace TesicFire
             }
 
             Transform sparks = manager.transform.Find("Sparks");
+            if(sparks)
             if(sparks.parent != manager.transform) sparks = null;
 
             if(manager.UsesSparks && !sparks)
