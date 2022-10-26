@@ -316,7 +316,7 @@ namespace TesicFire
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
-            foreach (BoxCollider col in bcs) { if (col.isTrigger) { bc = col; trigger = col; }; else col.enabled = true; }
+            foreach (BoxCollider col in bcs) { if (col.isTrigger) { bc = col; trigger = col; } else col.enabled = true; }
 
             if (mesh_original.isReadable)
             {
