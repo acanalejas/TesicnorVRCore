@@ -874,7 +874,7 @@ namespace TesicFire
 
             Transform[] children = manager.gameObject.GetComponentsInChildren<Transform>();
             bool smokeCreated = false;
-            foreach (Transform child in children) { if (child.gameObject.name == "Smoke") smokeCreated = true; }
+            foreach (Transform child in children) { if (child.gameObject.name == "Smoke" && child.parent == manager.transform) smokeCreated = true; }
 
             if (!smokeCreated && manager.UsesSmoke)
             {
@@ -906,6 +906,7 @@ namespace TesicFire
             }
 
             Transform sparks = manager.transform.Find("Sparks");
+            if(sparks.parent != manager.transform) sparks = null;
 
             if(manager.UsesSparks && !sparks)
             {
