@@ -700,7 +700,7 @@ namespace TesicFire
             BoxCollider[] cols = manager.gameObject.GetComponents<BoxCollider>();
             foreach(BoxCollider col in cols){ if(col.isTrigger) manager.trigger = col;}
             if(!manager.trigger) {
-                manager.trigger = manager.AddComponent<BoxCollider>();
+                manager.trigger = manager.gameObject.AddComponent<BoxCollider>();
                 manager.trigger.isTrigger = true;
                 }
             OnInspectorGUI();   
@@ -718,7 +718,7 @@ namespace TesicFire
                BoxCollider[] cols = manager.gameObject.GetComponents<BoxCollider>();
             foreach(BoxCollider col in cols){ if(col.isTrigger) manager.trigger = col;}
             if(!manager.trigger) {
-                manager.trigger = manager.AddComponent<BoxCollider>();
+                manager.trigger = manager.gameObject.AddComponent<BoxCollider>();
                 manager.trigger.isTrigger = true;
                 }
             }
