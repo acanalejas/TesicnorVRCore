@@ -114,7 +114,7 @@ namespace TesicFire
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
             bool isTrigger = false;
-            foreach (BoxCollider col in bcs) { if (col.isTrigger) { isTrigger = true; bc = col; } }
+            foreach (BoxCollider col in bcs) { if (col.isTrigger) { isTrigger = true; bc = col; } else { col.enabled = false; } }
             if (!isTrigger) bc = bcs[0];
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
@@ -314,7 +314,7 @@ namespace TesicFire
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
-            foreach (BoxCollider col in bcs) if (col.isTrigger) bc = col;
+            foreach (BoxCollider col in bcs) if (col.isTrigger) bc = col; else col.enabled = true;
 
             if (mesh_original.isReadable)
             {
