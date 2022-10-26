@@ -135,8 +135,11 @@ namespace TesicFire
         {
             if(completeFire) { StopCoroutine("construct"); }
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh50", 4));
+            yield return new WaitForSeconds(0.05f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh40", 3));
+            yield return new WaitForSeconds(0.05f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh30", 2));
+            yield return new WaitForSeconds(0.05f);
             fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh20", 1f));
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
@@ -666,7 +669,7 @@ namespace TesicFire
 
         public void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(trigger.center, trigger.size + PropOffset);
+            Gizmos.DrawWireCube(trigger.bounds.center, trigger.transform.TransformDirection(new Vector3(trigger.size.x + PropOffset.x, trigger.size.y + PropOffset.y, trigger.size.z + PropOffset.z)));
         }
 
         public void OnTriggerStay(Collider other)
