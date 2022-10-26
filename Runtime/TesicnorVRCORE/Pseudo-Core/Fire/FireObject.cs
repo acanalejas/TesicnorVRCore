@@ -670,7 +670,7 @@ namespace TesicFire
         public void OnDrawGizmos()
         {
             Vector3 size = fire_MR.localBounds.size + PropOffset; Vector3 scale = transform.lossyScale;
-            Matrix4x4 rotationMatrix = Matrix4x4.TRS(transform.position, transform.rotation, transform.lossyScale);
+            Matrix4x4 rotationMatrix = Matrix4x4.TRS(Vector3.zero, transform.rotation, transform.lossyScale);
             Gizmos.matrix = rotationMatrix;
             Gizmos.DrawWireCube(fire_MR.bounds.center, transform.InverseTransformDirection(new Vector3(size.x * scale.x, size.y * scale.y, size.z * scale.z)));
         }
