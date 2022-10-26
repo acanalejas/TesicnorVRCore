@@ -69,6 +69,8 @@ namespace TesicFire
         [SerializeField][HideInInspector] public float MaxSize = 4;
         [SerializeField][HideInInspector] public Vector3 PropOffset = Vector3.zero;
 
+        private BoxCollider trigger;
+
         private float timeOnFire = 0;
 
         private bool onFire = false;
@@ -114,7 +116,7 @@ namespace TesicFire
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
             bool isTrigger = false;
-            foreach (BoxCollider col in bcs) { if (col.isTrigger) { isTrigger = true; bc = col; } else { col.enabled = false; } }
+            foreach (BoxCollider col in bcs) { if (col.isTrigger) { isTrigger = true; bc = col; trigger = col; } else { col.enabled = false; } }
             if (!isTrigger) bc = bcs[0];
             //bc.size = fire_MR.localBounds.size;
             bc.isTrigger = true;
@@ -314,7 +316,7 @@ namespace TesicFire
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
-            foreach (BoxCollider col in bcs) if (col.isTrigger) bc = col; else col.enabled = true;
+            foreach (BoxCollider col in bcs) { if (col.isTrigger) { bc = col trigger = col; }; else col.enabled = true; }
 
             if (mesh_original.isReadable)
             {
@@ -664,7 +666,7 @@ namespace TesicFire
 
         public void OnDrawGizmos()
         {
-            Gizmos.DrawWireCube(GetComponent<BoxCollider>().center, GetComponent<BoxCollider>().size + PropOffset);
+            Gizmos.DrawWireCube(trigger.center, trigger.size + PropOffset);
         }
 
         public void OnTriggerStay(Collider other)
