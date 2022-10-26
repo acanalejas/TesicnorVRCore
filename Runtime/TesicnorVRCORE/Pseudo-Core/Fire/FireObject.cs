@@ -69,7 +69,7 @@ namespace TesicFire
         [SerializeField][HideInInspector] public float MaxSize = 4;
         [SerializeField][HideInInspector] public Vector3 PropOffset = Vector3.zero;
 
-        private BoxCollider trigger;
+        [HideInInspector] public BoxCollider trigger;
 
         private float timeOnFire = 0;
 
@@ -696,7 +696,15 @@ namespace TesicFire
 
         void OnEnable()
         {
-            FireObject manager = (FireObject)target;     OnInspectorGUI();   }
+            FireObject manager = (FireObject)target;    
+            BoxCollider[] cols = manager.gameObject.GetComponents<BoxCollider>();
+            foreach(BoxCollider col in cols){ if(col.isTrigger) manager.trigger = col;}
+            if(!manager.trigger) {
+                manager.trigger = manager.AddComponent<BoxCollider>();
+                manager.trigger.isTrigger = true;
+                }
+            OnInspectorGUI();   
+        }
 
         [InitializeOnEnterPlayMode]
         public override void OnInspectorGUI()
@@ -706,15 +714,24 @@ namespace TesicFire
             
             FireObject manager = (FireObject)target;
 
-            #region Titulo
+            if(!manager.trigger){
+               BoxCollider[] cols = manager.gameObject.GetComponents<BoxCollider>();
+            foreach(BoxCollider col in cols){ if(col.isTrigger) manager.trigger = col;}
+            if(!manager.trigger) {
+                manager.trigger = manager.AddComponent<BoxCollider>();
+                manager.trigger.isTrigger = true;
+                }
+            }
+
+    #region Titulo
             GUILayout.BeginHorizontal();
             GUILayout.Label("FIRE OBJECT", EditorStyles.miniButtonMid, GUILayout.ExpandHeight(true));
             GUILayout.EndHorizontal();
-            #endregion
+    #endregion
 
             GUILayout.Space(20);
 
-            #region Botones
+    #region Botones
             GUILayout.BeginHorizontal();
             
             if (GUILayout.Button("Fire Settings", EditorStyles.miniButtonLeft))
@@ -737,14 +754,14 @@ namespace TesicFire
             }
             
             GUILayout.EndHorizontal();
-            #endregion
+    #endregion
 
             GUILayout.Space(20);
 
-            #region Zona de parámetros
+    #region Zona de parámetros
             GUILayout.BeginVertical(EditorStyles.helpBox);
 
-            #region Ajustes del fuego
+    #region Ajustes del fuego
             if (fireSettings)
             {
                 GUILayout.Label("El prefab de las partículas de fuego");
@@ -803,7 +820,7 @@ namespace TesicFire
                 }
 
             }
-            #region CheckIfHasFire
+    #region CheckIfHasFire
             Transform[] _children = manager.GetComponentsInChildren<Transform>();
 
             bool hasFire = false;
@@ -831,10 +848,10 @@ namespace TesicFire
                 CopyParticles(manager.fire_SystemPrefab.fire_System, manager.fire_System);
             }
 
-            #endregion
-            #endregion
+    #endregion
+    #endregion
 
-            #region Ajustes del humo
+    #region Ajustes del humo
             if (smokeSettings)
             {
                 GUILayout.Label("Se usa el humo?", EditorStyles.boldLabel);
@@ -869,9 +886,9 @@ namespace TesicFire
                 Transform smoke_go = manager.transform.Find("Smoke");
                 DestroyImmediate(smoke_go.gameObject);
             }
-            #endregion
+    #endregion
 
-            #region Ajustes de VFX
+    #region Ajustes de VFX
             if (otherVFX)
             {
                 GUILayout.Label("Se usan chispas?", EditorStyles.boldLabel);
@@ -901,11 +918,11 @@ namespace TesicFire
                 DestroyImmediate(sparks.gameObject);
             }
 
-            #endregion
+    #endregion
 
             GUILayout.EndVertical();
             serializedObject.ApplyModifiedProperties();
-            #endregion
+    #endregion
         }
         
         void CopyParticles(ParticleSystem ps, ParticleSystem _target)
