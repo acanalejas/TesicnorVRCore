@@ -717,6 +717,8 @@ namespace TesicFire
             
             FireObject manager = (FireObject)target;
 
+            manager.fire_MR = manager.GetComponent<MeshRenderer>();
+
             if(!manager.trigger){
                BoxCollider[] cols = manager.gameObject.GetComponents<BoxCollider>();
             foreach(BoxCollider col in cols){ if(col.isTrigger) manager.trigger = col;}
