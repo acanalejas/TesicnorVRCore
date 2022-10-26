@@ -694,7 +694,7 @@ namespace TesicFire
 
         void OnEnable()
         {
-            FireObject manager = (FireObject)target;        }
+            FireObject manager = (FireObject)target;     OnInspectorGUI();   }
 
         [InitializeOnEnterPlayMode]
         public override void OnInspectorGUI()
