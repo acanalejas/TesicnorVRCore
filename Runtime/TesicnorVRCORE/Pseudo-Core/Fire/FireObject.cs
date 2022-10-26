@@ -670,7 +670,7 @@ namespace TesicFire
         public void OnDrawGizmos()
         {
             Vector3 size = fire_MR.localBounds.size + PropOffset; Vector3 scale = transform.lossyScale;
-            Gizmos.DrawWireCube(fire_MR.bounds.center, transform.InverseDirection(new Vector3(size.x * scale.x, size.y * scale.y, size.z * scale.z)));
+            Gizmos.DrawWireCube(fire_MR.bounds.center, transform.InverseTransformDirection(new Vector3(size.x * scale.x, size.y * scale.y, size.z * scale.z)));
         }
 
         public void OnTriggerStay(Collider other)
