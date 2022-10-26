@@ -834,7 +834,7 @@ namespace TesicFire
             {
                 if(child != manager.transform)
                 {
-                    if (child.name == "Fire") hasFire = true;
+                    if (child.name == "Fire" && child.parent == this.transform) hasFire = true;
                 }
             }
 
