@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace TesicFire
 {
@@ -30,7 +32,7 @@ namespace TesicFire
 
         public Mesh FireMesh(Vector3 initialFirePoint, string assetName);
 
-        public void FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier);
+        public IEnumerator FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier);
 
         public Vector2 ParticleSize();
     }

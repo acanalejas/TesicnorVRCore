@@ -134,13 +134,13 @@ namespace TesicFire
         IEnumerator construct()
         {
             if(completeFire) { StopCoroutine("construct"); }
-            FireMesh(initialFirePoint, "FireMesh50", 4);
+            StartCoroutine(FireMesh(initialFirePoint, "FireMesh50", 4));
             yield return new WaitForSeconds(0.05f);
-            FireMesh(initialFirePoint, "FireMesh40", 3);
+            StartCoroutine(FireMesh(initialFirePoint, "FireMesh40", 3));
             yield return new WaitForSeconds(0.05f);
-            FireMesh(initialFirePoint, "FireMesh30", 2);
+            StartCoroutine(FireMesh(initialFirePoint, "FireMesh30", 2));
             yield return new WaitForSeconds(0.05f);
-            FireMesh(initialFirePoint, "FireMesh20", 1f);
+            StartCoroutine(FireMesh(initialFirePoint, "FireMesh20", 1f));
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
             yield return new WaitForSeconds(Delay);
@@ -521,49 +521,55 @@ namespace TesicFire
 
         struct vertex { public float distance; public int index; }
         int numVertex;
-        public async void FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
+        Vector3 center;
+        public IEnumerator FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
         {
 
             Mesh fireMesh = new Mesh();
 
-            if (!mesh_original.isReadable) return fireMesh;
+            //if (!mesh_original.isReadable)  return fireMesh;
 
             //Creating the sphere to detect the points
-            Vector3 center = initialFirePoint;
-            await Task.Run(() => checkVertices());
+            center = initialFirePoint;
+
+            yield return checkVertices(center, radiusMultiplier);
             fireMesh.SetVertices(meshData_current.vertex);
             fireMesh.SetTriangles(meshData_current.triangles, 0);
             fireMesh.UploadMeshData(false);
             if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
 
-            fire_mesh.Add(fire_mesh);
+            fire_mesh.Add(fireMesh);
+            //return fireMesh;
+
         }
 
-        void checkVertices(Vector3 center, float radiusMultiplier)
+        
+        IEnumerator checkVertices(Vector3 center, float radiusMultiplier)
         {
             numVertex = (int)(mesh_original.vertices.Length / radiusMultiplier);
             List<vertex> distances = new List<vertex>();
             int i = 0;
             List<int> VertexInside = new List<int>();
-            foreach (Vector3 p in meshData_original.vertex)
+            //distances = distances.OrderByDescending(x => x.distance).ToList();
+            distances = distances.OrderBy(x => x.distance).ToList();
+            Debug.Log(meshData_current.vertex.Count);
+            int eachLength = (int)(meshData_original.vertex.Count / 10);
+            for (int j = 0; j < meshData_original.vertex.Count; j++)
             {
                 vertex _vertex = new vertex();
-                _vertex.index = i;
-                _vertex.distance = Vector3.Distance(center, transform.TransformPoint(p));
+                _vertex.index = j;
+                _vertex.distance = Vector3.Distance(center, transform.TransformPoint(meshData_original.vertex[j]));
                 distances.Add(_vertex);
 
                 i++;
             }
-            //distances = distances.OrderByDescending(x => x.distance).ToList();
-            distances = distances.OrderBy(x => x.distance).ToList();
-            Debug.Log(meshData_current.vertex.Count);
-
+            yield return new WaitForEndOfFrame();
             for (int k = numVertex - 1; k >= 0; k--)
             {
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
                 VertexInside.Add(distances[k].index);
             }
-
+            yield return new WaitForEndOfFrame();
             int h = 0;
             foreach (Vector3 v in meshData_current.vertex)
             {
@@ -571,7 +577,6 @@ namespace TesicFire
                     if (VertexInside[h] < meshData_original.normals.Count) meshData_current.normals.Add(meshData_original.normals[VertexInside[h]]);
                 h++;
             }
-
         }
 
         public bool OnFire()
