@@ -134,13 +134,13 @@ namespace TesicFire
         IEnumerator construct()
         {
             if(completeFire) { StopCoroutine("construct"); }
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh50", 4));
+            FireMesh(initialFirePoint, "FireMesh50", 4);
             yield return new WaitForSeconds(0.05f);
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh40", 3));
+            FireMesh(initialFirePoint, "FireMesh40", 3);
             yield return new WaitForSeconds(0.05f);
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh30", 2));
+            FireMesh(initialFirePoint, "FireMesh30", 2);
             yield return new WaitForSeconds(0.05f);
-            fire_mesh.Add(FireMesh(initialFirePoint, "FireMesh20", 1f));
+            FireMesh(initialFirePoint, "FireMesh20", 1f);
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
             yield return new WaitForSeconds(Delay);
@@ -521,7 +521,7 @@ namespace TesicFire
 
         struct vertex { public float distance; public int index; }
         int numVertex;
-        public async Mesh FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
+        public async void FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
         {
 
             Mesh fireMesh = new Mesh();
@@ -536,7 +536,7 @@ namespace TesicFire
             fireMesh.UploadMeshData(false);
             if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
 
-            return fireMesh;
+            fire_mesh.Add(fire_mesh);
         }
 
         void checkVertices(Vector3 center, float radiusMultiplier)
