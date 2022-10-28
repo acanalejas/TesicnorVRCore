@@ -520,7 +520,8 @@ namespace TesicFire
         }
 
         struct vertex { public float distance; public int index; }
-        public Mesh FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
+        int numVertex;
+        public async Mesh FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
         {
 
             Mesh fireMesh = new Mesh();
@@ -528,60 +529,49 @@ namespace TesicFire
             if (!mesh_original.isReadable) return fireMesh;
 
             //Creating the sphere to detect the points
-            Vector3 center = /*transform.InverseTransformPoint(initialFirePoint)*/ initialFirePoint;
-            float radius = GetComponent<MeshRenderer>().localBounds.size.magnitude / radiusMultiplier /*+ timeOnFire * FireSpeed*/;
-            int numVertex = (int)(mesh_original.vertices.Length / radiusMultiplier);
+            Vector3 center = initialFirePoint;
+            await Task.Run(() => checkVertices());
+            fireMesh.SetVertices(meshData_current.vertex);
+            fireMesh.SetTriangles(meshData_current.triangles, 0);
+            fireMesh.UploadMeshData(false);
+            if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
+
+            return fireMesh;
+        }
+
+        void checkVertices(Vector3 center, float radiusMultiplier)
+        {
+            numVertex = (int)(mesh_original.vertices.Length / radiusMultiplier);
             List<vertex> distances = new List<vertex>();
             int i = 0;
             List<int> VertexInside = new List<int>();
             foreach (Vector3 p in meshData_original.vertex)
             {
-                //(x?cx)2+(y?cy)2+(z?cz)2<r2 .
-                //Check if point is inside a sphere
-
-                //bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
                 vertex _vertex = new vertex();
                 _vertex.index = i;
                 _vertex.distance = Vector3.Distance(center, transform.TransformPoint(p));
                 distances.Add(_vertex);
 
-                //if (inside) { meshData_current.vertex.Add(p); VertexInside.Add(i); }
                 i++;
             }
             //distances = distances.OrderByDescending(x => x.distance).ToList();
             distances = distances.OrderBy(x => x.distance).ToList();
             Debug.Log(meshData_current.vertex.Count);
 
-            for(int k = numVertex - 1; k >= 0; k--)
+            for (int k = numVertex - 1; k >= 0; k--)
             {
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
                 VertexInside.Add(distances[k].index);
-            }
-            //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
-            for (int j = 0; j < meshData_original.triangles.Count - 3; j += 3)
-            {
-                bool validTriangle = true;
-
-                if (!VertexInside.Contains(meshData_original.triangles[j]) || !VertexInside.Contains(meshData_original.triangles[j + 1]) || !VertexInside.Contains(meshData_original.triangles[j + 2])) validTriangle = false;
-
-                if (validTriangle) { meshData_current.triangles.Add(meshData_original.triangles[VertexInside.IndexOf(meshData_original.triangles[j])]); meshData_current.triangles.Add(VertexInside.IndexOf(meshData_original.triangles[j + 1])); meshData_current.triangles.Add(VertexInside.IndexOf(meshData_original.triangles[j + 2])); }
             }
 
             int h = 0;
             foreach (Vector3 v in meshData_current.vertex)
             {
-                if(h < VertexInside.Count)
-                if (VertexInside[h] < meshData_original.normals.Count) meshData_current.normals.Add(meshData_original.normals[VertexInside[h]]);
+                if (h < VertexInside.Count)
+                    if (VertexInside[h] < meshData_original.normals.Count) meshData_current.normals.Add(meshData_original.normals[VertexInside[h]]);
                 h++;
             }
 
-            fireMesh.SetVertices(meshData_current.vertex);
-            fireMesh.SetTriangles(meshData_current.triangles, 0);
-            fireMesh.UploadMeshData(false);
-            //AssetDatabase.CreateAsset(fireMesh, "Assets/" + assetName + ".asset");
-            if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
-
-            return fireMesh;
         }
 
         public bool OnFire()
