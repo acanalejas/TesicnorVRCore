@@ -28,11 +28,7 @@ namespace TesicFire
         public bool CompleteFire();
         public bool Extinguished();
 
-        public Mesh FireMesh(Vector3 initialFirePoint);
-
-        public Mesh FireMesh(Vector3 initialFirePoint, string assetName);
-
-        public IEnumerator FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier);
+        public IEnumerator FireMesh(Vector3 initialFirePoint, float radiusMultiplier);
 
         public Vector2 ParticleSize();
     }

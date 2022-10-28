@@ -134,13 +134,13 @@ namespace TesicFire
         IEnumerator construct()
         {
             if(completeFire) { StopCoroutine("construct"); }
-            StartCoroutine(FireMesh(initialFirePoint, "FireMesh50", 4));
+            StartCoroutine(FireMesh(initialFirePoint, 4));
             yield return new WaitForSeconds(0.05f);
-            StartCoroutine(FireMesh(initialFirePoint, "FireMesh40", 3));
+            StartCoroutine(FireMesh(initialFirePoint, 3));
             yield return new WaitForSeconds(0.05f);
-            StartCoroutine(FireMesh(initialFirePoint, "FireMesh30", 2));
+            StartCoroutine(FireMesh(initialFirePoint, 2));
             yield return new WaitForSeconds(0.05f);
-            StartCoroutine(FireMesh(initialFirePoint, "FireMesh20", 1f));
+            StartCoroutine(FireMesh(initialFirePoint, 1f));
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
             yield return new WaitForSeconds(Delay);
@@ -434,95 +434,10 @@ namespace TesicFire
             InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
         }
 
-        public Mesh FireMesh(Vector3 initialFirePoint)
-        {
-            Mesh fireMesh = new Mesh();
-
-            //Creating the sphere to detect the points
-            Vector3 center = initialFirePoint;
-            float radius = mesh_original.bounds.size.magnitude/2 / 30 + timeOnFire * FireSpeed;
-
-            foreach (Vector3 p in meshData_original.vertex)
-            {
-                //(x?cx)2+(y?cy)2+(z?cz)2<r2 .
-                //Check if point is inside a sphere
-
-                bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
-
-                Action<object> action = (object obj) => {
-                    meshData_current.vertex.Add(p);
-                };
-
-                Task addVertex = new(action, "alpha");
-                if (inside) addVertex.Wait();
-            }
-
-            //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
-            for (int i = 0; i < meshData_original.triangles.Count - 3; i += 3)
-            {
-                bool validTriangle = true;
-
-                if (meshData_original.triangles[i] > meshData_current.vertex.Count - 1 || meshData_original.triangles[i + 1] > meshData_current.vertex.Count - 1 || meshData_original.triangles[i + 2] > meshData_current.vertex.Count - 1) validTriangle = false;
-
-                if (validTriangle) { meshData_current.triangles.Add(meshData_original.triangles[i]); meshData_current.triangles.Add(meshData_original.triangles[i + 1]); meshData_current.triangles.Add(meshData_original.triangles[i + 2]); }
-            }
-
-            int h = 0;
-            foreach(Vector3 v in meshData_current.vertex)
-            {
-                meshData_current.normals.Add(meshData_original.normals[h]);
-                h++;
-            }
-
-            fireMesh.SetVertices(meshData_current.vertex);
-            fireMesh.SetTriangles(meshData_current.triangles, 0);
-            if(meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
-            return fireMesh;
-        }
-
-        public Mesh FireMesh(Vector3 initialPoint, string assetName)
-        {
-            Mesh mesh = new Mesh();
-            Mesh fireMesh = new Mesh();
-
-            //Creating the sphere to detect the points
-            Vector3 center = initialFirePoint;
-            float radius = mesh_original.bounds.size.magnitude / 30 + timeOnFire * FireSpeed;
-
-            foreach (Vector3 p in meshData_original.vertex)
-            {
-                //(x?cx)2+(y?cy)2+(z?cz)2<r2 .
-                //Check if point is inside a sphere
-
-                bool inside = (p.x - center.x) * (p.x - center.x) + (p.y - center.y) * (p.y - center.y) + (p.z - center.z) * (p.z - center.z) < radius;
-
-                Action<object> action = (object obj) => {
-                    meshData_current.vertex.Add(p);
-                };
-
-                Task addVertex = new(action, "alpha");
-                if (inside) addVertex.Wait();
-            }
-
-            //Checkea todos los triangulos asegurandose de que ninguno pase de la lungitud de vertices
-            for (int i = 0; i < meshData_original.triangles.Count - 3; i += 3)
-            {
-                bool validTriangle = true;
-
-                if (meshData_original.triangles[i] > meshData_current.vertex.Count - 1 || meshData_original.triangles[i + 1] > meshData_current.vertex.Count - 1 || meshData_original.triangles[i + 2] > meshData_current.vertex.Count - 1) validTriangle = false;
-
-                if (validTriangle) { meshData_current.triangles.Add(meshData_original.triangles[i]); meshData_current.triangles.Add(meshData_original.triangles[i + 1]); meshData_current.triangles.Add(meshData_original.triangles[i + 2]); }
-            }
-
-            fireMesh.SetVertices(meshData_current.vertex);
-            fireMesh.SetTriangles(meshData_current.triangles, 0);
-            return fireMesh;
-        }
-
         struct vertex { public float distance; public int index; }
         int numVertex;
         Vector3 center;
-        public IEnumerator FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier)
+        public IEnumerator FireMesh(Vector3 initialFirePoint, float radiusMultiplier)
         {
 
             Mesh fireMesh = new Mesh();
