@@ -30,7 +30,7 @@ namespace TesicFire
 
         public Mesh FireMesh(Vector3 initialFirePoint, string assetName);
 
-        public async void FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier);
+        public void FireMesh(Vector3 initialFirePoint, string assetName, float radiusMultiplier);
 
         public Vector2 ParticleSize();
     }
