@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fire_System: {fileID: 8384452420551974213, guid: 7c190628cdda25f49a959b4b80dc51af,
     type: 3}
-  smoke_System: {fileID: 0}
+  smoke_System: {fileID: -3332074081512142832, guid: ea92da5ceefda424b829c2205ddc0264,
+    type: 3}
   sparks_System: {fileID: 3278027553378118874, guid: 67ecb20d89f962242920af5babb8f41d,
     type: 3}
