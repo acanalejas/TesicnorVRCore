@@ -55,6 +55,8 @@ namespace TesicFire
         [SerializeField]
         [HideInInspector] public ParticleSystem sparks_System;
 
+        [HideInInspector] public AudioSource fire_Source;
+
         [SerializeField][HideInInspector] public bool InitialFire = false;
         [SerializeField][HideInInspector] public bool UsesSmoke = true;
         [SerializeField][HideInInspector] public bool UsesSparks = true;
@@ -155,47 +157,6 @@ namespace TesicFire
         }
 
         [HideInInspector]public bool reconstructing = false;
-        /*
-        IEnumerator reconstruct()
-        {
-            reconstructing = true;
-            MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
-
-            int index = 0;
-            for(int i = 0; i < fire_mesh.Count; i++)
-            {
-                if (mf.mesh.GetHashCode() == fire_mesh[i].GetHashCode()) index = i;
-            }
-
-            float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
-
-            for(int i = index; i < fire_mesh.Count - 1; i++)
-            {
-                if (this.extinguishing) yield break;
-                if (mesh_original.isReadable)
-                {
-                    mf.mesh = fire_mesh[i + 1];
-                    var shape = fire_System.shape;
-                    shape.mesh = fire_mesh[i + 1];
-                }
-                else
-                {
-                    var shape = fire_System.shape;
-                    shape.scale = (GetComponent<MeshRenderer>().bounds.extents) / (fire_mesh.Count - i);
-                }
-                ParticleSize();
-                AdaptSmoke();
-                AdaptSparks();
-                Propagate();
-
-                TimeToExtinguish = timePerSection * (i + 1);
-                if (i == fire_mesh.Count - 2) completeFire = true;
-                else completeFire = false;
-                yield return new WaitForSeconds(2 / FireSpeed);
-            }
-            StopCoroutine("reconstruct");
-        }
-        */
         int index = 0;
         void reconstruct()
         {
@@ -329,6 +290,11 @@ namespace TesicFire
             {
                 var shape = fire_System.shape;
                 bc.size = shape.scale + PropOffset;
+            }
+            if (fire_Source)
+            {
+                fire_Source.volume = bc.size.magnitude;
+                fire_Source.maxDistance = bc.size.magnitude;
             }
         }
 
@@ -753,7 +719,7 @@ namespace TesicFire
 
             if (!hasFire)
             {
-                GameObject fire = new GameObject("Fire", typeof(ParticleSystem), typeof(MeshFilter), typeof(MeshRenderer));
+                GameObject fire = new GameObject("Fire", typeof(ParticleSystem), typeof(MeshFilter), typeof(MeshRenderer), typeof(AudioSource));
                 fire.transform.parent = manager.transform;
                 fire.transform.localPosition = Vector3.zero;
                 fire.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -763,6 +729,8 @@ namespace TesicFire
                 manager.fire_System = fire.GetComponent<ParticleSystem>();
                 manager.fire_GO = fire;
                 manager.fire_SystemPrefab = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/ScriptableObjects/Fire Particles.asset", typeof(FireParticles)) as FireParticles;
+                manager.fire_Source = fire.GetComponent<AudioSource>();
+                manager.fire_Source.clip = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/Sounds/Big Fire.wav", typeof(AudioClip)) as AudioClip;
 
                 CopyParticles(manager.fire_SystemPrefab.fire_System, manager.fire_System);
             }
