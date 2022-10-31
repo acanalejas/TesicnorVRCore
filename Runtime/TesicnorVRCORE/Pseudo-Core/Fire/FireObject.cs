@@ -126,6 +126,10 @@ namespace TesicFire
             //bc.enabled = false;
 
             GetComponent<Rigidbody>().isKinematic = true;
+
+            //Just for security in sound
+            fire_Source.playOnAwake = false;
+            fire_Source.Stop();
         }
         private void Start()
         {
@@ -733,6 +737,7 @@ namespace TesicFire
                 manager.fire_SystemPrefab = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/ScriptableObjects/Fire Particles.asset", typeof(FireParticles)) as FireParticles;
                 manager.fire_Source = fire.GetComponent<AudioSource>();
                 manager.fire_Source.clip = AssetDatabase.LoadAssetAtPath("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Fire/Sounds/Big Fire.wav", typeof(AudioClip)) as AudioClip;
+                manager.fire_Source.playOnAwake = false;
 
                 CopyParticles(manager.fire_SystemPrefab.fire_System, manager.fire_System);
             }
