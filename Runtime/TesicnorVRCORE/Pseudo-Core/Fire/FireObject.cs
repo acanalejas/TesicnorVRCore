@@ -703,7 +703,7 @@ namespace TesicFire
 
                 if(GUILayout.Button("Reset Fire", EditorStyles.miniButton))
                 {
-                    Transform fire = manager.transform.Find("Fire");
+                    Transform fire = manager.transform.Find("Fire_GO");
                     if (fire)
                     {
                         DestroyImmediate(fire.gameObject);
@@ -719,13 +719,13 @@ namespace TesicFire
             {
                 if(child != manager.transform)
                 {
-                    if (child.name == "Fire" && child.parent == manager.transform) hasFire = true;
+                    if (child.name == "Fire_GO" && child.parent == manager.transform) hasFire = true;
                 }
             }
 
             if (!hasFire)
             {
-                GameObject fire = new GameObject("Fire", typeof(ParticleSystem), typeof(MeshFilter), typeof(MeshRenderer), typeof(AudioSource));
+                GameObject fire = new GameObject("Fire_GO", typeof(ParticleSystem), typeof(MeshFilter), typeof(MeshRenderer), typeof(AudioSource));
                 fire.transform.parent = manager.transform;
                 fire.transform.localPosition = Vector3.zero;
                 fire.transform.localRotation = Quaternion.Euler(Vector3.zero);
