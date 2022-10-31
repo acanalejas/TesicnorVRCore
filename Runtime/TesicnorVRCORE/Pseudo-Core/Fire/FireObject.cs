@@ -704,6 +704,7 @@ namespace TesicFire
                 if(GUILayout.Button("Reset Fire", EditorStyles.miniButton))
                 {
                     Transform fire = manager.transform.Find("Fire_GO");
+                    if (!fire) fire = manager.transform.Find("Fire");
                     if (fire)
                     {
                         DestroyImmediate(fire.gameObject);
