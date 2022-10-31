@@ -299,8 +299,8 @@ namespace TesicFire
             }
             if (fire_Source)
             {
-                fire_Source.volume = bc.size.magnitude;
-                fire_Source.maxDistance = bc.size.magnitude;
+                fire_Source.volume = fire_MR.localBounds.extents.magnitude;
+                fire_Source.maxDistance = fire_MR.localBounds.extents.magnitude;
             }
         }
 
