@@ -148,6 +148,8 @@ namespace TesicFire
             yield return new WaitForSeconds(Delay);
             
             fire_System.Play();
+            fire_Source.loop = true;
+            fire_Source.Play();
             if (UsesSmoke && smoke_System) smoke_System.Play();
             if (UsesSparks && sparks_System) sparks_System.Play();
             StartCoroutine("burning");
