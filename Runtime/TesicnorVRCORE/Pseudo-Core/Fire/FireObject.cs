@@ -90,6 +90,10 @@ namespace TesicFire
 
         private Vector3 initialFirePoint;
         #endregion
+        #region Para el humo
+        [SerializeField][HideInInspector] public float Density = 1;
+        [SerializeField][HideInInspector] public Color Smoke_Color = Color.black;
+        #endregion
         #endregion
 
         #region FUNCTIONS
@@ -140,13 +144,10 @@ namespace TesicFire
         IEnumerator construct()
         {
             if(completeFire) { StopCoroutine("construct"); }
-            StartCoroutine(FireMesh(initialFirePoint, 4));
-            yield return new WaitForSeconds(0.05f);
-            StartCoroutine(FireMesh(initialFirePoint, 3));
-            yield return new WaitForSeconds(0.05f);
-            StartCoroutine(FireMesh(initialFirePoint, 2));
-            yield return new WaitForSeconds(0.05f);
-            StartCoroutine(FireMesh(initialFirePoint, 1f));
+            yield return FireMesh(initialFirePoint, 4);
+            yield return FireMesh(initialFirePoint, 3);
+            yield return FireMesh(initialFirePoint, 2);
+            yield return FireMesh(initialFirePoint, 1f);
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
             yield return new WaitForSeconds(Delay);
@@ -166,6 +167,7 @@ namespace TesicFire
         int index = 0;
         void reconstruct()
         {
+            Debug.Log("Index is : " + index);
             if (index == fire_mesh.Count) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
@@ -424,6 +426,7 @@ namespace TesicFire
             fireMesh.SetVertices(meshData_current.vertex);
             fireMesh.SetTriangles(meshData_current.triangles, 0);
             fireMesh.UploadMeshData(false);
+            fireMesh.name = "FireMesh  :  " + radiusMultiplier;
             if (meshData_current.normals.Count == meshData_current.vertex.Count) fireMesh.SetNormals(meshData_current.normals);
 
             fire_mesh.Add(fireMesh);
@@ -451,6 +454,7 @@ namespace TesicFire
 
                 i++;
             }
+            distances = distances.OrderBy(x => x.distance).ToList();
             yield return new WaitForEndOfFrame();
             for (int k = numVertex - 1; k >= 0; k--)
             {
@@ -465,6 +469,7 @@ namespace TesicFire
                     if (VertexInside[h] < meshData_original.normals.Count) meshData_current.normals.Add(meshData_original.normals[VertexInside[h]]);
                 h++;
             }
+            StopCoroutine("checkVertices");
         }
 
         public bool OnFire()
@@ -525,7 +530,7 @@ namespace TesicFire
             smoke_shape.shapeType = ParticleSystemShapeType.Box;
             if (fire_shape.mesh)
             {
-                smoke_shape.scale = fire_shape.mesh.bounds.size;
+                smoke_shape.scale = fire_MR.bounds.size;
             }
             smoke_System.transform.position = fire_MR.bounds.center;
 
@@ -537,6 +542,14 @@ namespace TesicFire
             if (fire_emission.rateMultiplier == 0) smoke_emission.rateMultiplier = 0;
             else smoke_emission.rateMultiplier = 7;
             smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier*1.5f;
+
+            smoke_emission.rateMultiplier *= Density;
+
+            var smoke_main = smoke_System.main;
+            smoke_main.startColor = Smoke_Color;
+
+            var smoke_col = smoke_System.colorOverLifetime;
+            smoke_col.color = Smoke_Color;
         }
         public void AdaptSparks()
         {
@@ -752,6 +765,16 @@ namespace TesicFire
             {
                 GUILayout.Label("Se usa el humo?", EditorStyles.boldLabel);
                 manager.UsesSmoke = EditorGUILayout.Toggle(manager.UsesSmoke, EditorStyles.toggle);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("La densidad del humo", EditorStyles.boldLabel);
+                manager.Density = EditorGUILayout.Slider(manager.Density, 1, 3);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("El color del humo", EditorStyles.boldLabel);
+                manager.Smoke_Color = EditorGUILayout.ColorField(manager.Smoke_Color);
 
                 GUILayout.Space(20);
                 
