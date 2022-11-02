@@ -202,6 +202,7 @@ public class VRInteractable_Dropdown : VR_Interactable
         vl.GetComponent<RectTransform>().localPosition -= new Vector3(0, image.rectTransform.sizeDelta.y, 0);
         vl.GetComponent<RectTransform>().localPosition -= new Vector3(0, spacing, 0);
         vl.SetActive(false);
+        vl.transform.parent = this.transform.parent;
         onRelease.AddListener(OpenDropdown);
     }
 
