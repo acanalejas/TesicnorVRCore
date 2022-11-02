@@ -548,8 +548,12 @@ namespace TesicFire
             var smoke_main = smoke_System.main;
             smoke_main.startColor = Smoke_Color;
 
+            smoke_System.gameObject.GetComponent<ParticleSystemRenderer>().material.color = Smoke_Color;
+
             var smoke_col = smoke_System.colorOverLifetime;
             smoke_col.color = Smoke_Color;
+
+            
         }
         public void AdaptSparks()
         {
