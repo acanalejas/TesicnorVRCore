@@ -22,12 +22,17 @@ public class DeadScene : MonoBehaviour
     #endregion
 
     #region FUNCTIONS
-    public static void GoToDeadScene(int _menuIndex, int _lastSceneIndex, string _results, string retryTraduction = "RETRY", string goToMenuTraduction = "GO TO MENU")
+    public static void GoToDeadScene(int _menuIndex, int _lastSceneIndex, MonoBehaviour _class, string _function , string retryTraduction = "RETRY", string goToMenuTraduction = "GO TO MENU")
     {
-        menuIndex = _menuIndex; lastSceneIndex = _lastSceneIndex; deadScene_results = _results;
+        menuIndex = _menuIndex; lastSceneIndex = _lastSceneIndex;  _class.Invoke(_function, 0.0f);
         deadScene_retry = retryTraduction; deadScene_goToMenu = goToMenuTraduction;
 
         SceneManager.LoadScene(deadScene_name);
+    }
+
+    public static void SetDeadText(string input)
+    {
+        deadScene_results = input;
     }
 
     private void Start()
