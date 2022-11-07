@@ -180,6 +180,7 @@ namespace TesicFire
         {
             Debug.Log("Index is : " + index);
             if (index == fire_mesh.Count) return;
+            if (extinguishing) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
 
@@ -412,7 +413,7 @@ namespace TesicFire
             if (valueToCheck == TimeToExtinguish) framesChecked++;
             else framesChecked = 0;
 
-            if (framesChecked > 10) extinguishing = false;
+            if (framesChecked > 4) extinguishing = false;
 
             valueToCheck = TimeToExtinguish;
 
