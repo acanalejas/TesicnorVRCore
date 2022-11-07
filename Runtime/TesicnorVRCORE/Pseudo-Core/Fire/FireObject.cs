@@ -493,13 +493,13 @@ namespace TesicFire
             var shape = fire_System.shape;
             if (GetComponent<MeshFilter>().mesh.isReadable)
             {
-                sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.bounds.size.magnitude / 1.5f, Time.deltaTime);
+                sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, mr.bounds.size.magnitude / 1.8f, Time.deltaTime);
             }
             else
             {
-                sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, shape.scale.magnitude / 1.5f, Time.deltaTime);
+                sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, shape.scale.magnitude / 1.8f, Time.deltaTime);
             }
-            sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.2f);
+            sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1f);
 
             var emission = fire_System.emission;
             Vector3 size = Vector3.zero;
