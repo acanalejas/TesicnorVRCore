@@ -157,6 +157,7 @@ namespace TesicFire
                 if (!fireutils.OnFire() || fireutils.Extinguished())
                 {
                     onFire = false;
+                    extinguished = true;
                     TimeToExtinguish = 0;
                     yield break;
                 }
