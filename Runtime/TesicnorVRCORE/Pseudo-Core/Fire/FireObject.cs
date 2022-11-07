@@ -213,6 +213,7 @@ namespace TesicFire
         public void BeginFire(Vector3 initialPoint, FireUtils utils = null)
         {
             //Vacia la lista de puntos actuales
+            if (this.onFire || this.extinguished) return;
             fireutils = utils;
             if(utils != null)
             {
