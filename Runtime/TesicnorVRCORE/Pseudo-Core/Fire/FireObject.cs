@@ -195,9 +195,13 @@ namespace TesicFire
                 else completeFire = false;
             index++;
         }
-        public void BeginFire(Vector3 initialPoint)
+        public void BeginFire(Vector3 initialPoint, FireUtils utils = null)
         {
             //Vacia la lista de puntos actuales
+            if(utils != null)
+            {
+                if(!utils.OnFire() || utils.Extinguished()) return; 
+            }
             meshData_current.vertex.Clear ();
             meshData_current.triangles.Clear();
 
@@ -583,7 +587,7 @@ namespace TesicFire
             {
                 if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
                 {
-                    fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center));
+                    fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center), this);
                 }
             }
         }

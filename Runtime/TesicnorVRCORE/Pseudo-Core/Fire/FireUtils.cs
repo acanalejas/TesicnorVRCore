@@ -8,7 +8,7 @@ namespace TesicFire
 {
     public interface FireUtils
     {
-        public void BeginFire(Vector3 initialPoint);
+        public void BeginFire(Vector3 initialPoint, FireUtils utils = null);
         public void EndFire();
 
         public void UpdateFire(Vector3 initialPoint);
