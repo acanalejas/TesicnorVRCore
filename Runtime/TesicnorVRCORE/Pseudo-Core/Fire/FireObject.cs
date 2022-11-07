@@ -152,6 +152,16 @@ namespace TesicFire
 
             yield return new WaitForSeconds(Delay);
             
+            if(fireutils != null)
+            {
+                if (!fireutils.OnFire() || fireutils.Extinguished())
+                {
+                    onFire = false;
+                    TimeToExtinguish = 0;
+                    yield break;
+                }
+            }
+
             fire_System.Play();
             fire_Source.loop = true;
             fire_Source.Play();
@@ -195,9 +205,13 @@ namespace TesicFire
                 else completeFire = false;
             index++;
         }
+
+        private FireUtils fireutils;
+
         public void BeginFire(Vector3 initialPoint, FireUtils utils = null)
         {
             //Vacia la lista de puntos actuales
+            fireutils = utils;
             if(utils != null)
             {
                 if(!utils.OnFire() || utils.Extinguished()) return; 
