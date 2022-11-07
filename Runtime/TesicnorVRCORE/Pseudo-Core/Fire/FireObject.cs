@@ -602,7 +602,7 @@ namespace TesicFire
 
             if (fireUtils != null)
             {
-                if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire())
+                if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire() && !fireUtils.Extinguished())
                 {
                     fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center), this);
                 }
