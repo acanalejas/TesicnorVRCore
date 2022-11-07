@@ -540,7 +540,7 @@ namespace TesicFire
 
             if (fire_emission.rateMultiplier == 0) smoke_emission.rateMultiplier = 0;
             else smoke_emission.rateMultiplier = 7;
-            smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier*1.5f;
+            smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier*1.5f/this.transform.lossyScale.magnitude;
 
             smoke_emission.rateMultiplier *= Density;
 
