@@ -499,7 +499,7 @@ namespace TesicFire
             {
                 sbl.sizeMultiplier = Mathf.Lerp(sbl.sizeMultiplier, shape.scale.magnitude / 1.5f, Time.deltaTime);
             }
-            sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.5f);
+            sbl.sizeMultiplier = Mathf.Clamp(sbl.sizeMultiplier, 0.4f, 1.2f);
 
             var emission = fire_System.emission;
             Vector3 size = Vector3.zero;
