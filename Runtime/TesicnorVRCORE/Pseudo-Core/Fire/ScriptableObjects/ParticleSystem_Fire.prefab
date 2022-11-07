@@ -285,7 +285,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.4
+      scalar: 1.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -672,7 +672,7 @@ ParticleSystem:
     m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
-    m_MeshNormalOffset: 0
+    m_MeshNormalOffset: 0.1
     m_MeshSpawn:
       mode: 0
       spread: 0
@@ -744,9 +744,9 @@ ParticleSystem:
     m_TextureColorAffectsParticles: 1
     m_TextureAlphaAffectsParticles: 1
     m_TextureBilinearFiltering: 0
-    randomDirectionAmount: 0.3
+    randomDirectionAmount: 0
     sphericalDirectionAmount: 0
-    randomPositionAmount: 0.3
+    randomPositionAmount: 0.2
     radius:
       value: 1
       mode: 0
@@ -1305,8 +1305,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.51829916, b: 0.11792451, a: 0.7254902}
-        key1: {r: 1, g: 0.9418183, b: 0.5294118, a: 0.95686275}
+        key0: {r: 1, g: 0.4889603, b: 0.11764705, a: 0.7254902}
+        key1: {r: 1, g: 0.6977097, b: 0.5294118, a: 0.95686275}
         key2: {r: 1, g: 0.23750053, b: 0, a: 0.30980393}
         key3: {r: 1, g: 0.3529412, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1473,7 +1473,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    speedRange: {x: 0.8, y: 1.5}
+    speedRange: {x: 0.8, y: 1.2}
     tilesX: 8
     tilesY: 4
     animationType: 0
@@ -1544,7 +1544,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.1
-      minScalar: 0.3
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2680,11 +2680,11 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
   NoiseModule:
-    enabled: 0
+    enabled: 1
     strength:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 0.35
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -2841,7 +2841,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     separateAxes: 0
-    frequency: 0.5
+    frequency: 2
     damping: 1
     octaves: 1
     octaveMultiplier: 0.5
@@ -2850,7 +2850,7 @@ ParticleSystem:
     scrollSpeed:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 0.2
       minScalar: 0
       maxCurve:
         serializedVersion: 2
