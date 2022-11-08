@@ -25,13 +25,13 @@ public class DeadScene : MonoBehaviour
     public GameObject rightHand;
     public GameObject leftHand;
 
-    [HideInInspector] public static List<Component> ForButtons;
+    [HideInInspector] public static List<Component> ForButtons = new List<Component>();
 
-    [HideInInspector] public static List<Component> ForRightHand_Components;
-    [HideInInspector] public static List<GameObject> ForRightHand_GO;
+    [HideInInspector] public static List<Component> ForRightHand_Components = new List<Component>();
+    [HideInInspector] public static List<GameObject> ForRightHand_GO = new List<GameObject>();
 
-    [HideInInspector] public static List<Component> ForLeftHand_Components;
-    [HideInInspector] public static List<GameObject> ForLeftHand_GO;
+    [HideInInspector] public static List<Component> ForLeftHand_Components = new List<Component>();
+    [HideInInspector] public static List<GameObject> ForLeftHand_GO = new List<GameObject>();
     #endregion
 
     #region FUNCTIONS
