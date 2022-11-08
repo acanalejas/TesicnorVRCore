@@ -147,11 +147,11 @@ public class DeadScene : MonoBehaviour
         RetryButton.GetComponentInChildren<TextMeshProUGUI>().text = deadScene_retry;
     }
 
-    private void GoToMenu()
+    public void GoToMenu()
     {
         SceneManager.LoadScene(menuIndex);
     }
-    private void Retry()
+    public void Retry()
     {
         SceneManager.LoadScene(lastSceneIndex);
     }
