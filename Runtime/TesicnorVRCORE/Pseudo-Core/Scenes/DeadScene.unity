@@ -516,6 +516,9 @@ GameObject:
   - component: {fileID: 314793312}
   - component: {fileID: 314793311}
   - component: {fileID: 314793310}
+  - component: {fileID: 314793316}
+  - component: {fileID: 314793315}
+  - component: {fileID: 314793314}
   m_Layer: 0
   m_Name: RETRY
   m_TagString: Untagged
@@ -626,6 +629,80 @@ RectTransform:
   m_AnchoredPosition: {x: -557, y: -301}
   m_SizeDelta: {x: 400, y: 240}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &314793314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314793309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 0, g: 0, b: 0, a: 1}
+  HoverColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  PressedColor: {r: 0.103773594, g: 0.103773594, b: 0.103773594, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2013009538}
+        m_TargetAssemblyTypeName: DeadScene, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Retry
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+--- !u!54 &314793315
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314793309}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &314793316
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 314793309}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &395866241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1237,6 +1314,9 @@ GameObject:
   - component: {fileID: 1247158947}
   - component: {fileID: 1247158946}
   - component: {fileID: 1247158948}
+  - component: {fileID: 1247158951}
+  - component: {fileID: 1247158950}
+  - component: {fileID: 1247158949}
   m_Layer: 0
   m_Name: GO TO MENU
   m_TagString: Untagged
@@ -1347,6 +1427,80 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1247158949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247158944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 0, g: 0, b: 0, a: 1}
+  HoverColor: {r: 0.1792453, g: 0.1792453, b: 0.1792453, a: 1}
+  PressedColor: {r: 0.11320752, g: 0.11320752, b: 0.11320752, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2013009538}
+        m_TargetAssemblyTypeName: DeadScene, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: GoToMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+--- !u!54 &1247158950
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247158944}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &1247158951
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1247158944}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1314743739
 GameObject:
   m_ObjectHideFlags: 0
@@ -2556,11 +2710,6 @@ MonoBehaviour:
   RetryButton: {fileID: 314793310}
   rightHand: {fileID: 1718727202}
   leftHand: {fileID: 1585515115}
-  ForButtons: []
-  ForRightHand_Components: []
-  ForRightHand_GO: []
-  ForLeftHand_Components: []
-  ForLeftHand_GO: []
 --- !u!114 &2013009539
 MonoBehaviour:
   m_ObjectHideFlags: 0
