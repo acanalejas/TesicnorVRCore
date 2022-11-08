@@ -25,13 +25,13 @@ public class DeadScene : MonoBehaviour
     public GameObject rightHand;
     public GameObject leftHand;
 
-    [HideInInspector] public List<Component> ForButtons;
+    [HideInInspector] public static List<Component> ForButtons;
 
-    [HideInInspector] public List<Component> ForRightHand_Components;
-    [HideInInspector] public List<GameObject> ForRightHand_GO;
+    [HideInInspector] public static List<Component> ForRightHand_Components;
+    [HideInInspector] public static List<GameObject> ForRightHand_GO;
 
-    [HideInInspector] public List<Component> ForLeftHand_Components;
-    [HideInInspector] public List<GameObject> ForLeftHand_GO;
+    [HideInInspector] public static List<Component> ForLeftHand_Components;
+    [HideInInspector] public static List<GameObject> ForLeftHand_GO;
     #endregion
 
     #region FUNCTIONS
@@ -50,41 +50,31 @@ public class DeadScene : MonoBehaviour
 
     public static void AddComponentsToButtons(List<Component> toAdd)
     {
-        if (Instance == null) return;
-
-        Instance.ForButtons.Clear();
-        Instance.ForButtons.AddRange(toAdd);
+        ForButtons.Clear();
+        ForButtons.AddRange(toAdd);
     }
 
     public static void AddComponentsToRightHand(List<Component> toAdd)
     {
-        if (Instance == null) return;
-
-        Instance.ForRightHand_Components.Clear();
-        Instance.ForRightHand_Components.AddRange(toAdd);
+        ForRightHand_Components.Clear();
+        ForRightHand_Components.AddRange(toAdd);
     }
 
     public static void AddComponentsToRightHand(List<GameObject> toAdd)
     {
-        if (Instance == null) return;
-
-        Instance.ForRightHand_GO.Clear();
-        Instance.ForRightHand_GO.AddRange(toAdd);
+        ForRightHand_GO.Clear();
+        ForRightHand_GO.AddRange(toAdd);
     }
 
     public static void AddComponentsToLeftHand(List<Component> toAdd)
     {
-        if (Instance == null) return;
-
-        Instance.ForLeftHand_Components.Clear();
-        Instance.ForLeftHand_Components.AddRange(toAdd);
+        ForLeftHand_Components.Clear();
+        ForLeftHand_Components.AddRange(toAdd);
     }
     public static void AddComponentsToLeftHand(List<GameObject> toAdd)
     {
-        if (Instance == null) return;
-
-        Instance.ForLeftHand_GO.Clear();
-        Instance.ForLeftHand_GO.AddRange(toAdd);
+        ForLeftHand_GO.Clear();
+        ForLeftHand_GO.AddRange(toAdd);
     }
     #endregion
 
