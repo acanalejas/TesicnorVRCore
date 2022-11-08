@@ -585,6 +585,12 @@ namespace TesicFire
             sparks_shape.scale = fire_shape.scale;
             sparks_shape.shapeType = fire_shape.shapeType;
             sparks_shape.meshRenderer = fire_shape.meshRenderer;
+
+            var main = sparks_System.main;
+            main.startSize = 0.05f;
+
+            var sol = sparks_System.sizeOverLifetime;
+            sol.sizeMultiplier = 0.05f;
         }
 
         public void OnDrawGizmos()
