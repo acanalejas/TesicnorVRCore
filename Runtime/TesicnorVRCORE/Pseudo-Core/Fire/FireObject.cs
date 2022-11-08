@@ -552,6 +552,7 @@ namespace TesicFire
             {
                 smoke_shape.shapeType = ParticleSystemShapeType.Mesh;
                 smoke_shape.mesh = fire_shape.mesh;
+                smoke_shape.scale = Vector3.one;
                 //smoke_shape.scale = new Vector3(fire_MR.bounds.size.x / this.transform.lossyScale.x, fire_MR.bounds.size.y / this.transform.lossyScale.y, fire_MR.bounds.size.z / this.transform.lossyScale.z);
             }
             else
