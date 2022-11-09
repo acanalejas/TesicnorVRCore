@@ -312,6 +312,7 @@ namespace TesicFire
             BoxCollider bc = new BoxCollider();
             BoxCollider bcc = new BoxCollider();
             foreach (BoxCollider col in bcs) { if (col.isTrigger) { bc = col; trigger = col; } else { col.enabled = true; bcc = col; collider = col; } }
+            if (!bcc) { bcc = this.gameObject.AddComponent<BoxCollider>(); collider = bcc; }
 
             if (mesh_original.isReadable)
             {
