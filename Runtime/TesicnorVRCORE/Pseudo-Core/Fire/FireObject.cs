@@ -895,7 +895,29 @@ namespace TesicFire
 
             GUILayout.EndVertical();
             serializedObject.ApplyModifiedProperties();
-    #endregion
+            #endregion
+
+            //Para asegurarse de que tiene los colliders correctos
+            Collider[] colliders = manager.GetComponents<Collider>();
+            if(colliders.Length > 0)
+            {
+                bool hasTrigger = false;
+                bool hasCol = false;
+                foreach(Collider col in colliders)
+                {
+                    if (col.isTrigger) hasTrigger = true;
+                    else hasCol = true;
+                }
+                if (!hasTrigger)
+                {
+                    Collider trigger = manager.gameObject.AddComponent<BoxCollider>();
+                    trigger.isTrigger = true;
+                }
+                if (!hasCol)
+                {
+                    Collider col = manager.gameObject.AddComponent<BoxCollider>();
+                }
+            }
         }
         
         void CopyParticles(ParticleSystem ps, ParticleSystem _target)
