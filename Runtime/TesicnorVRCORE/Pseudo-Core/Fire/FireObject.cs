@@ -186,7 +186,8 @@ namespace TesicFire
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
-
+            while (reconstructing)
+            {
                 if (mesh_original.isReadable)
                 {
                     mf.mesh = fire_mesh[index];
@@ -206,8 +207,9 @@ namespace TesicFire
                 TimeToExtinguish = timePerSection * (index);
                 if (index == fire_mesh.Count - 1) completeFire = true;
                 else completeFire = false;
-            index++;
-            yield return new WaitForSeconds(2 / fireSpeed);
+                index++;
+                yield return new WaitForSeconds(2 / fireSpeed);
+            }
         }
 
         private FireUtils fireutils;
