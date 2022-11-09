@@ -177,40 +177,36 @@ namespace TesicFire
 
         [HideInInspector]public bool reconstructing = false;
         int index = 0;
-        IEnumerator reconstruct()
+        void reconstruct()
         {
             Debug.Log("Index is : " + index);
-            if (index == fire_mesh.Count) yield break;
-            if (extinguishing) yield break;
+            if (index == fire_mesh.Count) return;
+            if (extinguishing || extinguished) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
-            index = 0;
-            while (reconstructing)
-            {
-                if (mesh_original.isReadable)
-                {
-                    mf.mesh = fire_mesh[index];
-                    var shape = fire_System.shape;
-                    shape.mesh = fire_mesh[index];
-                }
-                else
-                {
-                    var shape = fire_System.shape;
-                    shape.scale = (GetComponent<MeshRenderer>().bounds.extents) / (fire_mesh.Count - index);
-                }
-                ParticleSize();
-                AdaptSmoke();
-                AdaptSparks();
-                Propagate();
 
-                TimeToExtinguish = timePerSection * (index);
-                if (index == fire_mesh.Count - 1) completeFire = true;
-                else completeFire = false;
-                index++;
-                yield return new WaitForSeconds(2 / fireSpeed);
+            if (mesh_original.isReadable)
+            {
+                mf.mesh = fire_mesh[index];
+                var shape = fire_System.shape;
+                shape.mesh = fire_mesh[index];
             }
+            else
+            {
+                var shape = fire_System.shape;
+                shape.scale = (GetComponent<MeshRenderer>().bounds.extents) / (fire_mesh.Count - index);
+            }
+            ParticleSize();
+            AdaptSmoke();
+            AdaptSparks();
+            Propagate();
+
+            TimeToExtinguish = timePerSection * (index);
+            if (index == fire_mesh.Count - 1) completeFire = true;
+            else completeFire = false;
+            index++;
         }
 
         private FireUtils fireutils;
@@ -282,7 +278,7 @@ namespace TesicFire
             while (this.onFire)
             {
                 ParticleSize();
-                if (this.IsExtinguising()) StopCoroutine("reconstruct");
+                if (this.IsExtinguising()) CancelInvoke(nameof(reconstruct));
                 else Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
 
@@ -434,8 +430,7 @@ namespace TesicFire
             if (reconstructing) return;
             extinguishing = false;
 
-            StartCoroutine("reconstruct");
-            //InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
+            InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
         }
 
         struct vertex { public float distance; public int index; }
