@@ -139,7 +139,6 @@ namespace TesicFire
             yield return FireMesh(initialFirePoint, 1f);
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
-            Debug.Log("Delay is  :  " + Delay);
             yield return new WaitForSeconds(Delay);
             
             if(fireutils != null)
@@ -168,7 +167,6 @@ namespace TesicFire
         int index = 0;
         void reconstruct()
         {
-            Debug.Log("Index is : " + index);
             if (index == fire_mesh.Count) return;
             if (extinguishing || extinguished) return;
             reconstructing = true;
@@ -264,11 +262,11 @@ namespace TesicFire
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
         IEnumerator burning()
         {
-            while (this.onFire)
+            while (this.onFire || !this.extinguished)
             {
                 ParticleSize();
-                if (this.IsExtinguising()) CancelInvoke(nameof(reconstruct));
-                else Reconstruct();
+                if (this.IsExtinguising() || this.extinguished) CancelInvoke(nameof(reconstruct));
+                else if(!this.extinguished && !this.IsExtinguising()) Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
 
                 yield return frame;
@@ -285,7 +283,7 @@ namespace TesicFire
             onFire = false;
             timeOnFire = 0;
             StopCoroutine("burning");
-
+            CancelInvoke(nameof(reconstruct));
             fire_System.Stop();
             smoke_System.Stop();
         }
@@ -387,7 +385,6 @@ namespace TesicFire
             Vector3 distance = destiny - origin;
 
             float dot = Vector3.Dot(distance.normalized, forward);
-            Debug.Log("DOT : " + dot);
 
             Ray ray = new Ray(origin, distance.normalized);
             RaycastHit hit;
@@ -457,7 +454,6 @@ namespace TesicFire
             List<int> VertexInside = new List<int>();
             //distances = distances.OrderByDescending(x => x.distance).ToList();
             distances = distances.OrderBy(x => x.distance).ToList();
-            Debug.Log(meshData_current.vertex.Count);
             int eachLength = (int)(meshData_original.vertex.Count / 10);
             for (int j = 0; j < meshData_original.vertex.Count; j++)
             {
