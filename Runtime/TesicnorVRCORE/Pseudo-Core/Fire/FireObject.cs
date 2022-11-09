@@ -658,7 +658,7 @@ namespace TesicFire
                 manager.trigger = manager.gameObject.AddComponent<BoxCollider>();
                 manager.trigger.isTrigger = true;
                 }
-            OnInspectorGUI();   
+            //OnInspectorGUI();   
         }
 
         [InitializeOnEnterPlayMode]
