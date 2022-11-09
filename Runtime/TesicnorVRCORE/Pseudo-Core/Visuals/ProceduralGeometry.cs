@@ -190,7 +190,7 @@ public class ProceduralGeometry : MonoBehaviour
             File.Create(jsonName);
         }
         string json = JsonUtility.ToJson(Sections[index]);
-        File.WriteAllText(jsonName, json);
+        //File.WriteAllText(jsonName, json);
     }
 
     /// <summary>
