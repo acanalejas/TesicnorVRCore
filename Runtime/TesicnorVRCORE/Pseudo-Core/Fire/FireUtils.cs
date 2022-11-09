@@ -31,6 +31,8 @@ namespace TesicFire
         public IEnumerator FireMesh(Vector3 initialFirePoint, float radiusMultiplier);
 
         public Vector2 ParticleSize();
+
+        public Vector3 GetClosestPointToFire();
     }
 
     public static class FireUtilsMethods

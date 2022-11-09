@@ -72,6 +72,7 @@ namespace TesicFire
         [SerializeField][HideInInspector] public Vector3 PropOffset = Vector3.zero;
 
         [HideInInspector] public BoxCollider trigger;
+        [HideInInspector] public BoxCollider collider;
 
         private float timeOnFire = 0;
 
@@ -309,16 +310,19 @@ namespace TesicFire
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
-            foreach (BoxCollider col in bcs) { if (col.isTrigger) { bc = col; trigger = col; } else col.enabled = true; }
+            BoxCollider bcc = new BoxCollider();
+            foreach (BoxCollider col in bcs) { if (col.isTrigger) { bc = col; trigger = col; } else { col.enabled = true; bcc = col; collider = col; } }
 
             if (mesh_original.isReadable)
             {
                 bc.size = fire_MR.localBounds.size + PropOffset;
+                bcc.size = fire_MR.localBounds.size;
             }
             else
             {
                 var shape = fire_System.shape;
                 bc.size = shape.scale + PropOffset;
+                bcc.size = shape.scale;
             }
             if (fire_Source)
             {
@@ -620,6 +624,17 @@ namespace TesicFire
                     fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center), this);
                 }
             }
+        }
+
+        /// <summary>
+        /// If the object is not in fire, returns (10,10,10)
+        /// </summary>
+        /// <returns></returns>
+        public Vector3 GetClosestPointToFire()
+        {
+            if (!this.OnFire()) return new Vector3(10,10,10);
+
+            return collider.ClosestPoint(Camera.main.transform.position);
         }
         #endregion
         #endregion
