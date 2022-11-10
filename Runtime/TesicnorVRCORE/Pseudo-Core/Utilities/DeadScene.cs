@@ -44,6 +44,8 @@ public class DeadScene : MonoBehaviour
     public Sprite tick, cross;
     [Header("La medalla")]
     public GameObject medal;
+    [Header("Los colores para el titulo")]
+    public Color incorrectColor;
 
     [HideInInspector] public static List<Component> ForButtons = new List<Component>();
 
@@ -169,6 +171,7 @@ public class DeadScene : MonoBehaviour
 
         if (!approved) { border.sprite = redBorder; medal.SetActive(false); }
         Title.text = title;
+        if (!approved) Title.color = incorrectColor;
         porcentajeText.text = porcentaje; secondsText.text = seconds;
     }
 
