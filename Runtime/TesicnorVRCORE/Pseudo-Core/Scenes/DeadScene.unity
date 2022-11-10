@@ -3682,6 +3682,7 @@ MonoBehaviour:
   tick: {fileID: 21300000, guid: 6011d38f64956994baf5aee897c4a8f4, type: 3}
   cross: {fileID: 21300000, guid: d22ba12e2b8862142852a01c34527b4d, type: 3}
   medal: {fileID: 155777039}
+  incorrectColor: {r: 0.9056604, g: 0.11534355, b: 0.11534355, a: 1}
 --- !u!114 &2013009539
 MonoBehaviour:
   m_ObjectHideFlags: 0
