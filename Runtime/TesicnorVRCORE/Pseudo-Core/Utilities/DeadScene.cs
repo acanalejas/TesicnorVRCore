@@ -16,6 +16,16 @@ public class DeadScene : MonoBehaviour
     static string deadScene_results = "";
     static string deadScene_retry = "RETRY";
     static string deadScene_goToMenu = "GO TO MENU";
+    static string result0 = "";
+    static string result1 = "";
+    static string result2 = "";
+    static string result3 = "";
+    static string title = "";
+    static string seconds = "";
+    static string porcentaje = "";
+
+    static bool value0 = false, value1 = false, value2 = false, value3 = false;
+    static bool approved = true;
 
     public TextMeshProUGUI results;
     public Button MenuButton;
@@ -24,6 +34,16 @@ public class DeadScene : MonoBehaviour
     [Header("Para el player")]
     public GameObject rightHand;
     public GameObject leftHand;
+
+    [Header("Los textos de los resultados")]
+    public TextMeshProUGUI result0Text, result1Text, result2Text, result3Text, Title, porcentajeText, secondsText;
+    [Header("Los ticks de los resultados")]
+    public Image result0Tick, result1Tick, result2Tick, result3Tick, border;
+    [Header("Los sprites que se usan")]
+    public Sprite greenBorder, redBorder;
+    public Sprite tick, cross;
+    [Header("La medalla")]
+    public GameObject medal;
 
     [HideInInspector] public static List<Component> ForButtons = new List<Component>();
 
@@ -46,6 +66,14 @@ public class DeadScene : MonoBehaviour
     public static void SetDeadText(string input)
     {
         deadScene_results = input;
+    }
+
+    public static void SetResults(string _result0, string _result1, string _result2, string _result3, bool _value0, bool _value1, bool _value2, bool _value3, string _title, bool _approved, string _porcentaje, string _seconds)
+    {
+        result0 = _result0; result1 = _result1; result2 = _result2; result3 = _result3;
+        value0 = _value0; value1 = _value1; value2 = _value2; value3 = _value3;
+        title = _title; approved = _approved;
+        porcentaje = _porcentaje; seconds = _seconds;
     }
 
     public static void AddComponentsToButtons(List<Component> toAdd)
@@ -131,11 +159,24 @@ public class DeadScene : MonoBehaviour
         }
     }
 
+    private void SetResults()
+    {
+        result0Text.text = result0; result1Text.text = result1; result2Text.text = result2; result3Text.text = result3;
+        if (!value0) result0Tick.sprite = cross; 
+        if (!value1) result1Tick.sprite = cross;
+        if (!value2) result2Tick.sprite = cross;
+        if (!value3) result3Tick.sprite = cross;
+
+        if (!approved) { border.sprite = redBorder; medal.SetActive(false); }
+        Title.text = title;
+        porcentajeText.text = porcentaje; secondsText.text = seconds;
+    }
+
     private void Start()
     {
         if (Instance == null) Instance = this; else Destroy(this);
-        results.text = deadScene_results;
-
+        //results.text = deadScene_results;
+        SetResults();
         SetComponentsForButtons();
         SetComponentsHands();
         SetGameObjectsForHands();
