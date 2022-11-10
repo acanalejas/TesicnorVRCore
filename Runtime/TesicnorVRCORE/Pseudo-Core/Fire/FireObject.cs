@@ -171,6 +171,7 @@ namespace TesicFire
             if (extinguishing || extinguished) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
+            MeshFilter smf = smoke_System.gameObject.GetComponent<MeshFilter>();
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
 
@@ -179,6 +180,10 @@ namespace TesicFire
                 mf.mesh = fire_mesh[index];
                 var shape = fire_System.shape;
                 shape.mesh = fire_mesh[index];
+
+                var smoke_shape = smoke_System.shape;
+                smoke_shape.mesh = fire_mesh[index];
+                smf.mesh = fire_mesh[index];
             }
             else
             {
@@ -537,16 +542,15 @@ namespace TesicFire
             var smoke_shape = smoke_System.shape;
 
             //smoke_shape.scale = fire_shape.scale;
-            smoke_shape.shapeType = ParticleSystemShapeType.Box;
+            smoke_shape.shapeType = ParticleSystemShapeType.Mesh;
             if (fire_shape.mesh)
             {
-                smoke_shape.shapeType = ParticleSystemShapeType.Mesh;
-                smoke_shape.mesh = fire_shape.mesh;
                 smoke_shape.scale = Vector3.one;
                 //smoke_shape.scale = new Vector3(fire_MR.bounds.size.x / this.transform.lossyScale.x, fire_MR.bounds.size.y / this.transform.lossyScale.y, fire_MR.bounds.size.z / this.transform.lossyScale.z);
             }
             else
             {
+                smoke_shape.shapeType = ParticleSystemShapeType.Box;
                 smoke_shape.scale = GetComponent<BoxCollider>().size;
             }
             smoke_System.transform.position = fire_MR.bounds.center;

@@ -210,12 +210,13 @@ public class FireObjectEditor : Editor
 
         if (!smokeCreated && manager.UsesSmoke)
         {
-            GameObject smoke_go = new GameObject("Smoke", typeof(ParticleSystem));
+            GameObject smoke_go = new GameObject("Smoke", typeof(ParticleSystem), typeof(MeshFilter), typeof(MeshRenderer));
             smoke_go.transform.parent = manager.transform;
             smoke_go.transform.localRotation = Quaternion.Euler(Vector3.zero);
             smoke_go.transform.localScale = Vector3.one;
             //smoke_go.hideFlags = HideFlags.NotEditable;
             manager.smoke_System = smoke_go.GetComponent<ParticleSystem>();
+            smoke_go.GetComponent<MeshRenderer>().enabled = false;
 
             CopyParticles(manager.fire_SystemPrefab.smoke_System, manager.smoke_System);
         }
