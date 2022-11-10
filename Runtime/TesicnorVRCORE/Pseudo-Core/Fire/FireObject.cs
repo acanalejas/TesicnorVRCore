@@ -553,7 +553,7 @@ namespace TesicFire
                 smoke_shape.shapeType = ParticleSystemShapeType.Box;
                 smoke_shape.scale = GetComponent<BoxCollider>().size;
             }
-            smoke_System.transform.position = fire_MR.bounds.center;
+            smoke_System.transform.position = fire_System.transform.position;
 
             var fire_sol = fire_System.sizeOverLifetime;
             var smoke_sol = smoke_System.sizeOverLifetime;
