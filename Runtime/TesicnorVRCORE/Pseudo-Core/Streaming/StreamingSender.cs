@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Net;
 using System.IO;
+using StreamingCSharp;
 
 public class StreamingSender : MonoBehaviour
 {
