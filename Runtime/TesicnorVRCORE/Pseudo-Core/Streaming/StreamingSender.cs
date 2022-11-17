@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Net;
 using System.IO;
 
 public class StreamingSender : MonoBehaviour
@@ -9,6 +10,8 @@ public class StreamingSender : MonoBehaviour
     private Texture2D traduced;
 
     private Camera capturadora;
+
+    
 
     #endregion
 
@@ -51,6 +54,7 @@ public class StreamingSender : MonoBehaviour
     {
         byte[] jpg = GetTextureTraduction();
         File.WriteAllBytes(path, jpg);
+        HttpClient_Custom.SendData(jpg).Wait();
     }
     #endregion
 }
