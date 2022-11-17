@@ -51,7 +51,7 @@ public class StreamingSender : MonoBehaviour
     void WriteTXTFile()
     {
         byte[] jpg = GetTextureTraduction();
-        File.WriteAllBytes(path, jpg);
+        //File.WriteAllBytes(path, jpg);
         HttpClient_Custom.SendData(jpg).Wait();
     }
     #endregion
