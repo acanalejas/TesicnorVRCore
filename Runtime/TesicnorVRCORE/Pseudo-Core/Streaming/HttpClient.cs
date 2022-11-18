@@ -19,7 +19,7 @@ namespace StreamingCSharp
 
         public static void IntializeClient()
         {
-            client = new HttpClient();
+            client = new HttpClient(new HttpClientHandler(), false);
             client.Timeout = new TimeSpan(0, 1, 0);
             client.MaxResponseContentBufferSize = 2048;
             client.BaseAddress = new Uri(url);
