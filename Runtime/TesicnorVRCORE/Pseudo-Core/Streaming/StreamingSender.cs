@@ -17,7 +17,7 @@ public class StreamingSender : MonoBehaviour
     #endregion
 
     #region FUNCTIONS
-    private void Start()
+    private async void Start()
     {
         SetTextureForCamera();
         
@@ -25,7 +25,7 @@ public class StreamingSender : MonoBehaviour
         //StartCoroutine("update");
         client = new HttpClient_Custom();
         HttpClient_Custom.IntializeClient();
-        WriteTXTFile().Wait();
+        await WriteTXTFile();
         
     }
     private void SetTextureForCamera()
