@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Net;
 using System.IO;
 using StreamingCSharp;
+using System.Collections;
+using System.Threading.Tasks;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -34,9 +36,13 @@ public class StreamingSender : MonoBehaviour
         capturadora.Render();
     }
 
-    private void Update()
+    private IEnumerator Update()
     {
-        WriteTXTFile();
+        while (true)
+        {
+            WriteTXTFile().Wait();
+            yield return new WaitForSeconds(0.034f);
+        }
     }
     private byte[] GetTextureTraduction()
     {
@@ -48,11 +54,11 @@ public class StreamingSender : MonoBehaviour
         return jpg;
     }
 
-    void WriteTXTFile()
+    async Task WriteTXTFile()
     {
         byte[] jpg = GetTextureTraduction();
         //File.WriteAllBytes(path, jpg);
-        HttpClient_Custom.SendData(jpg).Wait();
+        await HttpClient_Custom.SendData(jpg);
     }
     #endregion
 }
