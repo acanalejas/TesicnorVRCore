@@ -17,7 +17,7 @@ namespace StreamingCSharp
         private static byte[] content;
 
 
-        public void IntializeClient()
+        public static void IntializeClient()
         {
             client = new HttpClient();
             client.Timeout = new TimeSpan(0, 1, 0);
