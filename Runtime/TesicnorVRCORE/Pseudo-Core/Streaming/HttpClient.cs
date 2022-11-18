@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,9 +89,9 @@ namespace StreamingCSharp
             MemoryStream ms = new MemoryStream();
             ms.Write(data, 0, data.Length);
             System.Net.Http.StreamContent content = new System.Net.Http.StreamContent(ms);
-            
+
             //Post the bytes
-            client.PostAsync(uri,content).Wait();
+            await client.PostAsync("http://127.0.0.1:8080", content);
         }
     }
 }
