@@ -12,6 +12,7 @@ public class StreamingSender : MonoBehaviour
     public string path;
     private Texture2D traduced;
     private Camera capturadora;
+    HttpClient_Custom client;
     #endregion
 
     #region FUNCTIONS
@@ -21,6 +22,9 @@ public class StreamingSender : MonoBehaviour
         
         traduced = new Texture2D(1920,1080);
         StartCoroutine("update");
+        client = new HttpClient_Custom();
+        HttpClient_Custom.IntializeClient();
+        
     }
     private void SetTextureForCamera()
     {

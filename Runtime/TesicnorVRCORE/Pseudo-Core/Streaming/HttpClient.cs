@@ -16,11 +16,15 @@ namespace StreamingCSharp
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
 
+
+        public void IntializeClient()
+        {
+            client = new HttpClient();
+            client.Timeout = new TimeSpan(0, 1, 0);
+            client.BaseAddress = new Uri(url);
+        }
         public static async void  AskForData()
         {
-            //Creating the client
-            client = new System.Net.Http.HttpClient();
-            
             var headers = client.DefaultRequestHeaders;
 
             //Checking correct header
@@ -54,7 +58,7 @@ namespace StreamingCSharp
             }
             catch(Exception ex)
             {
-
+                throw ex;
             }
         }
 
