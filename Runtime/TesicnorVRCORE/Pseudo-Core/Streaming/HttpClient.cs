@@ -21,10 +21,10 @@ namespace StreamingCSharp
         {
             client = new HttpClient();
             client.Timeout = new TimeSpan(0, 1, 0);
+            client.MaxResponseContentBufferSize = 2048;
             client.BaseAddress = new Uri(url);
-
-            
         }
+
         public static async void  AskForData()
         {
             var headers = client.DefaultRequestHeaders;
