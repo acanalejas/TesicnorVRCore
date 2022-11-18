@@ -94,10 +94,11 @@ namespace StreamingCSharp
             //Creates the content to send from a byte array with a stream
             MemoryStream ms = new MemoryStream();
             ms.Write(data, 0, data.Length);
-            System.Net.Http.StreamContent content = new System.Net.Http.StreamContent(ms);
+            System.Net.Http.StreamContent content = new System.Net.Http.StreamContent(ms, data.Length);
+            var _content = new StringContent(Encoding.UTF8.GetString(data));
 
             //Post the bytes
-            await client.PostAsync("http://127.0.0.1:8080", content);
+            await client.PostAsync("http://127.0.0.1:8080", _content);
         }
     }
 }
