@@ -311,8 +311,8 @@ namespace TesicFire
                 bc.size = fire_MR.localBounds.size + PropOffset;
                 bcc.size = fire_MR.localBounds.size;
 
-                bc.center = fire_MR.localBounds.center;
-                bcc.center = fire_MR.localBounds.center;
+                bc.center = fire_MR.bounds.center;
+                bcc.center = fire_MR.bounds.center;
             }
             else
             {
