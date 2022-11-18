@@ -22,6 +22,8 @@ namespace StreamingCSharp
             client = new HttpClient();
             client.Timeout = new TimeSpan(0, 1, 0);
             client.BaseAddress = new Uri(url);
+
+            
         }
         public static async void  AskForData()
         {

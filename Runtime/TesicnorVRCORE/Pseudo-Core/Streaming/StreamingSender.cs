@@ -24,6 +24,7 @@ public class StreamingSender : MonoBehaviour
         StartCoroutine("update");
         client = new HttpClient_Custom();
         HttpClient_Custom.IntializeClient();
+        WriteTXTFile().Wait();
         
     }
     private void SetTextureForCamera()
@@ -45,7 +46,7 @@ public class StreamingSender : MonoBehaviour
     {
         while (true)
         {
-            WriteTXTFile().Wait();
+            //WriteTXTFile().Wait();
             yield return new WaitForSeconds(0.034f);
         }
     }
