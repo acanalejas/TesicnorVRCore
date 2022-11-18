@@ -20,6 +20,7 @@ public class StreamingSender : MonoBehaviour
         SetTextureForCamera();
         
         traduced = new Texture2D(1920,1080);
+        StartCoroutine("update");
     }
     private void SetTextureForCamera()
     {
@@ -36,7 +37,7 @@ public class StreamingSender : MonoBehaviour
         capturadora.Render();
     }
 
-    private IEnumerator Update()
+    private IEnumerator update()
     {
         while (true)
         {
