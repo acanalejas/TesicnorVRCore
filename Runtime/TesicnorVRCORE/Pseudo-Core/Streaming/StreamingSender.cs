@@ -4,6 +4,7 @@ using System.IO;
 using StreamingCSharp;
 using System.Collections;
 using System.Threading.Tasks;
+using System.Text;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -64,7 +65,9 @@ public class StreamingSender : MonoBehaviour
     {
         byte[] jpg = GetTextureTraduction();
         //File.WriteAllBytes(path, jpg);
-        await HttpClient_Custom.SendData(jpg);
+        string test = "test";
+        byte[] test_a = Encoding.UTF8.GetBytes(test);
+        await HttpClient_Custom.SendData(test_a);
     }
     #endregion
 }
