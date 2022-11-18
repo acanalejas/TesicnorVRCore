@@ -97,7 +97,7 @@ namespace StreamingCSharp
             System.Net.Http.StreamContent content = new System.Net.Http.StreamContent(ms);
 
             //Post the bytes
-            client.PostAsync("http://127.0.0.1:8080", content);
+            await client.PostAsync("http://127.0.0.1:8080", content);
         }
     }
 }
