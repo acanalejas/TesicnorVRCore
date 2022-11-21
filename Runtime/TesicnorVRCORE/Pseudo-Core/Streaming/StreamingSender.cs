@@ -62,11 +62,13 @@ public class StreamingSender : MonoBehaviour
         alreadySended = false;
         byte[] jpg = GetTextureTraduction();
         //File.WriteAllBytes(path, jpg);
-        await HttpClient_Custom.SendData(jpg);
-        System.Threading.Thread.Sleep(100);
+        var task = Task.Run(() =>
+        {
+            HttpClient_Custom.SendData(jpg).Wait();
+        });
+        
+        while(task.Status != TaskStatus.RanToCompletion) { continue; }
         alreadySended = true;
-
-        return;
     }
     #endregion
 }
