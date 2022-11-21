@@ -29,7 +29,7 @@ public class StreamingSender : MonoBehaviour
     }
     private void SetTextureForCamera()
     {
-        Camera mainCamera = Camera.current;
+        Camera mainCamera = GameObject.FindObjectOfType<Camera>();
 
         GameObject capturadora_go = new GameObject("capturadora", typeof(Camera));
         capturadora_go.transform.parent = mainCamera.gameObject.transform;
