@@ -43,12 +43,9 @@ public class StreamingSender : MonoBehaviour
         capturadora.Render();
     }
 
-    private async void update()
+    private async void Update()
     {
-        while (true)
-        {
-            await WriteTXTFile();
-        }
+        await WriteTXTFile();
     }
     private byte[] GetTextureTraduction()
     {
