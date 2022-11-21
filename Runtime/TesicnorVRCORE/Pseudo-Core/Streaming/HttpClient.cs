@@ -84,6 +84,8 @@ namespace StreamingCSharp
 
             //Post the bytes
             await client.PostAsync("http://127.0.0.1:8080", content);
+            client.Dispose();
+            await client.DeleteAsync("http://127.0.0.1:8080");
         }
     }
 }

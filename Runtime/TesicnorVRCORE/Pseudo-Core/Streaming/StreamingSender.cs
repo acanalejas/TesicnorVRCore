@@ -66,8 +66,7 @@ public class StreamingSender : MonoBehaviour
         {
             HttpClient_Custom.SendData(jpg).Wait();
         });
-        
-        while(task.Status != TaskStatus.RanToCompletion) { continue; }
+
         alreadySended = true;
     }
     #endregion
