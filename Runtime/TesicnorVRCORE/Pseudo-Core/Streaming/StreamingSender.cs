@@ -24,7 +24,6 @@ public class StreamingSender : MonoBehaviour
         traduced = new Texture2D(1920,1080);
         client = new HttpClient_Custom();
         HttpClient_Custom.IntializeClient();
-        await WriteTXTFile();
     }
     private void SetTextureForCamera()
     {

@@ -16,7 +16,6 @@ namespace StreamingCSharp
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
 
-
         public static void IntializeClient()
         {
             client = new HttpClient(new HttpClientHandler(), false);
@@ -76,16 +75,11 @@ namespace StreamingCSharp
 
         public static async Task SendData(byte[] data)
         {
-            //Setting up the client
-            client = new System.Net.Http.HttpClient();
-
             //Creates the content to send from a byte array with a stream
             System.Net.Http.ByteArrayContent content = new ByteArrayContent(data);
 
             //Post the bytes
             await client.PostAsync("http://127.0.0.1:8080", content);
-            client.Dispose();
-            await client.DeleteAsync("http://127.0.0.1:8080");
         }
     }
 }
