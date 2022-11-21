@@ -11,18 +11,14 @@ public class StreamingSender : MonoBehaviour
     #region PARAMETERS
     public RenderTexture captured;
     public string path;
-    private Texture2D traduced;
     private Camera capturadora;
-    HttpClient_Custom client;
     #endregion
 
     #region FUNCTIONS
-    private async void Start()
+    private void Start()
     {
         SetTextureForCamera();
         
-        traduced = new Texture2D(1920,1080);
-        client = new HttpClient_Custom();
         HttpClient_Custom.IntializeClient();
     }
     private void SetTextureForCamera()
@@ -51,6 +47,7 @@ public class StreamingSender : MonoBehaviour
         parse.ReadPixels(new Rect(0, 0, parse.width, parse.height), 0, 0);
         parse.Apply();
         byte[] jpg = parse.EncodeToJPG();
+        Destroy(parse);
         return jpg;
     }
 
