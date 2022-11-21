@@ -9,6 +9,7 @@ using System.Text;
 public class StreamingSender : MonoBehaviour
 {
     #region PARAMETERS
+    private static StreamingSender instance;
     public RenderTexture captured;
     public string path;
     private Camera capturadora;
@@ -17,9 +18,14 @@ public class StreamingSender : MonoBehaviour
     #region FUNCTIONS
     private void Start()
     {
+        if (instance == null) instance = this;
+        else Destroy(this);
+
         SetTextureForCamera();
         
         HttpClient_Custom.IntializeClient();
+
+        DontDestroyOnLoad(this.gameObject);
     }
     private void SetTextureForCamera()
     {
