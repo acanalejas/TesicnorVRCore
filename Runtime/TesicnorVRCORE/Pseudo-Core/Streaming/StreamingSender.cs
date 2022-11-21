@@ -22,7 +22,7 @@ public class StreamingSender : MonoBehaviour
         SetTextureForCamera();
         
         traduced = new Texture2D(1920,1080);
-        StartCoroutine("update");
+        update();
         client = new HttpClient_Custom();
         HttpClient_Custom.IntializeClient();
         await WriteTXTFile();
@@ -43,12 +43,11 @@ public class StreamingSender : MonoBehaviour
         capturadora.Render();
     }
 
-    private IEnumerator update()
+    private async void update()
     {
         while (true)
         {
-            WriteTXTFile().Wait();
-            yield return new WaitForSeconds(0.034f);
+            await WriteTXTFile();
         }
     }
     private byte[] GetTextureTraduction()
