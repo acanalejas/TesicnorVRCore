@@ -79,21 +79,7 @@ namespace StreamingCSharp
             //Setting up the client
             client = new System.Net.Http.HttpClient();
 
-            var headers = client.DefaultRequestHeaders;
-
-            //Checking correct header
-            string header = "ie";
-            if (!headers.UserAgent.TryParseAdd(header))
-            {
-                throw new Exception("Invalid Header Value: " + header);
-            }
-
-            //Setting the uri which we are going to connect
-            Uri uri = new Uri(url);
-
             //Creates the content to send from a byte array with a stream
-            MemoryStream ms = new MemoryStream();
-            ms.Write(data, 0, data.Length);
             System.Net.Http.ByteArrayContent content = new ByteArrayContent(data);
 
             //Post the bytes
