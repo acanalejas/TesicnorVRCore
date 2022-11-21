@@ -58,21 +58,14 @@ public class StreamingSender : MonoBehaviour
     bool alreadySended = true;
     async Task WriteTXTFile()
     {
-        try
-        {
-            if (!alreadySended) return;
-            alreadySended = false;
-            byte[] jpg = GetTextureTraduction();
-            //File.WriteAllBytes(path, jpg);
-            await HttpClient_Custom.SendData(jpg);
+        if (!alreadySended) return;
+        alreadySended = false;
+        byte[] jpg = GetTextureTraduction();
+        //File.WriteAllBytes(path, jpg);
+        HttpClient_Custom.SendData(jpg).Wait();
 
-            alreadySended = true;
-        }
-        catch
-        {
-            return;
-        }
-        
+        alreadySended = true;
+
         return;
     }
     #endregion
