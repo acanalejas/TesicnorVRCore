@@ -79,7 +79,7 @@ namespace StreamingCSharp
             System.Net.Http.ByteArrayContent content = new ByteArrayContent(data);
 
             //Post the bytes
-            await client.PostAsync("http://192.168.20.55:8080/", content);
+            await client.PostAsync("http://10.128.128.128:8080/", content);
         }
     }
 }
