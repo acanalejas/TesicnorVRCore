@@ -12,7 +12,7 @@ namespace StreamingCSharp
 {
     public class HttpClient_Custom
     {
-        public static string url = "http://localhost:8080";
+        public static string url = "http://192.168.20.55:8080";
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
 
@@ -79,7 +79,7 @@ namespace StreamingCSharp
             System.Net.Http.ByteArrayContent content = new ByteArrayContent(data);
 
             //Post the bytes
-            await client.PostAsync("http://10.219.140.64:8080/", content);
+            await client.PostAsync("http://192.168.20.55:8080/", content);
         }
     }
 }
