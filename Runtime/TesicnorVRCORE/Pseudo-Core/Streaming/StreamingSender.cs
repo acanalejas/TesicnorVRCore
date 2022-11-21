@@ -55,11 +55,16 @@ public class StreamingSender : MonoBehaviour
         return jpg;
     }
 
+    bool alreadySended = true;
     async Task WriteTXTFile()
     {
+        if (!alreadySended) return;
+        alreadySended = false;
         byte[] jpg = GetTextureTraduction();
         //File.WriteAllBytes(path, jpg);
         await HttpClient_Custom.SendData(jpg);
+
+        alreadySended = true;
         return;
     }
     #endregion
