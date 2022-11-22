@@ -80,12 +80,6 @@ public class StreamingSender : MonoBehaviour
 
         alreadySended = true;
     }
-
-    private void OnLevelWasLoaded(int level)
-    {
-        Start();
-    }
-
     private bool hasCamera()
     {
         if (!capturadora)
