@@ -1,10 +1,7 @@
 using UnityEngine;
-using System.Net;
-using System.IO;
 using StreamingCSharp;
-using System.Collections;
 using System.Threading.Tasks;
-using System.Text;
+using UnityEngine.SceneManagement;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -16,17 +13,20 @@ public class StreamingSender : MonoBehaviour
     #endregion
 
     #region FUNCTIONS
-    private void Start()
+    private void Awake()
     {
         if (instance == null) instance = this;
         else Destroy(this);
 
-        SetTextureForCamera();
-        
-        HttpClient_Custom.IntializeClient();
-        StartCoroutine("update");
-
         DontDestroyOnLoad(this.gameObject);
+
+        parse = new Texture2D(1920, 1080, TextureFormat.ARGB32, false);
+
+        HttpClient_Custom.IntializeClient();
+    }
+    private void Start()
+    {
+        SetTextureForCamera();
     }
     private void SetTextureForCamera()
     {
@@ -39,46 +39,42 @@ public class StreamingSender : MonoBehaviour
         capturadora_go.transform.localScale = Vector3.one;
 
         capturadora = capturadora_go.GetComponent<Camera>();
-        captured.width = 1920;
-        captured.height = 1080;
         capturadora.targetTexture = captured;
         capturadora.Render();
+
+        parse = new Texture2D(captured.width, captured.height, TextureFormat.ARGB32, false);
     }
 
-    WaitForSeconds seconds = new WaitForSeconds(0.042f);
-    private IEnumerator update()
+    private async void Update()
     {
-        while (true)
-        {
-            WriteTXTFile().Wait();
-            yield return seconds;
-        }
+        await WriteTXTFile();
     }
-    //private async void Update()
-    //{
-    //    await WriteTXTFile();
-    //}
+    Texture2D parse;
     private byte[] GetTextureTraduction()
     {
-        Texture2D parse = new Texture2D(captured.width,captured.height, TextureFormat.ARGB32, false);
         RenderTexture.active = captured;
-        parse.ReadPixels(new Rect(0, 0, parse.width, parse.height), 0, 0);
+        parse.ReadPixels(new Rect(0, 0, captured.width, captured.height), 0, 0);
         parse.Apply();
-        byte[] jpg = parse.EncodeToJPG();
-        Destroy(parse);
+        jpg = parse.EncodeToJPG();
         return jpg;
     }
 
     bool alreadySended = true;
+    byte[] jpg;
     async Task WriteTXTFile()
     {
         if (!alreadySended) return;
         alreadySended = false;
-        byte[] jpg = GetTextureTraduction();
+        jpg = GetTextureTraduction();
         //File.WriteAllBytes(path, jpg);
         await HttpClient_Custom.SendData(jpg);
 
         alreadySended = true;
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        Start();
     }
     #endregion
 }

@@ -12,13 +12,16 @@ namespace StreamingCSharp
 {
     public class HttpClient_Custom
     {
-        public static string url = "http://192.168.20.55:8080";
+        public static string url = "http://192.168.71.234:8080";
         private static System.Net.Http.HttpClient client;
+        private static HttpClientHandler clientHandler;
         private static byte[] content;
 
         public static void IntializeClient()
         {
-            client = new HttpClient(new HttpClientHandler(), false);
+            clientHandler = new HttpClientHandler();
+
+            client = new HttpClient(clientHandler, false);
             client.Timeout = new TimeSpan(0, 1, 0);
             client.MaxResponseContentBufferSize = 2048;
             client.BaseAddress = new Uri(url);
@@ -73,13 +76,38 @@ namespace StreamingCSharp
             return ImageByteConverter.BytesToImage(content);
         }
 
+
+        static System.Net.Http.ByteArrayContent _content;
+        static System.Net.Http.StreamContent sc;
+        static System.Threading.CancellationToken cancelationToken = new System.Threading.CancellationToken(false);
         public static async Task SendData(byte[] data)
         {
             //Creates the content to send from a byte array with a stream
-            System.Net.Http.ByteArrayContent content = new ByteArrayContent(data);
+            var cts = new System.Threading.CancellationTokenSource();
+            using (var content = createContent(data))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url))
+            {
+                request.Content = content;
+                using(HttpResponseMessage result = await client.SendAsync(request, cts.Token))
+                {
+                    result.Content?.Dispose();
+                    result.Content = null;
 
-            //Post the bytes
-            await client.PostAsync("http://10.219.140.64:8080/", content);
+                    result.Dispose();
+                }
+
+                request.Content?.Dispose();
+                request.Content = null;
+                request.Dispose();
+            }
+        }
+
+        private static HttpContent createContent(byte[] data)
+        {
+            if (_content != null) _content = null;
+            _content = new ByteArrayContent(data);
+            _content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/byteArray");
+            return _content;
         }
     }
 }
