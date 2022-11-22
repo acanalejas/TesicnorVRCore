@@ -23,10 +23,13 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(1920, 1080, TextureFormat.ARGB32, false);
 
         HttpClient_Custom.IntializeClient();
+
+        SceneManager.sceneLoaded += OnSceneChanged;
     }
     private void Start()
     {
         SetTextureForCamera();
+        InvokeRepeating(nameof(update), 0, 0.042f);
     }
     private void SetTextureForCamera()
     {
@@ -45,7 +48,7 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(captured.width, captured.height, TextureFormat.ARGB32, false);
     }
 
-    private async void Update()
+    private async void update()
     {
         hasCamera();
         await WriteTXTFile();
@@ -72,23 +75,28 @@ public class StreamingSender : MonoBehaviour
         {
             await HttpClient_Custom.SendData(jpg);
         }
-        catch
+        catch(System.Exception ex)
         {
-            HttpClient_Custom.IntializeClient();
-            await HttpClient_Custom.SendData(jpg);
+
         }
 
         alreadySended = true;
     }
+
     private bool hasCamera()
     {
         if (!capturadora)
         {
-            capturadora = GameObject.FindObjectOfType<Camera>();
             SetTextureForCamera();
         }
 
         return true;
+    }
+
+    public void OnSceneChanged(Scene scene, LoadSceneMode mode)
+    {
+        CancelInvoke(nameof(update));
+        Start();
     }
     #endregion
 }
