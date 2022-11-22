@@ -29,7 +29,6 @@ public class StreamingSender : MonoBehaviour
     private void Start()
     {
         SetTextureForCamera();
-        InvokeRepeating(nameof(update), 0, 0.042f);
     }
     private void SetTextureForCamera()
     {
@@ -48,7 +47,7 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(captured.width, captured.height, TextureFormat.ARGB32, false);
     }
 
-    private async void update()
+    private async void Update()
     {
         hasCamera();
         WriteTXTFile();
@@ -95,7 +94,6 @@ public class StreamingSender : MonoBehaviour
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
-        CancelInvoke(nameof(update));
         Start();
     }
     #endregion
