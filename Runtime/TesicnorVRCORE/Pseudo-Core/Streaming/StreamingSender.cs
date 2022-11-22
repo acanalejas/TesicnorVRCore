@@ -29,6 +29,8 @@ public class StreamingSender : MonoBehaviour
     private void Start()
     {
         SetTextureForCamera();
+
+        InvokeRepeating(nameof(update), 0, 0.042f);
     }
     private void SetTextureForCamera()
     {
@@ -47,10 +49,9 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(captured.width, captured.height, TextureFormat.ARGB32, false);
     }
 
-    private void Update()
+    private async void update()
     {
-        hasCamera();
-        WriteTXTFile();
+        await WriteTXTFile();
     }
     Texture2D parse;
     private byte[] GetTextureTraduction()
@@ -64,7 +65,7 @@ public class StreamingSender : MonoBehaviour
 
     bool alreadySended = true;
     byte[] jpg;
-    async void WriteTXTFile()
+    async Task WriteTXTFile()
     {
         if (!alreadySended) return;
         alreadySended = false;
@@ -94,6 +95,7 @@ public class StreamingSender : MonoBehaviour
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
+        CancelInvoke(nameof(update));
         Start();
     }
     #endregion
