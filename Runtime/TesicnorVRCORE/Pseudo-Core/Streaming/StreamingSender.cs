@@ -51,7 +51,7 @@ public class StreamingSender : MonoBehaviour
     private async void update()
     {
         hasCamera();
-        await WriteTXTFile();
+        WriteTXTFile();
     }
     Texture2D parse;
     private byte[] GetTextureTraduction()
@@ -65,7 +65,7 @@ public class StreamingSender : MonoBehaviour
 
     bool alreadySended = true;
     byte[] jpg;
-    async Task WriteTXTFile()
+    async void WriteTXTFile()
     {
         if (!alreadySended) return;
         alreadySended = false;
