@@ -24,6 +24,7 @@ public class StreamingSender : MonoBehaviour
         SetTextureForCamera();
         
         HttpClient_Custom.IntializeClient();
+        StartCoroutine("update");
 
         DontDestroyOnLoad(this.gameObject);
     }
@@ -44,10 +45,19 @@ public class StreamingSender : MonoBehaviour
         capturadora.Render();
     }
 
-    private async void Update()
+    WaitForSeconds seconds = new WaitForSeconds(0.042f);
+    private IEnumerator update()
     {
-        await WriteTXTFile();
+        while (true)
+        {
+            WriteTXTFile().Wait();
+            yield return seconds;
+        }
     }
+    //private async void Update()
+    //{
+    //    await WriteTXTFile();
+    //}
     private byte[] GetTextureTraduction()
     {
         Texture2D parse = new Texture2D(captured.width,captured.height, TextureFormat.ARGB32, false);
@@ -66,10 +76,7 @@ public class StreamingSender : MonoBehaviour
         alreadySended = false;
         byte[] jpg = GetTextureTraduction();
         //File.WriteAllBytes(path, jpg);
-        var task = Task.Run(() =>
-        {
-            HttpClient_Custom.SendData(jpg).Wait();
-        });
+        await HttpClient_Custom.SendData(jpg);
 
         alreadySended = true;
     }

@@ -159,7 +159,7 @@ public class PlayerManager : MonoBehaviour
             if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true; Debug.Log("RECENTERING FROM PLAYER MANAGER"); }
             //playerControllers.SetActive(false);
         }
-        scenario.SetActive(!useHandsCanvas.activeSelf);
+        if(room)scenario.SetActive(!useHandsCanvas.activeSelf);
         if(room)room.SetActive(useHandsCanvas.activeSelf);
     }
 
@@ -193,7 +193,7 @@ public class PlayerManager : MonoBehaviour
             leftController.SetActive(true);
         }
 
-        scenario.SetActive(!useControllersCanvas.activeSelf);
+        if(room)scenario.SetActive(!useControllersCanvas.activeSelf);
         if(room)room.SetActive(useControllersCanvas.activeSelf);
     }
     #endregion
