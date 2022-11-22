@@ -54,10 +54,11 @@ public class StreamingSender : MonoBehaviour
         await WriteTXTFile();
     }
     Texture2D parse;
+    Rect rect = new Rect(0, 0, 1920, 1080);
     private byte[] GetTextureTraduction()
     {
         RenderTexture.active = captured;
-        parse.ReadPixels(new Rect(0, 0, captured.width, captured.height), 0, 0);
+        parse.ReadPixels(rect,0,0,false);
         parse.Apply();
         jpg = parse.EncodeToJPG();
         return jpg;
