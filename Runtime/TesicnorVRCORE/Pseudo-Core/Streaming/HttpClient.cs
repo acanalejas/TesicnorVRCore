@@ -88,17 +88,14 @@ namespace StreamingCSharp
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url))
             {
                 request.Content = content;
-                using(HttpResponseMessage result = await client.PostAsync(request, cts.Token))
+                using(HttpResponseMessage result = await client.SendAsync(request, cts.Token))
                 {
                     result.Content?.Dispose();
                     result.Content = null;
-
-                    result.Dispose();
                 }
 
                 request.Content?.Dispose();
                 request.Content = null;
-                request.Dispose();
             }
         }
 
