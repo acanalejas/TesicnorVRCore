@@ -47,7 +47,7 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(captured.width, captured.height, TextureFormat.ARGB32, false);
     }
 
-    private async void Update()
+    private void Update()
     {
         hasCamera();
         WriteTXTFile();
