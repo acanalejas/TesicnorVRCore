@@ -160,7 +160,7 @@ public class PlayerManager : MonoBehaviour
             //playerControllers.SetActive(false);
         }
         scenario.SetActive(!useHandsCanvas.activeSelf);
-        room.SetActive(useHandsCanvas.activeSelf);
+        if(room)room.SetActive(useHandsCanvas.activeSelf);
     }
 
     bool alreadyChanged = false;
@@ -194,7 +194,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         scenario.SetActive(!useControllersCanvas.activeSelf);
-        room.SetActive(useControllersCanvas.activeSelf);
+        if(room)room.SetActive(useControllersCanvas.activeSelf);
     }
     #endregion
 }
