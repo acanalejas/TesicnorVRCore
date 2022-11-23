@@ -73,7 +73,6 @@ public class StreamingSender : MonoBehaviour
         parse.ReadPixels(rect,0,0,false);
         //_data = parse.GetRawTextureData();
         _data = parse.GetRawTextureData();
-        Debug.Log(parse.format);
         await HttpClient_Custom.SendData(_data);
         alreadySended = true;
     }
@@ -81,7 +80,7 @@ public class StreamingSender : MonoBehaviour
 
     bool alreadySended = true;
     byte[] _data;
-    async void WriteTXTFile()
+    void WriteTXTFile()
     {
         if (!alreadySended) return;
         alreadySended = false;
