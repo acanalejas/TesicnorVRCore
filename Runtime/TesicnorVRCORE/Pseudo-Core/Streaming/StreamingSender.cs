@@ -2,6 +2,9 @@ using UnityEngine;
 using StreamingCSharp;
 using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.Collections;
+using System.Drawing;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -10,6 +13,8 @@ public class StreamingSender : MonoBehaviour
     public RenderTexture captured;
     public string path;
     private Camera capturadora;
+    public Camera playerCamera;
+    private static ImageConverter converter;
     #endregion
 
     #region FUNCTIONS
@@ -29,12 +34,14 @@ public class StreamingSender : MonoBehaviour
     private void Start()
     {
         SetTextureForCamera();
-
-        InvokeRepeating(nameof(update), 0, 0.042f);
+        StartCoroutine("update");
+        //InvokeRepeating(nameof(update), 0, 1/24);
     }
     private void SetTextureForCamera()
     {
-        Camera mainCamera = GameObject.FindObjectOfType<Camera>();
+        Camera mainCamera = playerCamera;
+
+        if (!playerCamera) return;
 
         GameObject capturadora_go = new GameObject("capturadora", typeof(Camera));
         capturadora_go.transform.parent = mainCamera.gameObject.transform;
@@ -46,42 +53,39 @@ public class StreamingSender : MonoBehaviour
         capturadora.targetTexture = captured;
         capturadora.Render();
 
-        parse = new Texture2D(captured.width, captured.height, TextureFormat.ARGB32, false);
+        parse = new Texture2D(1280, 720, TextureFormat.ARGB32, false);
     }
 
-    private async void update()
+    private IEnumerator update()
     {
-        await WriteTXTFile();
+        while (true)
+        {
+            this.WriteTXTFile();
+            yield return new WaitForSecondsRealtime(1 / 24);
+        }
+        
     }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 1920, 1080);
-    private byte[] GetTextureTraduction()
+    private async void GetTextureTraduction()
     {
         RenderTexture.active = captured;
         parse.ReadPixels(rect,0,0,false);
-        parse.Apply();
-        jpg = parse.EncodeToJPG();
-        return jpg;
+        //_data = parse.GetRawTextureData();
+        _data = parse.GetRawTextureData();
+        Debug.Log(parse.format);
+        await HttpClient_Custom.SendData(_data);
+        alreadySended = true;
     }
 
+
     bool alreadySended = true;
-    byte[] jpg;
-    async Task WriteTXTFile()
+    byte[] _data;
+    async void WriteTXTFile()
     {
         if (!alreadySended) return;
         alreadySended = false;
-        jpg = GetTextureTraduction();
-        //File.WriteAllBytes(path, jpg);
-        try
-        {
-            await HttpClient_Custom.SendData(jpg);
-        }
-        catch(System.Exception ex)
-        {
-
-        }
-
-        alreadySended = true;
+        GetTextureTraduction();
     }
 
     private bool hasCamera()
@@ -96,7 +100,7 @@ public class StreamingSender : MonoBehaviour
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
-        CancelInvoke(nameof(update));
+        //CancelInvoke(nameof(update));
         Start();
     }
     #endregion
