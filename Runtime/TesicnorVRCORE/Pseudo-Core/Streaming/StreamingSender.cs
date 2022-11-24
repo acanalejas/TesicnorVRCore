@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using System.Collections;
 using System.Drawing;
+using System.IO.Compression;
+using System.IO;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -53,7 +55,7 @@ public class StreamingSender : MonoBehaviour
         capturadora.targetTexture = captured;
         capturadora.Render();
 
-        parse = new Texture2D(640, 480, TextureFormat.ARGB32, false);
+        parse = new Texture2D(640, 480, TextureFormat.RGBA32, false);
     }
 
     private IEnumerator update()
@@ -72,8 +74,18 @@ public class StreamingSender : MonoBehaviour
         RenderTexture.active = captured;
         parse.ReadPixels(rect,0,0,false);
         //_data = parse.GetRawTextureData();
-        //parse.Compress(false);
         _data = parse.GetRawTextureData();
+
+        //Compress the byte[]
+        MemoryStream ms = new MemoryStream();
+        using(DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+        {
+            deflate.Write(_data,0,_data.Length);
+            deflate.Close();
+        }
+        _data = ms.ToArray();
+        ms.Close();
+
         await HttpClient_Custom.SendData(_data);
         alreadySended = true;
     }
