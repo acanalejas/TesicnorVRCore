@@ -53,7 +53,7 @@ public class StreamingSender : MonoBehaviour
         capturadora.targetTexture = captured;
         capturadora.Render();
 
-        parse = new Texture2D(1280, 720, TextureFormat.ARGB32, false);
+        parse = new Texture2D(640, 480, TextureFormat.ARGB32, false);
     }
 
     private IEnumerator update()
@@ -66,12 +66,13 @@ public class StreamingSender : MonoBehaviour
         
     }
     Texture2D parse;
-    Rect rect = new Rect(0, 0, 1920, 1080);
+    Rect rect = new Rect(0, 0, 640, 480);
     private async void GetTextureTraduction()
     {
         RenderTexture.active = captured;
         parse.ReadPixels(rect,0,0,false);
         //_data = parse.GetRawTextureData();
+        //parse.Compress(false);
         _data = parse.GetRawTextureData();
         await HttpClient_Custom.SendData(_data);
         alreadySended = true;
