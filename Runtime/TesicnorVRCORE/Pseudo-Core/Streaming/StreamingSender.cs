@@ -87,16 +87,21 @@ public class StreamingSender : MonoBehaviour
             }
             _data = ms.ToArray();
             ms.Close();
+            return;
         });
         
 
         await HttpClient_Custom.SendData(_data);
+        alreadySent = true;
     }
 
 
     byte[] _data;
+    bool alreadySent = true;
     void WriteTXTFile()
     {
+        if (!alreadySent) return;
+        alreadySent = false;
         GetTextureTraduction();
     }
 
