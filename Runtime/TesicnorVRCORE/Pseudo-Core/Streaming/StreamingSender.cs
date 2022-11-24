@@ -78,25 +78,25 @@ public class StreamingSender : MonoBehaviour
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
-        using(DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+        await Task.Run(() =>
         {
-            deflate.Write(_data,0,_data.Length);
-            deflate.Close();
-        }
-        _data = ms.ToArray();
-        ms.Close();
+            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+            {
+                deflate.Write(_data, 0, _data.Length);
+                deflate.Close();
+            }
+            _data = ms.ToArray();
+            ms.Close();
+        });
+        
 
         await HttpClient_Custom.SendData(_data);
-        alreadySended = true;
     }
 
 
-    bool alreadySended = true;
     byte[] _data;
     void WriteTXTFile()
     {
-        if (!alreadySended) return;
-        alreadySended = false;
         GetTextureTraduction();
     }
 
