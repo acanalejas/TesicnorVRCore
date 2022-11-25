@@ -82,6 +82,11 @@ public class StreamingSender : MonoBehaviour
                 deflate.Write(_data, 0, _data.Length);
                 deflate.Close();
             }
+            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+            {
+                deflate.Write(_data, 0, _data.Length);
+                deflate.Close();
+            }
             _data = ms.ToArray();
             ms.Close();
             return;
