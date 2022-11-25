@@ -59,7 +59,7 @@ public class StreamingSender : MonoBehaviour
         while (true)
         {
             this.WriteTXTFile();
-            yield return new WaitForSecondsRealtime(1 / 24);
+            yield return new WaitForSecondsRealtime(1 / 50);
         }
         
     }
