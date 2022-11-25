@@ -82,6 +82,12 @@ public class StreamingSender : MonoBehaviour
                 deflate.Write(_data, 0, _data.Length);
                 deflate.Close();
             }
+            _data = ms.ToArray();
+            ms.Close();
+            return;
+        }); 
+        await Task.Run(() =>
+        {
             using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
             {
                 deflate.Write(_data, 0, _data.Length);
@@ -91,8 +97,6 @@ public class StreamingSender : MonoBehaviour
             ms.Close();
             return;
         });
-        
-
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
