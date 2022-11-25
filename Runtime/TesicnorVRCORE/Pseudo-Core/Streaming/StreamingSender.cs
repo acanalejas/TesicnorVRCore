@@ -26,6 +26,7 @@ public class StreamingSender : MonoBehaviour
         else Destroy(this);
 
         HttpClient_Custom.IntializeClient();
+        DontDestroyOnLoad(this);
 
         SceneManager.sceneLoaded += OnSceneChanged;
     }
@@ -33,7 +34,6 @@ public class StreamingSender : MonoBehaviour
     {
         SetTextureForCamera();
         StartCoroutine("update");
-        //InvokeRepeating(nameof(update), 0, 1/24);
     }
     private void SetTextureForCamera()
     {
@@ -115,7 +115,11 @@ public class StreamingSender : MonoBehaviour
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
     {
         //CancelInvoke(nameof(update));
-        Start();
+        if (CameraGetter.Instance)
+        {
+            playerCamera = CameraGetter.Instance.playerCamera;
+            this.Start();
+        }
     }
     #endregion
 }
