@@ -89,6 +89,8 @@ public class StreamingSender : MonoBehaviour
 
         if (needsResize(_data))
         {
+            captured.width = 480;
+            captured.height = 360;
             parse.Reinitialize(480, 360);
             
             parse.ReadPixels(rect, 0, 0, false);
@@ -109,6 +111,8 @@ public class StreamingSender : MonoBehaviour
                 _ms.Close();
             });
             parse.Reinitialize(640, 480);
+            captured.width = 640;
+            captured.height = 480;
         }
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
