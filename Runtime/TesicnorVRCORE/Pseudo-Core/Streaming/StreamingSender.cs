@@ -90,7 +90,7 @@ public class StreamingSender : MonoBehaviour
         if (needsResize(_data))
         {
             parse.Reinitialize(480, 360);
-            
+            parse.ReadPixels(new Rect(0, 0, 480, 360),0,0);
             _data = parse.GetRawTextureData();
             
             //Compress the byte[]
