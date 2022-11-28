@@ -89,26 +89,26 @@ public class StreamingSender : MonoBehaviour
 
         if (needsResize(_data))
         {
-            parse.width = 480;
-            parse.height = 360;
-
-            parse.ReadPixels(rect, 0, 0, false);
+            //parse.width = 480;
+            //parse.height = 360;
+            //
+            //parse.ReadPixels(rect, 0, 0, false);
+            ////_data = parse.GetRawTextureData();
             //_data = parse.GetRawTextureData();
-            _data = parse.GetRawTextureData();
-            Debug.Log(parse.format);
-
-            //Compress the byte[]
-            MemoryStream _ms = new MemoryStream();
-            await Task.Run(() =>
-            {
-                using (DeflateStream deflate = new DeflateStream(_ms, System.IO.Compression.CompressionLevel.Optimal, false))
-                {
-                    deflate.Write(_data, 0, _data.Length);
-                    deflate.Close();
-                }
-                _data = _ms.ToArray();
-                _ms.Close();
-            });
+            //Debug.Log(parse.format);
+            //
+            ////Compress the byte[]
+            //MemoryStream _ms = new MemoryStream();
+            //await Task.Run(() =>
+            //{
+            //    using (DeflateStream deflate = new DeflateStream(_ms, System.IO.Compression.CompressionLevel.Optimal, false))
+            //    {
+            //        deflate.Write(_data, 0, _data.Length);
+            //        deflate.Close();
+            //    }
+            //    _data = _ms.ToArray();
+            //    _ms.Close();
+            //});
         }
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
