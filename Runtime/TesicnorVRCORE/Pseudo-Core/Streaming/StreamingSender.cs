@@ -51,7 +51,7 @@ public class StreamingSender : MonoBehaviour
         capturadora.targetTexture = captured;
         capturadora.Render();
 
-        parse = new Texture2D(640, 480, TextureFormat.ETC2_RGBA1, false);
+        parse = new Texture2D(640, 480, TextureFormat.ARGB4444, false);
     }
 
     private IEnumerator update()
