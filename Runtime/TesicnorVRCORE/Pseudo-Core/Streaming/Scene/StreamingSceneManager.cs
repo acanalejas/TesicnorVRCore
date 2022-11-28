@@ -13,6 +13,8 @@ public class StreamingSceneManager : MonoBehaviour
 
     public GameObject questionCanvas, keyboardCanvas;
     public TextMeshProUGUI IPText;
+
+    string ip;
     #endregion
 
     #region FUNCTIONS
@@ -51,14 +53,18 @@ public class StreamingSceneManager : MonoBehaviour
     public void Keyboard(string input)
     {
         IPText.text += input;
+        ip += input;
     }
     public void KeyboardDelete()
     {
         IPText.text.Remove(IPText.text.Length - 1);
+        ip.Remove(ip.Length - 1);
     }
     public void KeyboardEnter()
     {
-        string url = "http://" + IPText.text + ":8080";
+        Debug.Log(ip);
+        string url = "http://" + ip + ":8080";
+        Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
 
         GoToNextScene();
