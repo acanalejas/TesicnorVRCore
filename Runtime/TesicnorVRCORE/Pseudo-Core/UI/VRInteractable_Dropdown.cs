@@ -247,6 +247,8 @@ public class VRInteractable_Dropdown : VR_Interactable
             item.image.color = image.color;
             item.text.fontSize = text.fontSize;
             item.text.font = text.font;
+            item.text.autoSizeTextContainer = true;
+            item.text.enableAutoSizing = true;
             item.text.color = text.color;
 
             item.SetupUICollider();
