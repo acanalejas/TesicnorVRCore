@@ -52,10 +52,8 @@ namespace StreamingCSharp
 
         private static HttpContent createContent(byte[] data)
         {
-            if (sc != null) sc = null;
-            MemoryStream ms = new MemoryStream(data);
-            sc = new StreamContent(ms);
-            ms.Close();
+            if (_content != null) _content = null;
+            _content = new ByteArrayContent(data);
             return sc;
         }
     }
