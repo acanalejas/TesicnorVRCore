@@ -53,20 +53,17 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         this.WriteTXTFile();
     }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
-    private async void GetTextureTraduction()
+    private async Task GetTextureTraduction()
     {
         RenderTexture.active = captured;
-        capturadora.Render();
         parse.ReadPixels(rect, 0, 0, false);
-        //_data = parse.GetRawTextureData();
         _data = parse.GetRawTextureData();
-
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
@@ -94,11 +91,11 @@ public class StreamingSender : MonoBehaviour
 
     byte[] _data;
     bool alreadySent = true;
-    void WriteTXTFile()
+    async void WriteTXTFile()
     {
         if (!alreadySent) return;
         alreadySent = false;
-        GetTextureTraduction();
+        await GetTextureTraduction();
     }
 
     private bool hasCamera()
