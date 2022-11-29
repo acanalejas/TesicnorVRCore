@@ -63,7 +63,7 @@ public class StreamingSender : MonoBehaviour
     {
         RenderTexture.active = captured;
         capturadora.Render();
-        parse.ReadPixels(rect,0,0,false);
+        parse.ReadPixels(new Rect(0,0,640,480),0,0,false);
         //_data = parse.GetRawTextureData();
         _data = parse.GetRawTextureData();
 
@@ -71,7 +71,7 @@ public class StreamingSender : MonoBehaviour
         MemoryStream ms = new MemoryStream();
         await Task.Run(() =>
         {
-            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
             {
                 deflate.Write(_data, 0, _data.Length);
                 deflate.Close();
