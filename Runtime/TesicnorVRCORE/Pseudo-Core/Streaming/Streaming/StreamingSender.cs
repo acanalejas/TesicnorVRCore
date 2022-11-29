@@ -63,9 +63,13 @@ public class StreamingSender : MonoBehaviour
     {
         RenderTexture.active = captured;
         capturadora.Render();
-        parse.ReadPixels(new Rect(0,0,640,480),0,0,false);
-        //_data = parse.GetRawTextureData();
-        _data = parse.GetRawTextureData();
+        await Task.Run(() =>
+        {
+            parse.ReadPixels(rect, 0, 0, false);
+            //_data = parse.GetRawTextureData();
+            _data = parse.GetRawTextureData();
+        });
+        
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
