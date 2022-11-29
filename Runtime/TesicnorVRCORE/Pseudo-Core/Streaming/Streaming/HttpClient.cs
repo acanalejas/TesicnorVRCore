@@ -1,18 +1,16 @@
 ﻿using System;
-using System.IO;
 using System.Net.Http;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
+using System.IO.Compression;
+using System.IO;
+using UnityEngine;
 
 
 namespace StreamingCSharp
 {
     public class HttpClient_Custom
     {
-        public static string url = "";
+        public static string url = "http://192.168.20.55:8080";
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
 
@@ -33,6 +31,8 @@ namespace StreamingCSharp
             if (url == "") return;
             ///Creates the content to send from a byte array with a stream
             var cts = new System.Threading.CancellationTokenSource();
+
+
             using (var content = createContent(data))
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url))
             {
@@ -52,9 +52,11 @@ namespace StreamingCSharp
 
         private static HttpContent createContent(byte[] data)
         {
-            if (_content != null) _content = null;
-            _content = new ByteArrayContent(data);
-            return _content;
+            if (sc != null) sc = null;
+            MemoryStream ms = new MemoryStream(data);
+            sc = new StreamContent(ms);
+            ms.Close();
+            return sc;
         }
     }
 }

@@ -1,12 +1,10 @@
 using UnityEngine;
 using StreamingCSharp;
-using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-using System.Collections;
 using System.Drawing;
 using System.IO.Compression;
 using System.IO;
+using UnityEngine.Rendering;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -47,10 +45,8 @@ public class StreamingSender : MonoBehaviour
         capturadora_go.transform.localScale = Vector3.one;
 
         capturadora = capturadora_go.GetComponent<Camera>();
-        capturadora.farClipPlane = 0.3f;
         capturadora.targetTexture = captured;
-        RenderTexture.active = captured;
-
+        capturadora.nearClipPlane = 0.3f;
         parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
@@ -62,20 +58,20 @@ public class StreamingSender : MonoBehaviour
     Rect rect = new Rect(0, 0, 640, 480);
     private async void GetTextureTraduction()
     {
+        RenderTexture.active = captured;
         parse.ReadPixels(rect, 0, 0, false);
-        parse.Apply();
         _data = parse.GetRawTextureData();
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
-        using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+        using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
         {
             deflate.Write(_data, 0, _data.Length);
             deflate.Close();
         }
         _data = ms.ToArray();
         ms.Close();
-
+        Debug.Log(_data.Length);
        await HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
@@ -92,7 +88,7 @@ public class StreamingSender : MonoBehaviour
 
     byte[] _data;
     bool alreadySent = true;
-    async void WriteTXTFile()
+    void WriteTXTFile()
     {
         if (!alreadySent) return;
         alreadySent = false;
