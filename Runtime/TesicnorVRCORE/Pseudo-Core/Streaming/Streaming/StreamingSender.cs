@@ -70,17 +70,15 @@ public class StreamingSender : MonoBehaviour
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
-        await Task.Run(() =>
+        using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
         {
-            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
-            {
-                deflate.Write(_data, 0, _data.Length);
-                deflate.Close();
-            }
-            _data = ms.ToArray();
-            ms.Close();
-        });
-        await HttpClient_Custom.SendData(_data);
+            deflate.Write(_data, 0, _data.Length);
+            deflate.Close();
+        }
+        _data = ms.ToArray();
+        ms.Close();
+
+       HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
 
