@@ -62,13 +62,13 @@ public class StreamingSender : MonoBehaviour
     private async void GetTextureTraduction()
     {
         RenderTexture.active = captured;
-        capturadora.Render();
         parse.ReadPixels(rect, 0, 0, false);
+        parse.Apply();
         _data = parse.GetRawTextureData();
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
-        using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
+        using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
         {
             deflate.Write(_data, 0, _data.Length);
             deflate.Close();
