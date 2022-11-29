@@ -54,15 +54,9 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
-    private IEnumerator update()
+    private void Update()
     {
-        while (true)
-        {
-            this.WriteTXTFile();
-            yield return new WaitForSecondsRealtime(1 / 50);
-
-        }
-        
+        this.WriteTXTFile();
     }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
@@ -86,26 +80,6 @@ public class StreamingSender : MonoBehaviour
             _data = ms.ToArray();
             ms.Close();
         });
-
-        if (needsResize(_data))
-        {
-            //_data = parse.GetRawTextureData();
-            //
-            ////Compress the byte[]
-            //MemoryStream _ms = new MemoryStream();
-            //await Task.Run(() =>
-            //{
-            //    using (DeflateStream deflate = new DeflateStream(_ms, System.IO.Compression.CompressionLevel.Optimal, false))
-            //    {
-            //        deflate.Write(_data, 0, _data.Length);
-            //        deflate.Close();
-            //    }
-            //    _data = _ms.ToArray();
-            //    _ms.Close();
-            //});
-            //parse.Reinitialize(640, 480);
-            //parse.Reinitialize(480, 360);
-        }
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
