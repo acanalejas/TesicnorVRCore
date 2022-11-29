@@ -12,7 +12,7 @@ namespace StreamingCSharp
 {
     public class HttpClient_Custom
     {
-        public static string url = "http://192.168.20.55:8080";
+        public static string url = "";
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
 
@@ -30,6 +30,7 @@ namespace StreamingCSharp
         static System.Net.Http.StreamContent sc;
         public static async Task SendData(byte[] data)
         {
+            if (url == "") return;
             ///Creates the content to send from a byte array with a stream
             var cts = new System.Threading.CancellationTokenSource();
             using (var content = createContent(data))
