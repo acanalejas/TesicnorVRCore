@@ -59,7 +59,7 @@ public class StreamingSender : MonoBehaviour
     }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
-    private async Task GetTextureTraduction()
+    private async void GetTextureTraduction()
     {
         RenderTexture.active = captured;
         parse.ReadPixels(rect, 0, 0, false);
@@ -95,7 +95,7 @@ public class StreamingSender : MonoBehaviour
     {
         if (!alreadySent) return;
         alreadySent = false;
-        await GetTextureTraduction();
+        GetTextureTraduction();
     }
 
     private bool hasCamera()
