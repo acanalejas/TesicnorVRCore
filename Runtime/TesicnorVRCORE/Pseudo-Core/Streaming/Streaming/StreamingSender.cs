@@ -47,7 +47,9 @@ public class StreamingSender : MonoBehaviour
         capturadora_go.transform.localScale = Vector3.one;
 
         capturadora = capturadora_go.GetComponent<Camera>();
+        capturadora.farClipPlane = 0.3f;
         capturadora.targetTexture = captured;
+        RenderTexture.active = captured;
 
         parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
