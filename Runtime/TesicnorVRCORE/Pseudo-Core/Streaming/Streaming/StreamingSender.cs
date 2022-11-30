@@ -64,13 +64,11 @@ public class StreamingSender : MonoBehaviour
     {
         RenderTexture.active = captured;
         capturadora.Render();
+        ScreenCapture.CaptureScreenshotIntoRenderTexture(captured);
         parse.ReadPixels(rect, 0, 0, false);
-        await Task.Run(() =>
-        {
-            _data = parse.GetRawTextureData();
-        });
-        
-        
+        _data = parse.GetRawTextureData();
+
+
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
         using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
