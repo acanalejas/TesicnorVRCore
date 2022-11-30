@@ -60,7 +60,6 @@ public class StreamingSender : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1 / 60);
-            yield return GetPixels();
             this.WriteTXTFile();
         }
         
@@ -68,17 +67,17 @@ public class StreamingSender : MonoBehaviour
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
-    private IEnumerator GetPixels()
-    {
-        captured.Create();
-        capturadora.Render();
-        RenderTexture.active = captured;
-        parse.ReadPixels(rect, 0, 0, false);
-        
-        yield return _data = ScreenCapture.CaptureScreenshotAsTexture().GetRawTextureData();
-    }
     private async void GetTextureTraduction()
     {
+       
+        captured.Create();
+        RenderTexture.active = captured;
+        capturadora.targetTexture = captured;
+        capturadora.Render();
+        parse.ReadPixels(rect, 0, 0);
+
+        byte[]  _data = parse.GetRawTextureData();
+
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
         using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
@@ -104,7 +103,7 @@ public class StreamingSender : MonoBehaviour
         return false;
     }
 
-    byte[] _data;
+    //byte[] _data;
     bool alreadySent = true;
     void WriteTXTFile()
     {
