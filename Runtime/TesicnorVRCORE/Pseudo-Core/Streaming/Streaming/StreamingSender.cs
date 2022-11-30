@@ -62,7 +62,14 @@ public class StreamingSender : MonoBehaviour
     Rect rect = new Rect(0, 0, 640, 480);
     private async void GetTextureTraduction()
     {
-        GetPixels();
+        RenderTexture.active = captured;
+        capturadora.Render();
+        parse.ReadPixels(rect, 0, 0, false);
+        await Task.Run(() =>
+        {
+            _data = parse.GetRawTextureData();
+        });
+        
         
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
@@ -78,13 +85,6 @@ public class StreamingSender : MonoBehaviour
         alreadySent = true;
     }
 
-    IEnumerator GetPixels()
-    {
-        RenderTexture.active = captured;
-        capturadora.Render();
-        parse.ReadPixels(rect, 0, 0, false);
-        yield return _data = parse.GetRawTextureData();
-    }
 
     bool needsResize(byte[] img)
     {
