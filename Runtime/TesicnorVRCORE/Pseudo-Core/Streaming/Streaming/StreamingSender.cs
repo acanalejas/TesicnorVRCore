@@ -59,9 +59,9 @@ public class StreamingSender : MonoBehaviour
     Rect rect = new Rect(0, 0, 640, 480);
     private async void GetTextureTraduction()
     {
+        RenderTexture.active = captured;
         await Task.Run(() =>
         {
-            RenderTexture.active = captured;
             capturadora.Render();
             parse.ReadPixels(rect, 0, 0, false);
             _data = parse.GetRawTextureData();
