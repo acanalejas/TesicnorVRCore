@@ -34,7 +34,7 @@ namespace StreamingCSharp
 
 
             using (var content = createContent(data))
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url))
             {
                 request.Content = content;
                 using(HttpResponseMessage result = await client.SendAsync(request, cts.Token))
