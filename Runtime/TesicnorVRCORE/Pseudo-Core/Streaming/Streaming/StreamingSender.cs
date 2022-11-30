@@ -6,6 +6,9 @@ using System.IO.Compression;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEngine.Rendering;
+using System.Collections.Generic;
+using System.Collections;
+using System;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -59,13 +62,7 @@ public class StreamingSender : MonoBehaviour
     Rect rect = new Rect(0, 0, 640, 480);
     private async void GetTextureTraduction()
     {
-        RenderTexture.active = captured;
-        await Task.Run(() =>
-        {
-            capturadora.Render();
-            parse.ReadPixels(rect, 0, 0, false);
-            _data = parse.GetRawTextureData();
-        });
+        GetPixels();
         
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
@@ -79,6 +76,14 @@ public class StreamingSender : MonoBehaviour
         Debug.Log(_data.Length);
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
+    }
+
+    IEnumerator GetPixels()
+    {
+        RenderTexture.active = captured;
+        capturadora.Render();
+        parse.ReadPixels(rect, 0, 0, false);
+        yield return _data = parse.GetRawTextureData();
     }
 
     bool needsResize(byte[] img)
