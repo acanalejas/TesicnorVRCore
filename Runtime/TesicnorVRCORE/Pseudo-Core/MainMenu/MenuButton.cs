@@ -37,6 +37,11 @@ public class MenuButton : VR_Interactable
         MainMenuRCP.Instance.ChangeToGuidePanel();
     }
 
+    public void WaitGuided()
+    {
+        Invoke(nameof(PressedTheButton_Guided), 0.5f);
+    }
+
     #region Guide Canvas
     public void SetIsGuided(bool _value)
     {
