@@ -63,22 +63,21 @@ public class StreamingSender : MonoBehaviour
     private async void GetTextureTraduction()
     {
         //RenderTexture.active = captured;
-        //capturadora.Render();
-        ScreenCapture.CaptureScreenshotIntoRenderTexture(captured);
+        capturadora.Render();
         RenderTexture.active = captured;
         parse.ReadPixels(rect, 0, 0, false);
         _data = parse.GetRawTextureData();
 
 
         //Compress the byte[]
-        MemoryStream ms = new MemoryStream();
+        /*MemoryStream ms = new MemoryStream();
         using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
         {
             deflate.Write(_data, 0, _data.Length);
             deflate.Close();
         }
         _data = ms.ToArray();
-        ms.Close();
+        ms.Close();*/
         Debug.Log(_data.Length);
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
