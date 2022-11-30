@@ -67,12 +67,11 @@ public class StreamingSender : MonoBehaviour
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
-    private IEnumerator GetTextureTraduction()
+    private void GetTextureTraduction()
     {
         RenderTexture.active = captured;
         playerCamera.targetTexture = captured;
         playerCamera.Render();
-        yield return new WaitForEndOfFrame();
         parse.ReadPixels(rect, 0, 0);
 
         byte[]  _data = parse.GetRawTextureData();
@@ -90,7 +89,6 @@ public class StreamingSender : MonoBehaviour
         HttpClient_Custom.SendData(_data);
         alreadySent = true;
 
-        StopCoroutine(nameof(GetTextureTraduction));
     }
 
 
@@ -110,7 +108,7 @@ public class StreamingSender : MonoBehaviour
     {
         if (!alreadySent) return;
         alreadySent = false;
-        StartCoroutine(nameof(GetTextureTraduction));
+        this.GetTextureTraduction();
     }
 
     private bool hasCamera()
