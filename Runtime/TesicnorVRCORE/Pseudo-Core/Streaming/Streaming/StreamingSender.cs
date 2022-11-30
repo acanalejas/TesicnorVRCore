@@ -63,6 +63,7 @@ public class StreamingSender : MonoBehaviour
     private async void GetTextureTraduction()
     {
         //RenderTexture.active = captured;
+        captured.Create();
         capturadora.Render();
         RenderTexture.active = captured;
         parse.ReadPixels(rect, 0, 0, false);
