@@ -33,24 +33,24 @@ namespace StreamingCSharp
             var cts = new System.Threading.CancellationTokenSource();
 
 
-            using (var content = createContent(data))
+            using (ByteArrayContent content = createContent(data))
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, url))
             {
                 request.Content = content;
                 using(HttpResponseMessage result = await client.SendAsync(request, cts.Token))
                 {
-                    result.Content?.Dispose();
-                    result.Content = null;
+                    //result.Content?.Dispose();
+                    //result.Content = null;
                 }
 
-                request.Content?.Dispose();
-                request.Content = null;
+               //request.Content?.Dispose();
+               //request.Content = null;
             }
             /*_content = new ByteArrayContent(data);
             await client.PostAsync(url, _content);*/
         }
 
-        private static HttpContent createContent(byte[] data)
+        private static ByteArrayContent createContent(byte[] data)
         {
             if (_content != null) _content = null;
             _content = new ByteArrayContent(data);
