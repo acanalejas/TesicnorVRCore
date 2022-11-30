@@ -49,8 +49,8 @@ public class StreamingSender : MonoBehaviour
         capturadora_go.transform.localScale = Vector3.one;
 
         capturadora = capturadora_go.GetComponent<Camera>();
+        capturadora.CopyFrom(playerCamera);
         capturadora.targetTexture = captured;
-        capturadora.nearClipPlane = 0.3f;
         parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
@@ -70,14 +70,14 @@ public class StreamingSender : MonoBehaviour
 
 
         //Compress the byte[]
-        /*MemoryStream ms = new MemoryStream();
+        MemoryStream ms = new MemoryStream();
         using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
         {
             deflate.Write(_data, 0, _data.Length);
             deflate.Close();
         }
         _data = ms.ToArray();
-        ms.Close();*/
+        ms.Close();
         Debug.Log(_data.Length);
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
