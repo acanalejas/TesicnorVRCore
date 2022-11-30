@@ -21,7 +21,7 @@ public class StreamingSender : MonoBehaviour
     private static ImageConverter converter;
 
     public byte[] img_byte;
-    public string img_path;
+    public Texture2D img;
     #endregion
 
     #region FUNCTIONS
@@ -40,7 +40,7 @@ public class StreamingSender : MonoBehaviour
 
     public void SaveIMG()
     {
-        img_byte = File.ReadAllBytes(img_path);
+        img_byte = img.GetRawTextureData();
     }
     private void SetTextureForCamera()
     {
@@ -72,7 +72,7 @@ public class StreamingSender : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.Space)) SaveIMG();
+        if (Input.GetKeyDown(KeyCode.Space)) SaveIMG();
     }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
