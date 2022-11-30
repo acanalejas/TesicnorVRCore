@@ -9,6 +9,9 @@ public class MenuButton : VR_Interactable
     #region PARAMETERS
     [Header("Datos de la escena que queremos cargar")]
     [SerializeField] SceneData sceneData;
+
+    [Header("Queremos que el botón redirija a la escena directamente?")]
+    public bool GoToScene = true;
     #endregion
 
     #region FUNCTIONS
@@ -24,7 +27,7 @@ public class MenuButton : VR_Interactable
     }
     public void PressedTheButton()
     {
-        if(sceneData != null)
+        if(sceneData != null && GoToScene)
         SceneChanger.Instance.ChangeScene(sceneData);
     }
 
