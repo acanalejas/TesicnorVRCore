@@ -19,6 +19,9 @@ public class StreamingSender : MonoBehaviour
     private Camera capturadora;
     public Camera playerCamera;
     private static ImageConverter converter;
+
+    public byte[] img_byte;
+    public string img_path;
     #endregion
 
     #region FUNCTIONS
@@ -28,14 +31,16 @@ public class StreamingSender : MonoBehaviour
         else Destroy(this);
 
         HttpClient_Custom.IntializeClient();
-        DontDestroyOnLoad(this);
-
-        SceneManager.sceneLoaded += OnSceneChanged;
     }
     private void Start()
     {
         SetTextureForCamera();
         StartCoroutine("update");
+    }
+
+    public void SaveIMG()
+    {
+        img_byte = File.ReadAllBytes(img_path);
     }
     private void SetTextureForCamera()
     {
@@ -64,18 +69,24 @@ public class StreamingSender : MonoBehaviour
         }
         
     }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Space)) SaveIMG();
+    }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
     private void GetTextureTraduction()
     {
-        RenderTexture.active = captured;
+        /*RenderTexture.active = captured;
         playerCamera.targetTexture = captured;
         playerCamera.Render();
         parse.ReadPixels(new Rect(0, 0, 640, 480), 0, 0);
         parse.Apply();
 
-        byte[]  _data = parse.GetRawTextureData();
+        byte[]  _data = parse.GetRawTextureData();*/
+        byte[] _data = img_byte;
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
