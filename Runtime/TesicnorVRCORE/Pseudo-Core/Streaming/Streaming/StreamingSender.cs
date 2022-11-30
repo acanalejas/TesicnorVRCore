@@ -19,9 +19,6 @@ public class StreamingSender : MonoBehaviour
     private Camera capturadora;
     public Camera playerCamera;
     private static ImageConverter converter;
-
-    public byte[] img_byte;
-    public Texture2D img;
     #endregion
 
     #region FUNCTIONS
@@ -38,10 +35,6 @@ public class StreamingSender : MonoBehaviour
         StartCoroutine("update");
     }
 
-    public void SaveIMG()
-    {
-        img_byte = img.GetRawTextureData();
-    }
     private void SetTextureForCamera()
     {
         Camera mainCamera = playerCamera;
@@ -57,7 +50,7 @@ public class StreamingSender : MonoBehaviour
         capturadora = capturadora_go.GetComponent<Camera>();
         capturadora.CopyFrom(playerCamera);
         //capturadora.targetTexture = captured;
-        parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        parse = new Texture2D(640, 480, TextureFormat.RGB24, false);
     }
 
     private IEnumerator update()
@@ -70,23 +63,18 @@ public class StreamingSender : MonoBehaviour
         
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) SaveIMG();
-    }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
     private void GetTextureTraduction()
     {
-        /*RenderTexture.active = captured;
+        RenderTexture.active = captured;
         playerCamera.targetTexture = captured;
         playerCamera.Render();
         parse.ReadPixels(new Rect(0, 0, 640, 480), 0, 0);
         parse.Apply();
 
-        byte[]  _data = parse.GetRawTextureData();*/
-        byte[] _data = img_byte;
+        byte[]  _data = parse.GetRawTextureData();
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
