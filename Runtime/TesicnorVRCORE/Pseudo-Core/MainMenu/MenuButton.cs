@@ -24,6 +24,7 @@ public class MenuButton : VR_Interactable
     }
     public void PressedTheButton()
     {
+        if(sceneData != null)
         SceneChanger.Instance.ChangeScene(sceneData);
     }
 
@@ -37,6 +38,7 @@ public class MenuButton : VR_Interactable
     public void SetIsGuided(bool _value)
     {
         SceneChanger.Instance.SetIsGuided(_value);
+        if(sceneData != null)
         SceneChanger.Instance.ChangeScene();
     }
     #endregion
