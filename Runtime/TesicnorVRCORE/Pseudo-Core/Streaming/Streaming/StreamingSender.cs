@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Drawing;
 using System.IO.Compression;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine.Rendering;
 
 public class StreamingSender : MonoBehaviour
@@ -58,11 +59,14 @@ public class StreamingSender : MonoBehaviour
     Rect rect = new Rect(0, 0, 640, 480);
     private async void GetTextureTraduction()
     {
-        RenderTexture.active = captured;
-        capturadora.Render();
-        parse.ReadPixels(rect, 0, 0, false);
-        _data = parse.GetRawTextureData();
-
+        await Task.Run(() =>
+        {
+            RenderTexture.active = captured;
+            capturadora.Render();
+            parse.ReadPixels(rect, 0, 0, false);
+            _data = parse.GetRawTextureData();
+        });
+        
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
         using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
