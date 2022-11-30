@@ -54,7 +54,7 @@ namespace StreamingCSharp
         {
             if (_content != null) _content = null;
             _content = new ByteArrayContent(data);
-            return sc;
+            return _content;
         }
     }
 }
