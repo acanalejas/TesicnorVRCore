@@ -35,6 +35,7 @@ public class StreamingSender : MonoBehaviour
     private void Start()
     {
         SetTextureForCamera();
+        StartCoroutine("update");
     }
     private void SetTextureForCamera()
     {
