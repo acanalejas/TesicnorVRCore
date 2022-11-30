@@ -89,6 +89,8 @@ public class StreamingSender : MonoBehaviour
         Debug.Log(_data.Length);
         HttpClient_Custom.SendData(_data);
         alreadySent = true;
+
+        StopCoroutine(nameof(GetTextureTraduction));
     }
 
 
@@ -108,7 +110,7 @@ public class StreamingSender : MonoBehaviour
     {
         if (!alreadySent) return;
         alreadySent = false;
-        GetTextureTraduction();
+        StartCoroutine(nameof(GetTextureTraduction));
     }
 
     private bool hasCamera()
