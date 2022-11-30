@@ -54,22 +54,29 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
-    private void LateUpdate()
+    private IEnumerator update()
     {
-        this.WriteTXTFile();
+        while (true)
+        {
+            yield return new WaitForSeconds(1 / 60);
+            yield return GetPixels();
+            this.WriteTXTFile();
+        }
+        
     }
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
-    private async void GetTextureTraduction()
+
+    private IEnumerator GetPixels()
     {
-        //RenderTexture.active = captured;
         captured.Create();
         capturadora.Render();
         RenderTexture.active = captured;
         parse.ReadPixels(rect, 0, 0, false);
-        _data = parse.GetRawTextureData();
-
-
+        yield return _data = parse.GetRawTextureData();
+    }
+    private async void GetTextureTraduction()
+    {
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
         using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
