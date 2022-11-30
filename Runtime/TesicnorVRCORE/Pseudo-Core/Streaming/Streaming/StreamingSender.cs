@@ -60,6 +60,8 @@ public class StreamingSender : MonoBehaviour
     {
         capturadora.Render();
         RenderTexture.active = captured;
+        playerCamera.targetTexture = captured;
+        playerCamera.Render();
         parse.ReadPixels(rect, 0, 0, false);
         _data = parse.GetRawTextureData();
 
