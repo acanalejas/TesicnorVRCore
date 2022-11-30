@@ -72,22 +72,22 @@ public class StreamingSender : MonoBehaviour
         RenderTexture.active = captured;
         playerCamera.targetTexture = captured;
         playerCamera.Render();
-        parse.ReadPixels(rect, 0, 0);
+        parse.ReadPixels(new Rect(0, 0, 640, 480), 0, 0);
+        parse.Apply();
 
         byte[]  _data = parse.GetRawTextureData();
 
         //Compress the byte[]
         MemoryStream ms = new MemoryStream();
-        using (GZipStream deflate = new GZipStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+        using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
         {
             deflate.Write(_data, 0, _data.Length);
             deflate.Close();
         }
         _data = ms.ToArray();
-        ms.Close();
-        Debug.Log(_data.Length);
         HttpClient_Custom.SendData(_data);
         alreadySent = true;
+        ms.Close();
 
     }
 
