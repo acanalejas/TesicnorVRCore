@@ -63,7 +63,7 @@ public class StreamingSender : MonoBehaviour
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
-    private async Task GetTextureTraduction()
+    private IEnumerator GetTextureTraduction()
     {
         RenderTexture current = RenderTexture.active;
         RenderTexture.active = this.playerCamera.targetTexture;
@@ -71,6 +71,7 @@ public class StreamingSender : MonoBehaviour
         this.parse.ReadPixels(rect, 0, 0);
         RenderTexture.active = current;
 
+        yield return new WaitForEndOfFrame();
         //yield return new WaitForEndOfFrame();
         byte[]  _data = parse.GetRawTextureData();
 
@@ -82,10 +83,10 @@ public class StreamingSender : MonoBehaviour
             deflate.Close();
         }
         _data = ms.ToArray();
-        await HttpClient_Custom.SendData(_data);
+        yield return HttpClient_Custom.SendData(_data);
         alreadySent = true;
         ms.Close();
-
+        StopCoroutine(nameof(GetTextureTraduction));
     }
 
 
@@ -104,7 +105,7 @@ public class StreamingSender : MonoBehaviour
     async void WriteTXTFile()
     {
         alreadySent = false;
-        await this.GetTextureTraduction();
+        StartCoroutine(nameof(GetTextureTraduction));
     }
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
