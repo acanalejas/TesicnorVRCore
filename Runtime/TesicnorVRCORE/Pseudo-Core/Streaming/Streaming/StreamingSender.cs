@@ -70,8 +70,6 @@ public class StreamingSender : MonoBehaviour
         this.playerCamera.Render();
         this.parse.ReadPixels(rect, 0, 0);
         RenderTexture.active = current;
-
-        yield return new WaitForEndOfFrame();
         //yield return new WaitForEndOfFrame();
         byte[]  _data = parse.GetRawTextureData();
 
@@ -89,33 +87,12 @@ public class StreamingSender : MonoBehaviour
         StopCoroutine(nameof(GetTextureTraduction));
     }
 
-
-    bool needsResize(byte[] img)
-    {
-        if(img.Length > 50000)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
     //byte[] _data;
     bool alreadySent = true;
     async void WriteTXTFile()
     {
         alreadySent = false;
         StartCoroutine(nameof(GetTextureTraduction));
-    }
-
-    public void OnSceneChanged(Scene scene, LoadSceneMode mode)
-    {
-        //CancelInvoke(nameof(update));
-        if (CameraGetter.Instance)
-        {
-            playerCamera = CameraGetter.Instance.playerCamera;
-            this.Start();
-        }
     }
     #endregion
 }
