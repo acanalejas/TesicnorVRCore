@@ -103,7 +103,7 @@ public class StreamingSender : MonoBehaviour
 
     //byte[] _data;
     bool alreadySent = true;
-    async Task WriteTXTFile()
+    async void WriteTXTFile()
     {
         await Task.Run(() =>
         {
