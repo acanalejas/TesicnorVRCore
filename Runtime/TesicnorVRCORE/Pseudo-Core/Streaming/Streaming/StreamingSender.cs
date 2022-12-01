@@ -55,11 +55,9 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(640, 480, TextureFormat.RGB24, false);
     }
 
-    private async void Update()
+    private void Update()
     {
-        
-            await this.WriteTXTFile();
-        
+        this.WriteTXTFile();
     }
 
     Texture2D parse;
