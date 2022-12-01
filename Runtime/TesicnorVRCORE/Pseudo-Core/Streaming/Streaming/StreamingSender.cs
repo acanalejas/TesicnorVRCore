@@ -55,10 +55,10 @@ public class StreamingSender : MonoBehaviour
         parse = new Texture2D(640, 480, TextureFormat.RGB24, false);
     }
 
-    private void Update()
+    private async void Update()
     {
         
-            this.WriteTXTFile();
+            await this.WriteTXTFile();
         
     }
 
@@ -107,11 +107,14 @@ public class StreamingSender : MonoBehaviour
 
     //byte[] _data;
     bool alreadySent = true;
-    void WriteTXTFile()
+    async Task WriteTXTFile()
     {
-        if (!alreadySent) return;
-        alreadySent = false;
-        GetTextureTraduction();
+        await Task.Run(() =>
+        {
+            if (!alreadySent) return;
+            alreadySent = false;
+            GetTextureTraduction();
+        });
     }
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
