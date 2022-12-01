@@ -90,8 +90,6 @@ public class StreamingSender : MonoBehaviour
         alreadySent = true;
         ms.Close();
 
-        
-
     }
 
 
@@ -111,7 +109,6 @@ public class StreamingSender : MonoBehaviour
     {
         await Task.Run(() =>
         {
-            if (!alreadySent) return;
             alreadySent = false;
             GetTextureTraduction();
         });
