@@ -93,6 +93,8 @@ public class StreamingSender : MonoBehaviour
         alreadySent = true;
         ms.Close();
 
+        StopCoroutine(nameof(GetTextureTraduction));
+
     }
 
 
@@ -112,7 +114,7 @@ public class StreamingSender : MonoBehaviour
     {
         if (!alreadySent) return;
         alreadySent = false;
-        this.GetTextureTraduction();
+        this.StartCoroutine(nameof(GetTextureTraduction));
     }
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
