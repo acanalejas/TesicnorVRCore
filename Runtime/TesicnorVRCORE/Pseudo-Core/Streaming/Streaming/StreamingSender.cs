@@ -51,7 +51,7 @@ public class StreamingSender : MonoBehaviour
 
         playerCamera.targetTexture = captured;
         //capturadora.targetTexture = captured;
-        parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        parse = new Texture2D(977, 550, TextureFormat.RGB565, false);
     }
 
 
@@ -66,7 +66,7 @@ public class StreamingSender : MonoBehaviour
     }
 
     Texture2D parse;
-    Rect rect = new Rect(0, 0, 640, 480);
+    Rect rect = new Rect(0, 0, 977, 550);
 
     private async void GetTextureTraduction()
     {
