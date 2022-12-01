@@ -51,7 +51,6 @@ public class StreamingSender : MonoBehaviour
         capturadora.CopyFrom(playerCamera);
 
         playerCamera.targetTexture = captured;
-        RenderTexture.active = captured;
         //capturadora.targetTexture = captured;
         parse = new Texture2D(640, 480, TextureFormat.RGB24, false);
     }
@@ -74,6 +73,7 @@ public class StreamingSender : MonoBehaviour
         RenderTexture.active = captured;
         parse.ReadPixels(new Rect(0, 0, 640, 480), 0, 0);
         parse.Apply();
+        RenderTexture.active = null;
 
         byte[]  _data = parse.GetRawTextureData();
 
