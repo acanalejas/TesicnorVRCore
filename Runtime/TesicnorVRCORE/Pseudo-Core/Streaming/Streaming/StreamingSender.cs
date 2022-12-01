@@ -48,7 +48,6 @@ public class StreamingSender : MonoBehaviour
         capturadora_go.transform.localScale = Vector3.one;
 
         capturadora = capturadora_go.GetComponent<Camera>();
-        capturadora.CopyFrom(playerCamera);
 
         playerCamera.targetTexture = captured;
         //capturadora.targetTexture = captured;
