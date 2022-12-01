@@ -68,7 +68,7 @@ public class StreamingSender : MonoBehaviour
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
-    private void GetTextureTraduction()
+    private IEnumerator GetTextureTraduction()
     {
         RenderTexture current = RenderTexture.active;
         playerCamera.Render();
@@ -76,6 +76,8 @@ public class StreamingSender : MonoBehaviour
         parse.ReadPixels(rect, 0, 0);
         parse.Apply();
         RenderTexture.active = current;
+
+        yield return new WaitForEndOfFrame();
 
         byte[]  _data = parse.GetRawTextureData();
 
