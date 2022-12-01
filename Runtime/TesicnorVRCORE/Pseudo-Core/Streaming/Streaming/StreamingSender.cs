@@ -71,7 +71,8 @@ public class StreamingSender : MonoBehaviour
     private void GetTextureTraduction()
     {
         RenderTexture current = RenderTexture.active;
-        RenderTexture.active = captured;
+        playerCamera.Render();
+        RenderTexture.active = playerCamera.targetTexture;
         parse.ReadPixels(rect, 0, 0);
         parse.Apply();
         RenderTexture.active = current;
