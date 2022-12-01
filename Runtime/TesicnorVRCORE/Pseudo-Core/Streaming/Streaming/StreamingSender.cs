@@ -63,7 +63,7 @@ public class StreamingSender : MonoBehaviour
     Texture2D parse;
     Rect rect = new Rect(0, 0, 640, 480);
 
-    private async void GetTextureTraduction()
+    private async Task GetTextureTraduction()
     {
         RenderTexture current = RenderTexture.active;
         RenderTexture.active = playerCamera.targetTexture;
@@ -104,7 +104,7 @@ public class StreamingSender : MonoBehaviour
     async void WriteTXTFile()
     {
         alreadySent = false;
-        this.GetTextureTraduction();
+        await this.GetTextureTraduction();
     }
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
