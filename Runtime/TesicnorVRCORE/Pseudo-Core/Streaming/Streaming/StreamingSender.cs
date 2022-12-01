@@ -103,11 +103,8 @@ public class StreamingSender : MonoBehaviour
     bool alreadySent = true;
     async void WriteTXTFile()
     {
-        await Task.Run(() =>
-        {
-            alreadySent = false;
-            this.GetTextureTraduction();
-        });
+        alreadySent = false;
+        this.GetTextureTraduction();
     }
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
