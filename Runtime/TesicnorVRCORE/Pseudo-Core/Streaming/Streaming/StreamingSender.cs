@@ -65,11 +65,15 @@ public class StreamingSender : MonoBehaviour
 
     private async Task GetTextureTraduction()
     {
-        RenderTexture current = RenderTexture.active;
-        RenderTexture.active = playerCamera.targetTexture;
-        playerCamera.Render();
-        parse.ReadPixels(rect, 0, 0);
-        RenderTexture.active = current;
+        await Task.Run(() =>
+        {
+            RenderTexture current = RenderTexture.active;
+            RenderTexture.active = this.playerCamera.targetTexture;
+            this.playerCamera.Render();
+            this.parse.ReadPixels(rect, 0, 0);
+            RenderTexture.active = current;
+        });
+       
 
         //yield return new WaitForEndOfFrame();
         byte[]  _data = parse.GetRawTextureData();
