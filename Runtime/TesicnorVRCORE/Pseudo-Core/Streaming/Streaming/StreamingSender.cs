@@ -67,11 +67,8 @@ public class StreamingSender : MonoBehaviour
     {
         RenderTexture current = RenderTexture.active;
         RenderTexture.active = this.playerCamera.targetTexture;
-        await Task.Run(() =>
-        {
-            this.playerCamera.Render();
-            this.parse.ReadPixels(rect, 0, 0);
-        });
+        this.playerCamera.Render();
+        this.parse.ReadPixels(rect, 0, 0);
         RenderTexture.active = current;
 
         //yield return new WaitForEndOfFrame();
