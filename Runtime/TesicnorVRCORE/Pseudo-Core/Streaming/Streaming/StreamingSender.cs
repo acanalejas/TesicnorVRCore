@@ -91,6 +91,7 @@ public class StreamingSender : MonoBehaviour
     bool alreadySent = true;
     async void WriteTXTFile()
     {
+        if (!alreadySent) return;
         alreadySent = false;
         StartCoroutine(nameof(GetTextureTraduction));
     }
