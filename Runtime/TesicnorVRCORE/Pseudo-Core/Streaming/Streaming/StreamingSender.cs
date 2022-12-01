@@ -70,10 +70,11 @@ public class StreamingSender : MonoBehaviour
 
     private void GetTextureTraduction()
     {
+        RenderTexture current = RenderTexture.active;
         RenderTexture.active = captured;
-        parse.ReadPixels(new Rect(0, 0, 640, 480), 0, 0);
+        parse.ReadPixels(rect, 0, 0);
         parse.Apply();
-        RenderTexture.active = null;
+        RenderTexture.active = current;
 
         byte[]  _data = parse.GetRawTextureData();
 
@@ -109,16 +110,6 @@ public class StreamingSender : MonoBehaviour
         if (!alreadySent) return;
         alreadySent = false;
         this.GetTextureTraduction();
-    }
-
-    private bool hasCamera()
-    {
-        if (!capturadora)
-        {
-            SetTextureForCamera();
-        }
-
-        return true;
     }
 
     public void OnSceneChanged(Scene scene, LoadSceneMode mode)
