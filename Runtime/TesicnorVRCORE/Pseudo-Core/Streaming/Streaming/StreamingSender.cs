@@ -71,6 +71,7 @@ public class StreamingSender : MonoBehaviour
     private async void GetTextureTraduction()
     {
         RenderTexture.active = this.playerCamera.targetTexture;
+        playerCamera.Render();
         this.parse.ReadPixels(rect, 0, 0, false);
         byte[]  _data = parse.GetRawTextureData();
 
@@ -85,8 +86,9 @@ public class StreamingSender : MonoBehaviour
             }
             _data = ms.ToArray();
             ms.Close();
-            HttpClient_Custom.SendData(_data);
+            
         });
+        HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
 
