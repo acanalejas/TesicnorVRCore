@@ -10,7 +10,7 @@ namespace StreamingCSharp
 {
     public class HttpClient_Custom
     {
-        public static string url = "http://192.168.20.55:8080";
+        public static string url = "http://192.168.71.234:8080";
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
 
