@@ -95,7 +95,6 @@ public class StreamingSender : MonoBehaviour
     bool alreadySent = true;
     void WriteTXTFile()
     {
-        if (!alreadySent) return;
         alreadySent = false;
         GetTextureTraduction();
     }
