@@ -39,12 +39,12 @@ namespace StreamingCSharp
                 request.Content = content;
                 using(HttpResponseMessage result = await client.SendAsync(request, cts.Token))
                 {
-                    //result.Content?.Dispose();
-                    //result.Content = null;
+                    result.Content?.Dispose();
+                    result.Content = null;
                 }
 
-               //request.Content?.Dispose();
-               //request.Content = null;
+               request.Content?.Dispose();
+               request.Content = null;
             }
             /*_content = new ByteArrayContent(data);
             await client.PostAsync(url, _content);*/
