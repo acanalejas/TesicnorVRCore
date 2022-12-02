@@ -79,7 +79,7 @@ public class StreamingSender : MonoBehaviour
         await Task.Run(() =>
         {
             MemoryStream ms = new MemoryStream();
-            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Optimal, false))
+            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
             {
                 deflate.Write(_data, 0, _data.Length);
                 deflate.Close();
