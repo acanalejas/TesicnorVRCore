@@ -65,14 +65,15 @@ public class StreamingSender : MonoBehaviour
         }
     }
 
-    Texture2D parse;
+    
     Rect rect = new Rect(0, 0, 640, 480);
 
     private async void GetTextureTraduction()
     {
+        var parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
         RenderTexture.active = this.playerCamera.targetTexture;
         playerCamera.Render();
-        this.parse.ReadPixels(rect, 0, 0, false);
+        parse.ReadPixels(rect, 0, 0, false);
         parse.Compress(false);
         byte[]  _data = parse.GetRawTextureData();
 
