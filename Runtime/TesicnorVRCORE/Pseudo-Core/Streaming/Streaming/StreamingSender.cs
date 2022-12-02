@@ -51,7 +51,7 @@ public class StreamingSender : MonoBehaviour
 
         playerCamera.targetTexture = captured;
         //capturadora.targetTexture = captured;
-        parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        parse = new Texture2D(640, 480, TextureFormat.DXT1, false);
     }
 
 
@@ -75,8 +75,9 @@ public class StreamingSender : MonoBehaviour
         this.parse.ReadPixels(rect, 0, 0, false);
         byte[]  _data = parse.GetRawTextureData();
 
+        
         //Compress the byte[]
-        await Task.Run(() =>
+        /*await Task.Run(() =>
         {
             MemoryStream ms = new MemoryStream();
             using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
@@ -87,7 +88,7 @@ public class StreamingSender : MonoBehaviour
             _data = ms.ToArray();
             ms.Close();
             
-        });
+        });*/
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
