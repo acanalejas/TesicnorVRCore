@@ -51,7 +51,7 @@ public class StreamingSender : MonoBehaviour
 
         playerCamera.targetTexture = captured;
         //capturadora.targetTexture = captured;
-        parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        //parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
 
