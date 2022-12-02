@@ -85,9 +85,8 @@ public class StreamingSender : MonoBehaviour
             }
             _data = ms.ToArray();
             ms.Close();
+            HttpClient_Custom.SendData(_data);
         });
-        
-        await HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
 
