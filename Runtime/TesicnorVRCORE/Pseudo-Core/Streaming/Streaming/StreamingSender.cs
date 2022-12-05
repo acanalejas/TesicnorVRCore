@@ -74,7 +74,7 @@ public class StreamingSender : MonoBehaviour
         RenderTexture.active = this.playerCamera.targetTexture;
         playerCamera.Render();
         parse.ReadPixels(rect, 0, 0, false);
-        parse.Compress(false);
+        //parse.Compress(false);
         byte[] _data = parse.EncodeToJPG();
 
         await HttpClient_Custom.SendData(_data);
