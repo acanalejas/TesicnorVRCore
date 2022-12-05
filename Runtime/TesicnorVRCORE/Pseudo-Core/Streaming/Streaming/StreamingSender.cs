@@ -76,11 +76,7 @@ public class StreamingSender : MonoBehaviour
         parse.ReadPixels(rect, 0, 0, false);
 
         //Get the jpg byte array
-        byte[] _data = new byte[0];
-        await Task.Run(() =>
-        {
-            _data = parse.EncodeToJPG(40);
-        });
+        byte[] _data = parse.EncodeToJPG(40);
         
 
         //Send it to the receiver
