@@ -70,7 +70,7 @@ public class StreamingSender : MonoBehaviour
 
     private async void GetTextureTraduction()
     {
-        var parse = new Texture2D(640, 480, TextureFormat.ETC2_RGB, false);
+        var parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
         RenderTexture.active = this.playerCamera.targetTexture;
         playerCamera.Render();
         parse.ReadPixels(rect, 0, 0, false);
