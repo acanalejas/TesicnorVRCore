@@ -72,7 +72,7 @@ public class StreamingSender : MonoBehaviour
     private async void GetTextureTraduction()
     {
         //Capture the screen
-        RenderTexture.active = this.playerCamera.targetTexture;
+        RenderTexture.active = this.capturadora.targetTexture;
         parse.ReadPixels(rect, 0, 0, false);
 
         //Get the jpg byte array
