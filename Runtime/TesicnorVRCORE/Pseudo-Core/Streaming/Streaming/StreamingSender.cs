@@ -70,27 +70,13 @@ public class StreamingSender : MonoBehaviour
 
     private async void GetTextureTraduction()
     {
-        var parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        var parse = new Texture2D(640, 480, TextureFormat.ETC2_RGB, false);
         RenderTexture.active = this.playerCamera.targetTexture;
         playerCamera.Render();
         parse.ReadPixels(rect, 0, 0, false);
         parse.Compress(false);
         byte[]  _data = parse.GetRawTextureData();
 
-        
-        //Compress the byte[]
-        /*await Task.Run(() =>
-        {
-            MemoryStream ms = new MemoryStream();
-            using (DeflateStream deflate = new DeflateStream(ms, System.IO.Compression.CompressionLevel.Fastest, false))
-            {
-                deflate.Write(_data, 0, _data.Length);
-                deflate.Close();
-            }
-            _data = ms.ToArray();
-            ms.Close();
-            
-        });*/
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
     }
