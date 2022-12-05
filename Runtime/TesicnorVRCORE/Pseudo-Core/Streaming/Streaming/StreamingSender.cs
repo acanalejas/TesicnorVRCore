@@ -19,6 +19,7 @@ public class StreamingSender : MonoBehaviour
     private Camera capturadora;
     public Camera playerCamera;
     private static ImageConverter converter;
+    Texture2D parse;
     #endregion
 
     #region FUNCTIONS
@@ -51,7 +52,7 @@ public class StreamingSender : MonoBehaviour
 
         playerCamera.targetTexture = captured;
         //capturadora.targetTexture = captured;
-        //parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
     }
 
 
@@ -70,7 +71,6 @@ public class StreamingSender : MonoBehaviour
 
     private async void GetTextureTraduction()
     {
-        var parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
         RenderTexture.active = this.playerCamera.targetTexture;
         playerCamera.Render();
         parse.ReadPixels(rect, 0, 0, false);
