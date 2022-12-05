@@ -246,7 +246,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     {
         if (grippedObject)
         {
-            if (overlappingObjects.Contains(grippedObject)) overlappingObjects.Remove(grippedObject);
+            if (overlappingObjects.Contains(grippedObject)) { overlappingObjects.Remove(grippedObject); grippedObject.GetComponent<VRGripInterface>().SetAvailableEffects(false); }
         }
         if (isGrabbing()) grippedObject.GetComponent<VRGripInterface>().Release();
         if(hideOnGrab) SetRendererEnable(true);
@@ -344,8 +344,11 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         if (gripInterface != null)
         {
             if(!overlappingObjects.Contains(other.gameObject) && gripInterface.canBeGrabbed())
+            {
                 overlappingObjects.Add(other.gameObject);
-            Debug.Log("Added a grippable object to the list with name  :  " + other.gameObject.name);
+                Debug.Log("Added a grippable object to the list with name  :  " + other.gameObject.name);
+                gripInterface.SetAvailableEffects(true);
+            }
         }
     }
     private void OnTriggerExit(Collider other)
@@ -353,9 +356,12 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         VRGripInterface gripInterface = other.gameObject.GetComponent<VRGripInterface>();
         if (gripInterface != null)
         {
-            if(overlappingObjects.Contains(other.gameObject))
-            overlappingObjects.Remove(other.gameObject);
-            Debug.Log("Removed a grippable object from the list with name  :  " + other.gameObject.name);
+            if (overlappingObjects.Contains(other.gameObject))
+            {   
+                overlappingObjects.Remove(other.gameObject);
+                gripInterface.SetAvailableEffects(false);
+                Debug.Log("Removed a grippable object from the list with name  :  " + other.gameObject.name);
+            }
         }
     }
 

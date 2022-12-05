@@ -61,6 +61,13 @@ public interface VRGripInterface
     public void SetSimulateOnDrop();
 
     /// <summary>
+    /// Setea los effectos necesarios cuando el objeto esta disponible para ser agarrado
+    /// Ej: Highlight
+    /// </summary>
+    /// <param name="value"></param>
+    public void SetAvailableEffects(bool value);
+
+    /// <summary>
     /// Coroutine que sirve como "Update" para setear la posicion del objeto cuando se agarra
     /// </summary>
     /// <returns></returns>

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -56,7 +57,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
         if (go.GetComponent<VRCollider>())
         {
             VRCollider collider = go.GetComponent<VRCollider>();
-            if(collider.target == this && canReleaseObject && collider.hasTarget && (!needsGrabbing || (needsGrabbing && collider.isGrabbed())))
+            if(isGoodTarget(go) && canReleaseObject && collider.hasTarget && (!needsGrabbing || (needsGrabbing && collider.isGrabbed())))
             {
                 conditionCompleted = true;
                 if (collider.targetSound != null) {collider.targetSound.loop = false; collider.targetSound.Play();}
@@ -89,11 +90,19 @@ public class VRColliderReleaseTarget : MonoBehaviour
         }
     }
 
+    bool isGoodTarget(GameObject go)
+    {
+        if (go.GetComponent<VRCollider>() == null) return false;
+
+        VRCollider coll = go.GetComponent<VRCollider>();
+        return (coll.hasMultipleTargets && coll.targets.Contains(this)) || (!coll.hasMultipleTargets && coll.target == this); 
+    }
+
     public void CheckVRColliderExit(GameObject go)
     {
         if (go.GetComponent<VRCollider>())
         {
-            if(go.GetComponent<VRCollider>().target == this)
+            if(isGoodTarget(go))
             {
                 if(canBeCanceled) conditionCompleted = false;
 

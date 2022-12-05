@@ -44,6 +44,12 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Controla si tiene un target donde soltarlo")]
     [HideInInspector] public bool hasTarget = false;
 
+    /// <summary>
+    /// Se ilumina el objeto al ser seleccionable?
+    /// </summary>
+    [Header("Se ilumina el objeto al ser seleccionable?")]
+    [HideInInspector] public bool hasHighlight = false;
+
     public enum AttachmentMode { Normal, positionOffset, rotationAndPositionOffset, Animation, None};
 
     /// <summary>
@@ -122,11 +128,19 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Space(20)]
     [Header("========= SOLO SI NO SE PUEDE SOLTAR NORMAL ============")]
     [Space(20)]
+
+    [Header("Tiene multiples objetivos?")]
+    [HideInInspector]
+    [SerializeField] public bool hasMultipleTargets = false;
+
+    [Header("Los targets donde debe acercarse el objeto")]
+    [SerializeField]
+    [HideInInspector] public VRColliderReleaseTarget[] targets;
     /// <summary>
     /// El target donde debe acercarse el objeto
     /// </summary>
     [Header("El target donde debe acercarse el objeto")]
-    [HideInInspector] public VRColliderReleaseTarget target;
+    [SerializeField][HideInInspector] public VRColliderReleaseTarget target;
 
     /// <summary>
     /// Si se teletransporta al entrar al trigger o si hay que soltarlo manualmente
@@ -457,6 +471,22 @@ public class VRCollider : MonoBehaviour, VRGripInterface
 
         return _value;
     }
+
+    public void SetAvailableEffects(bool value)
+    {
+        if (isGrabbed())
+        {
+            SetHighlightEffect(false);
+            return;
+        }
+        SetHighlightEffect(value);
+    }
+
+    private void SetHighlightEffect(bool value)
+    {
+        var effect = GetComponent<HighlightEffect>();
+        effect.SetHighlight(value);
+    }
     #endregion
     #endregion
 }
@@ -485,6 +515,26 @@ public class VRColliderEditor : Editor
             collider.mass = EditorGUILayout.FloatField(collider.mass, "Masa del objeto");
 
             GUILayout.Space(10);
+        }
+
+        GUILayout.Label("Se ilumina el objeto al estar en rango para agarrarlo?");
+        collider.hasHighlight = GUILayout.Toggle(collider.hasHighlight, "Has Highlight");
+
+        GUILayout.Space(10);
+
+        if (collider.hasHighlight)
+        {
+            if (!collider.GetComponent<HighlightEffect>())
+            {
+                collider.gameObject.AddComponent<HighlightEffect>();
+            }
+        }
+        else
+        {
+            if (collider.GetComponent<HighlightEffect>())
+            {
+                DestroyImmediate(collider.gameObject.GetComponent<HighlightEffect>());
+            }
         }
 
         GUILayout.Label("Se puede soltar normal o tiene condiciones?", EditorStyles.boldLabel);
@@ -522,8 +572,21 @@ public class VRColliderEditor : Editor
 
         if (collider.hasTarget)
         {
-            SerializedProperty target = serializedObject.FindProperty("target");
-            EditorGUILayout.PropertyField(target, new GUIContent("Target"));
+            GUILayout.Label("Tiene multiples objetivos el objeto?");
+            collider.hasMultipleTargets = GUILayout.Toggle(collider.hasMultipleTargets, "Has Multiple Targets");
+            GUILayout.Space(10);
+
+            if (!collider.hasMultipleTargets)
+            {
+                SerializedProperty target = serializedObject.FindProperty("target");
+                EditorGUILayout.PropertyField(target, new GUIContent("Target"));
+            }
+            else
+            {
+                SerializedProperty targets = serializedObject.FindProperty("targets");
+                EditorGUILayout.PropertyField(targets, new GUIContent("Targets"));
+            }
+            
 
             GUILayout.Space(10);
 
