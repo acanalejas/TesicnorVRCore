@@ -56,7 +56,7 @@ public class StreamingSender : MonoBehaviour
     }
 
 
-    WaitForEndOfFrame frame = new WaitForEndOfFrame();
+    WaitForSeconds frame = new WaitForSeconds(1 / 50);
     private IEnumerator update()
     {
         while (true)
@@ -74,9 +74,14 @@ public class StreamingSender : MonoBehaviour
         //Capture the screen
         RenderTexture.active = this.playerCamera.targetTexture;
         parse.ReadPixels(rect, 0, 0, false);
-        
+
         //Get the jpg byte array
-        byte[] _data = parse.EncodeToJPG();
+        byte[] _data = new byte[0];
+        await Task.Run(() =>
+        {
+            _data = parse.EncodeToJPG(40);
+        });
+        
 
         //Send it to the receiver
         await HttpClient_Custom.SendData(_data);
