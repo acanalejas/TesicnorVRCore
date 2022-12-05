@@ -79,6 +79,7 @@ public class StreamingSender : MonoBehaviour
 
         await HttpClient_Custom.SendData(_data);
         alreadySent = true;
+        parse.Reinitialize(640, 480, TextureFormat.RGB565, false);
     }
 
     //byte[] _data;
