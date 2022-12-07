@@ -45,6 +45,7 @@ public class HighlightEffect : MonoBehaviour
     #endregion
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(HighlightEffect), true)]
 [CanEditMultipleObjects]
 public class HighlightEffectEditor: Editor
@@ -119,10 +120,13 @@ public class HighlightEffectEditor: Editor
 
         if (!mesh) return;
 
-        List<Vector3> vertices = new List<Vector3>();
-        List<Vector3> normals = new List<Vector3>();
+        List<Vector3> vertices      = new List<Vector3>();
+        List<Vector3> normals       = new List<Vector3>();
 
-        List<Vector3> newVertices = new List<Vector3>();
+        List<Vector3> newVertices   = new List<Vector3>();
+        List<Vector3> newNormals    = new List<Vector3>();
+        List<Vector4> newTangents   = new List<Vector4>();
+        List<int> newTriangles      = new List<int>();
 
         mesh.GetVertices(vertices);
         mesh.GetNormals(normals);
@@ -136,11 +140,90 @@ public class HighlightEffectEditor: Editor
             newVertices.Add(position);
         }
 
+        newNormals.AddRange(mesh.normals);
+        newTangents.AddRange(mesh.tangents);
+        newTriangles.AddRange(mesh.triangles);
+
+        Transform parent = highlight.transform.parent;
+        MeshFilter[] childrenMeshes = parent.gameObject.GetComponentsInChildren<MeshFilter>();
+
+        int l = 0;
+        foreach(var child in childrenMeshes)
+        {
+            if (child.gameObject == highlight.gameObject || child.gameObject == parent.gameObject) { childrenMeshes[l] = null; }
+                l++;
+        }
+        if(childrenMeshes.Length > 0)
+        {
+            int currentCount = newVertices.Count;
+            if(childrenMeshes.Length == 1 && childrenMeshes[0] != null)
+            {
+                List<Vector3> child_vertices = new List<Vector3>();
+                List<Vector3> child_normals = new List<Vector3>();
+
+                childrenMeshes[0].sharedMesh.GetVertices(child_vertices);
+                childrenMeshes[0].sharedMesh.GetNormals(child_normals);
+
+                for(int k = 0; k < child_vertices.Count; k++)
+                {
+                    Vector3 normal = child_normals[k].normalized;
+                    Vector3 offset = normal * outlineThickness;
+                    Vector3 vertex = childrenMeshes[0].transform.TransformPoint(child_vertices[k]);
+                    vertex = highlight.transform.InverseTransformPoint(vertex);
+                    Vector3 position = vertex + offset;
+
+                    newVertices.Add(position);
+                }
+
+                newNormals.AddRange(childrenMeshes[0].sharedMesh.normals);
+                newTangents.AddRange(childrenMeshes[0].sharedMesh.tangents);
+
+                foreach(int j in childrenMeshes[0].sharedMesh.triangles)
+                {
+                    newTriangles.Add(j + currentCount);
+                }
+            }
+            else if(childrenMeshes.Length > 1)
+            {
+                foreach(MeshFilter child in childrenMeshes)
+                {
+                    if (child != null) {
+                        currentCount = newVertices.Count;
+
+                        List<Vector3> child_vertices = new List<Vector3>();
+                        List<Vector3> child_normals = new List<Vector3>();
+
+                        child.sharedMesh.GetVertices(child_vertices);
+                        child.sharedMesh.GetNormals(child_normals);
+
+                        for (int i = 0; i < child_vertices.Count; i++)
+                        {
+                            Vector3 normal = child_normals[i].normalized;
+                            Vector3 offset = normal * outlineThickness;
+                            Vector3 vertex = child.transform.TransformPoint(child_vertices[i]);
+                            vertex = highlight.transform.InverseTransformPoint(vertex);
+                            Vector3 position = vertex + offset ;
+
+                            newVertices.Add(position);
+                        }
+                        newNormals.AddRange(child.sharedMesh.normals);
+                        newTangents.AddRange(child.sharedMesh.tangents);
+
+                        foreach (int i in child.sharedMesh.triangles)
+                        {
+                            newTriangles.Add(i + currentCount);
+                        }
+                    }
+                }
+            }
+        }
+
         Mesh newMesh = new Mesh();
         newMesh.SetVertices(newVertices);
-        newMesh.SetTriangles(mesh.triangles, 0);
-        newMesh.SetTangents(mesh.tangents);
-        newMesh.SetNormals(normals);
+        newMesh.SetTriangles(newTriangles, 0);
+        newMesh.SetTangents(newTangents);
+        newMesh.SetNormals(newNormals);
         highlight.GetComponent<MeshFilter>().sharedMesh = newMesh;
     }
 }
+#endif
