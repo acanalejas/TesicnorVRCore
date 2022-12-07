@@ -88,6 +88,7 @@ public class LocomotionComponent : MonoBehaviour
         Vector3 cameraRight = camera.right;
 
         Vector3 direction = (cameraForward.normalized * joystick.y) + (cameraRight.normalized * joystick.x);
+        direction = new Vector3(direction.x, 0, direction.z);
 
         return direction;
     }
