@@ -95,13 +95,13 @@ public class HighlightEffectEditor: Editor
 
             if (!highlight.GetComponent<MeshFilter>().sharedMesh)
             {
-                if (effect.GetComponent<MeshFilter>().sharedMesh)
+                if (effect.GetComponent<MeshFilter>())
                 {
                     highlight.GetComponent<MeshFilter>().sharedMesh = effect.GetComponent<MeshFilter>().sharedMesh;
                 }
             }
 
-            if(highlight.GetComponent<MeshFilter>().sharedMesh && effect.GetComponent<MeshFilter>().sharedMesh)
+            if(highlight.GetComponent<MeshFilter>().sharedMesh && effect.GetComponent<MeshFilter>())
             {
                 if(highlight.GetComponent<MeshFilter>().sharedMesh != effect.GetComponent<MeshFilter>().sharedMesh)
                 {
@@ -118,7 +118,7 @@ public class HighlightEffectEditor: Editor
     {
         Mesh mesh = highlight.GetComponent<MeshFilter>().sharedMesh;
 
-        if (!mesh) return;
+        
 
         List<Vector3> vertices      = new List<Vector3>();
         List<Vector3> normals       = new List<Vector3>();
@@ -127,6 +127,8 @@ public class HighlightEffectEditor: Editor
         List<Vector3> newNormals    = new List<Vector3>();
         List<Vector4> newTangents   = new List<Vector4>();
         List<int> newTriangles      = new List<int>();
+
+        if (!mesh) goto Done;
 
         mesh.GetVertices(vertices);
         mesh.GetNormals(normals);
@@ -143,6 +145,8 @@ public class HighlightEffectEditor: Editor
         newNormals.AddRange(mesh.normals);
         newTangents.AddRange(mesh.tangents);
         newTriangles.AddRange(mesh.triangles);
+
+        Done:
 
         Transform parent = highlight.transform.parent;
         MeshFilter[] childrenMeshes = parent.gameObject.GetComponentsInChildren<MeshFilter>();
@@ -187,7 +191,7 @@ public class HighlightEffectEditor: Editor
             {
                 foreach(MeshFilter child in childrenMeshes)
                 {
-                    if (child != null) {
+                    if (child != null && child.sharedMesh != null) {
                         currentCount = newVertices.Count;
 
                         List<Vector3> child_vertices = new List<Vector3>();
@@ -224,6 +228,30 @@ public class HighlightEffectEditor: Editor
         newMesh.SetTangents(newTangents);
         newMesh.SetNormals(newNormals);
         highlight.GetComponent<MeshFilter>().sharedMesh = newMesh;
+    }
+
+    public void OnDestroy()
+    {
+        var effect = target as HighlightEffect;
+
+        Transform highlight = effect.transform.Find("highlight");
+        //if(highlight) DestroyImmediate(highlight.gameObject);
+    }
+
+    public void OnDisable()
+    {
+        var effect = target as HighlightEffect;
+
+        Transform highlight = effect.transform.Find("highlight");
+        //if (highlight) highlight.gameObject.SetActive(false);
+    }
+
+    public void OnEnable()
+    {
+        var effect = target as HighlightEffect;
+
+        Transform highlight = effect.transform.Find("highlight");
+        if (highlight) highlight.gameObject.SetActive(true);
     }
 }
 #endif

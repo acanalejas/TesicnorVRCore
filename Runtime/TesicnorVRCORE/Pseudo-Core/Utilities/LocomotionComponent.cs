@@ -84,11 +84,10 @@ public class LocomotionComponent : MonoBehaviour
     {
         Vector3 _direction = new Vector3(joystick.x, 0, joystick.y);
 
-        Vector3 a = Vector3.forward;
-        Vector3 b = camera.forward;
+        Vector3 cameraForward = camera.forward;
+        Vector3 cameraRight = camera.right;
 
-        float angles = Mathf.Acos((a.x * b.x + a.y * b.y + a.z * b.z) / (a.magnitude * b.magnitude)) * 57.2958f;
-        Vector3 direction = Quaternion.AngleAxis(angles, Vector3.up) * _direction;
+        Vector3 direction = (cameraForward.normalized * joystick.y) + (cameraRight.normalized * joystick.x);
 
         return direction;
     }
