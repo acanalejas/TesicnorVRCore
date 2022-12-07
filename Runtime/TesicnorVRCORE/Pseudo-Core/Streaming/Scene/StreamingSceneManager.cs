@@ -57,8 +57,16 @@ public class StreamingSceneManager : MonoBehaviour
     }
     public void KeyboardDelete()
     {
-        IPText.text.Remove(IPText.text.Length - 1);
-        ip.Remove(ip.Length - 1);
+        char[] chars = IPText.text.ToCharArray();
+        char[] deleted = new char[chars.Length - 1];
+        string newString = "";
+        for(int i = 0; i < deleted.Length; i++)
+        {
+            deleted[i] = chars[i];
+            newString += deleted[i].ToString();
+        }
+
+        IPText.text = newString;
     }
     public void KeyboardEnter()
     {
