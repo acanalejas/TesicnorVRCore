@@ -172,7 +172,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (!lineRenderer) lineRenderer = GetComponent<LineRenderer>();
         if (!usesRay) lineRenderer.enabled = false;
     }
-    private void FixedUpdate()
+    private void Update()
     {
         DetectInteraction();
     }
