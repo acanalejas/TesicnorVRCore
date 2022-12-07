@@ -485,6 +485,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     private void SetHighlightEffect(bool value)
     {
         var effect = GetComponent<HighlightEffect>();
+        if(effect != null)
         effect.SetHighlight(value);
     }
     #endregion
