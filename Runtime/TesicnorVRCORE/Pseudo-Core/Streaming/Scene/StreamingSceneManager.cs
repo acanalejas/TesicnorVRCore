@@ -58,6 +58,7 @@ public class StreamingSceneManager : MonoBehaviour
     public void KeyboardDelete()
     {
         char[] chars = IPText.text.ToCharArray();
+        if (chars.Length <= 0) return;
         char[] deleted = new char[chars.Length - 1];
         string newString = "";
         for(int i = 0; i < deleted.Length; i++)
