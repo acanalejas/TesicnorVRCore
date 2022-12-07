@@ -25,13 +25,16 @@ public class HighlightEffect : MonoBehaviour
     [SerializeField]
     [HideInInspector] public MeshFilter mf;
 
+    [SerializeField, HideInInspector]
+    public bool DisableOnStart = true;
+
     private GameObject highlight;
     #endregion
 
     #region FUNCTIONS
     private void Start()
     {
-        if (transform.Find("highlight"))
+        if (transform.Find("highlight") && DisableOnStart)
         {
             highlight = transform.Find("highlight").gameObject;
             highlight.SetActive(false);
@@ -63,6 +66,11 @@ public class HighlightEffectEditor: Editor
 
         GUILayout.Label("La escala del efecto", EditorStyles.boldLabel);
         effect.scaleMultiplier = EditorGUILayout.Slider(effect.scaleMultiplier, 1f, 2);
+
+        GUILayout.Space(10);
+
+        GUILayout.Label("Se desactiva al empezar la escena?");
+        effect.DisableOnStart = GUILayout.Toggle(effect.DisableOnStart, "Disable on Start");
 
         effect.mf = effect.GetComponent<MeshFilter>();
 
