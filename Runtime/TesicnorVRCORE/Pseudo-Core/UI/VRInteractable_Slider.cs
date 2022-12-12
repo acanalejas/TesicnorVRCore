@@ -70,26 +70,25 @@ public class VRInteractable_Slider : MonoBehaviour
         public override void OnClick()
         {
             base.OnClick();
-            StartCoroutine("update"); 
         }
 
         public override void OnRelease()
         {
             base.OnRelease();
-            StopCoroutine("update");
         }
 
         //Hace de update mientras se pulsa el boton
         WaitForEndOfFrame frame = new WaitForEndOfFrame();
-        private IEnumerator update()
+        private void Update()
         {
-            while (GetIsClicking())
+            if (GetIsClicking())
             {
                 Attach();
-                yield return frame;
             }
         }
 
+
+        private Vector3 lastPoint;
         /// <summary>
         /// Setea la posicion del punto dependiendo de los puntos ya establecidos, y el rayo con el que apuntamos al objeto
         /// </summary>
@@ -97,11 +96,13 @@ public class VRInteractable_Slider : MonoBehaviour
         {
             VRInteractionInterface interaction = hand.GetComponent<VRInteractionInterface>();
             Vector3 hitPoint = interaction.GetRaycastHit(interaction.GetOrigin()).point;
+            if (lastPoint != Vector3.zero && Vector3.Distance(hitPoint, lastPoint) > 0.5f) hitPoint = lastPoint;
 
             if (slider.isHorizontal) this.transform.position = new Vector3(Mathf.Clamp(hitPoint.x, minPoint.x, maxPoint.x), this.transform.position.y, this.transform.position.z);
             else this.transform.position = new Vector3(this.transform.position.x, Mathf.Clamp(hitPoint.y, minPoint.y, maxPoint.y), this.transform.position.z);
 
             CheckValue();
+            lastPoint = hitPoint;
             //this.transform.position = new Vector3(Mathf.Clamp(this.transform.position.x, minPoint.x, maxPoint.x), Mathf.Clamp(this.transform.position.y, minPoint.y, maxPoint.y),0);
         }
 
