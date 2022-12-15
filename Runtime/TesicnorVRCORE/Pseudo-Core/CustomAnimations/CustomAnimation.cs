@@ -9,6 +9,11 @@ using UnityEditor;
 public class CustomAnimation : MonoBehaviour
 {
     #region PARAMETERS
+    public enum ComponentMode { Position, Rotation}
+
+    [SerializeField, HideInInspector]
+    public ComponentMode mode = ComponentMode.Position;
+    #region For position
     /// <summary>
     /// Animation curve that manages the speed
     /// </summary>
@@ -53,7 +58,7 @@ public class CustomAnimation : MonoBehaviour
     [SerializeField, HideInInspector]
     public AnimationDirection direction;
 
-    public enum AnimationType { Linear, CurveAbove, CurveBelow, ZigZag, Overlap}
+    public enum AnimationType { Linear, CurveAbove, CurveBelow, ZigZag}
     /// <summary>
     /// The type of animation performed
     /// </summary>
@@ -104,6 +109,73 @@ public class CustomAnimation : MonoBehaviour
     /// Path of the animation composed of all the points that the object is going to go through 
     /// </summary>
     Vector3[] path;
+    #endregion
+    #region For rotation
+    /// <summary>
+    /// Path of the animation composed of all the angles that the object is going to gothrough
+    /// </summary>
+    Vector3[] path_rot;
+
+    /// <summary>
+    /// Should the animation in rotation begin at start?
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public bool launchOnStart_rot;
+
+    /// <summary>
+    /// Should the animation return to the origin once it is completed?
+    /// </summary>
+    [HideInInspector, SerializeField]
+    public bool returnToOrigin_rot;
+
+    /// <summary>
+    /// Should the rotation animation loop?
+    /// </summary>
+    [HideInInspector, SerializeField]
+    public bool loop_rot;
+
+    /// <summary>
+    /// Axis where the object can rotate
+    /// </summary>
+    [HideInInspector, SerializeField]
+    public enum axis { Up, Down, Left, Right, Forward, Backward }
+
+    /// <summary>
+    /// The axises around the object is going to rotate
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public axis[] axises = { axis.Up };
+
+    /// <summary>
+    /// The simulation space where the animations are played
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public AnimationSpace space_rot = AnimationSpace.Local;
+
+    /// <summary>
+    /// Speed of the rotation animation
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public float speed_rot = 1;
+
+    /// <summary>
+    /// The arc used to rotate
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public float arc =  360 ;
+
+    /// <summary>
+    /// Time that lasts the object in rotate the indicated arc
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public float time_rot = 1;
+
+    /// <summary>
+    /// Time before returning to the origin
+    /// </summary>
+    [SerializeField, HideInInspector]
+    public float TimeToWaitBeforeReturn_rot = 0;
+    #endregion
 
     #endregion
 
@@ -112,6 +184,8 @@ public class CustomAnimation : MonoBehaviour
     {
         if (launchOnStart) LaunchAnimation();
     }
+
+    #region For Position
 
     /// <summary>
     /// Gets the direction that is going to be used in the animation
@@ -240,18 +314,64 @@ public class CustomAnimation : MonoBehaviour
 
         int mediumPoint = (int)(animationFrames / 2);
 
-        for(int i = 0; i < linearPoints.Count; i++)
+        for(int i = 0; i < animationFrames; i++)
         {
-            int difference = Mathf.Abs(mediumPoint - i);
-            difference = Mathf.Clamp(difference, 1, 50000);
-            float maxMultiplier = distance / 3;
+            //Raices de la parábola -> xInitial / xFinal
+            // y = a(x - xInitial)(x - xFinal)
 
-            float multiplier = maxMultiplier/(difference);
+            //maxY = a(medio - XInitial)(medio - xFinal)
 
-            Vector3 upVector = Vector3.up;
-            if (space == AnimationSpace.Local) upVector = transform.up;
+            //maxY/((medio - XInitial)(medio - xFinal)) = a
 
-            Vector3 point = linearPoints[i] + multiplier * upVector.normalized;
+            float a = (distance / 2) / ((mediumPoint - 0) * (mediumPoint - animationFrames));
+
+            float y = a *((i - 0)*(i - animationFrames));
+            Debug.Log(y);
+
+            Vector3 point = linearPoints[i] + y * Vector3.up;
+            points.Add(point);
+        }
+
+        return points.ToArray();
+    }
+
+    Vector3[] GetPathPointsCurveBelow()
+    {
+        List<Vector3> points = new List<Vector3>();
+
+        Vector3 star = transform.position;
+        Vector3 destiny = GetDestiny(GetDirection());
+
+        int animationFrames = (int)(fps * time);
+        float _distance = Vector3.Distance(star, destiny);
+        Vector3 norm_direction = (destiny - star).normalized;
+
+        float _distance_perPoint = _distance / animationFrames;
+
+        List<Vector3> linearPoints = new List<Vector3>();
+        for (int i = 0; i < animationFrames; i++)
+        {
+            Vector3 point = star + norm_direction * (_distance_perPoint * i);
+            linearPoints.Add(point);
+        }
+
+        int mediumPoint = (int)(animationFrames / 2);
+
+        for (int i = 0; i < animationFrames; i++)
+        {
+            //Raices de la parábola -> xInitial / xFinal
+            // y = a(x - xInitial)(x - xFinal)
+
+            //maxY = a(medio - XInitial)(medio - xFinal)
+
+            //maxY/((medio - XInitial)(medio - xFinal)) = a
+
+            float a = (distance / 2) / ((mediumPoint - 0) * (mediumPoint - animationFrames));
+
+            float y = a * ((i - 0) * (i - animationFrames));
+            Debug.Log(y);
+
+            Vector3 point = linearPoints[i] - y * Vector3.up;
             points.Add(point);
         }
 
@@ -270,6 +390,9 @@ public class CustomAnimation : MonoBehaviour
                 break;
             case AnimationType.CurveAbove:
                 path = GetPathPointsCurveAbove();
+                break;
+            case AnimationType.CurveBelow:
+                path = GetPathPointsCurveBelow();
                 break;
         }
         InvokeRepeating(nameof(SetPosition), 0, Time.deltaTime);
@@ -328,6 +451,13 @@ public class CustomAnimation : MonoBehaviour
             this.transform.position = path[index];
         }
     }
+    #endregion
+    #region For Rotation
+    public void LaunchAnimation_rot()
+    {
+
+    }
+    #endregion
 
     /// <summary>
     /// Is the animation playing?
@@ -355,123 +485,130 @@ public class CustomAnimationEditor : Editor
         base.OnInspectorGUI();
 
         var animation = target as CustomAnimation;
-
+        GUILayout.Space(20);
         GUILayout.Label("SOLO SIRVE PARA ANIMACIONES DE TRANSFORM DEL CONTENEDOR", EditorStyles.boldLabel);
         GUILayout.Space(20);
 
-        foldout_1 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_1, "Speed & Time");
-
-        GUILayout.Space(10);
-
-        if (foldout_1)
+        if(animation.mode == CustomAnimation.ComponentMode.Position)
         {
-            GUILayout.Label("Curva de velocidad de la animación", EditorStyles.boldLabel);
-            SerializedProperty curve = serializedObject.FindProperty("curve");
-            EditorGUILayout.PropertyField(curve);
+            foldout_1 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_1, "Speed & Time");
 
             GUILayout.Space(10);
 
-            GUILayout.Label("La velocidad máxima de la animación", EditorStyles.boldLabel);
-            animation.speed = EditorGUILayout.FloatField(animation.speed, EditorStyles.miniTextField);
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("El tiempo que dura la animación", EditorStyles.boldLabel);
-            animation.time = EditorGUILayout.FloatField(animation.time, EditorStyles.miniTextField);
-        }
-
-        EditorGUILayout.EndFoldoutHeaderGroup();
-
-        GUILayout.Space(10);
-
-        foldout_2 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_2, "Looping");
-
-        GUILayout.Space(10);
-
-        if (foldout_2)
-        {
-            GUILayout.Label("Vuelve a la posición inicial?", EditorStyles.boldLabel);
-            animation.returnToOrigin = GUILayout.Toggle(animation.returnToOrigin, "", EditorStyles.toggle);
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("Se reproduce en bucle la animación?", EditorStyles.boldLabel);
-            animation.loop = GUILayout.Toggle(animation.loop, "", EditorStyles.toggle);
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("Se aplica el movimiento a la animación?", EditorStyles.boldLabel);
-            animation.applyRootMotion = GUILayout.Toggle(animation.applyRootMotion, "", EditorStyles.toggle);
-
-            GUILayout.Space(10);
-
-            if (animation.loop || animation.returnToOrigin)
+            if (foldout_1)
             {
-                GUILayout.Label("Tiempo que para antes de volver", EditorStyles.boldLabel);
-                animation.timeToWaitBeforeReturn = EditorGUILayout.FloatField(animation.timeToWaitBeforeReturn, EditorStyles.miniTextField);
-                GUILayout.Space(10);
-            }
-        }
-
-        EditorGUILayout.EndFoldoutHeaderGroup();
-
-        GUILayout.Space(10);
-
-        foldout_3 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_3, "Space & Direction");
-
-        GUILayout.Space(10);
-
-        if (foldout_3)
-        {
-            GUILayout.Label("La distancia que se desplaza el objeto", EditorStyles.boldLabel);
-            animation.distance = EditorGUILayout.FloatField(animation.distance);
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("El espacio en el que se ejecuta la animación", EditorStyles.boldLabel);
-            animation.space = (CustomAnimation.AnimationSpace)EditorGUILayout.EnumPopup(animation.space);
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("La dirección de la animación", EditorStyles.boldLabel);
-            animation.direction = (CustomAnimation.AnimationDirection)EditorGUILayout.EnumPopup(animation.direction);
-
-            GUILayout.Space(10);
-
-            GUILayout.Label("El tipo de animación", EditorStyles.boldLabel);
-            animation.type = (CustomAnimation.AnimationType)EditorGUILayout.EnumPopup(animation.type);
-
-            GUILayout.Space(10);
-
-            if (animation.direction == CustomAnimation.AnimationDirection.Custom)
-            {
-                GUILayout.Label("La dirección en la que se reproducirá la animación", EditorStyles.boldLabel);
-                animation.customDirection = EditorGUILayout.Vector3Field("", animation.customDirection);
+                GUILayout.Label("Curva de velocidad de la animación", EditorStyles.boldLabel);
+                SerializedProperty curve = serializedObject.FindProperty("curve");
+                EditorGUILayout.PropertyField(curve);
 
                 GUILayout.Space(10);
+
+                GUILayout.Label("La velocidad máxima de la animación", EditorStyles.boldLabel);
+                animation.speed = EditorGUILayout.FloatField(animation.speed, EditorStyles.miniTextField);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("El tiempo que dura la animación", EditorStyles.boldLabel);
+                animation.time = EditorGUILayout.FloatField(animation.time, EditorStyles.miniTextField);
             }
 
-        }
+            EditorGUILayout.EndFoldoutHeaderGroup();
 
-        EditorGUILayout.EndFoldoutHeaderGroup();
+            GUILayout.Space(10);
 
-        GUILayout.Space(10);
+            foldout_2 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_2, "Looping");
 
-        foldout_4 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_4, "Options");
+            GUILayout.Space(10);
 
-        GUILayout.Space(10);
+            if (foldout_2)
+            {
+                GUILayout.Label("Vuelve a la posición inicial?", EditorStyles.boldLabel);
+                animation.returnToOrigin = GUILayout.Toggle(animation.returnToOrigin, "", EditorStyles.toggle);
 
-        if (foldout_4)
-        {
-            GUILayout.Label("Se lanza la animación al empezar?", EditorStyles.boldLabel);
-            animation.launchOnStart = GUILayout.Toggle(animation.launchOnStart, "", EditorStyles.toggle);
+                GUILayout.Space(10);
+
+                GUILayout.Label("Se reproduce en bucle la animación?", EditorStyles.boldLabel);
+                animation.loop = GUILayout.Toggle(animation.loop, "", EditorStyles.toggle);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("Se aplica el movimiento a la animación?", EditorStyles.boldLabel);
+                animation.applyRootMotion = GUILayout.Toggle(animation.applyRootMotion, "", EditorStyles.toggle);
+
+                GUILayout.Space(10);
+
+                if (animation.loop || animation.returnToOrigin)
+                {
+                    GUILayout.Label("Tiempo que para antes de volver", EditorStyles.boldLabel);
+                    animation.timeToWaitBeforeReturn = EditorGUILayout.FloatField(animation.timeToWaitBeforeReturn, EditorStyles.miniTextField);
+                    GUILayout.Space(10);
+                }
+            }
+
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            GUILayout.Space(10);
+
+            foldout_3 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_3, "Space & Direction");
+
+            GUILayout.Space(10);
+
+            if (foldout_3)
+            {
+                GUILayout.Label("La distancia que se desplaza el objeto", EditorStyles.boldLabel);
+                animation.distance = EditorGUILayout.FloatField(animation.distance);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("El espacio en el que se ejecuta la animación", EditorStyles.boldLabel);
+                animation.space = (CustomAnimation.AnimationSpace)EditorGUILayout.EnumPopup(animation.space);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("La dirección de la animación", EditorStyles.boldLabel);
+                animation.direction = (CustomAnimation.AnimationDirection)EditorGUILayout.EnumPopup(animation.direction);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("El tipo de animación", EditorStyles.boldLabel);
+                animation.type = (CustomAnimation.AnimationType)EditorGUILayout.EnumPopup(animation.type);
+
+                GUILayout.Space(10);
+
+                if (animation.direction == CustomAnimation.AnimationDirection.Custom)
+                {
+                    GUILayout.Label("La dirección en la que se reproducirá la animación", EditorStyles.boldLabel);
+                    animation.customDirection = EditorGUILayout.Vector3Field("", animation.customDirection);
+
+                    GUILayout.Space(10);
+                }
+
+            }
+
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            GUILayout.Space(10);
+
+            foldout_4 = EditorGUILayout.BeginFoldoutHeaderGroup(foldout_4, "Options");
+
+            GUILayout.Space(10);
+
+            if (foldout_4)
+            {
+                GUILayout.Label("Se lanza la animación al empezar?", EditorStyles.boldLabel);
+                animation.launchOnStart = GUILayout.Toggle(animation.launchOnStart, "", EditorStyles.toggle);
+
+                GUILayout.Space(10);
+            }
+
+            EditorGUILayout.EndFoldoutHeaderGroup();
 
             GUILayout.Space(10);
         }
+        else
+        {
 
-        EditorGUILayout.EndFoldoutHeaderGroup();
-
-        GUILayout.Space(10);
+        }
 
         serializedObject.ApplyModifiedProperties();
     }
