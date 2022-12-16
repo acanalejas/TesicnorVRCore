@@ -40,30 +40,7 @@ public class MultiplayerManager : MonoBehaviour
     /// <summary>
     /// IP of this shit
     /// </summary>
-    public static string IP { get {
-
-            var entry = Dns.GetHostEntry(Dns.GetHostName());
-
-            var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
-
-            foreach (var network in networkInterfaces)
-            {
-                IPInterfaceProperties properties = network.GetIPProperties();
-                if (network.OperationalStatus != OperationalStatus.Up)
-                    continue;
-
-                foreach (var address in properties.UnicastAddresses)
-                {
-                    if (address.Address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
-                        continue;
-                    if (IPAddress.IsLoopback(address.Address))
-                        continue;
-
-                    return address.Address.ToString();
-                }
-            }
-            return "http://localhost:8080/";
-        } }
+    public static string IP { get { return LocalIP(); } }
 
     public static int Players { get { return players; } }
     private static int players;
@@ -78,6 +55,31 @@ public class MultiplayerManager : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
+    }
+
+    public static string LocalIP()
+    {
+        var entry = Dns.GetHostEntry(Dns.GetHostName());
+
+        var networkInterfaces = NetworkInterface.GetAllNetworkInterfaces();
+
+        foreach (var network in networkInterfaces)
+        {
+            IPInterfaceProperties properties = network.GetIPProperties();
+            if (network.OperationalStatus != OperationalStatus.Up)
+                continue;
+
+            foreach (var address in properties.UnicastAddresses)
+            {
+                if (address.Address.AddressFamily != System.Net.Sockets.AddressFamily.InterNetwork)
+                    continue;
+                if (IPAddress.IsLoopback(address.Address))
+                    continue;
+
+                return address.Address.ToString();
+            }
+        }
+        return "localhost";
     }
 
     /// <summary>

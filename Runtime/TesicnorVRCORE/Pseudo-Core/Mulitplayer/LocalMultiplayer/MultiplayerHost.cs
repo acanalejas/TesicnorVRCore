@@ -13,14 +13,23 @@ public class MultiplayerHost : MonoBehaviour
     private string IP { get { return MultiplayerManager.IP; } }
     private int port { get { return MultiplayerManager.Port; } }
 
+    public bool initializeOnStart = true;
+
     HttpListener host;
     #endregion
 
     #region FUNCTIONS
+    private void Start()
+    {
+        if (initializeOnStart) CreateLocalSession();
+    }
+
     public void CreateLocalSession()
     {
         host = new HttpListener();
-        host.Prefixes.Add("http://" + IP + ":" + port.ToString());
+        host.Prefixes.Clear();
+        Debug.Log(IP);
+        host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
         host.Start();
 
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
@@ -28,6 +37,7 @@ public class MultiplayerHost : MonoBehaviour
 
     private void HttpCallback(IAsyncResult result)
     {
+        Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
         var request = context.Request;
         var response = context.Response;
