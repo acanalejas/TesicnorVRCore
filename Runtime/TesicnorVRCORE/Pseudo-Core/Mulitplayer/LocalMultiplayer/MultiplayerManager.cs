@@ -23,6 +23,8 @@ public struct MultiplayerClientData
     public int ID;
     public string URL;
 }
+
+[RequireComponent(typeof(UnityMainThreadInvoker))]
 public class MultiplayerManager : MonoBehaviour
 {
     #region SINGLETON
@@ -171,18 +173,41 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    public static Vector3 vt3_FromString(string input)
+    public Vector3 vt3_FromString(string input)
     {
         Debug.Log("Input string for vector is :" + input);
-        string[] splitted = input.Split(separator);
-        splitted[0].Replace(',', '.');
-        splitted[1].Replace(',', '.');
-        splitted[2].Replace(',', '.');
-        float x = float.Parse(splitted[0]);
-        float y = float.Parse(splitted[1]);
-        float z = float.Parse(splitted[2]);
+        float x = 0;
+        float y = 0;
+        float z = 0;
+        string[] splitted = new string[0];
+        try
+        {
+             splitted = input.Split('|');
+        }
+        catch
+        {
+            Debug.LogError("Could not split the vector");
+        }
+        finally
+        {
+            try
+            {
+                Debug.Log("Parsing vector");
+                splitted[0].Replace(',', '.');
+                splitted[1].Replace(',', '.');
+                splitted[2].Replace(',', '.');
+                x = float.Parse(splitted[0]);
+                y = float.Parse(splitted[1]);
+                z = float.Parse(splitted[2]);
+            }
+            catch
+            {
+                Debug.LogError("Failed to parse from string to Vector3");
+            }
 
-        Debug.Log("Vector from string " + x.ToString() + y.ToString() + z.ToString());
+            Debug.Log("Vector from string " + x.ToString() + y.ToString() + z.ToString());
+            
+        }
         return new Vector3(x, y, z);
     }
 
@@ -193,7 +218,10 @@ public class MultiplayerManager : MonoBehaviour
     /// <returns></returns>
     public static Quaternion quat_FromString(string input)
     {
-        return Quaternion.Euler(vt3_FromString(input));
+        Quaternion result = Quaternion.identity;
+        try { result = Quaternion.Euler(Instance.vt3_FromString(input)); }
+        catch { Debug.LogError("Error parsing from string to Quaternion"); }
+        return result;
     }
 
     /// <summary>
@@ -244,23 +272,24 @@ public class MultiplayerManager : MonoBehaviour
     /// <param name="input"></param>
     public void FindReplicatedGameObjects(string input)
     {
-        Debug.Log("Finding replicated objects");
-        //ReplicatedObject[] _allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
-        Debug.Log("Replicated objects found");
         try
         {
             GameObjectData[] allData = allData_god(input);
-            Debug.Log("Json parsed");
+            Debug.Log("Json parsed & AllDataLength : " + allData.Length);
+            Debug.Log("All replicated length : " + allReplicated.Length);
 
-            foreach (var data in allData)
+            if (allData.Length > 0)
             {
-                foreach (var rep in allReplicated)
+                foreach (var data in allData)
                 {
-                    if (rep.this_data.Name == data.Name) rep.Replicate(data);
+                    foreach (var rep in allReplicated)
+                    {
+                        if (rep.this_data.Name == data.Name) rep.Replicate(data);
+                    }
                 }
             }
         }
-        catch
+        catch(MissingReferenceException e)
         {
             Debug.LogError("Invalid GameObject to replicate");
         }

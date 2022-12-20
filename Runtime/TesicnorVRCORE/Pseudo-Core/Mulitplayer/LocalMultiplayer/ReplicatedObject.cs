@@ -10,6 +10,8 @@ public class ReplicatedObject : MonoBehaviour
     public GameObjectData this_data;
     GameObject[] children;
 
+    public Transform this_transform;
+
     public bool insidePlayer = false;
     #endregion
 
@@ -56,16 +58,17 @@ public class ReplicatedObject : MonoBehaviour
 
     public void Replicate(GameObjectData input)
     {
-        this_data = input;
+        //this_data = input;
         Debug.Log("GameObjectData name is : " + input.Name);
-        Debug.Log(MultiplayerManager.vt3_FromString(input.Position));
         try
         {
-            Debug.Log("Trying to replicate");
-            this.transform.position = MultiplayerManager.vt3_FromString(input.Position);
-            this.transform.rotation = MultiplayerManager.quat_FromString(input.Rotation);
-            this.transform.localScale = MultiplayerManager.vt3_FromString(input.Scale);
-
+            Debug.Log("Begin replication");
+            if (this_transform == null) return;
+            this_transform.position = Vector3.zero;
+            this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position);
+            this_transform.rotation = MultiplayerManager.quat_FromString(input.Rotation);
+            this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale);
+            Debug.Log("Finished replicating");
             /*if (children.Length > 0)
             {
                 for (int i = 0; i < children.Length; i++)
@@ -76,11 +79,10 @@ public class ReplicatedObject : MonoBehaviour
                 }
             }*/
         }
-        catch
+        catch(UnityException e)
         {
-            Debug.LogError("Coudn't replicate because the GameObjectData given was not valid");
+            Debug.LogError("Failed to replicate, probably invalid GameObjectData  " + e);
         }
-        
     }
     #endregion
 }
