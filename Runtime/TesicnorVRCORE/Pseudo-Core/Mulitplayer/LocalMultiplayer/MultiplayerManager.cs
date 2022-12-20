@@ -173,11 +173,16 @@ public class MultiplayerManager : MonoBehaviour
     /// <returns></returns>
     public static Vector3 vt3_FromString(string input)
     {
+        Debug.Log("Input string for vector is :" + input);
         string[] splitted = input.Split(separator);
-        float x; float.TryParse(splitted[0], out x);
-        float y; float.TryParse(splitted[1], out y);
-        float z; float.TryParse(splitted[2], out z);
+        splitted[0].Replace(',', '.');
+        splitted[1].Replace(',', '.');
+        splitted[2].Replace(',', '.');
+        float x = float.Parse(splitted[0]);
+        float y = float.Parse(splitted[1]);
+        float z = float.Parse(splitted[2]);
 
+        Debug.Log("Vector from string " + x.ToString() + y.ToString() + z.ToString());
         return new Vector3(x, y, z);
     }
 
@@ -257,7 +262,7 @@ public class MultiplayerManager : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Invalid GameObject to replicate");
+            Debug.LogError("Invalid GameObject to replicate");
         }
         
     }

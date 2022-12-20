@@ -74,7 +74,7 @@ public class MultiplayerClient : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Invalid string format to parse" + " : " + response_str);
+            Debug.LogError("Invalid string format to parse" + " : " + response_str);
         }
         response.Content?.Dispose();
         response.Content = null;

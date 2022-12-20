@@ -55,7 +55,7 @@ public class MultiplayerHost : MonoBehaviour
         }
         catch
         {
-            Debug.LogWarning("Coudn't replicate");
+            Debug.LogError("Coudn't replicate");
         }
         finally
         {
@@ -67,7 +67,7 @@ public class MultiplayerHost : MonoBehaviour
                 {
                     response_str = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
                 }
-                catch { Debug.Log("Couldn´t get string"); }
+                catch { Debug.LogError("Couldn´t get string"); }
                 Debug.Log("response string is: " + response_str);
                 byte[] response_byte = Encoding.UTF8.GetBytes(response_str);
 
