@@ -18,6 +18,8 @@ public class MultiplayerClient : MonoBehaviour
     private static HttpClient httpClient;
 
     public bool initializeOnStart = false;
+
+    static bool alreadySent = false;
     #endregion
 
     #region FUNCTIONS
@@ -29,7 +31,7 @@ public class MultiplayerClient : MonoBehaviour
 
     private void Update()
     {
-        SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+        if(!alreadySent)SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
     }
     public void StartClient()
     {
@@ -39,10 +41,12 @@ public class MultiplayerClient : MonoBehaviour
         httpClient.DefaultRequestHeaders.Add("application", "text");
     }
 
-    public static async Task SendData(string data)
+    
+    public static async void SendData(string data)
     {
         if (IP == "") return;
 
+        alreadySent = true;
         var cts = new System.Threading.CancellationTokenSource();
 
         using(StringContent sc = new StringContent(data))
@@ -56,12 +60,14 @@ public class MultiplayerClient : MonoBehaviour
             request.Content?.Dispose();
             request.Content = null;
         }
+        alreadySent = false;
     }
 
     public static async void ManageResponse(HttpResponseMessage response)
     {
         Debug.Log("Receiving a response");
-        string response_str = await response.Content.ReadAsStringAsync();
+        string response_str = await response.RequestMessage.Content.ReadAsStringAsync();
+        Debug.Log("Response is : " + response_str);
         try
         {
             MultiplayerManager.Instance.FindReplicatedGameObjects(response_str);

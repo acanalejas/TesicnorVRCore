@@ -326,7 +326,6 @@ public class CustomAnimation : MonoBehaviour
             float a = (distance / 2) / ((mediumPoint - 0) * (mediumPoint - animationFrames));
 
             float y = a *((i - 0)*(i - animationFrames));
-            Debug.Log(y);
 
             Vector3 point = linearPoints[i] + y * Vector3.up;
             points.Add(point);
@@ -369,7 +368,6 @@ public class CustomAnimation : MonoBehaviour
             float a = (distance / 2) / ((mediumPoint - 0) * (mediumPoint - animationFrames));
 
             float y = a * ((i - 0) * (i - animationFrames));
-            Debug.Log(y);
 
             Vector3 point = linearPoints[i] - y * Vector3.up;
             points.Add(point);
@@ -423,8 +421,6 @@ public class CustomAnimation : MonoBehaviour
 
             this.transform.position = path[index];
         }
-
-        Debug.Log("Moving");
     }
 
     /// <summary>
@@ -432,7 +428,6 @@ public class CustomAnimation : MonoBehaviour
     /// </summary>
     void SetPositionReverse()
     {
-        Debug.Log("Moving reverse");
         if (this.transform.position == path[0]) {
             if (loop) { InvokeRepeating(nameof(SetPosition), 0, Time.deltaTime); } 
 

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 public class MultiplayerHost : MonoBehaviour
 {
@@ -35,32 +36,50 @@ public class MultiplayerHost : MonoBehaviour
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
-    private void HttpCallback(IAsyncResult result)
+    private async void HttpCallback(IAsyncResult result)
     {
         Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
         var request = context.Request;
-        var response = context.Response;
-        
-        using(MemoryStream ms = (MemoryStream)request.InputStream)
-        {
-            StreamReader sr = new StreamReader(ms);
-            string content = Encoding.UTF8.GetString(ms.ToArray());
 
+        Debug.Log("Before entering the request");
+        MemoryStream ms = new MemoryStream();
+        request.InputStream.CopyTo(ms);
+        StreamReader sr = new StreamReader(ms);
+        string content = Encoding.UTF8.GetString(ms.ToArray());
+        Debug.Log("Request content is : " + content);
+
+        Debug.Log("Before finding replicated go");
+        try
+        {
             MultiplayerManager.Instance.FindReplicatedGameObjects(content);
-            ms.Close();
         }
-
-        if (MultiplayerManager.Instance)
+        finally
         {
-            string response_str = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
-            byte[] response_byte = Encoding.UTF8.GetBytes(response_str);
+            Debug.Log("Before response");
+            using (var response = context.Response)
+            {
+                string response_str = "";
+                try
+                {
+                    response_str = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
+                }
+                catch { Debug.Log("Couldn´t get string"); }
+                Debug.Log("response string is: " + response_str);
+                byte[] response_byte = Encoding.UTF8.GetBytes(response_str);
 
-            response.OutputStream.Write(response_byte, 0, response_byte.Length);
-            response.Close();
+                response.OutputStream.Write(response_byte, 0, response_byte.Length);
+                response.Close();
+            }
+
+            Debug.Log("After response");
+
+            host.BeginGetContext(new AsyncCallback(HttpCallback), host);
         }
+       
+        //ms.Close();
 
-        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
+
     }
 
     public void CloseLocalSession()

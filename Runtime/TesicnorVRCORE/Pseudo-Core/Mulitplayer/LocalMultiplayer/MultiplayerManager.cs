@@ -46,6 +46,7 @@ public class MultiplayerManager : MonoBehaviour
     private static int players;
 
     private static char separator { get { return '|'; } }
+    private static char jsonSeparator { get { return '?'; } }
 
     private ReplicatedObject[] allReplicated;
     #endregion
@@ -210,11 +211,14 @@ public class MultiplayerManager : MonoBehaviour
     public static GameObjectData[] allData_god(string input)
     {
         List<GameObjectData> result = new List<GameObjectData>();
-        string[] datas = input.Split(separator);
+        string[] datas = input.Split(jsonSeparator);
         foreach(var data in datas)
         {
+            Debug.Log("Data splitted is : " + data);
             GameObjectData _data = JsonUtility.FromJson<GameObjectData>(data);
-            result.Add(_data);
+
+            if(data != null)
+                result.Add(_data);
         }
 
         return result.ToArray();
@@ -228,15 +232,23 @@ public class MultiplayerManager : MonoBehaviour
     {
         allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
 
-        GameObjectData[] allData = allData_god(input);
-
-        foreach(var data in allData)
+        try
         {
-            foreach(var rep in allReplicated)
+            GameObjectData[] allData = allData_god(input);
+
+            foreach (var data in allData)
             {
-                if (rep.name == data.Name) rep.Replicate(data);
+                foreach (var rep in allReplicated)
+                {
+                    if (rep.name == data.Name) rep.Replicate(data);
+                }
             }
         }
+        catch
+        {
+            Debug.Log("Invalid GameObject to replicate");
+        }
+        
     }
 
     public string FindReplicatedGameObjects_str()
@@ -248,7 +260,7 @@ public class MultiplayerManager : MonoBehaviour
         {
             foreach(var obj in allReplicated)
             {
-                result += Json_FromGameObjectData(obj.this_data);
+                result += Json_FromGameObjectData(obj.this_data) + jsonSeparator.ToString();
             }
         }
 

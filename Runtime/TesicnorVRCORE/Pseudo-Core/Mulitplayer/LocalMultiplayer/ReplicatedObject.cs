@@ -14,6 +14,21 @@ public class ReplicatedObject : MonoBehaviour
     #endregion
 
     #region FUNCTIONS
+    public void Awake()
+    {
+        GetChildren();
+        SetGameObjectData();
+    }
+
+    public void Start()
+    {
+        SetGameObjectData();
+    }
+
+    public void Update()
+    {
+        SetGameObjectData();
+    }
     private void GetChildren()
     {
         Transform[] _children = this.transform.GetComponentsInChildren<Transform>();
