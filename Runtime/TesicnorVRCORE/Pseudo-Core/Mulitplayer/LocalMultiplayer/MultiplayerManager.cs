@@ -175,39 +175,16 @@ public class MultiplayerManager : MonoBehaviour
     /// <returns></returns>
     public Vector3 vt3_FromString(string input)
     {
-        Debug.Log("Input string for vector is :" + input);
         float x = 0;
         float y = 0;
         float z = 0;
-        string[] splitted = new string[0];
-        try
-        {
-             splitted = input.Split('|');
-        }
-        catch
-        {
-            Debug.LogError("Could not split the vector");
-        }
-        finally
-        {
-            try
-            {
-                Debug.Log("Parsing vector");
-                splitted[0].Replace(',', '.');
-                splitted[1].Replace(',', '.');
-                splitted[2].Replace(',', '.');
-                x = float.Parse(splitted[0]);
-                y = float.Parse(splitted[1]);
-                z = float.Parse(splitted[2]);
-            }
-            catch
-            {
-                Debug.LogError("Failed to parse from string to Vector3");
-            }
+        string[] splitted = input.Split(separator);
 
-            Debug.Log("Vector from string " + x.ToString() + y.ToString() + z.ToString());
-            
-        }
+        float.TryParse(splitted[0], out x);
+        float.TryParse(splitted[1], out y);
+        float.TryParse(splitted[2], out z);
+
+        Debug.Log("Vector from string " + x.ToString() + y.ToString() + z.ToString());
         return new Vector3(x, y, z);
     }
 

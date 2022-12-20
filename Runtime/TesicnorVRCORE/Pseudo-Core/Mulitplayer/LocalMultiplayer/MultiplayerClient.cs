@@ -29,9 +29,9 @@ public class MultiplayerClient : MonoBehaviour
         if (initializeOnStart) StartClient();
     }
 
-    private void Update()
+    private async void Update()
     {
-        if(!alreadySent)SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+        if(!alreadySent)await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
     }
     public void StartClient()
     {
@@ -42,7 +42,7 @@ public class MultiplayerClient : MonoBehaviour
     }
 
     
-    public static async void SendData(string data)
+    public static async Task SendData(string data)
     {
         if (IP == "") return;
 
@@ -50,7 +50,7 @@ public class MultiplayerClient : MonoBehaviour
         var cts = new System.Threading.CancellationTokenSource();
 
         using(StringContent sc = new StringContent(data))
-        using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, IP))
+        using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":8080"))
         {
             request.Content = sc;
             using(var response = await httpClient.SendAsync(request, cts.Token))

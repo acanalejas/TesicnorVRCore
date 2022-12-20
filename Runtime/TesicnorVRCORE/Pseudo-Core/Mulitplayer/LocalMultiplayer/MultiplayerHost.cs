@@ -82,15 +82,15 @@ public class MultiplayerHost : MonoBehaviour
         Debug.Log("Request content is : " + content);
 
         Debug.Log("Before response");
-        using (var response = context.Response)
+        using (var _response = context.Response)
         {
             string response_str = "";
             response_str = this.response;
             Debug.Log("response string is: " + response_str);
             byte[] response_byte = Encoding.UTF8.GetBytes(response_str);
 
-            response.OutputStream.Write(response_byte, 0, response_byte.Length);
-            response.Close();
+            _response.OutputStream.Write(response_byte, 0, response_byte.Length);
+            _response.Close();
         }
 
         Debug.Log("After response");
