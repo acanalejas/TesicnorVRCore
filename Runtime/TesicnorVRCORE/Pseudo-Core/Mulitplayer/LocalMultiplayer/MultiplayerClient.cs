@@ -29,9 +29,9 @@ public class MultiplayerClient : MonoBehaviour
         if (initializeOnStart) StartClient();
     }
 
-    private async void Update()
+    private void Update()
     {
-        if(!alreadySent)await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+        SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
     }
     public void StartClient()
     {
