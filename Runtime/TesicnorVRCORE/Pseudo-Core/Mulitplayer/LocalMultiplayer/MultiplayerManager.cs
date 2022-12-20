@@ -222,6 +222,7 @@ public class MultiplayerManager : MonoBehaviour
         string[] datas = input.Split(jsonSeparator);
         foreach(var data in datas)
         {
+            if (data == "") break;
             Debug.Log("Data splitted is : " + data);
             GameObjectData _data = JsonUtility.FromJson<GameObjectData>(data);
 
