@@ -251,7 +251,7 @@ public class MultiplayerManager : MonoBehaviour
             {
                 foreach (var rep in allReplicated)
                 {
-                    if (rep.name == data.Name) rep.Replicate(data);
+                    if (rep.this_data.Name == data.Name) rep.Replicate(data);
                 }
             }
         }
