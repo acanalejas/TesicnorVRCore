@@ -36,7 +36,7 @@ public class MultiplayerHost : MonoBehaviour
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
-    private async void HttpCallback(IAsyncResult result)
+    private void HttpCallback(IAsyncResult result)
     {
         Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
@@ -49,10 +49,13 @@ public class MultiplayerHost : MonoBehaviour
         string content = Encoding.UTF8.GetString(ms.ToArray());
         Debug.Log("Request content is : " + content);
 
-        Debug.Log("Before finding replicated go");
         try
         {
             MultiplayerManager.Instance.FindReplicatedGameObjects(content);
+        }
+        catch
+        {
+            Debug.LogWarning("Coudn't replicate");
         }
         finally
         {
@@ -76,9 +79,6 @@ public class MultiplayerHost : MonoBehaviour
 
             host.BeginGetContext(new AsyncCallback(HttpCallback), host);
         }
-       
-        //ms.Close();
-
 
     }
 

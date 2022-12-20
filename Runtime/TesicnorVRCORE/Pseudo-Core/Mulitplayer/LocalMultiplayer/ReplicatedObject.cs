@@ -58,19 +58,27 @@ public class ReplicatedObject : MonoBehaviour
     {
         this_data = input;
 
-        this.transform.position = MultiplayerManager.vt3_FromString(this_data.Position);
-        this.transform.rotation = MultiplayerManager.quat_FromString(this_data.Rotation);
-        this.transform.localScale = MultiplayerManager.vt3_FromString(this_data.Scale);
-
-        if(children.Length > 0)
+        try
         {
-            for(int i = 0; i < children.Length; i++)
+            this.transform.position = MultiplayerManager.vt3_FromString(this_data.Position);
+            this.transform.rotation = MultiplayerManager.quat_FromString(this_data.Rotation);
+            this.transform.localScale = MultiplayerManager.vt3_FromString(this_data.Scale);
+
+            if (children.Length > 0)
             {
-                children[i].transform.position = MultiplayerManager.vt3_FromString(this_data.Children[i].Position);
-                children[i].transform.rotation = MultiplayerManager.quat_FromString(this_data.Children[i].Rotation);
-                children[i].transform.localScale = MultiplayerManager.vt3_FromString(this_data.Children[i].Scale);
+                for (int i = 0; i < children.Length; i++)
+                {
+                    children[i].transform.position = MultiplayerManager.vt3_FromString(this_data.Children[i].Position);
+                    children[i].transform.rotation = MultiplayerManager.quat_FromString(this_data.Children[i].Rotation);
+                    children[i].transform.localScale = MultiplayerManager.vt3_FromString(this_data.Children[i].Scale);
+                }
             }
         }
+        catch
+        {
+            Debug.LogWarning("Coudn't replicate because the GameObjectData given was not valid");
+        }
+        
     }
     #endregion
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Net.NetworkInformation;
 using System.Net;
+using System;
 
 public struct GameObjectData{
     //For transform, all measures in world space
@@ -15,6 +16,12 @@ public struct GameObjectData{
     public string Name;
     public string[] Components;
     public GameObjectData[] Children;
+}
+
+public struct MultiplayerClientData
+{
+    public int ID;
+    public string URL;
 }
 public class MultiplayerManager : MonoBehaviour
 {
@@ -56,6 +63,7 @@ public class MultiplayerManager : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
+        allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
     }
 
     public static string LocalIP()
@@ -230,11 +238,13 @@ public class MultiplayerManager : MonoBehaviour
     /// <param name="input"></param>
     public void FindReplicatedGameObjects(string input)
     {
-        allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
-
+        Debug.Log("Finding replicated objects");
+        //ReplicatedObject[] _allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
+        Debug.Log("Replicated objects found");
         try
         {
             GameObjectData[] allData = allData_god(input);
+            Debug.Log("Json parsed");
 
             foreach (var data in allData)
             {
@@ -292,3 +302,4 @@ public class MultiplayerManagerEditor : Editor
     }
 }
 #endif
+

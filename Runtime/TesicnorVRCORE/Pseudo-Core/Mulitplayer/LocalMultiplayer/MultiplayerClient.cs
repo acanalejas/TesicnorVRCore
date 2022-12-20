@@ -53,7 +53,7 @@ public class MultiplayerClient : MonoBehaviour
         using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, IP))
         {
             request.Content = sc;
-            using(HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
+            using(var response = await httpClient.SendAsync(request, cts.Token))
             {
                 ManageResponse(response);
             }
@@ -66,11 +66,11 @@ public class MultiplayerClient : MonoBehaviour
     public static async void ManageResponse(HttpResponseMessage response)
     {
         Debug.Log("Receiving a response");
-        string response_str = await response.RequestMessage.Content.ReadAsStringAsync();
+        string response_str = await response.Content.ReadAsStringAsync();
         Debug.Log("Response is : " + response_str);
         try
         {
-            MultiplayerManager.Instance.FindReplicatedGameObjects(response_str);
+            //MultiplayerManager.Instance.FindReplicatedGameObjects(response_str);
         }
         catch
         {
