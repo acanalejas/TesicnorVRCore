@@ -35,6 +35,7 @@ public class MultiplayerClient : MonoBehaviour
 
     private async void Update()
     {
+        Debug.Log(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
         await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
         if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
         {
