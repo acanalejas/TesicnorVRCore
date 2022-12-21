@@ -78,6 +78,7 @@ public class MultiplayerClient : MonoBehaviour
         Debug.Log("Response is : " + response_str);
         try
         {
+            if(response.StatusCode == HttpStatusCode.OK)
             response_string = response_str;
         }
         catch
