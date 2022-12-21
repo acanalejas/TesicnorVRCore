@@ -64,10 +64,12 @@ public class ReplicatedObject : MonoBehaviour
         {
             Debug.Log("Begin replication");
             if (this_transform == null) return;
-            this_transform.position = Vector3.zero;
-            this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position);
-            this_transform.rotation = MultiplayerManager.quat_FromString(input.Rotation);
-            this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale);
+            if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.01f)
+            { this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position); }
+            if (Vector3.Distance(this.transform.rotation.eulerAngles, MultiplayerManager.quat_FromString(input.Rotation).eulerAngles) > 0.01f)
+            { this_transform.rotation = MultiplayerManager.quat_FromString(input.Rotation); }
+            if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.01f)
+            { this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale); }
             Debug.Log("Finished replicating");
             /*if (children.Length > 0)
             {

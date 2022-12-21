@@ -37,8 +37,8 @@ public class MultiplayerHost : MonoBehaviour
     {
         try
         {
-            if (content != lastContent) 
-            MultiplayerManager.Instance.FindReplicatedGameObjects(content);
+            if (content != lastContent)
+            { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
             lastContent = content;
         }
         catch
@@ -71,30 +71,24 @@ public class MultiplayerHost : MonoBehaviour
 
     private void HttpCallback(IAsyncResult result)
     {
-        Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
         var request = context.Request;
 
-        Debug.Log("Before entering the request");
         MemoryStream ms = new MemoryStream();
         request.InputStream.CopyTo(ms);
         StreamReader sr = new StreamReader(ms);
         content = Encoding.UTF8.GetString(ms.ToArray());
         Debug.Log("Request content is : " + content);
 
-        Debug.Log("Before response");
         using (var _response = context.Response)
         {
             string response_str = "";
             response_str = this.response;
-            Debug.Log("response string is: " + response_str);
             byte[] response_byte = Encoding.UTF8.GetBytes(response_str);
 
             _response.OutputStream.Write(response_byte, 0, response_byte.Length);
             _response.Close();
         }
-
-        Debug.Log("After response");
 
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }

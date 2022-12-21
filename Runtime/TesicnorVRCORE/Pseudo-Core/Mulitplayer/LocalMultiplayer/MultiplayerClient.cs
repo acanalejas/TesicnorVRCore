@@ -70,7 +70,7 @@ public class MultiplayerClient : MonoBehaviour
         Debug.Log("Response is : " + response_str);
         try
         {
-            //MultiplayerManager.Instance.FindReplicatedGameObjects(response_str);
+            MultiplayerManager.Instance.FindReplicatedGameObjects(response_str);
         }
         catch
         {
