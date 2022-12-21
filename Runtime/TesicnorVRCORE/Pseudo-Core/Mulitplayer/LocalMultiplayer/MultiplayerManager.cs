@@ -291,6 +291,7 @@ public class MultiplayerManager : MonoBehaviour
 
     public bool isValidString(string data)
     {
+        if (data == null) return false;
         if (data.Length <= 0 || data == "") return false;
 
         if (!data.Contains(jsonSeparator) && !data.Contains(separator)) return false;
