@@ -56,12 +56,14 @@ public class ReplicatedObject : MonoBehaviour
         }
     }
 
+    Vector3 lastPosition;
     public void Replicate(GameObjectData input)
     {
         //this_data = input;
         Debug.Log("GameObjectData name is : " + input.Name);
         try
         {
+            if (Vector3.Distance(lastPosition, this.transform.position) > 0.01f) return;
             Debug.Log("Begin replication");
             if (this_transform == null) return;
             if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.01f)
@@ -71,6 +73,7 @@ public class ReplicatedObject : MonoBehaviour
             if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.01f)
             { this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale); }
             Debug.Log("Finished replicating");
+            lastPosition = this.transform.position;
             /*if (children.Length > 0)
             {
                 for (int i = 0; i < children.Length; i++)
