@@ -35,9 +35,7 @@ public class MultiplayerClient : MonoBehaviour
 
     private async void Update()
     {
-        Debug.Log(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
         await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
-        Debug.Log(MultiplayerManager.Instance.isValidString(response_string) + " " + last_response != response_string);
         if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
         {
             MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
@@ -64,7 +62,7 @@ public class MultiplayerClient : MonoBehaviour
         using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
         {
             request.Content = sc;
-                var response = await httpClient.SendAsync(request, cts.Token);
+                var response = await httpClient.SendAsync(request);
                 ManageResponse(response);
             //using(var response = await httpClient.SendAsync(request, cts.Token))
             //{
