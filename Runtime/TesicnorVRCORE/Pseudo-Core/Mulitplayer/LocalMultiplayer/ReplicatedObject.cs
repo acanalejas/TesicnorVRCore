@@ -61,7 +61,7 @@ public class ReplicatedObject : MonoBehaviour
     Vector3 lastScale;
     public void Replicate(GameObjectData input)
     {
-        this_data = input;
+        //this_data = input;
         Debug.Log("GameObjectData name is : " + input.Name);
         try
         {

@@ -58,19 +58,23 @@ public class MultiplayerClient : MonoBehaviour
         alreadySent = true;
         var cts = new System.Threading.CancellationTokenSource();
 
-        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
-        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
+        await Task.Run(async () =>
         {
-            request.Content = sc;
-            var response = await httpClient.SendAsync(request);
-            ManageResponse(response);
-            //using(var response = await httpClient.SendAsync(request, cts.Token))
-            //{
-            //    ManageResponse(response);
-            //}
-            request.Content?.Dispose();
-            request.Content = null;
-        }
+            using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
+            {
+                request.Content = sc;
+                var response = await httpClient.SendAsync(request);
+                ManageResponse(response);
+                //using(var response = await httpClient.SendAsync(request, cts.Token))
+                //{
+                //    ManageResponse(response);
+                //}
+                request.Content?.Dispose();
+                request.Content = null;
+            }
+        });
+        
         alreadySent = false;
     }
 
