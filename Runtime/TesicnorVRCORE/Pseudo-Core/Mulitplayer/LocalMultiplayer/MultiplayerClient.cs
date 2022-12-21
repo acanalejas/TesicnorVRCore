@@ -58,8 +58,6 @@ public class MultiplayerClient : MonoBehaviour
         alreadySent = true;
         var cts = new System.Threading.CancellationTokenSource();
 
-        await Task.Run(async () =>
-        {
             using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
             using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
             {
@@ -73,7 +71,6 @@ public class MultiplayerClient : MonoBehaviour
                 request.Content?.Dispose();
                 request.Content = null;
             }
-        });
         
         alreadySent = false;
     }
