@@ -229,10 +229,11 @@ public class MultiplayerManager : MonoBehaviour
     public static GameObjectData[] allData_god(string input)
     {
         List<GameObjectData> result = new List<GameObjectData>();
+        if (input == null || input.Length == 0 || input == "") return null;
         string[] datas = input.Split(jsonSeparator);
         foreach(var data in datas)
         {
-            if (data == "") break;
+            if (data == "" || data == null || data.Length <= 0) break;
             Debug.Log("Data splitted is : " + data);
             GameObjectData _data = JsonUtility.FromJson<GameObjectData>(data);
 

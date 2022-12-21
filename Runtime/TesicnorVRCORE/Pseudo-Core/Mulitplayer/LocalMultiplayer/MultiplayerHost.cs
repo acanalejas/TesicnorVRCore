@@ -95,5 +95,10 @@ public class MultiplayerHost : MonoBehaviour
     {
         if (host.IsListening) host.Stop();
     }
+
+    private void OnApplicationQuit()
+    {
+        CloseLocalSession();
+    }
     #endregion
 }
