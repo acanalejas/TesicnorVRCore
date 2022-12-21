@@ -37,7 +37,7 @@ public class MultiplayerHost : MonoBehaviour
     {
         try
         {
-            if (content != lastContent)
+            if (content != lastContent && content != "")
             { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
             lastContent = content;
         }
