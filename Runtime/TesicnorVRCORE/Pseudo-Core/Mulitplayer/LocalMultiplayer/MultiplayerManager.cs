@@ -112,7 +112,7 @@ public class MultiplayerManager : MonoBehaviour
         List<string> components_str = new List<string>();
         foreach(var comp in components)
         {
-            components_str.Add(nameof(comp));
+            components_str.Add(comp.ToString());
         }
         data.Components = components_str.ToArray();
 

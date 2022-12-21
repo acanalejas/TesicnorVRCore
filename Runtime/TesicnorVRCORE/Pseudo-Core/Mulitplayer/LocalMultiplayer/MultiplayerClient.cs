@@ -24,6 +24,7 @@ public class MultiplayerClient : MonoBehaviour
 
     string response_string;
     string last_response;
+    string last_content;
     #endregion
 
     #region FUNCTIONS
@@ -31,16 +32,26 @@ public class MultiplayerClient : MonoBehaviour
     private void Start()
     {
         if (initializeOnStart) StartClient();
+        StartCoroutine("update");
     }
 
-    private async void Update()
+    private IEnumerator update()
     {
-        await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
-        if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
+        while (true)
         {
-            MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
-            last_response = response_string;
+            if (last_content != MultiplayerManager.Instance.FindReplicatedGameObjects_str())
+            {
+                yield return SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+            }
+
+            if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
+            {
+                MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
+                last_response = response_string;
+            }
+            yield return new WaitForSeconds(1 / 30);
         }
+        
     }
     public void StartClient()
     {
@@ -49,31 +60,24 @@ public class MultiplayerClient : MonoBehaviour
         httpClient.DefaultRequestHeaders.Accept.Clear();
     }
 
-    
     public async Task SendData(string data)
     {
-        if (IP == "") return;
-
-        alreadySent = true;
         var cts = new System.Threading.CancellationTokenSource();
 
-            using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
-            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
-            {
-                request.Content = sc;
-                var response = await httpClient.SendAsync(request);
-                ManageResponse(response);
-                //using(var response = await httpClient.SendAsync(request, cts.Token))
-                //{
-                //    ManageResponse(response);
-                //}
-                request.Content?.Dispose();
-                request.Content = null;
+        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
+        using (HttpResponseMessage request = httpClient.PostAsync("http://" + IP + ":8080", sc).Result)
+        {
+            request.EnsureSuccessStatusCode();
 
-            response.Dispose();
-            }
-        
-        alreadySent = false;
+            last_content = data;
+            
+            ManageResponse(request);
+
+            request.Content?.Dispose();
+            request.Content = null;
+
+            while (!request.IsSuccessStatusCode) continue;
+        }
     }
 
     public async void ManageResponse(HttpResponseMessage response)
