@@ -40,7 +40,6 @@ public class MultiplayerClient : MonoBehaviour
             MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
             last_response = response_string;
         }
-        if(response_string != "")
         SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
     }
     public void StartClient()
