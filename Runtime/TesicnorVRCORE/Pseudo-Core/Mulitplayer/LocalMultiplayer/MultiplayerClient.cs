@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 
+[DisallowMultipleComponent]
 public class MultiplayerClient : MonoBehaviour
 {
     #region PARAMETERS
@@ -20,6 +21,9 @@ public class MultiplayerClient : MonoBehaviour
     public bool initializeOnStart = false;
 
     static bool alreadySent = false;
+
+    static string response_string;
+    static string last_response;
     #endregion
 
     #region FUNCTIONS
@@ -32,6 +36,10 @@ public class MultiplayerClient : MonoBehaviour
     private void Update()
     {
         SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+        if(last_response != response_string)
+        {
+            MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
+        }
     }
     public void StartClient()
     {
@@ -70,7 +78,7 @@ public class MultiplayerClient : MonoBehaviour
         Debug.Log("Response is : " + response_str);
         try
         {
-            MultiplayerManager.Instance.FindReplicatedGameObjects(response_str);
+            response_string = response_str;
         }
         catch
         {

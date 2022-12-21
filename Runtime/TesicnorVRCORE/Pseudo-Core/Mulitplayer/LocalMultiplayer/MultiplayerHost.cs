@@ -73,6 +73,7 @@ public class MultiplayerHost : MonoBehaviour
     {
         var context = host.EndGetContext(result);
         var request = context.Request;
+        var _response = context.Response;
 
         MemoryStream ms = new MemoryStream();
         request.InputStream.CopyTo(ms);
@@ -80,15 +81,13 @@ public class MultiplayerHost : MonoBehaviour
         content = Encoding.UTF8.GetString(ms.ToArray());
         Debug.Log("Request content is : " + content);
 
-        using (var _response = context.Response)
-        {
-            string response_str = "";
-            response_str = this.response;
-            byte[] response_byte = Encoding.UTF8.GetBytes(response_str);
+        string response_str = "";
+        response_str = this.response;
+        byte[] response_byte = Encoding.UTF8.GetBytes(response);
 
-            _response.OutputStream.Write(response_byte, 0, response_byte.Length);
-            _response.Close();
-        }
+        _response.OutputStream.Write(response_byte, 0, response_byte.Length);
+        _response.Close();
+        Debug.Log("Response status code is : " + _response.StatusCode);
 
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
