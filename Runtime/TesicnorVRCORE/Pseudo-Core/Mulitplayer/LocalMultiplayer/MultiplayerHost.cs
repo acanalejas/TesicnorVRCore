@@ -87,7 +87,6 @@ public class MultiplayerHost : MonoBehaviour
 
         _response.OutputStream.Write(response_byte, 0, response_byte.Length);
         _response.Close();
-        Debug.Log("Response status code is : " + _response.StatusCode);
 
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
