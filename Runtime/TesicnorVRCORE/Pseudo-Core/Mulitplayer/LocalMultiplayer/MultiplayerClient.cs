@@ -36,8 +36,7 @@ public class MultiplayerClient : MonoBehaviour
     private async void Update()
     {
         MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
-        string data = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
-        await SendData(data);
+        await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
     }
     public void StartClient()
     {
