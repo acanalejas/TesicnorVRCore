@@ -33,14 +33,14 @@ public class MultiplayerClient : MonoBehaviour
         if (initializeOnStart) StartClient();
     }
 
-    private void Update()
+    private async void Update()
     {
         if (last_response != response_string)
         {
             MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
             last_response = response_string;
         }
-        SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+        await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
     }
     public void StartClient()
     {
@@ -57,6 +57,7 @@ public class MultiplayerClient : MonoBehaviour
 
         alreadySent = true;
         var cts = new System.Threading.CancellationTokenSource();
+        cts.CancelAfter(100);
 
         using(StringContent sc = new StringContent(data))
         using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
