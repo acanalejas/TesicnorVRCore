@@ -288,6 +288,39 @@ public class MultiplayerManager : MonoBehaviour
 
         return result;
     }
+
+    public bool isValidString(string data)
+    {
+        if (data.Length <= 0 || data == "") return false;
+
+        if (!data.Contains(jsonSeparator) && !data.Contains(separator)) return false;
+
+        if (data.Contains(jsonSeparator))
+        {
+            string[] splitted = data.Split(jsonSeparator);
+            try
+            {
+                JsonUtility.FromJson<GameObjectData>(splitted[0]);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        if (!data.Contains(jsonSeparator))
+        {
+            try
+            {
+                JsonUtility.FromJson<GameObjectData>(data);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
     #endregion
 }
 
