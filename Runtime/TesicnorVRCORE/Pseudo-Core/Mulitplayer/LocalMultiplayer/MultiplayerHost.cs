@@ -87,6 +87,7 @@ public class MultiplayerHost : MonoBehaviour
 
         _response.OutputStream.Write(response_byte, 0, response_byte.Length);
         _response.Close();
+
     }
 
     public void CloseLocalSession()

@@ -33,9 +33,9 @@ public class MultiplayerClient : MonoBehaviour
         if (initializeOnStart) StartClient();
     }
 
-    private void Update()
+    private async void Update()
     {
-        SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
+        await SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
         if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
         {
             MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
@@ -47,7 +47,6 @@ public class MultiplayerClient : MonoBehaviour
         httpClient = new HttpClient();
         httpClient.BaseAddress = new System.Uri("http://" + IP + ":" + Port.ToString());
         httpClient.DefaultRequestHeaders.Accept.Clear();
-        httpClient.DefaultRequestHeaders.Add("application", "text");
     }
 
     
@@ -70,6 +69,8 @@ public class MultiplayerClient : MonoBehaviour
                 //}
                 request.Content?.Dispose();
                 request.Content = null;
+
+            response.Dispose();
             }
         
         alreadySent = false;
