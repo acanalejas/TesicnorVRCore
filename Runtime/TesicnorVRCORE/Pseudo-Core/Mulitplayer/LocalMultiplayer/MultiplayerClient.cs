@@ -58,8 +58,8 @@ public class MultiplayerClient : MonoBehaviour
         alreadySent = true;
         var cts = new System.Threading.CancellationTokenSource();
 
-        using(StringContent sc = new StringContent(data))
-        using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
+        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
+        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
         {
             request.Content = sc;
             var response = await httpClient.SendAsync(request);
