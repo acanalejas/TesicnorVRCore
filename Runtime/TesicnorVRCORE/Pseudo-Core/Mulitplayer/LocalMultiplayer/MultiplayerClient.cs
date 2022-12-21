@@ -63,11 +63,8 @@ public class MultiplayerClient : MonoBehaviour
         using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
         {
             request.Content = sc;
-            await Task.Run(async () =>
-            {
                 var response = await httpClient.SendAsync(request, cts.Token);
                 ManageResponse(response);
-            });
             //using(var response = await httpClient.SendAsync(request, cts.Token))
             //{
             //    ManageResponse(response);
