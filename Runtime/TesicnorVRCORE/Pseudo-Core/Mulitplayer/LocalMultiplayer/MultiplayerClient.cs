@@ -22,8 +22,8 @@ public class MultiplayerClient : MonoBehaviour
 
     static bool alreadySent = false;
 
-    static string response_string;
-    static string last_response;
+    string response_string;
+    string last_response;
     #endregion
 
     #region FUNCTIONS
@@ -51,7 +51,7 @@ public class MultiplayerClient : MonoBehaviour
     }
 
     
-    public static async Task SendData(string data)
+    public async Task SendData(string data)
     {
         if (IP == "") return;
 
@@ -62,8 +62,8 @@ public class MultiplayerClient : MonoBehaviour
         using(HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":8080"))
         {
             request.Content = sc;
-                var response = await httpClient.SendAsync(request);
-                ManageResponse(response);
+            var response = await httpClient.SendAsync(request);
+            ManageResponse(response);
             //using(var response = await httpClient.SendAsync(request, cts.Token))
             //{
             //    ManageResponse(response);
@@ -74,7 +74,7 @@ public class MultiplayerClient : MonoBehaviour
         alreadySent = false;
     }
 
-    public static async void ManageResponse(HttpResponseMessage response)
+    public async void ManageResponse(HttpResponseMessage response)
     {
         Debug.Log("Receiving a response");
         string response_str = await response.Content.ReadAsStringAsync();

@@ -57,23 +57,30 @@ public class ReplicatedObject : MonoBehaviour
     }
 
     Vector3 lastPosition;
+    Vector3 lastRotation;
+    Vector3 lastScale;
     public void Replicate(GameObjectData input)
     {
         this_data = input;
         Debug.Log("GameObjectData name is : " + input.Name);
         try
         {
-            if (Vector3.Distance(lastPosition, this.transform.position) > 0.01f) return;
+            //if (Vector3.Distance(lastPosition, this.transform.position) > 0.001f
+            //    && Vector3.Distance(lastRotation, this.transform.rotation.eulerAngles) > 0.001f
+            //    && Vector3.Distance(lastScale, this.transform.localScale) > 0.001f) return;
+
             Debug.Log("Begin replication");
             if (this_transform == null) return;
-            if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.01f)
+            if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.001f)
             { this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position); }
-            if (Vector3.Distance(this.transform.rotation.eulerAngles, MultiplayerManager.quat_FromString(input.Rotation).eulerAngles) > 0.01f)
+            if (Vector3.Distance(this.transform.rotation.eulerAngles, MultiplayerManager.quat_FromString(input.Rotation).eulerAngles) > 0.001f)
             { this_transform.rotation = MultiplayerManager.quat_FromString(input.Rotation); }
-            if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.01f)
+            if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.001f)
             { this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale); }
             Debug.Log("Finished replicating");
             lastPosition = this.transform.position;
+            lastRotation = this.transform.rotation.eulerAngles;
+            lastScale = this.transform.localScale;
             /*if (children.Length > 0)
             {
                 for (int i = 0; i < children.Length; i++)
