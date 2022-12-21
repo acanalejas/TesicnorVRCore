@@ -48,7 +48,6 @@ public class MultiplayerClient : MonoBehaviour
         httpClient.BaseAddress = new System.Uri("http://" + IP + ":" + Port.ToString());
         httpClient.DefaultRequestHeaders.Accept.Clear();
         httpClient.DefaultRequestHeaders.Add("application", "text");
-        httpClient.Timeout = new System.TimeSpan(5);
     }
 
     
