@@ -350,3 +350,12 @@ public class MultiplayerManagerEditor : Editor
 }
 #endif
 
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public class Replicated : Attribute
+{
+    public static Action onReplicate;
+    public Replicated(Type classType, string methodName, Component component)
+    {
+        
+    }
+}
