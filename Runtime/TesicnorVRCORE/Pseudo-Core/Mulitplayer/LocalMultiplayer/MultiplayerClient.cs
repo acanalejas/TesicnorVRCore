@@ -39,10 +39,10 @@ public class MultiplayerClient : MonoBehaviour
     {
         while (true)
         {
-            if (last_content != MultiplayerManager.Instance.FindReplicatedGameObjects_str())
-            {
+            //if (last_content != MultiplayerManager.Instance.FindReplicatedGameObjects_str())
+            //{
                 yield return SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
-            }
+            //}
 
             if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
             {
