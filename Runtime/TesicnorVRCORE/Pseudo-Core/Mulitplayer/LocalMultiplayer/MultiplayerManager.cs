@@ -25,6 +25,8 @@ public struct MultiplayerClientData
 }
 
 [RequireComponent(typeof(UnityMainThreadInvoker))]
+[RequireComponent(typeof(UniqueIDManager))]
+[DisallowMultipleComponent]
 public class MultiplayerManager : MonoBehaviour
 {
     #region SINGLETON
@@ -64,8 +66,14 @@ public class MultiplayerManager : MonoBehaviour
 
     private void Awake()
     {
+        if (UniqueIDManager.Instance == null) this.gameObject.AddComponent<UniqueIDManager>();
         CheckSingleton();
-        allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
+        allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>(true);
+    }
+
+    private void Start()
+    {
+        Debug.Log( UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject));
     }
 
     public static string LocalIP()
@@ -350,12 +358,87 @@ public class MultiplayerManagerEditor : Editor
 }
 #endif
 
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
 public class Replicated : Attribute
 {
-    public static Action onReplicate;
-    public Replicated(Type classType, string methodName, Component component)
+    public static string onReplicate;
+    private static char compSeparator { get { return '?'; } }
+    private static char paramSeparator { get { return '|'; } }
+    public Replicated(int ID, Type classType, string methodName)
     {
-        
+        onReplicate += ID.ToString() + paramSeparator + classType.ToString() + paramSeparator + methodName + compSeparator;
+        Debug.Log("onReplicate = " + onReplicate);
     }
 }
+
+#region FOR ID MANAGEMENT
+[DisallowMultipleComponent]
+public class UniqueIDManager : MonoBehaviour
+{
+    private static UniqueIDManager instance;
+    public static UniqueIDManager Instance { get { return instance; } }
+
+    private void CheckSingleton()
+    {
+        if (instance == null) instance = this;
+        else Destroy(this);
+    }
+
+    public class UniqueID : MonoBehaviour
+    {
+        public int ID { get { return  id;} }
+        private int id;
+
+        public void SetID(int _id)
+        {
+            id = _id;
+        }
+    }
+
+    List<UniqueID> allIDs;
+
+    private void Awake()
+    {
+        CheckSingleton();
+
+        GameObject[] gameObjects = GameObject.FindObjectsOfType<GameObject>(true);
+        int index = 0;
+        foreach(GameObject gameObject in gameObjects)
+        {
+            UniqueID _id = gameObject.AddComponent<UniqueID>();
+            _id.SetID(index);
+            index++;
+        }
+    }
+
+    public GameObject GetGameObjectByID(int id)
+    {
+        foreach(UniqueID _id in allIDs)
+        {
+            if (id == _id.ID) return _id.gameObject;
+        }
+
+        return null;
+    }
+
+    public int GetIDFromGameObject(GameObject gameObject)
+    {
+        if(gameObject.GetComponent<UniqueID>() != null) return gameObject.GetComponent<UniqueID>().ID;
+
+        return -1;
+    }
+}
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(UniqueIDManager), true)]
+public class UniqueIDManagerEditor: Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        target.hideFlags = HideFlags.HideInInspector;
+    }
+}
+#endif
+#endregion
