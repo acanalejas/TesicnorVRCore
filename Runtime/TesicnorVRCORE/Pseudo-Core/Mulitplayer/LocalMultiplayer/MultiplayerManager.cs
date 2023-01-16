@@ -322,6 +322,7 @@ public class MultiplayerManager : MonoBehaviour
                 GameObject go = UniqueIDManager.Instance.GetGameObjectByID(id);
                 Component comp = go.GetComponent(data.TypeName);
                 MonoBehaviour mono = comp as MonoBehaviour;
+                Debug.Log("Before Invoking the action");
                 mono.Invoke(data.ActionName, 0);
             }
         }
