@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using System.Linq;
+using UnityEngine.Events;
 
 namespace TesicFire
 {
@@ -95,8 +96,13 @@ namespace TesicFire
         [SerializeField][HideInInspector] public float Density = 1;
         [SerializeField][HideInInspector] public Color Smoke_Color = Color.black;
         #endregion
+
+        #region Multiplayer
+
+        #endregion
         #endregion
 
+        static string id;
         #region FUNCTIONS
         #region Interface
         private void Awake()
@@ -126,6 +132,7 @@ namespace TesicFire
         }
         private void Start()
         {
+            id = UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString();
             mesh_original = GetComponent<MeshFilter>().mesh;
             if (InitialFire) BeginFire(/*GetComponent<MeshRenderer>().localBounds.center*/ mesh_original.bounds.center);
         }

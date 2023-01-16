@@ -5,6 +5,7 @@ using UnityEditor;
 using System.Net.NetworkInformation;
 using System.Net;
 using System;
+using System.Reflection;
 
 public struct GameObjectData{
     //For transform, all measures in world space
@@ -24,6 +25,14 @@ public struct MultiplayerClientData
     public string URL;
 }
 
+public struct ActionData
+{
+    public string objectID;
+    public Type TypeName;
+    public string ActionName;
+}
+
+
 [RequireComponent(typeof(UnityMainThreadInvoker))]
 [RequireComponent(typeof(UniqueIDManager))]
 [DisallowMultipleComponent]
@@ -32,6 +41,16 @@ public class MultiplayerManager : MonoBehaviour
     #region SINGLETON
     private static MultiplayerManager instance;
     public static MultiplayerManager Instance { get { return instance; } }
+
+    public delegate void replicateMethod(Type classType, string methodName, int uniqueID);
+
+    replicateMethod replicate = ReplicateMethod;
+
+    static void ReplicateMethod(Type classType, string methodName, int UniqueID)
+    {
+        string toAdd = classType.Name + ParamsSeparator + methodName + ParamsSeparator + UniqueID.ToString();
+        OnReplication += toAdd + MethodsSeparator;
+    }
 
     void CheckSingleton()
     {
@@ -60,6 +79,16 @@ public class MultiplayerManager : MonoBehaviour
     private static char jsonSeparator { get { return '?'; } }
 
     private ReplicatedObject[] allReplicated;
+
+    public static string OnReplication = "";
+
+    private static char MethodsNJsonSeparator { get { return '%'; } }
+    private static char MethodsSeparator { get { return '/'; } }
+    private static char ParamsSeparator { get { return '!'; } }
+
+    private MethodInfo[] replicatedMethods;
+
+    private List<ActionData> actionsData = new List<ActionData>();
     #endregion
 
     #region FUNCTIONS
@@ -73,6 +102,7 @@ public class MultiplayerManager : MonoBehaviour
 
     private void Start()
     {
+        replicatedMethods = GetAllReplicatedMethods();
         Debug.Log( UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject));
     }
 
@@ -260,6 +290,7 @@ public class MultiplayerManager : MonoBehaviour
     {
         try
         {
+            string jsonObjects = input.Split(MethodsNJsonSeparator.ToString())[0];
             GameObjectData[] allData = allData_god(input);
             Debug.Log("Json parsed & AllDataLength : " + allData.Length);
             Debug.Log("All replicated length : " + allReplicated.Length);
@@ -279,7 +310,25 @@ public class MultiplayerManager : MonoBehaviour
         {
             Debug.LogError("Invalid GameObject to replicate");
         }
-        
+        try
+        {
+            string methods = input.Split(MethodsNJsonSeparator.ToString())[1];
+            string[] methodsJson = methods.Split(jsonSeparator.ToString());
+
+            foreach(var method in methodsJson)
+            {
+                ActionData data = JsonUtility.FromJson<ActionData>(method);
+                int id = 0; int.TryParse(data.objectID, out id);
+                GameObject go = UniqueIDManager.Instance.GetGameObjectByID(id);
+                Component comp = go.GetComponent(data.TypeName);
+                MonoBehaviour mono = comp as MonoBehaviour;
+                mono.Invoke(data.ActionName, 0);
+            }
+        }
+        catch
+        {
+            Debug.LogError("Couldn't replicate actions");
+        }
     }
 
     public string FindReplicatedGameObjects_str()
@@ -293,6 +342,21 @@ public class MultiplayerManager : MonoBehaviour
             {
                 result += Json_FromGameObjectData(obj.this_data) + jsonSeparator.ToString();
             }
+        }
+
+        result += MethodsNJsonSeparator.ToString() + FindReplicatedFunctions_str();
+        return result;
+    }
+
+    public string FindReplicatedFunctions_str()
+    {
+        if (actionsData.Count <= 0) return "";
+
+        string result = "";
+
+        foreach(var data in actionsData)
+        {
+            result += JsonUtility.ToJson(data) + jsonSeparator.ToString();
         }
 
         return result;
@@ -331,6 +395,65 @@ public class MultiplayerManager : MonoBehaviour
 
         return true;
     }
+
+    Action toAdd;
+    MethodInfo[] GetAllReplicatedMethods()
+    {
+        var methods = TypeCache.GetFieldsWithAttribute(typeof(ReplicatedAttribute));
+        List<MethodInfo> allinfo = new List<MethodInfo>();
+
+        
+        foreach(var method in methods)
+        {
+            Type _type = method.DeclaringType;
+            Debug.Log("Declaring type is : " + _type.FullName);
+            UnityEngine.Object[] gos = GameObject.FindObjectsOfType(_type);
+            Debug.Log("Objects with the type : " + gos.Length);
+            
+            foreach(var go in gos)
+            {
+                Component _go = go as Component;
+                Debug.Log("Component type is : " + _go.GetType());
+                MonoBehaviour mono = go as MonoBehaviour;
+
+                toAdd = () =>
+                {
+                    ActionData adata = new ActionData();
+                    adata.ActionName = method.Name;
+                    adata.TypeName = _type;
+                    adata.objectID = UniqueIDManager.Instance.GetIDFromGameObject(_go.gameObject).ToString();
+                    this.actionsData.Add(adata);
+                };
+
+                Action ac = method.GetValue(_go) as Action;
+                ac += toAdd;
+                object obj = ac.Clone();
+
+                Debug.Log(ac.GetInvocationList().Length);
+                method.SetValue(_go, obj);
+            }
+        }
+
+        return allinfo.ToArray();
+    }
+
+    private void LateUpdate()
+    {
+        Debug.Log("Number of actions to replicate this frame : " + actionsData.Count);
+        actionsData.Clear();
+    }
+
+    private void AddOnInvokeReplicated()
+    {
+        /*if (replicatedMethods.Length <= 0) return;
+
+        foreach(var _method in replicatedMethods)
+        {
+            Debug.Log(_method.DeclaringType);
+            
+        }*/
+        
+    }
     #endregion
 }
 
@@ -358,17 +481,16 @@ public class MultiplayerManagerEditor : Editor
 }
 #endif
 
-[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
-public class Replicated : Attribute
+[AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = true)]
+public class ReplicatedAttribute : Attribute
 {
-    public static string onReplicate;
     private static char compSeparator { get { return '?'; } }
     private static char paramSeparator { get { return '|'; } }
-    public Replicated(int ID, Type classType, string methodName)
+    public ReplicatedAttribute()
     {
-        onReplicate += ID.ToString() + paramSeparator + classType.ToString() + paramSeparator + methodName + compSeparator;
-        Debug.Log("onReplicate = " + onReplicate);
+
     }
+    
 }
 
 #region FOR ID MANAGEMENT
@@ -417,7 +539,7 @@ public class UniqueIDManager : MonoBehaviour
         {
             if (id == _id.ID) return _id.gameObject;
         }
-
+        
         return null;
     }
 
