@@ -268,7 +268,7 @@ public class MultiplayerManager : MonoBehaviour
     {
         List<GameObjectData> result = new List<GameObjectData>();
         if (input == null || input.Length == 0 || input == "") return null;
-        string[] datas = input.Split(jsonSeparator);
+        string[] datas = input.Split(MethodsNJsonSeparator)[0].Split(jsonSeparator);
         foreach(var data in datas)
         {
             if (data == "" || data == null || data.Length <= 0) break;
