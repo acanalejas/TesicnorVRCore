@@ -88,7 +88,7 @@ public class MultiplayerManager : MonoBehaviour
 
     private MethodInfo[] replicatedMethods;
 
-    private List<ActionData> actionsData = new List<ActionData>();
+    public List<ActionData> actionsData = new List<ActionData>();
     #endregion
 
     #region FUNCTIONS
@@ -312,15 +312,29 @@ public class MultiplayerManager : MonoBehaviour
         }
         try
         {
-            string methods = input.Split(MethodsNJsonSeparator.ToString())[1];
+            string methods = input;
+            try
+            {
+                methods = methods.Split(MethodsNJsonSeparator.ToString())[1];
+            }
+            catch
+            {
+                Debug.LogError("Error at spliting the string");
+                return;
+            }
+            if (methods.Length <= 0 || methods == "" || methods == null) return;
             string[] methodsJson = methods.Split(jsonSeparator.ToString());
 
             foreach(var method in methodsJson)
             {
                 ActionData data = JsonUtility.FromJson<ActionData>(method);
+                if(data.Equals(null)) { Debug.LogError("Data is null"); return; }
+                if(method == null || method == "") { Debug.LogError("method is null or empty"); return; }
                 int id = 0; int.TryParse(data.objectID, out id);
                 GameObject go = UniqueIDManager.Instance.GetGameObjectByID(id);
+                if(go == null) { Debug.LogError("Couldn't get GameObject by ID"); return; }
                 Component comp = go.GetComponent(data.TypeName);
+                if(comp == null) { Debug.LogError("Couldn't get Component from the GameObject"); return; }
                 MonoBehaviour mono = comp as MonoBehaviour;
                 Debug.Log("Before Invoking the action");
                 mono.Invoke(data.ActionName, 0);
@@ -438,11 +452,6 @@ public class MultiplayerManager : MonoBehaviour
         return allinfo.ToArray();
     }
 
-    private void LateUpdate()
-    {
-        Debug.Log("Number of actions to replicate this frame : " + actionsData.Count);
-        actionsData.Clear();
-    }
 
     private void AddOnInvokeReplicated()
     {

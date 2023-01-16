@@ -49,6 +49,7 @@ public class MultiplayerHost : MonoBehaviour
         try
         {
             response = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
+            
         }
         catch
         {
@@ -84,7 +85,8 @@ public class MultiplayerHost : MonoBehaviour
         string response_str = "";
         response_str = this.response;
         byte[] response_byte = Encoding.UTF8.GetBytes(response);
-
+        Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
+        MultiplayerManager.Instance.actionsData.Clear();
         _response.OutputStream.Write(response_byte, 0, response_byte.Length);
         _response.Close();
 
