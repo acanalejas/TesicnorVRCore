@@ -12,7 +12,7 @@ public class MultiplayerClient : MonoBehaviour
 {
     #region PARAMETERS
     [Header("La IP a la que se va a conectar")]
-    public static string IP = "192.168.20.73";
+    public static string IP = "192.168.20.40";
     [Header("El puerto por el que se va a establecer la conexión")]
     public static int Port = 8080;
 
@@ -44,7 +44,7 @@ public class MultiplayerClient : MonoBehaviour
                 yield return SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
             //}
 
-            if (MultiplayerManager.Instance.isValidString(response_string) && last_response != response_string)
+            if (MultiplayerManager.Instance.isValidString(response_string.Split("%")[0]) && last_response != response_string)
             {
                 MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
                 last_response = response_string;
