@@ -44,7 +44,7 @@ public class BackendGetter : MonoBehaviour
     public void Start()
     {
         httpClient = new HttpClient();
-        Core.Initialize("4555446954534597");
+        Core.Initialize("5770002119716955");
         Oculus.Platform.Users.GetLoggedInUser().OnComplete(GetLoggedInUserCallback);
         
 
@@ -52,16 +52,23 @@ public class BackendGetter : MonoBehaviour
     }
     private void GetLoggedInUserCallback(Message msg)
     {
-        if (!msg.IsError)
+        try
         {
-            User user = msg.GetUser();
-            string userName = user.OculusID;
-            string displayName = user.DisplayName;
-            username.text = userName + displayName;
+            if (!msg.IsError)
+            {
+                User user = msg.GetUser();
+                string userName = user.OculusID;
+                string displayName = user.DisplayName;
+                username.text = userName + displayName;
+            }
+            else
+            {
+                username.text = "Error detected while getting username";
+            }
         }
-        else
+        catch
         {
-            username.text = "Error detected while getting username";
+            username.text = "Error on try";
         }
     }
     #endregion
