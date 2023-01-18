@@ -28,7 +28,7 @@ public struct MultiplayerClientData
 public struct ActionData
 {
     public string objectID;
-    public Type TypeName;
+    public string TypeName;
     public string ActionName;
 }
 
@@ -102,8 +102,9 @@ public class MultiplayerManager : MonoBehaviour
 
     private void Start()
     {
+#if UNITY_EDITOR
         replicatedMethods = GetAllReplicatedMethods();
-        Debug.Log( UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject));
+#endif
     }
 
     public static string LocalIP()
@@ -327,17 +328,20 @@ public class MultiplayerManager : MonoBehaviour
 
             foreach(var method in methodsJson)
             {
+                Debug.Log("Before parsing to struct");
                 ActionData data = JsonUtility.FromJson<ActionData>(method);
-                if(data.Equals(null)) { Debug.LogError("Data is null"); return; }
-                if(method == null || method == "") { Debug.LogError("method is null or empty"); return; }
+                Debug.Log("After parsing to struct");
                 int id = 0; int.TryParse(data.objectID, out id);
+                Debug.Log("After parsing string id : " + id);
+                if (UniqueIDManager.Instance == null) Debug.Log("UniqueIDManager null value");
                 GameObject go = UniqueIDManager.Instance.GetGameObjectByID(id);
-                if(go == null) { Debug.LogError("Couldn't get GameObject by ID"); return; }
+                Debug.Log("After Getting the GO by ID");
                 Component comp = go.GetComponent(data.TypeName);
-                if(comp == null) { Debug.LogError("Couldn't get Component from the GameObject"); return; }
+                Debug.Log("After getting the component");
                 MonoBehaviour mono = comp as MonoBehaviour;
+                Debug.Log("After parsing component to MonoBehaviour");
                 Debug.Log("Before Invoking the action");
-                mono.Invoke(data.ActionName, 0);
+                mono.Invoke("F" + data.ActionName, 0);
             }
         }
         catch
@@ -412,8 +416,10 @@ public class MultiplayerManager : MonoBehaviour
     }
 
     Action toAdd;
+#if UNITY_EDITOR
     MethodInfo[] GetAllReplicatedMethods()
     {
+
         var methods = TypeCache.GetFieldsWithAttribute(typeof(ReplicatedAttribute));
         List<MethodInfo> allinfo = new List<MethodInfo>();
 
@@ -435,7 +441,7 @@ public class MultiplayerManager : MonoBehaviour
                 {
                     ActionData adata = new ActionData();
                     adata.ActionName = method.Name;
-                    adata.TypeName = _type;
+                    adata.TypeName = _type.FullName;
                     adata.objectID = UniqueIDManager.Instance.GetIDFromGameObject(_go.gameObject).ToString();
                     this.actionsData.Add(adata);
                 };
@@ -452,7 +458,7 @@ public class MultiplayerManager : MonoBehaviour
         return allinfo.ToArray();
     }
 
-
+#endif
     private void AddOnInvokeReplicated()
     {
         /*if (replicatedMethods.Length <= 0) return;
@@ -488,6 +494,11 @@ public class MultiplayerManagerEditor : Editor
         GUILayout.Label("Puerto que usaremos para la comunicación", EditorStyles.boldLabel);
         MultiplayerManager.Port = EditorGUILayout.IntField(MultiplayerManager.Port);
     }
+
+    private void CheckActionWrapper(MultiplayerManager manager)
+    {
+
+    }
 }
 #endif
 
@@ -508,7 +519,7 @@ public class ReplicatedAttribute : Attribute
 public class UniqueIDManager : MonoBehaviour
 {
     private static UniqueIDManager instance;
-    public static UniqueIDManager Instance { get { return instance; } }
+    public static UniqueIDManager Instance { get { return instance; } set { instance = value; } }
 
     private void CheckSingleton()
     {
@@ -527,7 +538,7 @@ public class UniqueIDManager : MonoBehaviour
         }
     }
 
-    List<UniqueID> allIDs;
+    List<UniqueID> allIDs = new List<UniqueID>();
 
     private void Awake()
     {
@@ -539,18 +550,20 @@ public class UniqueIDManager : MonoBehaviour
         {
             UniqueID _id = gameObject.AddComponent<UniqueID>();
             _id.SetID(index);
+            allIDs.Add(_id);
             index++;
         }
     }
 
     public GameObject GetGameObjectByID(int id)
     {
+        GameObject result = null;
         foreach(UniqueID _id in allIDs)
         {
-            if (id == _id.ID) return _id.gameObject;
+            if (id == _id.ID) result = _id.gameObject;
         }
-        
-        return null;
+
+        return result;
     }
 
     public int GetIDFromGameObject(GameObject gameObject)
