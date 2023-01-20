@@ -38,7 +38,7 @@ public class BackendGetter : MonoBehaviour
 {
     #region PARAMETERS
     HttpClient httpClient;
-    static BackendData backendData = new BackendData();
+    public static  BackendData backendData = new BackendData();
     public TextMeshProUGUI username;
     string username_str;
     public static int appCode { get { return 1; } }
