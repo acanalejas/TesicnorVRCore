@@ -6,6 +6,7 @@ using System.Net;
 using Oculus.Platform;
 using Oculus.Platform.Models;
 using TMPro;
+using System.Text;
 
 public struct VRExperience
 {
@@ -37,39 +38,67 @@ public class BackendGetter : MonoBehaviour
 {
     #region PARAMETERS
     HttpClient httpClient;
+    static BackendData backendData = new BackendData();
     public TextMeshProUGUI username;
+    string username_str;
+    public static int appCode { get { return 1; } }
+    public static string urlNoParams { get { return "https://app.e-xtinguisher.com/api/vr-users/public"; } }
+
+    public static string BackendDataKey { get { return "BackendData"; } }
     #endregion
 
     #region FUNCTIONS
-    public void Start()
+
+    public virtual void Awake()
+    {
+        GetBackendData(appCode.ToString());
+    }
+    public virtual void Start()
+    {
+        backendData = JsonUtility.FromJson<BackendData>(PlayerPrefs.GetString(BackendDataKey));
+    }
+
+    #region Connecting and getting the data
+    public async virtual void GetBackendData(string appCode)
     {
         httpClient = new HttpClient();
-        Core.Initialize("5770002119716955");
-        Oculus.Platform.Users.GetLoggedInUser().OnComplete(GetLoggedInUserCallback);
-        
 
-        DontDestroyOnLoad(this.gameObject);
+        var cts = new System.Threading.CancellationTokenSource();
+
+        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, "https://app.e-xtinguisher.com/api/vr-users/public?applicationId=" + appCode + "&userName=" + username_str))
+        {
+            using (HttpResponseMessage response = await httpClient.SendAsync(hrm))
+            {
+                BackendDataFromResponse(response);
+            }
+        }
     }
-    private void GetLoggedInUserCallback(Message msg)
+
+    private async void BackendDataFromResponse(HttpResponseMessage response)
     {
+        string buffer = await response.Content.ReadAsStringAsync();
+
         try
         {
-            if (!msg.IsError)
+            backendData = JsonUtility.FromJson<BackendData>(buffer);
+
+            if (PlayerPrefs.HasKey(BackendDataKey))
             {
-                User user = msg.GetUser();
-                string userName = user.OculusID;
-                string displayName = user.DisplayName;
-                username.text = userName + displayName;
+                string oldData = PlayerPrefs.GetString(BackendDataKey);
+
+                if(oldData != buffer)
+                {
+                    PlayerPrefs.SetString(BackendDataKey, buffer);
+                }
             }
-            else
-            {
-                username.text = "Error detected while getting username";
-            }
+            else { PlayerPrefs.SetString(BackendDataKey, buffer); }
         }
         catch
         {
-            username.text = "Error on try";
+            Debug.Log("Coudn´t parse the string from the backend to the struct");
         }
     }
+    #endregion
+
     #endregion
 }
