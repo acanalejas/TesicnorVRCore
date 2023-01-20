@@ -68,7 +68,7 @@ public class BackendGetter : MonoBehaviour
         Debug.Log(username_str);
         using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "?applicationId=" + appCode + "&" + "userName=" + username_str))
         {
-            using (HttpResponseMessage response = await httpClient.SendAsync(hrm))
+            using (HttpResponseMessage response = await httpClient.SendAsync(hrm, cts.Token))
             {
                 BackendDataFromResponse(response);
             }
