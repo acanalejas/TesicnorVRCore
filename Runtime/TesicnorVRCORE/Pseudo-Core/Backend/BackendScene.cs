@@ -73,7 +73,8 @@ public class BackendScene : MonoBehaviour
                     Debug.Log("Backend connected with correct user");
                     string content = response.Content.ReadAsStringAsync().Result;
                     BackendData data = JsonUtility.FromJson<BackendData>(content);
-                    if (data.name != string.Empty) PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
+                    BackendGetter.backendData = data;
+                    PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
                     Debug.Log(data.name);
                 }
                 else
