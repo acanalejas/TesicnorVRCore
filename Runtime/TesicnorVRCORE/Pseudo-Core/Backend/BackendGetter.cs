@@ -80,12 +80,12 @@ public class BackendGetter : MonoBehaviour
     {
         string buffer = await response.Content.ReadAsStringAsync();
         if (buffer == string.Empty) return;
-        Debug.Log(buffer);
         if (response.StatusCode != HttpStatusCode.OK) return;
 
         try
         {
             backendData = JsonUtility.FromJson<BackendData>(buffer);
+            Debug.Log("Number of experiences is : " + backendData.vrExperiences.Length);
 
             if (PlayerPrefs.HasKey(BackendDataKey))
             {
