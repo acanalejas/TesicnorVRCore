@@ -51,6 +51,7 @@ public class BackendGetter : MonoBehaviour
 
     public virtual void Awake()
     {
+        httpClient = new HttpClient();
         GetBackendData(appCode.ToString());
     }
     public virtual void Start()
@@ -61,8 +62,6 @@ public class BackendGetter : MonoBehaviour
     #region Connecting and getting the data
     public async virtual void GetBackendData(string appCode)
     {
-        httpClient = new HttpClient();
-
         var cts = new System.Threading.CancellationTokenSource();
 
         username_str = PlayerPrefs.GetString("Username");
