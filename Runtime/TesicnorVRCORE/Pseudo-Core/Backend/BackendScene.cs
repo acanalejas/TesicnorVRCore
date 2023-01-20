@@ -75,6 +75,7 @@ public class BackendScene : MonoBehaviour
                     BackendData data = JsonUtility.FromJson<BackendData>(content);
                     BackendGetter.backendData = data;
                     PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
+                    PlayerPrefs.SetString("Username", user);
                     Debug.Log(data.name);
                 }
                 else

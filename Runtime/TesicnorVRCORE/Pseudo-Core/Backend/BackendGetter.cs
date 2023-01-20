@@ -65,7 +65,9 @@ public class BackendGetter : MonoBehaviour
 
         var cts = new System.Threading.CancellationTokenSource();
 
-        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, "https://app.e-xtinguisher.com/api/vr-users/public?applicationId=" + appCode + "&userName=" + username_str))
+        username_str = PlayerPrefs.GetString("Username");
+
+        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "?applicationId=" + appCode + "&" + "userName=" + username_str))
         {
             using (HttpResponseMessage response = await httpClient.SendAsync(hrm))
             {
@@ -77,6 +79,7 @@ public class BackendGetter : MonoBehaviour
     private async void BackendDataFromResponse(HttpResponseMessage response)
     {
         string buffer = await response.Content.ReadAsStringAsync();
+        if (response.StatusCode != HttpStatusCode.OK) return;
 
         try
         {
