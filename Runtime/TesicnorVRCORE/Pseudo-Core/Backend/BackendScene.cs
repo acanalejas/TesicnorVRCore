@@ -5,11 +5,13 @@ using System.Net.Http;
 using System.IO;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class BackendScene : MonoBehaviour
 {
     #region PARAMETERS
     public static string BackendSceneName { get { return "BackendEmailScene"; } }
+    static int nextBuildIndex;
 
     private HttpClient httpClient;
 
@@ -81,6 +83,7 @@ public class BackendScene : MonoBehaviour
                 }
             }
         }
+        SceneManager.LoadScene(nextBuildIndex);
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
@@ -108,6 +111,12 @@ public class BackendScene : MonoBehaviour
             yield return frame;
         }
         StopCoroutine(nameof(ShowPopUp));
+    }
+
+    public static void GoToBackendScene(int nextSceneBuildIndex)
+    {
+        SceneManager.LoadScene(BackendSceneName);
+        nextBuildIndex = nextSceneBuildIndex;
     }
     #endregion
 }
