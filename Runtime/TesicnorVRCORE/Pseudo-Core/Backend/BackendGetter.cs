@@ -66,7 +66,7 @@ public class BackendGetter : MonoBehaviour
         var cts = new System.Threading.CancellationTokenSource();
 
         username_str = PlayerPrefs.GetString("Username");
-
+        Debug.Log(username_str);
         using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "?applicationId=" + appCode + "&" + "userName=" + username_str))
         {
             using (HttpResponseMessage response = await httpClient.SendAsync(hrm))
@@ -79,6 +79,8 @@ public class BackendGetter : MonoBehaviour
     private async void BackendDataFromResponse(HttpResponseMessage response)
     {
         string buffer = await response.Content.ReadAsStringAsync();
+        if (buffer == string.Empty) return;
+        Debug.Log(buffer);
         if (response.StatusCode != HttpStatusCode.OK) return;
 
         try
