@@ -36,7 +36,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     /// <summary>
     /// El objeto con el que esta interactuando la mano
     /// </summary>
-    private GameObject interactingObject;
+    [HideInInspector]public GameObject interactingObject;
 
     /// <summary>
     /// Resultado del Raycast que se usa para detectar las interacciones

@@ -61,6 +61,8 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
 
 
     protected GameObject hand;
+
+    protected HandInteraction[] hands;
     #endregion
 
     #region FUNCTIONS
@@ -73,11 +75,27 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         GetComponent<Rigidbody>().isKinematic = true;
 
         if (!is3DObject) SetupUICollider();
+
+        hands = GameObject.FindObjectsOfType<HandInteraction>();
     }
 
     public virtual void Update()
     {
         if (!this.isHovered && !this.isClicking) ChangeColor(0);
+
+        if (!isAnyHandInteractingWithThis()) ChangeColor(0);
+    }
+
+    bool isAnyHandInteractingWithThis()
+    {
+        bool interacting = false;
+
+        foreach(var hand in hands)
+        {
+            if (hand.interactingObject == this.gameObject) interacting = true;
+        }
+
+        return interacting;
     }
 
     public void SetupUICollider()
