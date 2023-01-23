@@ -8,7 +8,8 @@ using Oculus.Platform.Models;
 using TMPro;
 using System.Text;
 
-public struct VRExperience
+[System.Serializable]
+public class VRExperience
 {
     public int id;
     public string code;
@@ -16,21 +17,34 @@ public struct VRExperience
     public bool visibleForAll;
     public string description;
 }
-
-public struct VRProperty
+[System.Serializable]
+public class VRProperty
 {
     public long id;
     public string propertyName;
     public string propertyValue;
 }
 
-public struct BackendData
+
+[System.Serializable]
+public class BackendData
 {
+    [System.Serializable]
+    public class VRClient
+    {
+        public int id;
+        public string name;
+        public string code;
+        public string description;
+        public string vrusers;
+    }
+
     public int id;
     public string name;
     public string description;
     public VRProperty[] vRProperties;
     public VRExperience[] vrExperiences;
+    public VRClient client;
     public VRProperty[] vrproperties;
 }
 

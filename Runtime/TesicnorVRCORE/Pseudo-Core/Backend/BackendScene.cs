@@ -76,7 +76,13 @@ public class BackendScene : MonoBehaviour
                     BackendGetter.backendData = data;
                     PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
-                    Debug.Log(data.name);
+                    Debug.Log("BackendData { \n " +
+                         data.id + "\n" + 
+                         data.name + "\n" +
+                         data.vrExperiences + "}");
+                    Debug.Log(content);
+                    Debug.Log("Number of experiences is : " + data.vrExperiences.Length);
+                    SceneManager.LoadScene(nextBuildIndex);
                 }
                 else
                 {
@@ -85,7 +91,6 @@ public class BackendScene : MonoBehaviour
                 }
             }
         }
-        SceneManager.LoadScene(nextBuildIndex);
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
