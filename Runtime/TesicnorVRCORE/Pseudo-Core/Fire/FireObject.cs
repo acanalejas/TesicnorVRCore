@@ -132,7 +132,7 @@ namespace TesicFire
         }
         private void Start()
         {
-            id = UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString();
+            //id = UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString();
             mesh_original = GetComponent<MeshFilter>().mesh;
             if (InitialFire) BeginFire(/*GetComponent<MeshRenderer>().localBounds.center*/ mesh_original.bounds.center);
         }
