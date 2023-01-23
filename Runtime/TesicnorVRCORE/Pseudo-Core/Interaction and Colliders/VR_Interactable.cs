@@ -75,6 +75,11 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         if (!is3DObject) SetupUICollider();
     }
 
+    public virtual void Update()
+    {
+        if (!this.isHovered && !this.isClicking) ChangeColor(0);
+    }
+
     public void SetupUICollider()
     {
         RectTransform rectTransform = this.GetComponent<RectTransform>();
