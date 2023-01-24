@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 using System.Net;
 using System;
 using System.Reflection;
+using System.IO;
 
 public struct GameObjectData{
     //For transform, all measures in world space
@@ -450,6 +451,8 @@ public class MultiplayerManager : MonoBehaviour
                 ac += toAdd;
                 object obj = ac.Clone();
 
+                
+
                 Debug.Log(ac.GetInvocationList().Length);
                 method.SetValue(_go, obj);
             }
@@ -457,7 +460,7 @@ public class MultiplayerManager : MonoBehaviour
 
         return allinfo.ToArray();
     }
-
+    
 #endif
     private void AddOnInvokeReplicated()
     {
@@ -505,14 +508,11 @@ public class MultiplayerManagerEditor : Editor
 [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = true)]
 public class ReplicatedAttribute : Attribute
 {
-    private static char compSeparator { get { return '?'; } }
-    private static char paramSeparator { get { return '|'; } }
     public ReplicatedAttribute()
     {
-
     }
-    
 }
+
 
 #region FOR ID MANAGEMENT
 [DisallowMultipleComponent]

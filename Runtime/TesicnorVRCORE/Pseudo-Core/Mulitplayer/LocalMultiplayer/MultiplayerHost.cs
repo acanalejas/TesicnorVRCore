@@ -94,6 +94,7 @@ public class MultiplayerHost : MonoBehaviour
 
     public void CloseLocalSession()
     {
+        if(host != null)
         if (host.IsListening) host.Stop();
     }
 

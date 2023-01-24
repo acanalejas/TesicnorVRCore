@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Reflection;
+#if UNITY_EDITOR
+using UnityEditor;
+using System.IO;
+#endif
 
 [DisallowMultipleComponent]
 [SerializeField]
@@ -13,6 +18,8 @@ public class ReplicatedObject : MonoBehaviour
     public Transform this_transform;
 
     public bool insidePlayer = false;
+
+    public System.Action replicate;
     #endregion
 
     #region FUNCTIONS
@@ -98,3 +105,80 @@ public class ReplicatedObject : MonoBehaviour
     }
     #endregion
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(ReplicatedObject), true)]
+public class ReplicatedObjectEditor: Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        SearchReplicatedAttribute();
+    }
+
+    void SearchReplicatedAttribute()
+    {
+        TypeCache.MethodCollection mc = TypeCache.GetMethodsWithAttribute(typeof(ReplicatedAttribute));
+        TypeCache.FieldInfoCollection fic = TypeCache.GetFieldsWithAttribute(typeof(ReplicatedAttribute));
+
+        Dictionary<MethodInfo, bool> md = new Dictionary<MethodInfo, bool>();
+        Dictionary<FieldInfo, bool> fd = new Dictionary<FieldInfo, bool>();
+
+        TypeCache.TypeCollection tc = TypeCache.GetTypesDerivedFrom(typeof(ReplicatedObject));
+
+        //Checks if the methods are not in the correct class
+        if(mc.Count > 0)
+        {
+            foreach(var method in mc)
+            {
+                bool derivado = false;
+                foreach(var type in tc)
+                {
+                    if (method.DeclaringType.Name == type.Name) derivado = true;
+
+                }
+
+                md.Add(method, derivado);
+
+                if (!derivado) Debug.LogException(new UnityException("Only classes derived from ReplicatedObject can use the ReplicatedAttribute"));
+            }
+        }
+
+        //Checks if the fields are not in the correct class
+        if(fic.Count > 0)
+        {
+            foreach(var field in fic)
+            {
+                bool derivado = false;
+                foreach(var type in tc)
+                {
+                    if (field.DeclaringType.Name == type.Name) derivado = true;
+                }
+
+                fd.Add(field, derivado);
+
+                if (!derivado) { Debug.LogException(new UnityException("Only classes derived from ReplicatedObject can use the ReplicatedAttribute")); }
+                
+            }
+        }
+
+        foreach(var method in md)
+        {
+            if (!method.Value) continue;
+
+            if(target.GetType().Name == method.Key.DeclaringType.Name)
+            {
+                string path = OverrideCode.GetTypePath(target);
+                Debug.Log(path);
+                string fieldName = "f" + method.Key.Name;
+                string fieldType = "System.Action";
+                string fieldValue = "";
+
+                FileStream fs = OverrideCode.BothStream(path);
+                OverrideCode.AddCodeToMethod(fs, "Awake", "replicate += ()=>{" + method.Key.Name + "()" + "};", method.Key.DeclaringType.Name);
+                fs.Close();
+            }
+        }
+    }
+}
+#endif

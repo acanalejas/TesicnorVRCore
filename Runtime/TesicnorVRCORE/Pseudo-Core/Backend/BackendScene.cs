@@ -70,18 +70,11 @@ public class BackendScene : MonoBehaviour
             {
                 if(response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Debug.Log("Backend connected with correct user");
                     string content = response.Content.ReadAsStringAsync().Result;
                     BackendData data = JsonUtility.FromJson<BackendData>(content);
                     BackendGetter.backendData = data;
                     PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
-                    Debug.Log("BackendData { \n " +
-                         data.id + "\n" + 
-                         data.name + "\n" +
-                         data.vrExperiences + "}");
-                    Debug.Log(content);
-                    Debug.Log("Number of experiences is : " + data.vrExperiences.Length);
                     SceneManager.LoadScene(nextBuildIndex);
                 }
                 else
@@ -91,6 +84,20 @@ public class BackendScene : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void DemoButton()
+    {
+        BackendData data = new BackendData();
+        data.vrExperiences = new VRExperience[1];
+        data.vrExperiences[0].code = "EXT-001";
+        data.vrExperiences[0].name = "House-Kitchen";
+        data.vrExperiences[0].id = 0;
+
+        BackendGetter.backendData = data;
+
+        PlayerPrefs.SetString(BackendGetter.BackendDataKey, JsonUtility.ToJson(data));
+        PlayerPrefs.SetString("Username", "");
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
