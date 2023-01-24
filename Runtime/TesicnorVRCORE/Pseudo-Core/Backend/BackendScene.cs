@@ -98,6 +98,8 @@ public class BackendScene : MonoBehaviour
 
         PlayerPrefs.SetString(BackendGetter.BackendDataKey, JsonUtility.ToJson(data));
         PlayerPrefs.SetString("Username", "");
+
+        SceneManager.LoadScene(nextBuildIndex);
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
