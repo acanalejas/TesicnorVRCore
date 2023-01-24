@@ -118,6 +118,11 @@ public interface VRInteractableInterface
     /// <returns></returns>
     bool GetIsHovered();
     /// <summary>
+    /// Es este interactable accionable por colision directa?
+    /// </summary>
+    /// <returns></returns>
+    bool GetIsTouchable();
+    /// <summary>
     /// Setea la mano que interactua
     /// </summary>
     /// <param name="_hand"></param>

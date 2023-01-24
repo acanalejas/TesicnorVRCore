@@ -669,6 +669,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 426168997}
   nonDetectedColor: {r: 0.9339623, g: 0.18943575, b: 0.18943575, a: 255}
   detectedColor: {r: 255, g: 149, b: 25, a: 255}
+  interactingObject: {fileID: 0}
   interactionOrigin: {fileID: 426168992}
   handController: {fileID: 426168998}
   dedoGordo: {fileID: 0}
@@ -946,6 +947,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 471665475}
   nonDetectedColor: {r: 0.9339623, g: 0.18943575, b: 0.18943575, a: 255}
   detectedColor: {r: 255, g: 149, b: 25, a: 255}
+  interactingObject: {fileID: 0}
   interactionOrigin: {fileID: 471665470}
   handController: {fileID: 471665476}
   dedoGordo: {fileID: 0}
@@ -3768,7 +3770,7 @@ PrefabInstance:
     - target: {fileID: 5072736657283662254, guid: 83da785f57bb1c641964bdc64a78db89,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.375
+      value: 0.735
       objectReference: {fileID: 0}
     - target: {fileID: 5072736657283662254, guid: 83da785f57bb1c641964bdc64a78db89,
         type: 3}
@@ -3798,7 +3800,7 @@ PrefabInstance:
     - target: {fileID: 5072736657283662254, guid: 83da785f57bb1c641964bdc64a78db89,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.289
+      value: -0.296
       objectReference: {fileID: 0}
     - target: {fileID: 5072736657283662254, guid: 83da785f57bb1c641964bdc64a78db89,
         type: 3}

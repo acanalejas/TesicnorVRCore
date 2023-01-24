@@ -20,6 +20,9 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
     [Header("Usa el rallo o solo colision?")]
     [HideInInspector] public bool usesRay = true;
 
+    [Header("Se puede tocar el boton?")]
+    [HideInInspector] public bool usesCollision = false;
+
     [Header("Solo rellenar si es un objeto de UI")]
     [HideInInspector] public RectTransform canvasTransform;
 
@@ -298,6 +301,11 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         return result;
        
     }
+
+    public bool GetIsTouchable()
+    {
+        return usesCollision;
+    }
     #endregion
 }
 
@@ -320,6 +328,11 @@ public class InteractableEditor : Editor
 
         GUILayout.Label("Se puede presionar con el rayo?", EditorStyles.boldLabel);
         interactable.usesRay = GUILayout.Toggle(interactable.usesRay, "Uses ray?");
+
+        GUILayout.Space(10);
+
+        GUILayout.Label("Se puede presionar con colisión?", EditorStyles.boldLabel);
+        interactable.usesCollision = GUILayout.Toggle(interactable.usesCollision, "Uses collision?");
 
         GUILayout.Space(10);
 

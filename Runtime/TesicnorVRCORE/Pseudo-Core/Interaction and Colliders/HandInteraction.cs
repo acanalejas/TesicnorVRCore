@@ -144,6 +144,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             VRInteractableInterface interactable = collision.GetComponent<VRInteractableInterface>();
             if(interactable != null)
             {
+                if (!interactable.GetIsTouchable()) return;
                 hand.interactingObject = collision.gameObject;
                 hand.interactingObject.GetComponent<VRInteractableInterface>().SetHand(hand.gameObject);
                 hand.interactingObject.GetComponent<VRInteractableInterface>().OnClick();
