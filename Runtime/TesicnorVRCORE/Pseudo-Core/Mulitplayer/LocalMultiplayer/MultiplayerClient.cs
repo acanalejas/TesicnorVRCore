@@ -76,7 +76,7 @@ public class MultiplayerClient : MonoBehaviour
         var cts = new System.Threading.CancellationTokenSource();
 
         using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
-        using (HttpResponseMessage request = httpClient.PostAsync("http://" + IP + ":8080", sc, cts.Token).Result)
+        using (HttpResponseMessage request = await httpClient.PostAsync("http://" + IP + ":8080", sc, cts.Token))
         {
             request.EnsureSuccessStatusCode();
 
