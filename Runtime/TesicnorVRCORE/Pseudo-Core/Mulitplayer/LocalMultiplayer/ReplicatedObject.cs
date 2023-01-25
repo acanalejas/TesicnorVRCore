@@ -54,6 +54,7 @@ public class ReplicatedObject : MonoBehaviour
     public void SetGameObjectData()
     {
         this_data = MultiplayerManager.fromGameObject(this.gameObject);
+        if (children == null) return;
         if(children.Length > 0)
         {
             for(int i = 0; i < children.Length; i++)
