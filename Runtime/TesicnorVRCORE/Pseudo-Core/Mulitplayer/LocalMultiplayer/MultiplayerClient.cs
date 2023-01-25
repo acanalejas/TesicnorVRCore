@@ -12,7 +12,7 @@ public class MultiplayerClient : MonoBehaviour
 {
     #region PARAMETERS
     [Header("La IP a la que se va a conectar")]
-    public static string IP = "192.168.20.40";
+    public static string IP = "192.168.20.42";
     [Header("El puerto por el que se va a establecer la conexión")]
     public static int Port = 8080;
 
