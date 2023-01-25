@@ -518,7 +518,7 @@ public class ReplicatedAttribute : Attribute
     public ReplicatedAttribute(string filePath, string actionName, string className)
     {
         FileStream fs = OverrideCode.BothStream(filePath);
-        OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count); \n" + "//Codigo generado dinamicamente, no tocar", className);
+        OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count - 1); \n" + "//Codigo generado dinamicamente, no tocar", className);
         fs.Close();
         Debug.Log("Constructing Replicated Attribute");
     }
