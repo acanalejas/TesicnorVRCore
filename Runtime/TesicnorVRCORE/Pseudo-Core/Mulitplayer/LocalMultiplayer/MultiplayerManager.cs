@@ -342,7 +342,7 @@ public class MultiplayerManager : MonoBehaviour
                 MonoBehaviour mono = comp as MonoBehaviour;
                 Debug.Log("After parsing component to MonoBehaviour");
                 Debug.Log("Before Invoking the action");
-                mono.Invoke(data.ActionName, 0);
+                mono.Invoke("F" + data.ActionName, 0);
                 
             }
         }

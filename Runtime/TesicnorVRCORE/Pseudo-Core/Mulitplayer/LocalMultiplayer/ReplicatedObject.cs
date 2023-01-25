@@ -175,9 +175,9 @@ public class ReplicatedObjectEditor: Editor
                 string fieldType = "System.Action";
                 string fieldValue = "";
 
-                FileStream fs = OverrideCode.BothStream(path);
-                OverrideCode.AddCodeToMethod(fs, "Awake", "replicate += ()=>{" + method.Key.Name + "()" + "};", method.Key.DeclaringType.Name);
-                fs.Close();
+                //FileStream fs = OverrideCode.BothStream(path);
+                //OverrideCode.AddCodeToMethod(fs, "Awake", "replicate += ()=>{" + method.Key.Name + "()" + "};", method.Key.DeclaringType.Name);
+                //fs.Close();
             }
         }
     }
