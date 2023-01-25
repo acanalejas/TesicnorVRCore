@@ -495,12 +495,20 @@ public class MultiplayerManagerEditor : Editor
         GUILayout.Space(10);
         GUILayout.Label("Puerto que usaremos para la comunicación", EditorStyles.boldLabel);
         MultiplayerManager.Port = EditorGUILayout.IntField(MultiplayerManager.Port);
+
+        CheckActionWrapper(manager);
     }
 
     private void CheckActionWrapper(MultiplayerManager manager)
     {
+        TypeCache.FieldInfoCollection fic = TypeCache.GetFieldsWithAttribute(typeof(ReplicatedAttribute));
 
+        foreach(var f in fic)
+        {
+            f.GetCustomAttribute(typeof(ReplicatedAttribute));
+        }
     }
+
 }
 #endif
 
@@ -510,7 +518,7 @@ public class ReplicatedAttribute : Attribute
     public ReplicatedAttribute(string filePath, string actionName, string className)
     {
         FileStream fs = OverrideCode.BothStream(filePath);
-        OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count);", className);
+        OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count); \n" + "//Codigo generado dinamicamente, no tocar", className);
         fs.Close();
         Debug.Log("Constructing Replicated Attribute");
     }
