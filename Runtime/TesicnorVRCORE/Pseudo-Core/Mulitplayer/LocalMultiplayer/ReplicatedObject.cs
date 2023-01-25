@@ -180,6 +180,11 @@ public class ReplicatedObjectEditor: Editor
                 //fs.Close();
             }
         }
+
+        foreach(var field in fic)
+        {
+            field.GetCustomAttribute(typeof(ReplicatedAttribute));
+        }
     }
 }
 #endif

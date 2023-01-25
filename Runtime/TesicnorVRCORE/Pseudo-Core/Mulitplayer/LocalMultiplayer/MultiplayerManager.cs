@@ -418,7 +418,6 @@ public class MultiplayerManager : MonoBehaviour
     }
 
     Action toAdd;
-#if UNITY_EDITOR
     MethodInfo[] GetAllReplicatedMethods()
     {
 
@@ -462,7 +461,6 @@ public class MultiplayerManager : MonoBehaviour
         return allinfo.ToArray();
     }
     
-#endif
     private void AddOnInvokeReplicated()
     {
         /*if (replicatedMethods.Length <= 0) return;
@@ -506,11 +504,15 @@ public class MultiplayerManagerEditor : Editor
 }
 #endif
 
-[AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = true)]
+[AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
 public class ReplicatedAttribute : Attribute
 {
-    public ReplicatedAttribute()
+    public ReplicatedAttribute(string filePath, string actionName, string className)
     {
+        FileStream fs = OverrideCode.BothStream(filePath);
+        OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count);", className);
+        fs.Close();
+        Debug.Log("Constructing Replicated Attribute");
     }
 }
 
