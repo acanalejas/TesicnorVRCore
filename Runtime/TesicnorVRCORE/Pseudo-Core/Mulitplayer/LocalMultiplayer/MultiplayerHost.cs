@@ -70,10 +70,11 @@ public class MultiplayerHost : MonoBehaviour
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
-    private void HttpCallback(IAsyncResult result)
+    private async void HttpCallback(IAsyncResult result)
     {
         Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
         var request = context.Request;
         var _response = context.Response;
 
@@ -90,10 +91,13 @@ public class MultiplayerHost : MonoBehaviour
         Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
         MultiplayerManager.Instance.actionsData.Clear();
         MultiplayerManager.Instance.fieldDatas.Clear();
-        _response.OutputStream.Write(response_byte, 0, response_byte.Length);
-        _response.Close();
-        
-        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
+        await manageResponse(_response, response_byte);
+    }
+
+    private async Task manageResponse(HttpListenerResponse response, byte[] bytes)
+    {
+        await response.OutputStream.WriteAsync(bytes, 0, bytes.Length);
+        response.Close();
     }
 
     public void CloseLocalSession()
