@@ -44,8 +44,7 @@ public class MultiplayerClient : MonoBehaviour
                 yield return SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
             //}
             string resp = response_string;
-            MultiplayerManager.Instance.actionsData.Clear();
-            MultiplayerManager.Instance.fieldDatas.Clear();
+            
             try
             {
                 resp = response_string.Split("%")[0];
@@ -91,6 +90,9 @@ public class MultiplayerClient : MonoBehaviour
 
             //while (!request.IsSuccessStatusCode) continue;
         }
+
+        MultiplayerManager.Instance.actionsData.Clear();
+        MultiplayerManager.Instance.fieldDatas.Clear();
     }
 
     public async void ManageResponse(HttpResponseMessage response)
