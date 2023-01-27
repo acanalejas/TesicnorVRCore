@@ -428,6 +428,7 @@ public class MultiplayerManager : MonoBehaviour
             result += JsonUtility.ToJson(data) + jsonSeparator.ToString();
         }
 
+        fieldDatas.Clear();
         return result;
     }
 
