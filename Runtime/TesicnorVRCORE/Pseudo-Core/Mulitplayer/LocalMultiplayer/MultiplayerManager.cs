@@ -365,6 +365,7 @@ public class MultiplayerManager : MonoBehaviour
                 foreach (var field in fieldsJson)
                 {
                     Debug.Log("Replicating fields bb");
+                if (field.Length <= 0 || field == null || field == "") continue;
                     FieldData fd = JsonUtility.FromJson<FieldData>(field);
                     int id = 0; int.TryParse(fd.objectID, out id);
                     GameObject go = UniqueIDManager.Instance.GetGameObjectByID((int)id);
