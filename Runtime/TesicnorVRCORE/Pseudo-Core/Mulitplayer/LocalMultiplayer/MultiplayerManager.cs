@@ -353,8 +353,8 @@ public class MultiplayerManager : MonoBehaviour
             Debug.LogError("Couldn't replicate actions");
         }
 
-        try
-        {
+        //try
+        //{
             string fields = input.Split(MethodsNJsonSeparator)[2];
 
 
@@ -378,12 +378,12 @@ public class MultiplayerManager : MonoBehaviour
             }
 
 
-        }
+        //}
 
-        catch
-        {
-            Debug.LogError("Couldn't replicate fields");
-        }
+        //catch
+        //{
+        //    Debug.LogError("Couldn't replicate fields");
+        //}
     }
 
     public string FindReplicatedGameObjects_str()
