@@ -90,7 +90,6 @@ public class MultiplayerHost : MonoBehaviour
         MultiplayerManager.Instance.fieldDatas.Clear();
         _response.OutputStream.Write(response_byte, 0, response_byte.Length);
         _response.Close();
-
     }
 
     public void CloseLocalSession()

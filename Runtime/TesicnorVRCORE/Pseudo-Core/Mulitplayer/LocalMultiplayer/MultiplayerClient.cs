@@ -77,18 +77,24 @@ public class MultiplayerClient : MonoBehaviour
         var cts = new System.Threading.CancellationTokenSource();
 
         using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
-        using (HttpResponseMessage request = await httpClient.PostAsync("http://" + IP + ":8080", sc, cts.Token))
+        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":" + Port.ToString()))
         {
-            request.EnsureSuccessStatusCode();
+            request.Content = sc;
+            using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
+            {
 
-            last_content = data;
-            
-            ManageResponse(request);
+                response.EnsureSuccessStatusCode();
 
-            request.Content?.Dispose();
-            request.Content = null;
+                last_content = data;
 
-            //while (!request.IsSuccessStatusCode) continue;
+                ManageResponse(response);
+
+                request.Content?.Dispose();
+                request.Content = null;
+
+                //while (!request.IsSuccessStatusCode) continue;
+            }
+
         }
 
         MultiplayerManager.Instance.actionsData.Clear();
