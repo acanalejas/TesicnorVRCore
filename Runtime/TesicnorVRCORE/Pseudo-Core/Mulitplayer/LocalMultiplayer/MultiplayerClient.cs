@@ -44,6 +44,8 @@ public class MultiplayerClient : MonoBehaviour
                 yield return SendData(MultiplayerManager.Instance.FindReplicatedGameObjects_str());
             //}
             string resp = response_string;
+            MultiplayerManager.Instance.actionsData.Clear();
+            MultiplayerManager.Instance.fieldDatas.Clear();
             try
             {
                 resp = response_string.Split("%")[0];
@@ -56,8 +58,6 @@ public class MultiplayerClient : MonoBehaviour
             {
                 MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
                 last_response = response_string;
-                MultiplayerManager.Instance.actionsData.Clear();
-                MultiplayerManager.Instance.fieldDatas.Clear();
             }
 
             Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
