@@ -33,6 +33,15 @@ public struct ActionData
     public string ActionName;
 }
 
+public struct FieldData
+{
+    public string objectID;
+    public string returnType;
+    public string declaringType;
+    public string fieldName;
+    public string fieldValue;
+}
+
 
 [RequireComponent(typeof(UnityMainThreadInvoker))]
 [RequireComponent(typeof(UniqueIDManager))]
@@ -90,6 +99,7 @@ public class MultiplayerManager : MonoBehaviour
     private MethodInfo[] replicatedMethods;
 
     public List<ActionData> actionsData = new List<ActionData>();
+    public List<FieldData> fieldDatas = new List<FieldData>();  
     #endregion
 
     #region FUNCTIONS
@@ -250,6 +260,7 @@ public class MultiplayerManager : MonoBehaviour
     {
         string result = "";
         int index = 0;
+
         foreach(var data in input)
         {
             string data_str = JsonUtility.ToJson(data);
@@ -350,6 +361,40 @@ public class MultiplayerManager : MonoBehaviour
         {
             Debug.LogError("Couldn't replicate actions");
         }
+
+        try
+        {
+            string fields = "";
+
+            try
+            {
+                fields = input.Split(MethodsNJsonSeparator)[2];
+            }
+            catch
+            {
+                Debug.Log("Couldn't split the string to get fields");
+            }
+
+            if (fields.Length <= 0 || fields == "" || fields == null) return;
+            string[] fieldsJson = fields.Split(jsonSeparator);
+
+            foreach(var field in fieldsJson)
+            {
+                FieldData fd = JsonUtility.FromJson<FieldData>(field);
+                int id = 0; int.TryParse(fd.objectID, out id);
+                GameObject go = UniqueIDManager.Instance.GetGameObjectByID((int)id);
+
+                Component comp = go.GetComponent(fd.declaringType);
+                MonoBehaviour mono = comp as MonoBehaviour;
+                mono.SendMessage("F" + fd.fieldName, fd.fieldValue);
+            }
+
+        }
+
+        catch
+        {
+            Debug.LogError("Couldn't replicate fields");
+        }
     }
 
     public string FindReplicatedGameObjects_str()
@@ -365,7 +410,7 @@ public class MultiplayerManager : MonoBehaviour
             }
         }
 
-        result += MethodsNJsonSeparator.ToString() + FindReplicatedFunctions_str();
+        result += MethodsNJsonSeparator.ToString() + FindReplicatedFunctions_str() + MethodsNJsonSeparator.ToString() + FindReplicatedFields_str();
         return result;
     }
 
@@ -376,6 +421,20 @@ public class MultiplayerManager : MonoBehaviour
         string result = "";
 
         foreach(var data in actionsData)
+        {
+            result += JsonUtility.ToJson(data) + jsonSeparator.ToString();
+        }
+
+        return result;
+    }
+
+    public string FindReplicatedFields_str()
+    {
+        if (fieldDatas.Count <= 0) return "";
+
+        string result = "";
+
+        foreach(var data in fieldDatas)
         {
             result += JsonUtility.ToJson(data) + jsonSeparator.ToString();
         }
@@ -446,14 +505,11 @@ public class MultiplayerManager : MonoBehaviour
                     adata.objectID = UniqueIDManager.Instance.GetIDFromGameObject(_go.gameObject).ToString();
                     this.actionsData.Add(adata);
                 };
-
+                
                 Action ac = method.GetValue(_go) as Action;
                 ac += toAdd;
                 object obj = ac.Clone();
 
-                
-
-                Debug.Log(ac.GetInvocationList().Length);
                 method.SetValue(_go, obj);
             }
         }
@@ -461,16 +517,41 @@ public class MultiplayerManager : MonoBehaviour
         return allinfo.ToArray();
     }
     
-    private void AddOnInvokeReplicated()
+    public void AddFieldToReplicate(FieldData data)
     {
-        /*if (replicatedMethods.Length <= 0) return;
+        FieldData _data = data;
 
-        foreach(var _method in replicatedMethods)
+        if (alreadyContainsFieldData(data))
         {
-            Debug.Log(_method.DeclaringType);
-            
-        }*/
-        
+            _data = findFieldInList(data);
+            _data.fieldValue = data.fieldValue;
+        }
+        else
+        {
+            fieldDatas.Add(data);
+        }
+    }
+
+    bool alreadyContainsFieldData(FieldData data)
+    {
+        bool result = false;
+
+        foreach(var field in fieldDatas)
+        {
+            if (field.fieldName == data.fieldName && field.declaringType == data.declaringType) result = true;
+        }
+
+        return result;
+    }
+
+    public FieldData findFieldInList(FieldData data)
+    {
+        foreach(var field in fieldDatas)
+        {
+            if (field.fieldName == data.fieldName && field.declaringType == data.declaringType) return field;
+        }
+
+        return new FieldData();
     }
     #endregion
 }
@@ -508,11 +589,11 @@ public class MultiplayerManagerEditor : Editor
             f.GetCustomAttribute(typeof(ReplicatedAttribute));
         }
     }
-
+    
 }
 #endif
 
-[AttributeUsage(AttributeTargets.Field, AllowMultiple = true, Inherited = true)]
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.All, AllowMultiple = true, Inherited = true)]
 public class ReplicatedAttribute : Attribute
 {
     public ReplicatedAttribute(string filePath, string actionName, string className)
@@ -520,6 +601,25 @@ public class ReplicatedAttribute : Attribute
         FileStream fs = OverrideCode.BothStream(filePath);
         OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count - 1); \n" + "//Codigo generado dinamicamente, no tocar", className);
         fs.Close();
+        Debug.Log("Constructing Replicated Attribute");
+    }
+    public ReplicatedAttribute(string fieldType, string fieldName, string className, string filePath)
+    {
+
+        FileStream fs = OverrideCode.BothStream(filePath);
+        string content = fieldType + ".TryParse(input, out _" + fieldName + ");\n " + fieldName + " = _" + fieldName + ";\n //Codigo generado dinamicamente, no tocar";
+        OverrideCode.AddMethod(fs, "F" + fieldName, content, className, "string");
+        fs.Close();
+
+        FileStream fs_2 = OverrideCode.BothStream(filePath);
+        OverrideCode.AddCodeToField(fs_2, fieldType + " " + fieldName, "_" + fieldName + " = value;" + "\n" + "FieldData data = new FieldData(); \n" + "data.fieldName = " + "nameof(" + fieldName + ")" + 
+            "; \n" + "data.fieldValue = value.ToString() ; \n" +
+            "data.declaringType = " + "nameof(" + className + "); \n" + 
+            "data.returnType = " + '"' + fieldType + '"' + ";\n" + 
+            "data.objectID = " + "UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString(); \n" +
+            "MultiplayerManager.Instance.findFieldInList(data); \n",
+            "return " + "_" + fieldName + ";", className, true, fieldType);
+        fs_2.Close();
         Debug.Log("Constructing Replicated Attribute");
     }
 }

@@ -127,12 +127,14 @@ public static class OverrideCode
     /// <param name="stream">Stream already opened from the file</param>
     /// <param name="methodName">Name of the method to create</param>
     /// <param name="methodContent">Content of the method</param>
-    public static void AddMethod(FileStream stream, string methodName, string methodContent, string className)
+    public static void AddMethod(FileStream stream, string methodName, string methodContent, string className, string inputType = "")
     {
         if (!stream.CanWrite || !stream.CanRead) return;
         if (methodName == "" || methodName == null || methodContent == "" || methodContent == null) return;
 
-        string _method = "public void " + methodName + "() \n " +
+        string inputName = "";
+        if (inputType != "") inputName = " input";
+        string _method = "public void " + methodName + "(" + inputType + " " + inputName + ") \n " +
             "{\n" +
                "   " + methodContent +
                "\n }";
@@ -201,6 +203,13 @@ public static class OverrideCode
         stream.Write(Encoding.UTF8.GetBytes(result_str), 0, result_str.Length);
     }
 
+    /// <summary>
+    /// Ads input code to the desired method
+    /// </summary>
+    /// <param name="stream">File stream of the class file</param>
+    /// <param name="methodName">Name of the method to modify</param>
+    /// <param name="newContent">Content that is going to be added</param>
+    /// <param name="className">Name of the class that contains the method</param>
     public static void AddCodeToMethod(FileStream stream, string methodName, string newContent, string className)
     {
         if (methodName == null || methodName.Length == 0 || className == null || className.Length == 0 || newContent == null || newContent.Length == 0) return;
@@ -261,6 +270,77 @@ public static class OverrideCode
         stream.Write(Encoding.UTF8.GetBytes(result_str), 0, result_str.Length);
     }
 
+    public static void AddCodeToField(FileStream stream, string fieldName, string SetContent, string GetContent, string className, bool addParameter = true, string parameterType = "")
+    {
+        if (fieldName == "" || fieldName == null || className == "" || className == null) return;
+        if (!stream.CanWrite || !stream.CanRead) return;
+
+        char[] buffer = new char[stream.Length];
+
+        StreamReader sr = new StreamReader(stream);
+        sr.ReadBlock(buffer, 0, (int)stream.Length);
+
+        int afterNameIndex = SearchWordInCharArray(fieldName, buffer);
+
+        char[] prebuffer = new char[afterNameIndex];
+
+        for(int i = 0; i < prebuffer.Length; i++)
+        {
+            prebuffer[i] = buffer[i];
+        }
+
+        string content = "";
+        if(SetContent != "" && SetContent != null)
+        {
+            content = "{ set{" + SetContent + "}";
+        }
+        else if(GetContent != null && GetContent != "")
+        {
+            content = "{";
+        }
+        if (GetContent != "" && GetContent != null)
+        {
+            content += "get{" + GetContent + "}}";
+        }
+        else if (content.Length > 0) 
+        {
+            content += "}";
+        }
+        if (addParameter)
+        {
+            string name = fieldName;
+            if (fieldName.Contains(" ")) name = fieldName.Split(' ')[1];
+            content += "\n \n private " + parameterType + " " + "_" + name + ";";
+        }
+
+        if (SearchWordInCharArray(content, buffer) > 0) return;
+
+        char[] inyected = content.ToCharArray();
+
+        char[] postBuffer = new char[buffer.Length - afterNameIndex];
+        for(int i = afterNameIndex; i < buffer.Length; i++)
+        {
+            postBuffer[i - afterNameIndex] = buffer[i];
+        }
+
+        if(content.Length > 0)
+        {
+            if (postBuffer[0] == ';') postBuffer[0] = ' ';
+            else if (postBuffer[1] == ';') postBuffer[1] = ' ';
+            else if (postBuffer[2] == ';') postBuffer[2] = ' ';
+        }
+
+        string result = "";
+        foreach (var c in prebuffer) if(c != char.MinValue) result += c;
+        foreach (var c in inyected) if (c != char.MinValue) result += c;
+        foreach (var c in postBuffer) if (c != char.MinValue) result += c;
+
+        MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(result));
+        ms.CopyTo(stream);
+        stream.SetLength(0);
+        stream.Write(Encoding.UTF8.GetBytes(result), 0, result.Length);
+    }
+
     /// <summary>
     /// Busca una palabra en un array de caracteres y devuelve el índice de la siguiente posicion a la palabra
     /// </summary>
@@ -278,19 +358,26 @@ public static class OverrideCode
         {
             if(array[i] == word[0])
             {
-                bools[0] = true;
-                for(int h = 1; h < word.Length; h++)
+                if(i > 0)
                 {
-                    if (array[i + h] == word[h])
+                    if (array[i - 1] != '"' || array[i - 2] != '"')
                     {
-                        bools[h] = true;
-                    }
-                    else
-                    {
-                        for (int j = 0; j < bools.Length; j++) bools[j] = false;
-                        break;
+                        bools[0] = true;
+                        for (int h = 1; h < word.Length; h++)
+                        {
+                            if (array[i + h] == word[h])
+                            {
+                                bools[h] = true;
+                            }
+                            else
+                            {
+                                for (int j = 0; j < bools.Length; j++) bools[j] = false;
+                                break;
+                            }
+                        }
                     }
                 }
+                
             }
 
             bool allTrue = true;
