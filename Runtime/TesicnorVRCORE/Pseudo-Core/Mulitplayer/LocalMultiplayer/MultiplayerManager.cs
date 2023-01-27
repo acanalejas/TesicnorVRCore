@@ -353,8 +353,8 @@ public class MultiplayerManager : MonoBehaviour
             Debug.LogError("Couldn't replicate actions");
         }
 
-        try
-        {
+       // try
+        //{
             string fields = "";
 
             try
@@ -390,12 +390,12 @@ public class MultiplayerManager : MonoBehaviour
                 Debug.Log("Wrapper invoked correctly");
             }
 
-        }
+        //}
 
-        catch
-        {
-            Debug.LogError("Couldn't replicate fields");
-        }
+        //catch
+        //{
+        //    Debug.LogError("Couldn't replicate fields");
+        //}
     }
 
     public string FindReplicatedGameObjects_str()
