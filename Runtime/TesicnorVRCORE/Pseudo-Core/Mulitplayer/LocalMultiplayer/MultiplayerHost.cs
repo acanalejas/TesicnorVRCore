@@ -72,14 +72,16 @@ public class MultiplayerHost : MonoBehaviour
 
     private void HttpCallback(IAsyncResult result)
     {
+        Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
-        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
         var request = context.Request;
         var _response = context.Response;
 
         MemoryStream ms = new MemoryStream();
         request.InputStream.CopyTo(ms);
         content = Encoding.UTF8.GetString(ms.ToArray());
+        ms.Close();
+        request.InputStream.Close();
         Debug.Log("Request content is : " + content);
 
         string response_str = "";
@@ -90,6 +92,8 @@ public class MultiplayerHost : MonoBehaviour
         MultiplayerManager.Instance.fieldDatas.Clear();
         _response.OutputStream.Write(response_byte, 0, response_byte.Length);
         _response.Close();
+        
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
     public void CloseLocalSession()

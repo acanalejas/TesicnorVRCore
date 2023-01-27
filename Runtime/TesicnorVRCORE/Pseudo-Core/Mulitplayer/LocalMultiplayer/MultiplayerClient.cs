@@ -83,7 +83,7 @@ public class MultiplayerClient : MonoBehaviour
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
             {
 
-                response.EnsureSuccessStatusCode();
+                //response.EnsureSuccessStatusCode();
 
                 last_content = data;
 
