@@ -60,6 +60,7 @@ public class MultiplayerClient : MonoBehaviour
 
             Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
             MultiplayerManager.Instance.actionsData.Clear();
+            MultiplayerManager.Instance.fieldDatas.Clear();
             yield return new WaitForSeconds(1 / 30);
         }
         

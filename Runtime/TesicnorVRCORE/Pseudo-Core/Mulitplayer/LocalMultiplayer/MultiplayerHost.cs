@@ -87,6 +87,7 @@ public class MultiplayerHost : MonoBehaviour
         byte[] response_byte = Encoding.UTF8.GetBytes(response);
         Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
         MultiplayerManager.Instance.actionsData.Clear();
+        MultiplayerManager.Instance.fieldDatas.Clear();
         _response.OutputStream.Write(response_byte, 0, response_byte.Length);
         _response.Close();
 
