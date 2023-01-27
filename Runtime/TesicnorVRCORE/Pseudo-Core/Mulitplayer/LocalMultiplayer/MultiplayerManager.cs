@@ -617,7 +617,7 @@ public class ReplicatedAttribute : Attribute
             "data.declaringType = " + "nameof(" + className + "); \n" + 
             "data.returnType = " + '"' + fieldType + '"' + ";\n" + 
             "data.objectID = " + "UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString(); \n" +
-            "MultiplayerManager.Instance.findFieldInList(data); \n",
+            "MultiplayerManager.Instance.AddFieldToReplicate(data); \n",
             "return " + "_" + fieldName + ";", className, true, fieldType);
         fs_2.Close();
         Debug.Log("Constructing Replicated Attribute");
