@@ -366,7 +366,6 @@ public class MultiplayerManager : MonoBehaviour
                 Debug.LogError("Couldn't split the string to get fields");
             }
 
-            Debug.Log("Before replicating fields");
 
             if (fields.Length <= 0 || fields == "" || fields == null) return;
             string[] fieldsJson = fields.Split(jsonSeparator);
@@ -375,14 +374,20 @@ public class MultiplayerManager : MonoBehaviour
             {
                 Debug.Log("Replicating fields bb");
                 FieldData fd = JsonUtility.FromJson<FieldData>(field);
+                Debug.Log("Is fieldData null? : " + (fd.fieldName.Length <= 0));
                 int id = 0; int.TryParse(fd.objectID, out id);
+                Debug.Log("Id parsed correctly");
                 GameObject go = UniqueIDManager.Instance.GetGameObjectByID((int)id);
+                Debug.Log("Is gameObject null? : " + (go == null));
 
                 Component comp = go.GetComponent(fd.declaringType);
+                Debug.Log("Is the component null? : " + (comp == null));
                 MonoBehaviour mono = comp as MonoBehaviour;
+                Debug.Log("Is the monobehaviour null? : " + (mono == null));
                 object[] objs = new object[1];
                 objs[0] = fd.fieldValue;
                 mono.GetType().GetMethod("F" + fd.fieldName).Invoke(mono, objs);
+                Debug.Log("Wrapper invoked correctly");
             }
 
         }
