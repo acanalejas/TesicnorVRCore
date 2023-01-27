@@ -353,49 +353,37 @@ public class MultiplayerManager : MonoBehaviour
             Debug.LogError("Couldn't replicate actions");
         }
 
-       // try
-        //{
-            string fields = "";
+        try
+        {
+            string fields = input.Split(MethodsNJsonSeparator)[2];
 
-            try
+
+            if (fields.Length > 0)
             {
-                fields = input.Split(MethodsNJsonSeparator)[2];
-            }
-            catch
-            {
-                Debug.LogError("Couldn't split the string to get fields");
-            }
+                string[] fieldsJson = fields.Split(jsonSeparator);
 
+                foreach (var field in fieldsJson)
+                {
+                    Debug.Log("Replicating fields bb");
+                    FieldData fd = JsonUtility.FromJson<FieldData>(field);
+                    int id = 0; int.TryParse(fd.objectID, out id);
+                    GameObject go = UniqueIDManager.Instance.GetGameObjectByID((int)id);
 
-            if (fields.Length <= 0 || fields == "" || fields == null) return;
-            string[] fieldsJson = fields.Split(jsonSeparator);
-
-            foreach(var field in fieldsJson)
-            {
-                Debug.Log("Replicating fields bb");
-                FieldData fd = JsonUtility.FromJson<FieldData>(field);
-                Debug.Log("Is fieldData null? : " + (fd.fieldName.Length <= 0));
-                int id = 0; int.TryParse(fd.objectID, out id);
-                Debug.Log("Id parsed correctly");
-                GameObject go = UniqueIDManager.Instance.GetGameObjectByID((int)id);
-                Debug.Log("Is gameObject null? : " + (go == null));
-
-                Component comp = go.GetComponent(fd.declaringType);
-                Debug.Log("Is the component null? : " + (comp == null));
-                MonoBehaviour mono = comp as MonoBehaviour;
-                Debug.Log("Is the monobehaviour null? : " + (mono == null));
-                object[] objs = new object[1];
-                objs[0] = fd.fieldValue;
-                mono.GetType().GetMethod("F" + fd.fieldName).Invoke(mono, objs);
-                Debug.Log("Wrapper invoked correctly");
+                    Component comp = go.GetComponent(fd.declaringType);
+                    MonoBehaviour mono = comp as MonoBehaviour;
+                    object[] objs = new object[1];
+                    objs[0] = fd.fieldValue;
+                    mono.GetType().GetMethod("F" + fd.fieldName).Invoke(mono, objs);
+                }
             }
 
-        //}
 
-        //catch
-        //{
-        //    Debug.LogError("Couldn't replicate fields");
-        //}
+        }
+
+        catch
+        {
+            Debug.LogError("Couldn't replicate fields");
+        }
     }
 
     public string FindReplicatedGameObjects_str()
