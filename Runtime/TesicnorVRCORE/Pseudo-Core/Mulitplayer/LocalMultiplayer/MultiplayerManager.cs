@@ -234,7 +234,6 @@ public class MultiplayerManager : MonoBehaviour
         float.TryParse(splitted[1], out y);
         float.TryParse(splitted[2], out z);
 
-        Debug.Log("Vector from string " + x.ToString() + y.ToString() + z.ToString());
         return new Vector3(x, y, z);
     }
 
@@ -285,7 +284,6 @@ public class MultiplayerManager : MonoBehaviour
         foreach(var data in datas)
         {
             if (data == "" || data == null || data.Length <= 0) break;
-            Debug.Log("Data splitted is : " + data);
             GameObjectData _data = JsonUtility.FromJson<GameObjectData>(data);
 
             if(data != null)
@@ -305,8 +303,6 @@ public class MultiplayerManager : MonoBehaviour
         {
             string jsonObjects = input.Split(MethodsNJsonSeparator.ToString())[0];
             GameObjectData[] allData = allData_god(input);
-            Debug.Log("Json parsed & AllDataLength : " + allData.Length);
-            Debug.Log("All replicated length : " + allReplicated.Length);
 
             if (allData.Length > 0)
             {
@@ -335,26 +331,21 @@ public class MultiplayerManager : MonoBehaviour
                 Debug.LogError("Error at spliting the string");
                 return;
             }
-            if (methods.Length <= 0 || methods == "" || methods == null) return;
-            string[] methodsJson = methods.Split(jsonSeparator.ToString());
-
-            foreach(var method in methodsJson)
+            if (methods.Length > 0)
             {
-                Debug.Log("Before parsing to struct");
-                ActionData data = JsonUtility.FromJson<ActionData>(method);
-                Debug.Log("After parsing to struct");
-                int id = 0; int.TryParse(data.objectID, out id);
-                Debug.Log("After parsing string id : " + id);
-                if (UniqueIDManager.Instance == null) Debug.Log("UniqueIDManager null value");
-                GameObject go = UniqueIDManager.Instance.GetGameObjectByID(id);
-                Debug.Log("After Getting the GO by ID");
-                Component comp = go.GetComponent(data.TypeName);
-                Debug.Log("After getting the component");
-                MonoBehaviour mono = comp as MonoBehaviour;
-                Debug.Log("After parsing component to MonoBehaviour");
-                Debug.Log("Before Invoking the action");
-                mono.Invoke("F" + data.ActionName, 0);
-                
+                string[] methodsJson = methods.Split(jsonSeparator.ToString());
+
+                foreach (var method in methodsJson)
+                {
+                    ActionData data = JsonUtility.FromJson<ActionData>(method);
+                    int id = 0; int.TryParse(data.objectID, out id);
+                    if (UniqueIDManager.Instance == null) Debug.Log("UniqueIDManager null value");
+                    GameObject go = UniqueIDManager.Instance.GetGameObjectByID(id);
+                    Component comp = go.GetComponent(data.TypeName);
+                    MonoBehaviour mono = comp as MonoBehaviour;
+                    mono.Invoke("F" + data.ActionName, 0);
+
+                }
             }
         }
         catch
@@ -372,21 +363,26 @@ public class MultiplayerManager : MonoBehaviour
             }
             catch
             {
-                Debug.Log("Couldn't split the string to get fields");
+                Debug.LogError("Couldn't split the string to get fields");
             }
+
+            Debug.Log("Before replicating fields");
 
             if (fields.Length <= 0 || fields == "" || fields == null) return;
             string[] fieldsJson = fields.Split(jsonSeparator);
 
             foreach(var field in fieldsJson)
             {
+                Debug.Log("Replicating fields bb");
                 FieldData fd = JsonUtility.FromJson<FieldData>(field);
                 int id = 0; int.TryParse(fd.objectID, out id);
                 GameObject go = UniqueIDManager.Instance.GetGameObjectByID((int)id);
 
                 Component comp = go.GetComponent(fd.declaringType);
                 MonoBehaviour mono = comp as MonoBehaviour;
-                mono.SendMessage("F" + fd.fieldName, fd.fieldValue);
+                object[] objs = new object[1];
+                objs[0] = fd.fieldValue;
+                mono.GetType().GetMethod("F" + fd.fieldName).Invoke(mono, objs);
             }
 
         }
@@ -487,14 +483,11 @@ public class MultiplayerManager : MonoBehaviour
         foreach(var method in methods)
         {
             Type _type = method.DeclaringType;
-            Debug.Log("Declaring type is : " + _type.FullName);
             UnityEngine.Object[] gos = GameObject.FindObjectsOfType(_type);
-            Debug.Log("Objects with the type : " + gos.Length);
             
             foreach(var go in gos)
             {
                 Component _go = go as Component;
-                Debug.Log("Component type is : " + _go.GetType());
                 MonoBehaviour mono = go as MonoBehaviour;
 
                 toAdd = () =>
