@@ -91,24 +91,6 @@ public class MultiplayerHost : MonoBehaviour
         buffer.Add(_buff);
         manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
     }
-    private async Task HandleBuffer(HttpListenerResponse response)
-    {
-        if (buffer.Count <= 0) return;
-
-        byte[] toRead = buffer[0];
-
-        await Task.Run(() =>
-        {
-            lock (buffer)
-            {
-                lock (response)
-                {
-                    
-                    buffer.Remove(toRead);
-                }
-            }
-        });
-    }
 
     private void manageRequest()
     {
@@ -122,9 +104,9 @@ public class MultiplayerHost : MonoBehaviour
 
     }
 
-    private async void manageResponse(HttpListenerResponse response, byte[] bytes)
+    private void manageResponse(HttpListenerResponse response, byte[] bytes)
     {
-        await response.OutputStream.WriteAsync(bytes, 0, bytes.Length);
+        response.OutputStream.Write(bytes, 0, bytes.Length);
         response.Close();
         buffer.Remove(bytes);
     }
