@@ -74,6 +74,7 @@ public class MultiplayerClient : MonoBehaviour
 
     public async Task SendData(string data)
     {
+        if (data == last_content) return;
         var cts = new System.Threading.CancellationTokenSource();
 
         using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
