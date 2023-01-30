@@ -61,37 +61,38 @@ public class MultiplayerHost : MonoBehaviour
     public void CreateLocalSession()
     {
         host = new HttpListener();
-        host.Prefixes.Clear();
         Debug.Log(IP);
         host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
         //CloseLocalSession();
         if(!host.IsListening)host.Start();
-
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
     private async void HttpCallback(IAsyncResult result)
     {
-        Debug.Log("Receiving a request");
         var context = host.EndGetContext(result);
-        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
         var request = context.Request;
         var _response = context.Response;
+        byte[] response_byte = await manageRequest(request);
+        await manageResponse(_response, response_byte);
+    }
+
+    private async Task<byte[]> manageRequest(HttpListenerRequest request)
+    {
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
 
         MemoryStream ms = new MemoryStream();
-        request.InputStream.CopyTo(ms);
+        await request.InputStream.CopyToAsync(ms);
         content = Encoding.UTF8.GetString(ms.ToArray());
         ms.Close();
-        request.InputStream.Close();
-        Debug.Log("Request content is : " + content);
 
         string response_str = "";
         response_str = this.response;
         byte[] response_byte = Encoding.UTF8.GetBytes(response);
-        Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
         MultiplayerManager.Instance.actionsData.Clear();
         MultiplayerManager.Instance.fieldDatas.Clear();
-        await manageResponse(_response, response_byte);
+
+        return response_byte;
     }
 
     private async Task manageResponse(HttpListenerResponse response, byte[] bytes)
