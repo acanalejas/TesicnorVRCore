@@ -78,6 +78,7 @@ public class MultiplayerHost : MonoBehaviour
         host = new HttpListener();
         Debug.Log(IP);
         host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
+        
         //CloseLocalSession();
         if(!host.IsListening)host.Start();
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
@@ -95,8 +96,9 @@ public class MultiplayerHost : MonoBehaviour
 
         byte[] _buff = ms.ToArray();
         ms.Close();
-        if(_buff.Length > 0)
-        buffer.Add(_buff);
+        if (_buff.Length > 0)
+            buffer.Add(_buff);
+        else return;
         manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
     }
 

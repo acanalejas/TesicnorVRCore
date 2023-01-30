@@ -81,7 +81,7 @@ public class MultiplayerClient : MonoBehaviour
         if (data == last_content || data == last_response) _data = "";
 
         using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(_data)))
-        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":" + Port.ToString()))
+        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
         {
             request.Content = sc;
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
