@@ -60,7 +60,7 @@ public class MultiplayerHost : MonoBehaviour
             Debug.LogError("Couldn't get the string for the response");
         }
 
-        ManageContexts();
+        //ManageContexts();
             
     }
 
@@ -74,6 +74,7 @@ public class MultiplayerHost : MonoBehaviour
         byte[] bytes = manageRequest(request);
         await manageResponse(response, bytes);
 
+        if(contexts.Count > 0)
         contexts.RemoveAt(0);
 
     }
@@ -92,6 +93,7 @@ public class MultiplayerHost : MonoBehaviour
     {
         var context = host.EndGetContext(result);
         contexts.Add(context);
+        ManageContexts();
     }
     private async Task HandleBuffer(HttpListenerResponse response)
     {

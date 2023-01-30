@@ -74,10 +74,13 @@ public class MultiplayerClient : MonoBehaviour
 
     public async Task SendData(string data)
     {
-        if (data == last_content) return;
+        //if (data == last_content) return;
         var cts = new System.Threading.CancellationTokenSource();
 
-        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
+        string _data = data;
+        if (data == last_content) _data = "";
+
+        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(_data)))
         using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":" + Port.ToString()))
         {
             request.Content = sc;
