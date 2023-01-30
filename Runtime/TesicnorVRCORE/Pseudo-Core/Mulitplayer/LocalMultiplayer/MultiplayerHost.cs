@@ -60,23 +60,8 @@ public class MultiplayerHost : MonoBehaviour
             Debug.LogError("Couldn't get the string for the response");
         }
 
-        //ManageContexts();
+        manageRequest();
             
-    }
-
-    private async void ManageContexts()
-    {
-        if (contexts.Count <= 0) return;
-
-        var request = contexts[0].Request;
-        var response = contexts[0].Response;
-
-        byte[] bytes = manageRequest(request);
-        await manageResponse(response, bytes);
-
-        if(contexts.Count > 0)
-        contexts.RemoveAt(0);
-
     }
 
     public void CreateLocalSession()
@@ -92,8 +77,19 @@ public class MultiplayerHost : MonoBehaviour
     private async void HttpCallback(IAsyncResult result)
     {
         var context = host.EndGetContext(result);
-        contexts.Add(context);
-        ManageContexts();
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
+
+        MemoryStream ms = new MemoryStream();
+        context.Request.InputStream.CopyTo(ms);
+        
+
+        byte[] _buff = ms.ToArray();
+        Debug.Log(_buff.Length);
+        Debug.Log(buffer.Count);
+        ms.Close();
+        if(_buff.Length > 0)
+        buffer.Add(_buff);
+        await manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
     }
     private async Task HandleBuffer(HttpListenerResponse response)
     {
@@ -107,29 +103,23 @@ public class MultiplayerHost : MonoBehaviour
             {
                 lock (response)
                 {
-                    manageResponse(response, toRead).Wait();
+                    
                     buffer.Remove(toRead);
                 }
             }
         });
     }
 
-    private byte[] manageRequest(HttpListenerRequest request)
+    private void manageRequest()
     {
-        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
+        if (buffer.Count <= 0) return;
 
-        MemoryStream ms = new MemoryStream();
-        request.InputStream.CopyTo(ms);
-        content = Encoding.UTF8.GetString(ms.ToArray());
-        ms.Close();
+        content = Encoding.UTF8.GetString(buffer[0]);
+        buffer.RemoveAt(0);
 
-        string response_str = "";
-        response_str = this.response;
-        byte[] response_byte = Encoding.UTF8.GetBytes(response);
         MultiplayerManager.Instance.actionsData.Clear();
         MultiplayerManager.Instance.fieldDatas.Clear();
 
-        return response_byte;
     }
 
     private async Task manageResponse(HttpListenerResponse response, byte[] bytes)

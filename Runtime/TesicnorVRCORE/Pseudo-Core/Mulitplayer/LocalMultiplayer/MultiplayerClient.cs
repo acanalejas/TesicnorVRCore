@@ -78,7 +78,7 @@ public class MultiplayerClient : MonoBehaviour
         var cts = new System.Threading.CancellationTokenSource();
 
         string _data = data;
-        if (data == last_content) _data = "";
+        if (data == last_content || data == last_response) _data = "";
 
         using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(_data)))
         using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Put, "http://" + IP + ":" + Port.ToString()))
