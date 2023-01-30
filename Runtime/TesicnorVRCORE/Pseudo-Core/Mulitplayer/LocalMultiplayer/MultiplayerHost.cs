@@ -25,6 +25,8 @@ public class MultiplayerHost : MonoBehaviour
 
     string response;
 
+    List<byte[]> buffer = new List<byte[]>();
+
     #endregion
 
     #region FUNCTIONS
@@ -65,15 +67,7 @@ public class MultiplayerHost : MonoBehaviour
         host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
         //CloseLocalSession();
         if(!host.IsListening)host.Start();
-        Listen();
-    }
-
-    private async Task Listen()
-    {
-        await Task.Run(() =>
-        {
-            host.BeginGetContext(new AsyncCallback(HttpCallback), host);
-        });
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
     private async void HttpCallback(IAsyncResult result)
@@ -81,13 +75,30 @@ public class MultiplayerHost : MonoBehaviour
         var context = host.EndGetContext(result);
         var request = context.Request;
         var _response = context.Response;
-        byte[] response_byte = await manageRequest(request);
-        await manageResponse(_response, response_byte);
+        buffer.Add(await manageRequest(request));
+        await HandleBuffer(_response);
+    }
+    private async Task HandleBuffer(HttpListenerResponse response)
+    {
+        if (buffer.Count <= 0) return;
+
+        byte[] toRead = buffer[0];
+
+        await Task.Run(() =>
+        {
+            lock (buffer)
+            {
+                lock (response)
+                {
+                    manageResponse(response, toRead);
+                }
+            }
+        });
     }
 
     private async Task<byte[]> manageRequest(HttpListenerRequest request)
     {
-        await Listen();
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
 
         MemoryStream ms = new MemoryStream();
         await request.InputStream.CopyToAsync(ms);
