@@ -74,7 +74,7 @@ public class MultiplayerHost : MonoBehaviour
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
-    private async void HttpCallback(IAsyncResult result)
+    private void HttpCallback(IAsyncResult result)
     {
         var context = host.EndGetContext(result);
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
@@ -89,7 +89,7 @@ public class MultiplayerHost : MonoBehaviour
         ms.Close();
         if(_buff.Length > 0)
         buffer.Add(_buff);
-        await manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
+        manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
     }
     private async Task HandleBuffer(HttpListenerResponse response)
     {
@@ -122,7 +122,7 @@ public class MultiplayerHost : MonoBehaviour
 
     }
 
-    private async Task manageResponse(HttpListenerResponse response, byte[] bytes)
+    private async void manageResponse(HttpListenerResponse response, byte[] bytes)
     {
         await response.OutputStream.WriteAsync(bytes, 0, bytes.Length);
         response.Close();
