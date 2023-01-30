@@ -18,7 +18,7 @@ namespace StreamingCSharp
         {
             client = new HttpClient();
             client.Timeout = new TimeSpan(0, 1, 0);
-            client.MaxResponseContentBufferSize = 256;
+            client.MaxResponseContentBufferSize = 15000;
             client.BaseAddress = new Uri(url);
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/image"));

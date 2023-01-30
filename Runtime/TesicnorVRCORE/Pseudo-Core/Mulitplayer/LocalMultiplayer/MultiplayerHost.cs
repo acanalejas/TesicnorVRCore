@@ -78,7 +78,6 @@ public class MultiplayerHost : MonoBehaviour
         host = new HttpListener();
         Debug.Log(IP);
         host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
-        
         //CloseLocalSession();
         if(!host.IsListening)host.Start();
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);

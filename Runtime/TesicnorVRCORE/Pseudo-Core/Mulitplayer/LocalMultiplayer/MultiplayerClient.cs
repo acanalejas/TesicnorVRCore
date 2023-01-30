@@ -67,37 +67,39 @@ public class MultiplayerClient : MonoBehaviour
     }
     public void StartClient()
     {
-        httpClient = new HttpClient();
+        /*httpClient = new HttpClient();
         httpClient.BaseAddress = new System.Uri("http://" + IP + ":" + Port.ToString());
-        httpClient.DefaultRequestHeaders.Accept.Clear();
+        httpClient.DefaultRequestHeaders.Accept.Clear();*/
+        StreamingCSharp.HttpClient_Custom.url = "http://" + IP + ":" + Port.ToString();
+        StreamingCSharp.HttpClient_Custom.IntializeClient();
     }
 
     public async Task SendData(string data)
     {
         //if (data == last_content) return;
-        var cts = new System.Threading.CancellationTokenSource();
-
-        string _data = data;
-        if (data == last_content || data == last_response) _data = "";
-
-        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(_data)))
-        using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
-        {
-            request.Content = sc;
-            Debug.Log(sc.ReadAsByteArrayAsync().Result.Length);
-            using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
-            {
-
-                last_content = data;
-
-                ManageResponse(response);
-
-                request.Content?.Dispose();
-                request.Content = null;
-            }
-
-        }
-
+        //var cts = new System.Threading.CancellationTokenSource();
+        //
+        //string _data = data;
+        //if (data == last_content || data == last_response) _data = "";
+        //
+        //using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(_data)))
+        //using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
+        //{
+        //    request.Content = sc;
+        //    Debug.Log(sc.ReadAsByteArrayAsync().Result.Length);
+        //    using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
+        //    {
+        //
+        //        last_content = data;
+        //
+        //        ManageResponse(response);
+        //
+        //        request.Content?.Dispose();
+        //        request.Content = null;
+        //    }
+        //
+        //}
+        await StreamingCSharp.HttpClient_Custom.SendData(Encoding.UTF8.GetBytes(data));
         MultiplayerManager.Instance.actionsData.Clear();
         MultiplayerManager.Instance.fieldDatas.Clear();
     }
