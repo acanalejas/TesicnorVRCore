@@ -27,6 +27,8 @@ public class MultiplayerHost : MonoBehaviour
 
     List<byte[]> buffer = new List<byte[]>();
 
+    List<HttpListenerContext> contexts = new List<HttpListenerContext>();
+
     #endregion
 
     #region FUNCTIONS
@@ -57,7 +59,21 @@ public class MultiplayerHost : MonoBehaviour
         {
             Debug.LogError("Couldn't get the string for the response");
         }
+
+        ManageContexts();
             
+    }
+
+    private void ManageContexts()
+    {
+        if (contexts.Count <= 0) return;
+
+        var request = contexts[0].Request;
+        var response = contexts[0].Response;
+
+        byte[] bytes = manageRequest(request);
+        manageResponse(response, bytes);
+
     }
 
     public void CreateLocalSession()
@@ -73,10 +89,7 @@ public class MultiplayerHost : MonoBehaviour
     private async void HttpCallback(IAsyncResult result)
     {
         var context = host.EndGetContext(result);
-        var request = context.Request;
-        var _response = context.Response;
-        buffer.Add(await manageRequest(request));
-        await manageResponse(_response, buffer[0]);
+        contexts.Add(context);
     }
     private async Task HandleBuffer(HttpListenerResponse response)
     {
@@ -97,12 +110,12 @@ public class MultiplayerHost : MonoBehaviour
         });
     }
 
-    private async Task<byte[]> manageRequest(HttpListenerRequest request)
+    private byte[] manageRequest(HttpListenerRequest request)
     {
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
 
         MemoryStream ms = new MemoryStream();
-        await request.InputStream.CopyToAsync(ms);
+        request.InputStream.CopyTo(ms);
         content = Encoding.UTF8.GetString(ms.ToArray());
         ms.Close();
 
