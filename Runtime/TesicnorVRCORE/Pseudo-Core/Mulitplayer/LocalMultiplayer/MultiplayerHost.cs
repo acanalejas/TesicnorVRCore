@@ -74,6 +74,8 @@ public class MultiplayerHost : MonoBehaviour
         byte[] bytes = manageRequest(request);
         manageResponse(response, bytes);
 
+        contexts.RemoveAt(0);
+
     }
 
     public void CreateLocalSession()
