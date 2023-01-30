@@ -64,7 +64,7 @@ public class MultiplayerHost : MonoBehaviour
             
     }
 
-    private void ManageContexts()
+    private async void ManageContexts()
     {
         if (contexts.Count <= 0) return;
 
@@ -72,7 +72,7 @@ public class MultiplayerHost : MonoBehaviour
         var response = contexts[0].Response;
 
         byte[] bytes = manageRequest(request);
-        manageResponse(response, bytes);
+        await manageResponse(response, bytes);
 
         contexts.RemoveAt(0);
 
