@@ -41,8 +41,9 @@ public class MultiplayerHost : MonoBehaviour
     {
         try
         {
-            if (content != lastContent && content != "")
-            { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
+            //if (content != lastContent && content != "")
+            //{ MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
+            MultiplayerManager.Instance.FindReplicatedGameObjects(content);
             lastContent = content;
         }
         catch
@@ -81,11 +82,10 @@ public class MultiplayerHost : MonoBehaviour
 
         MemoryStream ms = new MemoryStream();
         context.Request.InputStream.CopyTo(ms);
+        context.Request.InputStream.Close();
         
 
         byte[] _buff = ms.ToArray();
-        Debug.Log(_buff.Length);
-        Debug.Log(buffer.Count);
         ms.Close();
         if(_buff.Length > 0)
         buffer.Add(_buff);
@@ -108,7 +108,6 @@ public class MultiplayerHost : MonoBehaviour
     {
         response.OutputStream.Write(bytes, 0, bytes.Length);
         response.Close();
-        buffer.Remove(bytes);
     }
 
     public void CloseLocalSession()
