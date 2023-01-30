@@ -90,7 +90,8 @@ public class MultiplayerHost : MonoBehaviour
             {
                 lock (response)
                 {
-                    manageResponse(response, toRead);
+                    manageResponse(response, toRead).Wait();
+                    buffer.Remove(toRead);
                 }
             }
         });
