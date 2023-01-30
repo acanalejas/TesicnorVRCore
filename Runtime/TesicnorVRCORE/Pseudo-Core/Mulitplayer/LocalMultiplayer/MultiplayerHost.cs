@@ -35,15 +35,24 @@ public class MultiplayerHost : MonoBehaviour
     private void Start()
     {
         if (initializeOnStart) CreateLocalSession();
+        StartCoroutine("update");
+    }
+
+    IEnumerator update()
+    {
+        while (true)
+        {
+            manageRequest();
+            yield return new WaitForSeconds(1 / 30);
+        }
     }
 
     private void Update()
     {
         try
         {
-            //if (content != lastContent && content != "")
-            //{ MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
-            MultiplayerManager.Instance.FindReplicatedGameObjects(content);
+            if (content != lastContent && content != "")
+            { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
             lastContent = content;
         }
         catch
@@ -61,7 +70,6 @@ public class MultiplayerHost : MonoBehaviour
             Debug.LogError("Couldn't get the string for the response");
         }
 
-        manageRequest();
             
     }
 
