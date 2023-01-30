@@ -84,10 +84,9 @@ public class MultiplayerClient : MonoBehaviour
         using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
         {
             request.Content = sc;
+            Debug.Log(sc.ReadAsByteArrayAsync().Result.Length);
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
             {
-
-                //response.EnsureSuccessStatusCode();
 
                 last_content = data;
 
@@ -95,8 +94,6 @@ public class MultiplayerClient : MonoBehaviour
 
                 request.Content?.Dispose();
                 request.Content = null;
-
-                //while (!request.IsSuccessStatusCode) continue;
             }
 
         }

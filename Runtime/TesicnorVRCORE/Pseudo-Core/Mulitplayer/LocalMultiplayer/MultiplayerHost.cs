@@ -98,7 +98,6 @@ public class MultiplayerHost : MonoBehaviour
         ms.Close();
         if (_buff.Length > 0)
             buffer.Add(_buff);
-        else return;
         manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
     }
 
