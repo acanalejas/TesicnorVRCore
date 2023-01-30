@@ -76,7 +76,7 @@ public class MultiplayerHost : MonoBehaviour
         var request = context.Request;
         var _response = context.Response;
         buffer.Add(await manageRequest(request));
-        await HandleBuffer(_response);
+        await manageResponse(_response, buffer[0]);
     }
     private async Task HandleBuffer(HttpListenerResponse response)
     {
@@ -119,6 +119,7 @@ public class MultiplayerHost : MonoBehaviour
     {
         await response.OutputStream.WriteAsync(bytes, 0, bytes.Length);
         response.Close();
+        buffer.Remove(bytes);
     }
 
     public void CloseLocalSession()
