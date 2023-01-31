@@ -467,6 +467,7 @@ public class MultiplayerManager : MonoBehaviour
     }
 
     Action toAdd;
+#if UNITY_EDITOR
     MethodInfo[] GetAllReplicatedMethods()
     {
 
@@ -503,7 +504,7 @@ public class MultiplayerManager : MonoBehaviour
 
         return allinfo.ToArray();
     }
-    
+#endif
     public void AddFieldToReplicate(FieldData data)
     {
         FieldData _data = data;

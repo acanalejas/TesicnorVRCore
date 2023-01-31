@@ -414,6 +414,7 @@ public static class OverrideCode
         return 0;
     }
 
+#if UNITY_EDITOR
     /// <summary>
     /// Devuelve el directorio donde se encuentra el objeto que le pasamos
     /// </summary>
@@ -429,5 +430,6 @@ public static class OverrideCode
         }
         return "";
     }
-    #endregion
+#endif
+#endregion
 }
