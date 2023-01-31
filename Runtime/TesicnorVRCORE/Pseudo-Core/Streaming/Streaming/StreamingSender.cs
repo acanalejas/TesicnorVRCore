@@ -71,17 +71,24 @@ public class StreamingSender : MonoBehaviour
 
     private async void GetTextureTraduction()
     {
-        //Capture the screen
-        RenderTexture.active = this.capturadora.targetTexture;
-        parse.ReadPixels(rect, 0, 0, false);
+        try
+        {
+            //Capture the screen
+            RenderTexture.active = this.capturadora.targetTexture;
+            parse.ReadPixels(rect, 0, 0, false);
 
-        //Get the jpg byte array
-        byte[] _data = parse.EncodeToJPG(40);
-        
+            //Get the jpg byte array
+            byte[] _data = parse.EncodeToJPG(40);
 
-        //Send it to the receiver
-        await HttpClient_Custom.SendData(_data);
-        alreadySent = true;
+
+            //Send it to the receiver
+            await HttpClient_Custom.SendData(_data);
+            alreadySent = true;
+        }
+        catch
+        {
+            Debug.LogError("No se ha podido enviar la imagen");
+        }
     }
 
     //byte[] _data;

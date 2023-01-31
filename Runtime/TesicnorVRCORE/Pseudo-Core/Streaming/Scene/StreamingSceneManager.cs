@@ -76,7 +76,8 @@ public class StreamingSceneManager : MonoBehaviour
         Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
 
-        GoToNextScene();
+        //GoToNextScene();
+        StreamingSceneManager.GoToStreamingScene(2, "00 Main Menu (Part 2)");
     }
 
     #endregion
