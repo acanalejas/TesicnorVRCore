@@ -72,7 +72,7 @@ public class StreamingSceneManager : MonoBehaviour
     public void KeyboardEnter()
     {
         Debug.Log(ip);
-        string url = "http://" + ip + ":8080";
+        string url = "http://" + IPText.text + ":8080/";
         Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
 
