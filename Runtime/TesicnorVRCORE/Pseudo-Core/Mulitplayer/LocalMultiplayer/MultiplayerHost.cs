@@ -85,6 +85,7 @@ public class MultiplayerHost : MonoBehaviour
 
     private void HttpCallback(IAsyncResult result)
     {
+        //float _time = Time.fixedTime;
         var context = host.EndGetContext(result);
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
 
@@ -98,6 +99,9 @@ public class MultiplayerHost : MonoBehaviour
         if (_buff.Length > 0)
             buffer.Add(_buff);
         manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
+        //float afterTime = Time.fixedTime;
+
+        //Debug.Log("Tiempo que se tarda en escuchar la peticion es " + (afterTime - _time) + "segundos");
     }
 
     private void manageRequest()
@@ -112,7 +116,7 @@ public class MultiplayerHost : MonoBehaviour
 
     }
 
-    private void manageResponse(HttpListenerResponse response, byte[] bytes)
+    private async void manageResponse(HttpListenerResponse response, byte[] bytes)
     {
         response.OutputStream.Write(bytes, 0, bytes.Length);
         response.Close();

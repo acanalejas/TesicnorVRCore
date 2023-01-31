@@ -84,7 +84,6 @@ public class MultiplayerClient : MonoBehaviour
         using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
         {
             request.Content = sc;
-            Debug.Log(sc.ReadAsByteArrayAsync().Result.Length);
             float time = Time.fixedTime;
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
             {
