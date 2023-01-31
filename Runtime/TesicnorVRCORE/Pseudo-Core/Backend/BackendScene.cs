@@ -75,7 +75,8 @@ public class BackendScene : MonoBehaviour
                     BackendGetter.backendData = data;
                     PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
-                    SceneManager.LoadScene(nextBuildIndex);
+                    //SceneManager.LoadScene(nextBuildIndex);
+                    StreamingSceneManager.GoToStreamingScene(2, "00 Main Menu (Part 2)");
                 }
                 else
                 {
