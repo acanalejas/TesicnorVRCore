@@ -6,7 +6,6 @@ using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 
-#if UNITY_EDITOR
 public static class OverrideCode 
 {
     #region PARAMETERS
@@ -432,4 +431,3 @@ public static class OverrideCode
     }
     #endregion
 }
-#endif
