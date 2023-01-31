@@ -24,6 +24,7 @@ public class MultiplayerHost : MonoBehaviour
     string lastContent;
 
     string response;
+    static float timer;
 
     List<byte[]> buffer = new List<byte[]>();
 
@@ -69,7 +70,7 @@ public class MultiplayerHost : MonoBehaviour
         {
             Debug.LogError("Couldn't get the string for the response");
         }
-
+        timer += Time.deltaTime;
             
     }
 
@@ -85,7 +86,7 @@ public class MultiplayerHost : MonoBehaviour
 
     private void HttpCallback(IAsyncResult result)
     {
-        //float _time = Time.fixedTime;
+        float _time = timer;
         var context = host.EndGetContext(result);
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
 
@@ -99,9 +100,9 @@ public class MultiplayerHost : MonoBehaviour
         if (_buff.Length > 0)
             buffer.Add(_buff);
         manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
-        //float afterTime = Time.fixedTime;
+        float afterTime = timer;
 
-        //Debug.Log("Tiempo que se tarda en escuchar la peticion es " + (afterTime - _time) + "segundos");
+        Debug.Log("Tiempo que se tarda en escuchar la peticion es " + (afterTime - _time) + "segundos");
     }
 
     private void manageRequest()

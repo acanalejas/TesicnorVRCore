@@ -68,16 +68,16 @@ public class StreamingSceneManager : MonoBehaviour
         }
 
         IPText.text = newString;
+        ip = newString;
     }
     public void KeyboardEnter()
     {
         Debug.Log(ip);
-        string url = "http://" + IPText.text + ":8080/";
+        string url = "http://" + ip + ":8080/";
         Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
 
         GoToNextScene();
-        //StreamingSceneManager.GoToStreamingScene(2, "00 Main Menu (Part 2)");
     }
 
     #endregion
