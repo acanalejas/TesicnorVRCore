@@ -85,8 +85,11 @@ public class MultiplayerClient : MonoBehaviour
         {
             request.Content = sc;
             Debug.Log(sc.ReadAsByteArrayAsync().Result.Length);
+            float time = Time.fixedTime;
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
             {
+                float afterTime = Time.fixedTime;
+                Debug.Log("Se ha tardado en enviar la petición " + (afterTime - time) + "segundos");
 
                 last_content = data;
 
