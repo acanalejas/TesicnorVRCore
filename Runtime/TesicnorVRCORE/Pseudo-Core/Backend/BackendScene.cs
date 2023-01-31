@@ -100,7 +100,8 @@ public class BackendScene : MonoBehaviour
         PlayerPrefs.SetString(BackendGetter.BackendDataKey, JsonUtility.ToJson(data));
         PlayerPrefs.SetString("Username", "");
 
-        SceneManager.LoadScene(nextBuildIndex);
+        //SceneManager.LoadScene(nextBuildIndex);
+        StreamingSceneManager.GoToStreamingScene(2,"00 Main Menu (Part 2)");
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
