@@ -19,9 +19,15 @@ public class BackendScene : MonoBehaviour
 
     public GameObject WarningPopUp_go;
 
+    public GameObject ConnectionPopUp_go;
+
     List<Image> imgs = new List<Image>();
     List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
     List<Text> texts_legacy = new List<Text>();
+
+    List<Image> con_imgs = new List<Image>();
+    List<TextMeshProUGUI> con_texts = new List<TextMeshProUGUI>();
+    List<Text> con_texts_legacy = new List<Text>();
     #endregion
 
     #region METHODS
@@ -41,6 +47,14 @@ public class BackendScene : MonoBehaviour
         imgs.AddRange(WarningPopUp_go.GetComponentsInChildren<Image>());
         texts.AddRange(WarningPopUp_go.GetComponentsInChildren<TextMeshProUGUI>());
         texts_legacy.AddRange(WarningPopUp_go.GetComponentsInChildren<Text>());
+
+        con_imgs.Clear();
+        con_texts.Clear();
+        con_texts_legacy.Clear();
+
+        con_imgs.AddRange(ConnectionPopUp_go.GetComponentsInChildren<Image>());
+        con_texts.AddRange(ConnectionPopUp_go.GetComponentsInChildren<TextMeshProUGUI>());
+        con_texts_legacy.AddRange(ConnectionPopUp_go.GetComponentsInChildren<Text>());
     }
     private void SetWarningPopUpToTransparent()
     {
@@ -56,6 +70,24 @@ public class BackendScene : MonoBehaviour
         {
             text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
         }
+
+        foreach(var img in con_imgs)
+        {
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+        }
+        foreach(var text in con_texts)
+        {
+            text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+        }
+        foreach(var text in con_texts_legacy)
+        {
+            text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+        }
+    }
+
+    private void SetConnectionPopUpToTransparent()
+    {
+        
     }
     public async void EnterButton()
     {
@@ -80,8 +112,14 @@ public class BackendScene : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(response.StatusCode);
-                    StartCoroutine(nameof(ShowPopUp));
+                    if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        StartCoroutine(nameof(ShowPopUp));
+                    }
+                    else
+                    {
+                        StartCoroutine(nameof(ShowConPopUp));
+                    }
                 }
             }
         }
@@ -127,6 +165,32 @@ public class BackendScene : MonoBehaviour
             foreach (var img in imgs) img.color -= new Color(0, 0, 0, 0.01f);
             foreach (var text in texts) text.color -= new Color(0, 0, 0, 0.01f);
             foreach (var text in texts_legacy) text.color -= new Color(0, 0, 0, 0.01f);
+            yield return frame;
+        }
+        StopCoroutine(nameof(ShowPopUp));
+    }
+
+    private IEnumerator ShowConPopUp()
+    {
+        if (con_imgs[0].color.a > 0) yield break;
+        float alpha = 0;
+        while (alpha < 1)
+        {
+            alpha += 0.01f;
+            foreach (var img in con_imgs) img.color += new Color(0, 0, 0, 0.01f);
+            foreach (var text in con_texts) text.color += new Color(0, 0, 0, 0.01f);
+            foreach (var text in con_texts_legacy) text.color += new Color(0, 0, 0, 0.01f);
+            yield return frame;
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        while (alpha > 0)
+        {
+            alpha -= 0.01f;
+            foreach (var img in con_imgs) img.color -= new Color(0, 0, 0, 0.01f);
+            foreach (var text in con_texts) text.color -= new Color(0, 0, 0, 0.01f);
+            foreach (var text in con_texts_legacy) text.color -= new Color(0, 0, 0, 0.01f);
             yield return frame;
         }
         StopCoroutine(nameof(ShowPopUp));
