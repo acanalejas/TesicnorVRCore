@@ -74,22 +74,24 @@ public class MultiplayerClient : MonoBehaviour
 
     public async Task SendData(string data)
     {
+        Debug.Log("Content is : " + data);
         //if (data == last_content) return;
         var cts = new System.Threading.CancellationTokenSource();
 
-        string _data = data;
-        if (data == last_content || data == last_response) _data = "";
-
-        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(_data)))
+        //string _data = data;
+        //if (data == last_content || data == last_response) _data = "";
+        Debug.Log("cts created");
+        using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
         using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
         {
+            Debug.Log("Before sending the request");
             request.Content = sc;
-            float time = Time.fixedTime;
+            //float time = Time.fixedTime;
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
             {
-                float afterTime = Time.fixedTime;
-                Debug.Log("Se ha tardado en enviar la petición " + (afterTime - time) + "segundos");
-
+                //float afterTime = Time.fixedTime;
+                //Debug.Log("Se ha tardado en enviar la petición " + (afterTime - time) + "segundos");
+                Debug.Log("Peticion enviada");
                 last_content = data;
 
                 ManageResponse(response);
@@ -97,9 +99,7 @@ public class MultiplayerClient : MonoBehaviour
                 request.Content?.Dispose();
                 request.Content = null;
             }
-
         }
-
         MultiplayerManager.Instance.actionsData.Clear();
         MultiplayerManager.Instance.fieldDatas.Clear();
     }
@@ -111,7 +111,9 @@ public class MultiplayerClient : MonoBehaviour
         Debug.Log("Response is : " + response_str);
         try
         {
-            response_string = response_str;
+            if (response_str != last_response && response_str != last_content)
+                response_string = response_str;
+            else response_string = "";
         }
         catch
         {
@@ -120,5 +122,6 @@ public class MultiplayerClient : MonoBehaviour
         response.Content?.Dispose();
         response.Content = null;
     }
+
     #endregion
 }

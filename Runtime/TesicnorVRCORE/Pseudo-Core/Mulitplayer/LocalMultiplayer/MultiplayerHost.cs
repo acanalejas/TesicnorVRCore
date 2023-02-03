@@ -52,9 +52,8 @@ public class MultiplayerHost : MonoBehaviour
     {
         try
         {
-            if (content != lastContent && content != "")
+            if (content != lastContent && content != "") 
             { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
-            lastContent = content;
         }
         catch
         {
@@ -64,14 +63,13 @@ public class MultiplayerHost : MonoBehaviour
         try
         {
             response = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
-            
+            if (response == content || response == lastContent) response = "";
         }
         catch
         {
             Debug.LogError("Couldn't get the string for the response");
         }
-        timer += Time.deltaTime;
-            
+        lastContent = content;
     }
 
     public void CreateLocalSession()
@@ -80,29 +78,26 @@ public class MultiplayerHost : MonoBehaviour
         Debug.Log(IP);
         host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
         //CloseLocalSession();
-        if(!host.IsListening)host.Start();
+        if (!host.IsListening) { host.Start(); }
         host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
     private void HttpCallback(IAsyncResult result)
     {
-        float _time = timer;
         var context = host.EndGetContext(result);
-        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
-
+        
         MemoryStream ms = new MemoryStream();
         context.Request.InputStream.CopyTo(ms);
         context.Request.InputStream.Close();
         
-
         byte[] _buff = ms.ToArray();
         ms.Close();
         if (_buff.Length > 0)
             buffer.Add(_buff);
-        manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
-        float afterTime = timer;
 
-        Debug.Log("Tiempo que se tarda en escuchar la peticion es " + (afterTime - _time) + "segundos");
+        manageResponse(context.Response, Encoding.UTF8.GetBytes(response));
+
+        host.BeginGetContext(new AsyncCallback(HttpCallback), host);
     }
 
     private void manageRequest()
@@ -119,7 +114,7 @@ public class MultiplayerHost : MonoBehaviour
 
     private async void manageResponse(HttpListenerResponse response, byte[] bytes)
     {
-        response.OutputStream.Write(bytes, 0, bytes.Length);
+        await response.OutputStream.WriteAsync(bytes, 0, bytes.Length);
         response.Close();
     }
 

@@ -20,6 +20,8 @@ public class ReplicatedObject : MonoBehaviour
     public bool insidePlayer = false;
 
     public System.Action replicate;
+
+    public GameObjectData last_data = new GameObjectData();
     #endregion
 
     #region FUNCTIONS
@@ -54,8 +56,8 @@ public class ReplicatedObject : MonoBehaviour
     public void SetGameObjectData()
     {
         this_data = MultiplayerManager.fromGameObject(this.gameObject);
-        if (children == null) return;
-        if(children.Length > 0)
+        if (children == null || this_data.Children == null) return;
+        if(children.Length > 0 && this_data.Children.Length > 0)
         {
             for(int i = 0; i < children.Length; i++)
             {
@@ -70,14 +72,12 @@ public class ReplicatedObject : MonoBehaviour
     public void Replicate(GameObjectData input)
     {
         this_data = input;
-        Debug.Log("GameObjectData name is : " + input.Name);
         try
         {
             //if (Vector3.Distance(lastPosition, this.transform.position) > 0.001f
             //    && Vector3.Distance(lastRotation, this.transform.rotation.eulerAngles) > 0.001f
             //    && Vector3.Distance(lastScale, this.transform.localScale) > 0.001f) return;
 
-            Debug.Log("Begin replication");
             if (this_transform == null) return;
             if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.001f)
             { this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position); }
@@ -85,7 +85,6 @@ public class ReplicatedObject : MonoBehaviour
             { this_transform.rotation = MultiplayerManager.quat_FromString(input.Rotation); }
             if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.001f)
             { this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale); }
-            Debug.Log("Finished replicating");
             lastPosition = this.transform.position;
             lastRotation = this.transform.rotation.eulerAngles;
             lastScale = this.transform.localScale;
@@ -103,6 +102,7 @@ public class ReplicatedObject : MonoBehaviour
         {
             Debug.LogError("Failed to replicate, probably invalid GameObjectData  " + e);
         }
+        last_data = input;
     }
     #endregion
 }
