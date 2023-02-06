@@ -23,6 +23,8 @@ public class MultiplayerHost : MonoBehaviour
 
     string lastContent;
 
+    string lastResponse;
+
     string response;
     static float timer;
 
@@ -52,7 +54,7 @@ public class MultiplayerHost : MonoBehaviour
     {
         try
         {
-            if (content != lastContent && content != "") 
+            if (content != lastContent && content != "" && content != response) 
             { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
         }
         catch
@@ -63,7 +65,9 @@ public class MultiplayerHost : MonoBehaviour
         try
         {
             response = MultiplayerManager.Instance.FindReplicatedGameObjects_str();
-            if (response == content || response == lastContent) response = "";
+            if (response == content || response == lastContent || lastResponse == response) response = "";
+
+            lastResponse = response;
         }
         catch
         {

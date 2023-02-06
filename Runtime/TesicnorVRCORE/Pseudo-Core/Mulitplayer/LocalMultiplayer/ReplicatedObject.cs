@@ -12,7 +12,7 @@ using System.IO;
 public class ReplicatedObject : MonoBehaviour
 {
     #region PARAMETERS
-    public GameObjectData this_data;
+    public GameObjectData this_data = new GameObjectData();
     GameObject[] children;
 
     public Transform this_transform;
@@ -78,6 +78,7 @@ public class ReplicatedObject : MonoBehaviour
             //    && Vector3.Distance(lastRotation, this.transform.rotation.eulerAngles) > 0.001f
             //    && Vector3.Distance(lastScale, this.transform.localScale) > 0.001f) return;
 
+            if (MultiplayerManager.EqualsGameObjectData(this_data, last_data)) throw new UnityException("Not valid to replicate due its the same");
             if (this_transform == null) return;
             if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.001f)
             { this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position); }
@@ -88,6 +89,27 @@ public class ReplicatedObject : MonoBehaviour
             lastPosition = this.transform.position;
             lastRotation = this.transform.rotation.eulerAngles;
             lastScale = this.transform.localScale;
+
+            string _parentID = "null";
+            try
+            {
+                if(transform.parent)
+                _parentID = this.transform.parent.GetComponent<UniqueID>().ID.ToString();
+            }
+            catch { Debug.LogError("No se pudo conseguir la ID del padre"); }
+
+            if (_parentID != input.ParentID)
+            {
+                if (input.ParentID == "null") { transform.parent = null; }
+                else
+                {
+                    int _id = 0; int.TryParse(input.ParentID, out _id);
+
+                    GameObject newParent = UniqueIDManager.Instance.GetGameObjectByID(_id);
+                    if (newParent != null)
+                        transform.parent = newParent.transform;
+                }
+            }
             /*if (children.Length > 0)
             {
                 for (int i = 0; i < children.Length; i++)

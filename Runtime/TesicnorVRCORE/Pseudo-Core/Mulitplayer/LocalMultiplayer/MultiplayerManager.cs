@@ -14,6 +14,7 @@ public struct GameObjectData{
     public string Rotation;
     public string Scale;
     public string ID;
+    public string ParentID;
 
     //For general
     public string Name;
@@ -159,17 +160,31 @@ public class MultiplayerManager : MonoBehaviour
         data.Scale = str_fromVector3(go.transform.localScale);
         try
         {
-            data.ID = go.GetComponent<UniqueIDManager.UniqueID>().ID.ToString();
+            data.ID = go.GetComponent<UniqueID>().ID.ToString();
         }
         catch
         {
             data.ID = "0";
         }
 
+        try
+        {
+            data.ParentID = go.transform.parent.GetComponent<UniqueID>().ID.ToString();
+            int id = 0; int.TryParse(data.ParentID, out id);
+            if (id < 0) data.ParentID = (-id).ToString();
+        }
+
+        catch
+        {
+            data.ParentID = "null";
+        }
+
         Component[] components = go.GetComponents<Component>();
         List<string> components_str = new List<string>();
+        if(components != null && components.Length > 0)
         foreach(var comp in components)
         {
+                if(comp != null)
             components_str.Add(comp.ToString());
         }
         data.Components = components_str.ToArray();
@@ -341,8 +356,9 @@ public class MultiplayerManager : MonoBehaviour
                             if(id == -this_id)
                             {
                                 GameObject newObj = GameObject.Instantiate(rep.gameObject);
-                                newObj.GetComponent<UniqueIDManager.UniqueID>().SetID(id);
+                                newObj.GetComponent<UniqueID>().SetID(id);
                                 newObj.GetComponent<ReplicatedObject>().Replicate(data);
+
                             }
                         }
                     }
@@ -441,7 +457,6 @@ public class MultiplayerManager : MonoBehaviour
                     }
                     result += Json_FromGameObjectData(sendData) + jsonSeparator.ToString();
                 }
-                
             }
         }
 
@@ -660,129 +675,5 @@ public class ReplicatedAttribute : Attribute
 
 
 #region FOR ID MANAGEMENT
-public class UniqueIDManager : MonoBehaviour
-{
-    private static UniqueIDManager instance;
-    public static UniqueIDManager Instance { get { return instance; } set { instance = value; } }
 
-    private void CheckSingleton()
-    {
-        if (instance == null) instance = this;
-        else Destroy(this);
-    }
-
-    public class UniqueID : MonoBehaviour
-    {
-        public int ID { get { return  id;} }
-        public int id;
-
-        public void SetID(int _id)
-        {
-            id = _id;
-        }
-    }
-
-    public class UniqueIDPlayer : MonoBehaviour
-    {
-        public int ID { get { return id; } }
-        private int id;
-
-        public void SetID(int _id)
-        {
-            id = _id;
-        }
-    }
-
-    List<UniqueID> allIDs = new List<UniqueID>();
-    List<UniqueIDPlayer> allPlayerID = new List<UniqueIDPlayer>();
-
-    private void Awake()
-    {
-        CheckSingleton();
-    }
-
-    public void SetIDs()
-    {
-        GameObject[] gameObjects = GameObject.FindObjectsOfType<GameObject>(true);
-        int index = 0;
-        foreach (GameObject gameObject in gameObjects)
-        {
-            if (gameObject.GetComponent<ReplicatedObject>() != null)
-            {
-                if (gameObject.GetComponent<ReplicatedObject>().insidePlayer && !gameObject.GetComponent<UniqueID>())
-                {
-                    UniqueID _id_player = gameObject.AddComponent<UniqueID>();
-                    _id_player.SetID(-index);
-                    allIDs.Add(_id_player);
-                }
-                else if(!gameObject.GetComponent<UniqueID>())
-                {
-                    UniqueID _id = gameObject.AddComponent<UniqueID>();
-                    _id.SetID(index);
-                    allIDs.Add(_id);
-                }
-            }
-            else if(!gameObject.GetComponent<UniqueID>())
-            {
-                UniqueID _id = gameObject.AddComponent<UniqueID>();
-                _id.SetID(index);
-                allIDs.Add(_id);
-            }
-            index++;
-        }
-    }
-
-    public GameObject GetGameObjectByID(int id)
-    {
-        GameObject result = null;
-        int searchID = id;
-        if (id < 0) searchID = -id;
-        foreach(UniqueID _id in allIDs)
-        {
-            if (searchID == _id.ID) result = _id.gameObject;
-        }
-
-        if(result == null && id < 0)
-        {
-            GameObject original = null;
-            foreach(var _id in allIDs)
-            {
-                if (id == _id.ID) original = _id.gameObject;
-            }
-
-            if (original)
-            {
-                Debug.Log("Creating new GOS for replicating");
-                GameObject newGO = GameObject.Instantiate(original, original.transform.position, original.transform.rotation);
-                newGO.GetComponent<UniqueID>().SetID(-id);
-                result = newGO;
-            }
-        }
-
-        return result;
-    }
-
-    public int GetIDFromGameObject(GameObject gameObject)
-    {
-        if(gameObject.GetComponent<UniqueID>() != null) return gameObject.GetComponent<UniqueID>().ID;
-
-        return -1;
-    }
-}
-
-#if UNITY_EDITOR
-[CustomEditor(typeof(UniqueIDManager), true)]
-public class UniqueIDManagerEditor: Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-
-        UniqueIDManager manager = target as UniqueIDManager;
-
-        manager.SetIDs();
-    }
-}
-#endif
 #endregion

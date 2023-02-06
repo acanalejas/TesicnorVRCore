@@ -53,7 +53,7 @@ public class MultiplayerClient : MonoBehaviour
             {
 
             }
-            if (MultiplayerManager.Instance.isValidString(resp) && last_response != response_string)
+            if (MultiplayerManager.Instance.isValidString(resp) && last_response != response_string && response_string != last_content)
             {
                 MultiplayerManager.Instance.FindReplicatedGameObjects(response_string);
                 last_response = response_string;
