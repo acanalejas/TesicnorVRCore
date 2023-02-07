@@ -71,6 +71,7 @@ namespace TesicFire
         [SerializeField][HideInInspector] public float MaxEmission = 80;
         [SerializeField][HideInInspector] public float MaxSize = 4;
         [SerializeField][HideInInspector] public Vector3 PropOffset = Vector3.zero;
+        [HideInInspector] public bool badExtinguisher = false;
 
         [HideInInspector] public BoxCollider trigger;
         [HideInInspector] public BoxCollider collider;
@@ -346,7 +347,10 @@ namespace TesicFire
             extinguishing = true;
             reconstructing = false;
 
-            TimeToExtinguish -= Time.deltaTime;
+            float timeToSubstract = Time.deltaTime;
+            if (badExtinguisher) timeToSubstract = Time.deltaTime / 3;
+
+            TimeToExtinguish -= timeToSubstract;
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
             for(int i = 0; i < fire_mesh.Count; i++)
