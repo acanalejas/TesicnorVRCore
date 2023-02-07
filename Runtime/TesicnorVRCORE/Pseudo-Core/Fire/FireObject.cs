@@ -352,7 +352,7 @@ namespace TesicFire
             if (_try == 0) _try = 1;
             else if (_try == 1) _try = 0;
 
-            if (badExtinguisher && _try != 0) return;
+            if (badExtinguisher && _try != 0) timeToSubstract = Time.deltaTime / 100;
 
             TimeToExtinguish -= timeToSubstract;
 
