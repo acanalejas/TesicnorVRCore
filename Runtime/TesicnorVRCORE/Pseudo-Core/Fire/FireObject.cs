@@ -348,7 +348,7 @@ namespace TesicFire
             reconstructing = false;
 
             float timeToSubstract = Time.deltaTime;
-            if (badExtinguisher) timeToSubstract = Time.deltaTime / 1000;
+            if (badExtinguisher) return;
 
             TimeToExtinguish -= timeToSubstract;
 
