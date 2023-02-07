@@ -340,6 +340,7 @@ namespace TesicFire
             return extinguished;
         }
 
+        int _try = 0;
         public void ExtinguishFire()
         {
             if (this.Extinguished() || !this.OnFire()) return;
@@ -348,7 +349,11 @@ namespace TesicFire
             reconstructing = false;
 
             float timeToSubstract = Time.deltaTime;
-            if (badExtinguisher) return;
+            if (_try == 0) _try = 1;
+            else if (_try == 1) _try = 2;
+            else if (_try == 2) _try = 0;
+
+            if (badExtinguisher && _try != 0) return;
 
             TimeToExtinguish -= timeToSubstract;
 
