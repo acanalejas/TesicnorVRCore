@@ -353,7 +353,7 @@ namespace TesicFire
             else if (_try == 1) _try = 2;
             else if(_try == 2) _try = 0;
 
-            if (badExtinguisher && _try == 0) return;
+            if (badExtinguisher && _try != 0) return;
 
             TimeToExtinguish -= timeToSubstract;
 
