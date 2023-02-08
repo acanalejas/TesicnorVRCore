@@ -22,12 +22,17 @@ public class ReplicatedObject : MonoBehaviour
     public System.Action replicate;
 
     public GameObjectData last_data = new GameObjectData();
+    public GameObjectData last_data2 = new GameObjectData();
+
+    public GameObjectData[] last_datas = new GameObjectData[30];
+    List<GameObjectData> children_data = new List<GameObjectData>();
     #endregion
 
     #region FUNCTIONS
     public void Awake()
     {
         GetChildren();
+        InitializeDataBuffer();
         SetGameObjectData();
     }
 
@@ -38,6 +43,7 @@ public class ReplicatedObject : MonoBehaviour
 
     public void Update()
     {
+        GetChildren();
         SetGameObjectData();
     }
     private void GetChildren()
@@ -55,15 +61,43 @@ public class ReplicatedObject : MonoBehaviour
 
     public void SetGameObjectData()
     {
+        if (isDataRepeated(MultiplayerManager.fromGameObject(this.gameObject))) return;
         this_data = MultiplayerManager.fromGameObject(this.gameObject);
-        if (children == null || this_data.Children == null) return;
-        if(children.Length > 0 && this_data.Children.Length > 0)
+        this_data.Children = "";
+        if(children.Length > 0)
         {
             for(int i = 0; i < children.Length; i++)
             {
-                this_data.Children[i] = MultiplayerManager.fromGameObject(children[i]);
+                GameObjectData child_data = MultiplayerManager.fromGameObject(children[i], insidePlayer);
+                this_data.Children += JsonUtility.ToJson(child_data,true) + MultiplayerManager.childSeparator;
             }
         }
+    }
+
+    bool isDataRepeated(GameObjectData input)
+    {
+        foreach(var data in last_datas)
+        {
+            if (MultiplayerManager.EqualsGameObjectData(data, input)) return true;
+        }
+        return false;
+    }
+
+    void InitializeDataBuffer()
+    {
+        for(int i = 0; i < last_datas.Length; i++)
+        {
+            last_datas[i] = new GameObjectData();
+        }
+    }
+
+    void AddDataToBuffer(GameObjectData input)
+    {
+        for (int i = last_datas.Length - 2; i >= 0; i--)
+        {
+            last_datas[i] = last_datas[i + 1];
+        }
+        last_datas[last_datas.Length - 1] = input;
     }
 
     Vector3 lastPosition;
@@ -71,7 +105,8 @@ public class ReplicatedObject : MonoBehaviour
     Vector3 lastScale;
     public void Replicate(GameObjectData input)
     {
-        this_data = input;
+        if (MultiplayerManager.EqualsGameObjectData(this_data, input) || isDataRepeated(input)) return;
+        else this_data = input;
         try
         {
             //if (Vector3.Distance(lastPosition, this.transform.position) > 0.001f
@@ -80,11 +115,11 @@ public class ReplicatedObject : MonoBehaviour
 
             if (MultiplayerManager.EqualsGameObjectData(this_data, last_data)) throw new UnityException("Not valid to replicate due its the same");
             if (this_transform == null) return;
-            if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.001f)
-            { this_transform.position = MultiplayerManager.Instance.vt3_FromString(input.Position); }
-            if (Vector3.Distance(this.transform.rotation.eulerAngles, MultiplayerManager.quat_FromString(input.Rotation).eulerAngles) > 0.001f)
-            { this_transform.rotation = MultiplayerManager.quat_FromString(input.Rotation); }
-            if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.001f)
+            if (Vector3.Distance(this.transform.position, MultiplayerManager.Instance.vt3_FromString(input.Position)) > 0.0001f)
+            { this_transform.localPosition = MultiplayerManager.Instance.vt3_FromString(input.Position); }
+            if (Vector3.Distance(this.transform.rotation.eulerAngles, MultiplayerManager.quat_FromString(input.Rotation).eulerAngles) > 0.0001f)
+            { this_transform.localRotation = MultiplayerManager.quat_FromString(input.Rotation); }
+            if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.0001f)
             { this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale); }
             lastPosition = this.transform.position;
             lastRotation = this.transform.rotation.eulerAngles;
@@ -93,8 +128,13 @@ public class ReplicatedObject : MonoBehaviour
             string _parentID = "null";
             try
             {
-                if(transform.parent)
-                _parentID = this.transform.parent.GetComponent<UniqueID>().ID.ToString();
+                if (transform.parent)
+                {
+                    UniqueID pID = this.transform.parent.GetComponent<UniqueID>();
+                    int pID_int = Mathf.Abs(pID.ID);
+                    
+                    _parentID = pID_int.ToString();
+                }
             }
             catch { Debug.LogError("No se pudo conseguir la ID del padre"); }
 
@@ -110,21 +150,68 @@ public class ReplicatedObject : MonoBehaviour
                         transform.parent = newParent.transform;
                 }
             }
-            /*if (children.Length > 0)
+            if(input.Children.Length > 0 && children != null)
+            if (children.Length > 0 && MultiplayerManager.Instance)
             {
-                for (int i = 0; i < children.Length; i++)
+                    string[] children_str = input.Children.Split(MultiplayerManager.childSeparator);
+                    children_data.Clear();
+                    for(int i = 0; i < children_str.Length; i++)
+                    {
+                        GameObjectData _children_data = new GameObjectData();
+                        if (children_str[i] != null && children_str[i].Length > 0)
+                        {
+                            _children_data = JsonUtility.FromJson<GameObjectData>(children_str[i]);
+                            children_data.Add(_children_data);
+                        }
+                    }
+                    List<GameObjectData> notReplicated = new List<GameObjectData>();
+                foreach (var child in children_data)
                 {
-                    children[i].transform.position = MultiplayerManager.vt3_FromString(input.Children[i].Position);
-                    children[i].transform.rotation = MultiplayerManager.quat_FromString(input.Children[i].Rotation);
-                    children[i].transform.localScale = MultiplayerManager.vt3_FromString(input.Children[i].Scale);
-                }
-            }*/
-        }
+                        bool replicated = false;
+                        foreach (var _child in children)
+                        {
+                            if (child.Name == _child.name && _child.transform)
+                            {
+                                if (child.Position.Length > 0 && child.Position != "")
+                                    _child.transform.localPosition = MultiplayerManager.Instance.vt3_FromString(child.Position);
+                                if (child.Rotation.Length > 0 && child.Rotation != "")
+                                    _child.transform.localRotation = MultiplayerManager.quat_FromString(child.Rotation);
+                                if (child.Scale.Length > 0 && child.Scale != "")
+                                    _child.transform.localScale = MultiplayerManager.Instance.vt3_FromString(child.Scale);
+                                replicated = true;
+                            }
+                        }
+                        if (!replicated)
+                        {
+                            int childID = 0; int.TryParse(child.ID, out childID);
+                            int parentID = 0; int.TryParse(child.ParentID, out parentID);
+
+                            //childID = Mathf.Abs(childID);
+                            //parentID = Mathf.Abs(parentID);
+
+                            Debug.Log("Parent id is : " + parentID + "\n Child id is : " + childID);
+
+                            GameObject childGO = UniqueIDManager.Instance.GetGameObjectByID(childID);
+                            GameObject parentGO = UniqueIDManager.Instance.GetGameObjectByID(parentID);
+
+                            if (childGO == null || parentGO == null) { Debug.LogError("Couldn't find the parent or the child" + "\n Parent value is : " + parentGO + "\n Child value is : " + childGO); break; }
+
+                            childGO.transform.parent = parentGO.transform;
+
+                            childGO.transform.localPosition = MultiplayerManager.Instance.vt3_FromString(child.Position);
+                            childGO.transform.localRotation = MultiplayerManager.quat_FromString(child.Rotation);
+                            childGO.transform.localScale = MultiplayerManager.Instance.vt3_FromString(child.Scale);
+                        }
+                    }
+            }
+        }   
         catch(UnityException e)
         {
             Debug.LogError("Failed to replicate, probably invalid GameObjectData  " + e);
         }
+        last_data2 = last_data;
         last_data = input;
+        AddDataToBuffer(input);
     }
     #endregion
 }

@@ -74,24 +74,14 @@ public class MultiplayerClient : MonoBehaviour
 
     public async Task SendData(string data)
     {
-        Debug.Log("Content is : " + data);
-        //if (data == last_content) return;
         var cts = new System.Threading.CancellationTokenSource();
 
-        //string _data = data;
-        //if (data == last_content || data == last_response) _data = "";
-        Debug.Log("cts created");
         using (ByteArrayContent sc = new ByteArrayContent(Encoding.UTF8.GetBytes(data)))
         using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "http://" + IP + ":" + Port.ToString()))
         {
-            Debug.Log("Before sending the request");
             request.Content = sc;
-            //float time = Time.fixedTime;
             using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
             {
-                //float afterTime = Time.fixedTime;
-                //Debug.Log("Se ha tardado en enviar la petición " + (afterTime - time) + "segundos");
-                Debug.Log("Peticion enviada");
                 last_content = data;
 
                 ManageResponse(response);
@@ -106,9 +96,7 @@ public class MultiplayerClient : MonoBehaviour
 
     public async void ManageResponse(HttpResponseMessage response)
     {
-        Debug.Log("Receiving a response");
         string response_str = await response.Content.ReadAsStringAsync();
-        Debug.Log("Response is : " + response_str);
         try
         {
             if (response_str != last_response && response_str != last_content)

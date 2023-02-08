@@ -7,6 +7,9 @@ using System.Net;
 using System;
 using System.Reflection;
 using System.IO;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR;
+using UnityEngine.SpatialTracking;
 
 public struct GameObjectData{
     //For transform, all measures in world space
@@ -18,8 +21,7 @@ public struct GameObjectData{
 
     //For general
     public string Name;
-    public string[] Components;
-    public GameObjectData[] Children;
+    public string Children;
 }
 
 public struct MultiplayerClientData
@@ -88,7 +90,9 @@ public class MultiplayerManager : MonoBehaviour
     private static int players;
 
     private static char separator { get { return '|'; } }
-    private static char jsonSeparator { get { return '?'; } }
+    public static char jsonSeparator { get { return '?'; } }
+
+    public static char childSeparator { get { return '#'; } }
 
     private ReplicatedObject[] allReplicated;
 
@@ -149,14 +153,14 @@ public class MultiplayerManager : MonoBehaviour
     /// </summary>
     /// <param name="go"></param>
     /// <returns></returns>
-    public static GameObjectData fromGameObject(GameObject go)
+    public static GameObjectData fromGameObject(GameObject go, bool insidePlayer = false)
     {
         GameObjectData data = new GameObjectData();
 
         data.Name = go.name;
 
-        data.Position = str_fromVector3(go.transform.position);
-        data.Rotation = str_fromQuaternion(go.transform.rotation);
+        data.Position = str_fromVector3(go.transform.localPosition);
+        data.Rotation = str_fromQuaternion(go.transform.localRotation);
         data.Scale = str_fromVector3(go.transform.localScale);
         try
         {
@@ -171,7 +175,7 @@ public class MultiplayerManager : MonoBehaviour
         {
             data.ParentID = go.transform.parent.GetComponent<UniqueID>().ID.ToString();
             int id = 0; int.TryParse(data.ParentID, out id);
-            if (id < 0) data.ParentID = (-id).ToString();
+            if (insidePlayer) data.ParentID = (-id).ToString();
         }
 
         catch
@@ -179,15 +183,6 @@ public class MultiplayerManager : MonoBehaviour
             data.ParentID = "null";
         }
 
-        Component[] components = go.GetComponents<Component>();
-        List<string> components_str = new List<string>();
-        if(components != null && components.Length > 0)
-        foreach(var comp in components)
-        {
-                if(comp != null)
-            components_str.Add(comp.ToString());
-        }
-        data.Components = components_str.ToArray();
 
         return data;
     }
@@ -318,7 +313,7 @@ public class MultiplayerManager : MonoBehaviour
 
     public static bool EqualsGameObjectData(GameObjectData data1, GameObjectData data2)
     {
-        if (data1.Name == data2.Name && data1.ID == data2.ID && data1.Components == data2.Components && data1.Scale == data2.Scale &&
+        if (data1.Name == data2.Name && data1.ID == data2.ID && data1.Scale == data2.Scale &&
             data1.Children == data2.Children && data1.Position == data2.Position && data1.Rotation == data2.Rotation) return true;
 
         return false;
@@ -343,7 +338,7 @@ public class MultiplayerManager : MonoBehaviour
                     bool found = false;
                     foreach (var rep in allReplicated)
                     {
-                        if (rep.this_data.ID == data.ID) { rep.Replicate(data); found = true; }
+                        if (rep.this_data.ID == data.ID && !EqualsGameObjectData(rep.this_data, data)) { rep.Replicate(data); found = true; }
                     }
 
                     if (!found)
@@ -353,12 +348,37 @@ public class MultiplayerManager : MonoBehaviour
                             int this_id = 0; int.TryParse(rep.this_data.ID, out this_id);
                             int id = 0; int.TryParse(data.ID, out id);
 
-                            if(id == -this_id)
+                            if (id == -this_id)
                             {
-                                GameObject newObj = GameObject.Instantiate(rep.gameObject);
-                                newObj.GetComponent<UniqueID>().SetID(id);
+                                GameObject newObj = GameObject.Instantiate(rep.gameObject, rep.transform.position, rep.transform.rotation, rep.gameObject.transform);
+
+                                TrackedPoseDriver[] allDrivers = newObj.GetComponentsInChildren<TrackedPoseDriver>();
+                                Camera[] allCameras = newObj.GetComponentsInChildren<Camera>();
+                                if (allDrivers.Length > 0)
+                                {
+                                    foreach(var driver in allDrivers)
+                                    {
+                                        Destroy(driver);
+                                    }
+                                }
+
+                                if(allCameras.Length > 0)
+                                {
+                                    foreach(var cam in allCameras)
+                                    {
+                                        cam.enabled = false;
+                                    }
+                                }
+                                UniqueID _id = newObj.GetComponent<UniqueID>();
+                                _id.SetID(id);
+                                UniqueIDManager.Instance.AddID(_id);
                                 newObj.GetComponent<ReplicatedObject>().Replicate(data);
 
+                                UniqueID[] added =  newObj.GetComponentsInChildren<UniqueID>();
+                                foreach(var addedid in added)
+                                {
+                                    if (addedid != _id) { addedid.SetID(-addedid.ID); UniqueIDManager.Instance.AddID(addedid); }
+                                }
                             }
                         }
                     }

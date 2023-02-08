@@ -32,6 +32,8 @@ public class MultiplayerHost : MonoBehaviour
 
     List<HttpListenerContext> contexts = new List<HttpListenerContext>();
 
+    HttpListenerResponse Response;
+
     #endregion
 
     #region FUNCTIONS

@@ -21,6 +21,15 @@ public class UniqueIDManager : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
+        GetAllIDs();
+    }
+
+    private void GetAllIDs()
+    {
+        UniqueID[] all = GameObject.FindObjectsOfType<UniqueID>();
+
+        allIDs.Clear();
+        allIDs.AddRange(all);
     }
 
     public void SetIDs()
@@ -51,6 +60,21 @@ public class UniqueIDManager : MonoBehaviour
                 allIDs.Add(_id);
             }
             index++;
+        }
+        foreach(var id in allIDs)
+        {
+            if (id.GetComponent<ReplicatedObject>())
+            {
+                if (id.GetComponent<ReplicatedObject>().insidePlayer)
+                {
+                    UniqueID[] childrenIDs = id.GetComponentsInChildren<UniqueID>();
+
+                    foreach(var childID in childrenIDs)
+                    {
+                        childID.SetID(-childID.ID);
+                    }
+                }
+            }
         }
     }
 
@@ -84,6 +108,10 @@ public class UniqueIDManager : MonoBehaviour
         return result;
     }
 
+    public void AddID(UniqueID id)
+    {
+        allIDs.Add(id);
+    }
     public int GetIDFromGameObject(GameObject gameObject)
     {
         if (gameObject.GetComponent<UniqueID>() != null) return gameObject.GetComponent<UniqueID>().ID;
@@ -99,10 +127,30 @@ public class UniqueIDManagerEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
+
+        bool buttonPressed = GUILayout.Button("Reset all IDs");
+
+        if (buttonPressed)
+        {
+            ResetIDs();
+        }
     }
     public void OnEnable()
     {
         UniqueIDManager manager = target as UniqueIDManager;
+        manager.SetIDs();
+    }
+
+    public void ResetIDs()
+    {
+        UniqueIDManager manager = target as UniqueIDManager;
+        UniqueID[] allIDs = GameObject.FindObjectsOfType<UniqueID>();
+
+        foreach(var ID in allIDs)
+        {
+            DestroyImmediate(ID);
+        }
+
         manager.SetIDs();
     }
 }
