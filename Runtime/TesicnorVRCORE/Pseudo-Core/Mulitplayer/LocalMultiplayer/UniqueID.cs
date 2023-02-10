@@ -5,7 +5,7 @@ using UnityEngine;
 public class UniqueID : MonoBehaviour
 {
     public int ID { get { return id; } }
-    public int id;
+    [SerializeField]private int id;
 
     public void SetID(int _id)
     {

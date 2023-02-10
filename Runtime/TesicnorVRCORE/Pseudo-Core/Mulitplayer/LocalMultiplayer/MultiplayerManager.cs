@@ -94,7 +94,7 @@ public class MultiplayerManager : MonoBehaviour
 
     public static char childSeparator { get { return '#'; } }
 
-    private ReplicatedObject[] allReplicated;
+    public List<ReplicatedObject> allReplicated = new List<ReplicatedObject>();
 
     public static string OnReplication = "";
 
@@ -113,7 +113,7 @@ public class MultiplayerManager : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
-        allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>(true);
+        allReplicated.AddRange(GameObject.FindObjectsOfType<ReplicatedObject>(true));
     }
 
     private void Start()
@@ -164,7 +164,9 @@ public class MultiplayerManager : MonoBehaviour
         data.Scale = str_fromVector3(go.transform.localScale);
         try
         {
-            data.ID = go.GetComponent<UniqueID>().ID.ToString();
+            int id = go.GetComponent<UniqueID>().ID;
+            //id = Mathf.Abs(id);
+            data.ID = id.ToString();
         }
         catch
         {
@@ -173,13 +175,26 @@ public class MultiplayerManager : MonoBehaviour
 
         try
         {
-            data.ParentID = go.transform.parent.GetComponent<UniqueID>().ID.ToString();
-            int id = 0; int.TryParse(data.ParentID, out id);
-            if (insidePlayer) data.ParentID = (-id).ToString();
+            if (go.transform.parent != null)
+            {
+            Debug.Log("Parent transform is : " + go.transform.parent);
+
+                data.ParentID = UniqueIDManager.Instance.GetIDFromGameObject(go.transform.parent.gameObject).ToString();
+                
+                int id = 0; int.TryParse(data.ParentID, out id);
+                if (insidePlayer) data.ParentID = (-id).ToString();
+                Debug.Log("Parent ID registrada es : " + data.ParentID);
+            }
+           //else
+           //{
+           //    Debug.Log("Setting the parent to null");
+           //    data.ParentID = "null";
+           //}
         }
 
         catch
         {
+            Debug.Log("Something failed getting the parent");
             data.ParentID = "null";
         }
 
@@ -343,6 +358,7 @@ public class MultiplayerManager : MonoBehaviour
 
                     if (!found)
                     {
+                    List<ReplicatedObject> added_ro = new List<ReplicatedObject>();
                         foreach(var rep in allReplicated)
                         {
                             int this_id = 0; int.TryParse(rep.this_data.ID, out this_id);
@@ -350,37 +366,49 @@ public class MultiplayerManager : MonoBehaviour
 
                             if (id == -this_id)
                             {
-                                GameObject newObj = GameObject.Instantiate(rep.gameObject, rep.transform.position, rep.transform.rotation, rep.gameObject.transform);
+                                GameObject newObj = UniqueIDManager.Instance.GetGameObjectByID(id);
 
-                                TrackedPoseDriver[] allDrivers = newObj.GetComponentsInChildren<TrackedPoseDriver>();
-                                Camera[] allCameras = newObj.GetComponentsInChildren<Camera>();
-                                if (allDrivers.Length > 0)
+
+                                Component[] allComponents = newObj.GetComponentsInChildren<Component>();
+                                if(allComponents.Length > 0)
+                                foreach(var comp in allComponents)
                                 {
-                                    foreach(var driver in allDrivers)
+                                        if (!comp) continue;
+                                    if (comp.GetType() != typeof(Transform) && comp.GetType() != typeof(MeshRenderer) &&
+                                        comp.GetType() != typeof(SkinnedMeshRenderer) && comp.GetType() != typeof(UnityEngine.UI.Image) &&
+                                        comp.GetType() != typeof(MeshFilter) && comp.GetType() != typeof(UnityEngine.UI.Text) &&
+                                        comp.GetType() != typeof(TMPro.TextMeshProUGUI) && comp.GetType() != typeof(ParticleSystem) &&
+                                        comp.GetType() != typeof(UnityEngine.UI.CanvasScaler) && comp.GetType() != typeof(Canvas) &&
+                                        comp.GetType() != typeof(RectTransform) && comp.GetType() != typeof(Camera) &&
+                                        comp.GetType() != typeof(CanvasRenderer) && comp.GetType() != typeof(GameObject) &&
+                                        comp.GetType() != typeof(ReplicatedObject) && comp.GetType() != typeof(UniqueID))
                                     {
-                                        Destroy(driver);
-                                    }
-                                }
+                                        MonoBehaviour mono = comp as MonoBehaviour;
 
-                                if(allCameras.Length > 0)
+                                        if (mono)
+                                        {
+                                            mono.enabled = false;
+                                        }
+                                    }
+
+                                    else if (comp.GetType() == typeof(Camera)) { Camera cam = comp as Camera; cam.enabled = false; }
+                                }
+                                if (newObj.GetComponent<ReplicatedObject>())
                                 {
-                                    foreach(var cam in allCameras)
-                                    {
-                                        cam.enabled = false;
-                                    }
+                                    newObj.GetComponent<ReplicatedObject>().Replicate(data);
+                                    newObj.GetComponent<ReplicatedObject>().insidePlayer = false;
+                                    added_ro.Add(newObj.GetComponent<ReplicatedObject>());
                                 }
-                                UniqueID _id = newObj.GetComponent<UniqueID>();
-                                _id.SetID(id);
-                                UniqueIDManager.Instance.AddID(_id);
-                                newObj.GetComponent<ReplicatedObject>().Replicate(data);
-
                                 UniqueID[] added =  newObj.GetComponentsInChildren<UniqueID>();
+                                if(added.Length > 0)
                                 foreach(var addedid in added)
                                 {
-                                    if (addedid != _id) { addedid.SetID(-addedid.ID); UniqueIDManager.Instance.AddID(addedid); }
+                                    if (addedid != newObj.GetComponent<UniqueID>()) { addedid.SetID((int)MathF.Abs(addedid.ID)); UniqueIDManager.Instance.AddID(addedid); }
                                 }
+                                
                             }
                         }
+                        //allReplicated.AddRange(added_ro);
                     }
                 }
             }
@@ -459,10 +487,8 @@ public class MultiplayerManager : MonoBehaviour
 
     public string FindReplicatedGameObjects_str()
     {
-        allReplicated = GameObject.FindObjectsOfType<ReplicatedObject>();
-
         string result = "";
-        if(allReplicated.Length > 0)
+        if(allReplicated.Count > 0)
         {
             foreach(var obj in allReplicated)
             {
@@ -542,8 +568,14 @@ public class MultiplayerManager : MonoBehaviour
                 return false;
             }
         }
-
         return true;
+    }
+
+    void ReplicateGameObject(GameObject go, GameObjectData input)
+    {
+        go.transform.localPosition = vt3_FromString(input.Position);
+        go.transform.localRotation = quat_FromString(input.Rotation);
+        go.transform.localScale = vt3_FromString(input.Scale);
     }
 
     Action toAdd;

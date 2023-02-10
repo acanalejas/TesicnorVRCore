@@ -26,6 +26,7 @@ public class ReplicatedObject : MonoBehaviour
 
     public GameObjectData[] last_datas = new GameObjectData[30];
     List<GameObjectData> children_data = new List<GameObjectData>();
+    List<GameObject> children_modified = new List<GameObject>();
     #endregion
 
     #region FUNCTIONS
@@ -54,6 +55,21 @@ public class ReplicatedObject : MonoBehaviour
         foreach(var child in _children)
         {
             if (child.gameObject != this.gameObject) _childrenList.Add(child.gameObject);
+            if (!children_modified.Contains(child.gameObject) && child.gameObject != this.gameObject) children_modified.Add(child.gameObject);
+        }
+        List<GameObject> toRemove = new List<GameObject>();
+        foreach(var child in children_modified)
+        {
+            if (!_childrenList.Contains(child.gameObject))
+            {
+                Debug.Log("Changing the parent to"); 
+                _childrenList.Add(child);
+                toRemove.Add(child);
+            }
+        }
+        foreach(var child in toRemove)
+        {
+            children_modified.Remove(child);
         }
 
         children = _childrenList.ToArray();
@@ -121,9 +137,6 @@ public class ReplicatedObject : MonoBehaviour
             { this_transform.localRotation = MultiplayerManager.quat_FromString(input.Rotation); }
             if (Vector3.Distance(this.transform.localScale, MultiplayerManager.Instance.vt3_FromString(input.Scale)) > 0.0001f)
             { this_transform.localScale = MultiplayerManager.Instance.vt3_FromString(input.Scale); }
-            lastPosition = this.transform.position;
-            lastRotation = this.transform.rotation.eulerAngles;
-            lastScale = this.transform.localScale;
 
             string _parentID = "null";
             try
@@ -131,9 +144,9 @@ public class ReplicatedObject : MonoBehaviour
                 if (transform.parent)
                 {
                     UniqueID pID = this.transform.parent.GetComponent<UniqueID>();
-                    int pID_int = Mathf.Abs(pID.ID);
+                    //int pID_int = Mathf.Abs(pID.ID);
                     
-                    _parentID = pID_int.ToString();
+                    _parentID = pID.ID.ToString();
                 }
             }
             catch { Debug.LogError("No se pudo conseguir la ID del padre"); }
@@ -148,6 +161,7 @@ public class ReplicatedObject : MonoBehaviour
                     GameObject newParent = UniqueIDManager.Instance.GetGameObjectByID(_id);
                     if (newParent != null)
                         transform.parent = newParent.transform;
+                    else transform.parent = null;
                 }
             }
             if(input.Children.Length > 0 && children != null)
@@ -164,7 +178,6 @@ public class ReplicatedObject : MonoBehaviour
                             children_data.Add(_children_data);
                         }
                     }
-                    List<GameObjectData> notReplicated = new List<GameObjectData>();
                 foreach (var child in children_data)
                 {
                         bool replicated = false;
@@ -179,6 +192,19 @@ public class ReplicatedObject : MonoBehaviour
                                 if (child.Scale.Length > 0 && child.Scale != "")
                                     _child.transform.localScale = MultiplayerManager.Instance.vt3_FromString(child.Scale);
                                 replicated = true;
+
+                                int _pID = 0;
+                                if (_child.transform.parent) _pID = UniqueIDManager.Instance.GetIDFromGameObject(_child.transform.parent.gameObject);
+                                if(input.ParentID != _pID.ToString())
+                                {
+                                    if (input.ParentID == "null") _child.transform.parent = null;
+                                    else
+                                    {
+                                        Debug.Log("Setting the parent in replication");
+                                        int pID = 0; int.TryParse(input.ParentID, out pID);
+                                        _child.transform.parent = UniqueIDManager.Instance.GetGameObjectByID(Mathf.Abs(_pID)).transform;
+                                    }
+                                }
                             }
                         }
                         if (!replicated)
@@ -186,17 +212,19 @@ public class ReplicatedObject : MonoBehaviour
                             int childID = 0; int.TryParse(child.ID, out childID);
                             int parentID = 0; int.TryParse(child.ParentID, out parentID);
 
-                            //childID = Mathf.Abs(childID);
-                            //parentID = Mathf.Abs(parentID);
+                            childID = Mathf.Abs(childID);
+                            parentID = Mathf.Abs(parentID);
 
                             Debug.Log("Parent id is : " + parentID + "\n Child id is : " + childID);
 
                             GameObject childGO = UniqueIDManager.Instance.GetGameObjectByID(childID);
                             GameObject parentGO = UniqueIDManager.Instance.GetGameObjectByID(parentID);
 
-                            if (childGO == null || parentGO == null) { Debug.LogError("Couldn't find the parent or the child" + "\n Parent value is : " + parentGO + "\n Child value is : " + childGO); break; }
+                            if (childGO == null) { Debug.LogError("Couldn't find the parent or the child" + "\n Parent value is : " + parentGO + "\n Child value is : " + childGO); break; }
 
-                            childGO.transform.parent = parentGO.transform;
+                            if (parentGO)
+                                childGO.transform.parent = parentGO.transform;
+                            else { childGO.transform.parent = null;}
 
                             childGO.transform.localPosition = MultiplayerManager.Instance.vt3_FromString(child.Position);
                             childGO.transform.localRotation = MultiplayerManager.quat_FromString(child.Rotation);

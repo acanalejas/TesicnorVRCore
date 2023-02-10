@@ -67,10 +67,12 @@ public class UniqueIDManager : MonoBehaviour
             {
                 if (id.GetComponent<ReplicatedObject>().insidePlayer)
                 {
-                    UniqueID[] childrenIDs = id.GetComponentsInChildren<UniqueID>();
-
+                    UniqueID[] childrenIDs = id.GetComponentsInChildren<UniqueID>(true);
+                    Debug.Log(childrenIDs.Length);
+                    if(childrenIDs.Length > 0)
                     foreach(var childID in childrenIDs)
                     {
+                        if(childID != id && childID.ID > 0);
                         childID.SetID(-childID.ID);
                     }
                 }
@@ -81,26 +83,35 @@ public class UniqueIDManager : MonoBehaviour
     public GameObject GetGameObjectByID(int id)
     {
         GameObject result = null;
-        int searchID = id;
-        if (id < 0) searchID = -id;
+        int searchID = Mathf.Abs(id);
         foreach (UniqueID _id in allIDs)
         {
             if (searchID == _id.ID) result = _id.gameObject;
         }
 
-        if (result == null && id < 0)
+        if (result == null)
         {
             GameObject original = null;
             foreach (var _id in allIDs)
             {
-                if (id == _id.ID) original = _id.gameObject;
+                if (id == _id.ID || id == -_id.ID) original = _id.gameObject;
             }
 
             if (original)
             {
                 Debug.Log("Creating new GOS for replicating");
                 GameObject newGO = GameObject.Instantiate(original, original.transform.position, original.transform.rotation);
-                newGO.GetComponent<UniqueID>().SetID(-id);
+                newGO.GetComponent<UniqueID>().SetID(id);
+                allIDs.Add(newGO.GetComponent<UniqueID>());
+                if (newGO.GetComponent<ReplicatedObject>())
+                    newGO.GetComponent<ReplicatedObject>().insidePlayer = false; //MultiplayerManager.Instance.allReplicated.Add(newGO.GetComponent<ReplicatedObject>());
+
+                UniqueID[] childrenIDs = newGO.GetComponentsInChildren<UniqueID>();
+                if(childrenIDs.Length > 0)
+                    foreach(var childID in childrenIDs)
+                    {
+                        allIDs.Add(childID);
+                    }
                 result = newGO;
             }
         }
@@ -138,7 +149,7 @@ public class UniqueIDManagerEditor : Editor
     public void OnEnable()
     {
         UniqueIDManager manager = target as UniqueIDManager;
-        manager.SetIDs();
+        //manager.SetIDs();
     }
 
     public void ResetIDs()

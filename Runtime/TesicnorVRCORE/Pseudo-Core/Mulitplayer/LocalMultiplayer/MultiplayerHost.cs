@@ -54,15 +54,15 @@ public class MultiplayerHost : MonoBehaviour
 
     private void Update()
     {
-        try
-        {
+        // try
+        //{
             if (content != lastContent && content != "" && content != response) 
             { MultiplayerManager.Instance.FindReplicatedGameObjects(content); }
-        }
-        catch
-        {
-            Debug.LogError("Coudn't replicate");
-        }
+        //}
+        //catch
+        //{
+        //    Debug.LogError("Coudn't replicate");    
+        //}
 
         try
         {
