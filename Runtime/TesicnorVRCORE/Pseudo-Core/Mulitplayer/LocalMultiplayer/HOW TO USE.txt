@@ -1,0 +1,87 @@
+GUIA DE COMO USAR EL MODO MULTIJUGADOR CON EL PLUGIN DE TESICNOR
+
+INDICE :
+ 
+	1. Necesarios en la escena
+	2. Workflow del plugin
+	3. Como usar el plugin
+	4. Como conectar
+
+
+
+1.NECESARIOS EN LA ESCENA
+
+Los componentes sin los que sería imposible hacerlo funcionar son los siguientes:
+- MultiplayerManager -> Contiene toda la funcionalidad general de manejo de datos, parseo y viceversa.
+- UniqueIDManager -> Se encarga de asignar una ID a cada GameObject de la escena, además de buscar un objeto por ID, y una ID teniendo el objeto
+- MultiplayerHost/Client -> Se encarga de la conexion específica bien sea el cliente o el host. Ya profundizaremos en sus diferencias
+- ReplicatedObject -> Objeto replicado, se encarga de conseguir la informacion necesaria para replicar de un GameObject y contiene los métodos necesarios para que se replique si le entran datos.
+
+
+2. WORKFLOW DEL PLUGIN
+
+El plugin funciona por replicación P2P, en una wifi local.
+Las conexiones se realizan a traves del puerto 8080 del dispositivo, y el cliente apunta a la IP directa del host, debido a ello han de estar en la misma wifi en el momento de jugar.
+
+No hay que preocuparse por conocer la IP de nuestro dispositivo, puesto que en la clase MultiplayerManager tenemos la variable estática "IP" que nos devuelve la IP que estemos usando en ese momento en la red local.
+
+El método para enviar los datos es el siguiente:
+Cada ReplicatedObject de la escena almacena informacion en una estructura de tipo GameObjectData sobre el GameObject que lo contiene y todos sus hijos (nombre, ID, posicion, rotacion, escala, hijos), y con un rate de 30 fps parsea esa estructura en un string con formato Json, el cual el cliente pasa a una lista de bytes, lo encapsula en un mensaje HTTP de tipo POST apuntando directamente a la IP del host en el puerto 8080.
+
+El host recibe la petición y añade la lista de bytes a un buffer el cual se va llenandod de peticiones y a su vez en el Update del host, vamos analizando cada posicion del buffer y liberándolo.
+Esto es así para evitar una pérdida de información, así como un bloqueo en el Host al realizar demasiadas operaciones mientras recibe cada petición.
+
+Las peticiones tienen 3 partes: 
+	-> La parte de los objetos replicados 
+	-> La parte de los métodos (acciones)
+	-> La parte de los campos
+
+En la parte de los objetos replicados simplemente es cada objeto replicado, su estructura GameObjectData pasada a Json y se envía en cada petición.
+La parte de las acciones, se envía una estructura llamada ActionData pasada a Json, y solo se envía en el frame que se ejecuta la acción.
+La parte de los campos es similar a la de las acciones, en este caso se envia una estructura de tipo FieldData pasada a Json, solo en los frames que los valores cambian.
+
+De hacer que todo esto encaje y tenga sentido y no sea un infierno de usar, se encargan varias clases:
+	-> OverrideCode
+	-> MultiplayerManagerEditor
+	-> ReplicatedObjectEditor
+	-> ReplicatedAttribute
+
+Las clases de editor se encargan de en tiempo de editor buscar si hay campos o métodos con el atributo Replicated,
+lo cual es usado para lanzar el constructor de ReplicatedAttribute (Ya que un constructor de atributo solo se lanza cuando buscamos el atributo con GetCustomAttribute).
+La clase ReplicatedAttribute tiene dos constructores, uno para acciones y uno para campos.
+Hay que recordar que solo pueden ser valores constantes y que no dependan de ninguna instancia, pero nosotros solo lo usaremos en Editor asi que nos sirve perfectamente.
+A estos constructores hay que pasarles datos como el directorio del archivo en el que se encuentra lo que estamos apuntando, el nombre de la accion o el campo, el nombre de la clase...
+Y esto es para que la clase OverrideCode pueda recargar los binarios del archivo que contiene la clase que estamos apuntando, y añade wrappers, setters, getters, en general, añade el código necesario
+para poder linkear todo.
+
+Cuando por ejemplo se lanza una acción replicada, recibiremos un Json de un FieldData, al analizarlo, se busca el GameObject con la ID que recibimos, el componente dentro de ese GameObject
+con el tipo que hemos recibido, y se invoca la función con nombre F + <nombredeaccion>, y de similar manera ocurre con los campos.
+
+
+3. COMO USAR EL PLUGIN DE MULTIPLYER
+
+Para usar el plugin correctamente, primero siempre debe haber en escena un MultiplayerManager, un UniqueIDManager, y un cliente o un host.
+Si simplemente queremos que el transform de un objeto este replicado, a ese objeto se le añade el componente ReplicatedObject y se le dice si está dentro del jugador o no, y se le asigna el transform.
+Si necesitamos replicar un evento/método/función, debemos añadirlos a una acción, que será la que se invoque y añadirle el atributo Replicated a la acción, hecho esto solo necesitaremos seleccionar en la escena
+o bien el objeto replicado, o el MultiplayerManager que se encargaran de lanzar el constructor del atributo.
+Si queremos replicar un parámetro, es igual pero no hace falta crear ninguno nuevo, simplemente añadimos el atributo y listo.
+
+Si nos queremos ahorrar comederos de cabeza, en la ruta de menú Tesicnor -> Multiplayer tenemos varios GameObjects ya preparados para el Multiplayer.
+
+A tener en cuenta: 
+Los objetos que pueden ser agarrados no necesariamente deben replicarse, puesto que la jerarquía de un objeto replicado también se envia, y esto incluye el transform de los hijos, 
+pero si tenemos un evento de activación de fisicas, disparo, o cualquier cosa que se dispare, eso si deberá ser replicado, o no estarán sincronizados ambos jugadores puesto que a uno se le lanzara
+un evento que a otro no.
+
+4. COMO CONECTAR
+
+Para conectar dos equipos con este plugin, primero debe iniciarse el Host, con crearlo en Runtime o previamente sirve, siempre y cuando tenga marcado el valor "Initialize on play" para que empiece
+a escuchar automaticamente, sino deberemos lanzar el método "CreateLocalSession" que contiene la clase MultiplayerHost para iniciar la escucha.
+
+Ahora bien la conexion es a IP directa, por tanto el cliente debe conocer la IP antes de intentar conectarse, asi que aqui ya depende de la aplicacion en cuestion y el desarrollador, pero lo ideal sería enseñarle al
+host su propia IP, y que este se la diga al cliente, que deberá introducirla en algun sistema para setearla en el MultiplayerClient con el método SetIP(string ip) donde "ip" debe ser
+la IP en cadena de texto ejemplo "192.168.20.50".
+
+El cliente en cuanto a inicializacion funciona igual al host, se marca para que lance peticiones desde el incio, o se inicializa manualmente mas adelante.
+
+

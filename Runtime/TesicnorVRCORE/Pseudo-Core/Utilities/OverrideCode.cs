@@ -48,6 +48,63 @@ public static class OverrideCode
         stream.Close();
     }
 
+    public static void AddFieldValue(FileStream stream, string fieldName, string fieldValue, string className)
+    {
+        if (!stream.CanRead || !stream.CanWrite) return;
+        if (fieldName.Length <= 0 || fieldValue.Length <= 0 || className.Length <= 0) return;
+
+        string added = " = " + fieldValue;
+
+        char[] buffer = new char[stream.Length + added.Length];
+
+        StreamReader sr = new StreamReader(stream);
+        sr.ReadBlock(buffer, 0, (int)stream.Length); 
+
+        int indexOffset = SearchWordInCharArray(className, buffer);
+        int startIndex = SearchWordInCharArray(fieldName, buffer, indexOffset);
+
+        if (startIndex <= 0) return;
+
+        char[] preBuffer = new char[startIndex];
+
+        for(int i = 0; i < startIndex; i++)
+        {
+            preBuffer[i] = buffer[i];
+        }
+
+        char[] inyectedCode = added.ToCharArray();
+
+        char[] postBuffer = new char[stream.Length - startIndex];
+
+        for(int i = startIndex; i < stream.Length; i++)
+        {
+            postBuffer[i - startIndex] = buffer[i];
+        }
+        char[] result = new char[preBuffer.Length + inyectedCode.Length + postBuffer.Length];
+
+        for (int i = 0; i < preBuffer.Length; i++)
+        {
+            result[i] = preBuffer[i];
+        }
+        for (int i = 0; i < inyectedCode.Length; i++)
+        {
+            result[i + startIndex] = inyectedCode[i];
+        }
+        for (int i = 0; i < postBuffer.Length; i++)
+        {
+            result[i + startIndex + inyectedCode.Length] = postBuffer[i];
+        }
+
+        string result_str = "";
+
+        foreach (var c in result) if (c != char.MinValue) result_str += c.ToString();
+
+        MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(result_str));
+        ms.CopyTo(stream);
+        stream.SetLength(0);
+        stream.Write(Encoding.UTF8.GetBytes(result_str), 0, result_str.Length);
+    }
+
     /// <summary>
     /// Ads a field to a class.
     /// Needs a FileStream with access read and write
@@ -224,7 +281,7 @@ public static class OverrideCode
         sr.ReadBlock(buffer, 0, (int)stream.Length);
 
         if (SearchWordInCharArray(methodName, buffer) <= 0) return;
-
+        if (SearchWordInCharArray(newContent, buffer) > 0) return;
         int startIndex = SearchWordInCharArray(methodName, buffer);
         int writeIndex = SearchSymbolEndClass(startIndex, buffer);
 
@@ -403,15 +460,29 @@ public static class OverrideCode
     private static int SearchSymbolEndClass(int startIndex, char[] array)
     {
         int x = 0;
-        int index = 0;
-        foreach (char c in array)
+        for(int i = startIndex; i < array.Length; i++)
         {
-            if (c == '{') x++;
-            if (c == '}') { x--; if (x <= 0) return index; }
-            index++;
+            if (array[i] == '{') x++;
+            if (array[i] == '}') { x--; if (x <= 0) return i; }
         }
 
         return 0;
+    }
+
+    public static bool IsWordInClass(FileStream stream, string word)
+    {
+        if (word.Length <= 0) return false;
+        if (!stream.CanWrite || !stream.CanRead) return false;
+
+        char[] buffer = new char[stream.Length];
+
+        StreamReader sr = new StreamReader(stream);
+        sr.ReadBlock(buffer, 0, (int)stream.Length);
+
+        int search = SearchWordInCharArray(word, buffer);
+
+        if (search > 0) return true;
+        return false;
     }
 
 #if UNITY_EDITOR

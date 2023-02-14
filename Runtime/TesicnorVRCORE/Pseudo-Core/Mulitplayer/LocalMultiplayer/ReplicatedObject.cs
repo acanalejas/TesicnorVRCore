@@ -47,22 +47,24 @@ public class ReplicatedObject : MonoBehaviour
         GetChildren();
         SetGameObjectData();
     }
+
+    List<GameObject> _childrenList = new List<GameObject>();
+    List<GameObject> toRemove = new List<GameObject>();
     private void GetChildren()
     {
         Transform[] _children = this.transform.GetComponentsInChildren<Transform>();
 
-        List<GameObject> _childrenList = new List<GameObject>();
+        _childrenList.Clear();
         foreach(var child in _children)
         {
-            if (child.gameObject != this.gameObject) _childrenList.Add(child.gameObject);
             if (!children_modified.Contains(child.gameObject) && child.gameObject != this.gameObject) children_modified.Add(child.gameObject);
+            if (child.gameObject != this.gameObject) _childrenList.Add(child.gameObject);
         }
-        List<GameObject> toRemove = new List<GameObject>();
+        toRemove.Clear();
         foreach(var child in children_modified)
         {
             if (!_childrenList.Contains(child.gameObject))
             {
-                Debug.Log("Changing the parent to"); 
                 _childrenList.Add(child);
                 toRemove.Add(child);
             }
@@ -143,10 +145,10 @@ public class ReplicatedObject : MonoBehaviour
             {
                 if (transform.parent)
                 {
-                    UniqueID pID = this.transform.parent.GetComponent<UniqueID>();
+                    int pID = UniqueIDManager.Instance.GetIDFromGameObject(this.transform.parent.gameObject);
                     //int pID_int = Mathf.Abs(pID.ID);
                     
-                    _parentID = pID.ID.ToString();
+                    _parentID = pID.ToString();
                 }
             }
             catch { Debug.LogError("No se pudo conseguir la ID del padre"); }
@@ -158,7 +160,8 @@ public class ReplicatedObject : MonoBehaviour
                 {
                     int _id = 0; int.TryParse(input.ParentID, out _id);
 
-                    GameObject newParent = UniqueIDManager.Instance.GetGameObjectByID(_id);
+                    GameObject newParent = UniqueIDManager.Instance.GetGameObjectByID(_id, false);
+                    if (_id == 0) newParent = null;
                     if (newParent != null)
                         transform.parent = newParent.transform;
                     else transform.parent = null;
@@ -183,7 +186,7 @@ public class ReplicatedObject : MonoBehaviour
                         bool replicated = false;
                         foreach (var _child in children)
                         {
-                            if (child.Name == _child.name && _child.transform)
+                            if (child.ID == UniqueIDManager.Instance.GetIDFromGameObject(_child).ToString() && _child.transform)
                             {
                                 if (child.Position.Length > 0 && child.Position != "")
                                     _child.transform.localPosition = MultiplayerManager.Instance.vt3_FromString(child.Position);
@@ -193,18 +196,37 @@ public class ReplicatedObject : MonoBehaviour
                                     _child.transform.localScale = MultiplayerManager.Instance.vt3_FromString(child.Scale);
                                 replicated = true;
 
-                                int _pID = 0;
-                                if (_child.transform.parent) _pID = UniqueIDManager.Instance.GetIDFromGameObject(_child.transform.parent.gameObject);
-                                if(input.ParentID != _pID.ToString())
+                                int _pID = 0; int.TryParse(child.ParentID, out _pID);
+
+                                string _pID_str = "null";
+                                GameObject parentGO = null;
+                                if ( _pID != 0)
+                                parentGO = UniqueIDManager.Instance.GetGameObjectByID(_pID, false);
+
+                                if (parentGO)
                                 {
-                                    if (input.ParentID == "null") _child.transform.parent = null;
+                                    _child.transform.parent = parentGO.transform;
+                                }
+                                else _child.transform.parent = null;
+
+                                
+
+                                /*if (_child.transform.parent) _pID = UniqueIDManager.Instance.GetIDFromGameObject(_child.transform.parent.gameObject);
+                                
+                                if(_pID != 0) _pID_str = _pID.ToString();
+                                
+                                if(input.ParentID != _pID_str)
+                                {
+                                    if (input.ParentID == "null" || input.ParentID == "0") _child.transform.parent = null;
                                     else
                                     {
                                         Debug.Log("Setting the parent in replication");
                                         int pID = 0; int.TryParse(input.ParentID, out pID);
-                                        _child.transform.parent = UniqueIDManager.Instance.GetGameObjectByID(Mathf.Abs(_pID)).transform;
+                                        GameObject parentGO = UniqueIDManager.Instance.GetGameObjectByID(_pID, false);
+                                        if(parentGO)
+                                        _child.transform.parent = parentGO.transform;
                                     }
-                                }
+                                }*/
                             }
                         }
                         if (!replicated)
@@ -215,7 +237,6 @@ public class ReplicatedObject : MonoBehaviour
                             childID = Mathf.Abs(childID);
                             parentID = Mathf.Abs(parentID);
 
-                            Debug.Log("Parent id is : " + parentID + "\n Child id is : " + childID);
 
                             GameObject childGO = UniqueIDManager.Instance.GetGameObjectByID(childID);
                             GameObject parentGO = UniqueIDManager.Instance.GetGameObjectByID(parentID);
@@ -307,7 +328,6 @@ public class ReplicatedObjectEditor: Editor
             if(target.GetType().Name == method.Key.DeclaringType.Name)
             {
                 string path = OverrideCode.GetTypePath(target);
-                Debug.Log(path);
                 string fieldName = "f" + method.Key.Name;
                 string fieldType = "System.Action";
                 string fieldValue = "";

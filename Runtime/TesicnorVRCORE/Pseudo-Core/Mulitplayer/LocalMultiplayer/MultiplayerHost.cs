@@ -43,12 +43,13 @@ public class MultiplayerHost : MonoBehaviour
         StartCoroutine("update");
     }
 
+    WaitForSeconds seconds = new WaitForSeconds(1 / 30);
     IEnumerator update()
     {
         while (true)
         {
             manageRequest();
-            yield return new WaitForSeconds(1 / 30);
+            yield return seconds;
         }
     }
 
@@ -81,7 +82,6 @@ public class MultiplayerHost : MonoBehaviour
     public void CreateLocalSession()
     {
         host = new HttpListener();
-        Debug.Log(IP);
         host.Prefixes.Add("http://" + this.IP + ":" + port.ToString() + "/");
         //CloseLocalSession();
         if (!host.IsListening) { host.Start(); }

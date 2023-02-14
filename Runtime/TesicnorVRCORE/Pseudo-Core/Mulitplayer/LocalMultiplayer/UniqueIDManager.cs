@@ -68,7 +68,6 @@ public class UniqueIDManager : MonoBehaviour
                 if (id.GetComponent<ReplicatedObject>().insidePlayer)
                 {
                     UniqueID[] childrenIDs = id.GetComponentsInChildren<UniqueID>(true);
-                    Debug.Log(childrenIDs.Length);
                     if(childrenIDs.Length > 0)
                     foreach(var childID in childrenIDs)
                     {
@@ -80,7 +79,7 @@ public class UniqueIDManager : MonoBehaviour
         }
     }
 
-    public GameObject GetGameObjectByID(int id)
+    public GameObject GetGameObjectByID(int id, bool canInstantiate = true)
     {
         GameObject result = null;
         int searchID = Mathf.Abs(id);
@@ -97,9 +96,8 @@ public class UniqueIDManager : MonoBehaviour
                 if (id == _id.ID || id == -_id.ID) original = _id.gameObject;
             }
 
-            if (original)
+            if (original && canInstantiate)
             {
-                Debug.Log("Creating new GOS for replicating");
                 GameObject newGO = GameObject.Instantiate(original, original.transform.position, original.transform.rotation);
                 newGO.GetComponent<UniqueID>().SetID(id);
                 allIDs.Add(newGO.GetComponent<UniqueID>());
@@ -127,7 +125,7 @@ public class UniqueIDManager : MonoBehaviour
     {
         if (gameObject.GetComponent<UniqueID>() != null) return gameObject.GetComponent<UniqueID>().ID;
 
-        return -1;
+        return 0;
     }
 }
 

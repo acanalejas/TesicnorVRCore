@@ -35,6 +35,7 @@ public class MultiplayerClient : MonoBehaviour
         StartCoroutine("update");
     }
 
+    WaitForSeconds seconds = new WaitForSeconds(1 / 30);
     private IEnumerator update()
     {
         while (true)
@@ -59,9 +60,7 @@ public class MultiplayerClient : MonoBehaviour
                 last_response = response_string;
             }
 
-            Debug.Log("Number of actions to replicate this frame : " + MultiplayerManager.Instance.actionsData.Count);
-            
-            yield return new WaitForSeconds(1 / 30);
+            yield return seconds;
         }
         
     }
@@ -109,6 +108,11 @@ public class MultiplayerClient : MonoBehaviour
         }
         response.Content?.Dispose();
         response.Content = null;
+    }
+
+    public void SetIP(string ip)
+    {
+        IP = ip;
     }
 
     #endregion

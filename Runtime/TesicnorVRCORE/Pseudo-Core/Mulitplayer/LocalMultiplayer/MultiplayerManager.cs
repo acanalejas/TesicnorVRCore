@@ -47,7 +47,6 @@ public struct FieldData
 }
 
 
-[RequireComponent(typeof(UnityMainThreadInvoker))]
 [RequireComponent(typeof(UniqueIDManager))]
 [DisallowMultipleComponent]
 public class MultiplayerManager : MonoBehaviour
@@ -164,26 +163,22 @@ public class MultiplayerManager : MonoBehaviour
         data.Scale = str_fromVector3(go.transform.localScale);
         try
         {
-            int id = go.GetComponent<UniqueID>().ID;
+            int id = UniqueIDManager.Instance.GetIDFromGameObject(go);
             //id = Mathf.Abs(id);
             data.ID = id.ToString();
         }
         catch
         {
-            data.ID = "0";
+            Debug.LogError("Coudn't get the ID");
         }
 
         try
         {
             if (go.transform.parent != null)
             {
-            Debug.Log("Parent transform is : " + go.transform.parent);
 
                 data.ParentID = UniqueIDManager.Instance.GetIDFromGameObject(go.transform.parent.gameObject).ToString();
-                
-                int id = 0; int.TryParse(data.ParentID, out id);
-                if (insidePlayer) data.ParentID = (-id).ToString();
-                Debug.Log("Parent ID registrada es : " + data.ParentID);
+                if (data.ParentID == "0") data.ParentID = "null";
             }
            //else
            //{
@@ -304,6 +299,7 @@ public class MultiplayerManager : MonoBehaviour
         return result;
     }
 
+    static List<GameObjectData> result = new List<GameObjectData>();
     /// <summary>
     /// Gets all GameObjectData structs from a single string
     /// </summary>
@@ -311,7 +307,7 @@ public class MultiplayerManager : MonoBehaviour
     /// <returns></returns>
     public static GameObjectData[] allData_god(string input)
     {
-        List<GameObjectData> result = new List<GameObjectData>();
+        result.Clear();
         if (input == null || input.Length == 0 || input == "") return null;
         string[] datas = input.Split(MethodsNJsonSeparator)[0].Split(jsonSeparator);
         foreach(var data in datas)
@@ -334,6 +330,7 @@ public class MultiplayerManager : MonoBehaviour
         return false;
     }
 
+    List<ReplicatedObject> added_ro = new List<ReplicatedObject>();
     /// <summary>
     /// Find all the replicated objects and applys the incoming modification from the other device
     /// </summary>
@@ -358,7 +355,7 @@ public class MultiplayerManager : MonoBehaviour
 
                     if (!found)
                     {
-                    List<ReplicatedObject> added_ro = new List<ReplicatedObject>();
+                        added_ro.Clear();
                         foreach(var rep in allReplicated)
                         {
                             int this_id = 0; int.TryParse(rep.this_data.ID, out this_id);
@@ -379,7 +376,7 @@ public class MultiplayerManager : MonoBehaviour
                                         comp.GetType() != typeof(MeshFilter) && comp.GetType() != typeof(UnityEngine.UI.Text) &&
                                         comp.GetType() != typeof(TMPro.TextMeshProUGUI) && comp.GetType() != typeof(ParticleSystem) &&
                                         comp.GetType() != typeof(UnityEngine.UI.CanvasScaler) && comp.GetType() != typeof(Canvas) &&
-                                        comp.GetType() != typeof(RectTransform) && comp.GetType() != typeof(Camera) &&
+                                        comp.GetType() != typeof(RectTransform) &&
                                         comp.GetType() != typeof(CanvasRenderer) && comp.GetType() != typeof(GameObject) &&
                                         comp.GetType() != typeof(ReplicatedObject) && comp.GetType() != typeof(UniqueID))
                                     {
@@ -390,14 +387,14 @@ public class MultiplayerManager : MonoBehaviour
                                             mono.enabled = false;
                                         }
                                     }
-
-                                    else if (comp.GetType() == typeof(Camera)) { Camera cam = comp as Camera; cam.enabled = false; }
+                                    if(comp.GetType() == typeof(Camera)) { Camera cam = comp as Camera; cam.enabled = false; }
                                 }
-                                if (newObj.GetComponent<ReplicatedObject>())
+                                ReplicatedObject fromNewObj = newObj.GetComponent<ReplicatedObject>();
+                                if (fromNewObj)
                                 {
-                                    newObj.GetComponent<ReplicatedObject>().Replicate(data);
-                                    newObj.GetComponent<ReplicatedObject>().insidePlayer = false;
-                                    added_ro.Add(newObj.GetComponent<ReplicatedObject>());
+                                    fromNewObj.Replicate(data);
+                                    fromNewObj.insidePlayer = false;
+                                    added_ro.Add(fromNewObj);
                                 }
                                 UniqueID[] added =  newObj.GetComponentsInChildren<UniqueID>();
                                 if(added.Length > 0)
@@ -417,8 +414,8 @@ public class MultiplayerManager : MonoBehaviour
         {
             Debug.LogError("Invalid GameObject to replicate");
         }
-        try
-        {
+        //             try
+        //             {
             string methods = input;
             try
             {
@@ -433,8 +430,10 @@ public class MultiplayerManager : MonoBehaviour
             {
                 string[] methodsJson = methods.Split(jsonSeparator.ToString());
 
+            if(methodsJson.Length > 0)
                 foreach (var method in methodsJson)
                 {
+                if (method.Length <= 0 || method == null) continue;
                     ActionData data = JsonUtility.FromJson<ActionData>(method);
                     int id = 0; int.TryParse(data.objectID, out id);
                     if (UniqueIDManager.Instance == null) Debug.Log("UniqueIDManager null value");
@@ -445,11 +444,11 @@ public class MultiplayerManager : MonoBehaviour
 
                 }
             }
-        }
-        catch
-        {
-            Debug.LogError("Couldn't replicate actions");
-        }
+        //}
+        //catch
+        //{
+        //    Debug.LogError("Couldn't replicate actions");
+        //}
 
         try
         {
@@ -462,7 +461,6 @@ public class MultiplayerManager : MonoBehaviour
 
                 foreach (var field in fieldsJson)
                 {
-                    Debug.Log("Replicating fields bb");
                 if (field.Length <= 0 || field == null || field == "") continue;
                     FieldData fd = JsonUtility.FromJson<FieldData>(field);
                     int id = 0; int.TryParse(fd.objectID, out id);
@@ -684,10 +682,16 @@ public class MultiplayerManagerEditor : Editor
     private void CheckActionWrapper(MultiplayerManager manager)
     {
         TypeCache.FieldInfoCollection fic = TypeCache.GetFieldsWithAttribute(typeof(ReplicatedAttribute));
+        TypeCache.MethodCollection mc = TypeCache.GetMethodsWithAttribute(typeof(ReplicatedAttribute));
 
         foreach(var f in fic)
         {
             f.GetCustomAttribute(typeof(ReplicatedAttribute));
+        }
+
+        foreach(var m in mc)
+        {
+            m.GetCustomAttribute(typeof(ReplicatedAttribute));
         }
     }
     
@@ -702,7 +706,34 @@ public class ReplicatedAttribute : Attribute
         FileStream fs = OverrideCode.BothStream(filePath);
         OverrideCode.AddMethod(fs, "F" + actionName, actionName + "(); \n MultiplayerManager.Instance.actionsData.RemoveAt(MultiplayerManager.Instance.actionsData.Count - 1); \n" + "//Codigo generado dinamicamente, no tocar", className);
         fs.Close();
-        Debug.Log("Constructing Replicated Attribute");
+
+        FileStream fs_2 = OverrideCode.BothStream(filePath);
+        if(OverrideCode.IsWordInClass(fs_2, "Awake"))
+        {
+            fs_2.Close();
+            FileStream fs_3 = OverrideCode.BothStream(filePath);
+            OverrideCode.AddCodeToMethod(fs_3, "Awake", actionName + " += ()=>{" +
+                "\nActionData adata = new ActionData();" +
+                "\nadata.ActionName = nameof(" + actionName + ");" +
+                "\nadata.TypeName = nameof(" + className + ");" +
+                "\nadata.objectID = UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString();" +
+                "\nMultiplayerManager.Instance.actionsData.Add(adata);" +
+                "\n};", className);
+            fs_3.Close();
+        }
+        else
+        {
+            fs_2.Close();
+            FileStream fs_3 = OverrideCode.BothStream(filePath);
+            OverrideCode.AddMethod(fs_2, "Awake", actionName + " += ()=> {" +
+                "\nActionData adata = new ActionData();" +
+                "\nadata.ActionName = nameof(" + actionName + ");" +
+                "\nadata.TypeName = " + "nameof("+ className + ");" +
+                "\nadata.objectID = UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString();" +
+                "\nMultiplayerManager.Instance.actionsData.Add(adata);" +
+                "\n};", className);
+            fs_3.Close();
+        }
     }
     public ReplicatedAttribute(string fieldType, string fieldName, string className, string filePath)
     {
@@ -721,7 +752,6 @@ public class ReplicatedAttribute : Attribute
             "MultiplayerManager.Instance.AddFieldToReplicate(data); \n",
             "return " + "_" + fieldName + ";", className, true, fieldType);
         fs_2.Close();
-        Debug.Log("Constructing Replicated Attribute");
     }
 }
 

@@ -120,7 +120,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         CalculateVelocity();
         SetHandsTracking();
     }
-    private void Update()
+    public void Update()
     {
         CheckListSecurity();
     }

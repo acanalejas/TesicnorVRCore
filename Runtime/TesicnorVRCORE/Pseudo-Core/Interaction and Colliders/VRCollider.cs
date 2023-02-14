@@ -335,14 +335,14 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     {
         RepositionOnGrab();
         Vector3 _fixed = Vector3.zero;
-        if (grippingHand.handType == GrippingHand.HandType.left) _fixed = OffsetManager.Instance.currentHandsOffset.GetOffsetPositionFromForward(_offset, true);
-        else _fixed = OffsetManager.Instance.currentHandsOffset.GetOffsetPositionFromForward(_offset, false);
+        //if (grippingHand.handType == GrippingHand.HandType.left) _fixed = OffsetManager.Instance.currentHandsOffset.GetOffsetPositionFromForward(_offset, true);
+        //else _fixed = OffsetManager.Instance.currentHandsOffset.GetOffsetPositionFromForward(_offset, false);
         /*if (grippingHand.handType == GrippingHand.HandType.right) _fixed = new Vector3(OffsetManager.Instance.currentHandsOffset.RightPositionMult.x * _offset.x,
             OffsetManager.Instance.currentHandsOffset.RightPositionMult.y * _offset.y, OffsetManager.Instance.currentHandsOffset.RightPositionMult.z * _offset.z);
 
         else if (grippingHand.handType == GrippingHand.HandType.left) _fixed = new Vector3(OffsetManager.Instance.currentHandsOffset.LeftPositionMult.x * _offset.x,
              OffsetManager.Instance.currentHandsOffset.RightPositionMult.y * _offset.y, OffsetManager.Instance.currentHandsOffset.RightPositionMult.z * _offset.z);*/
-        this.transform.localPosition = _fixed;
+        this.transform.localPosition = _offset;
     }
 
     /// <summary>
@@ -355,9 +355,9 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         RepositionOnGrab(_offsetPosition);
         Vector3 rotation = Vector3.zero;
         float multiplier = 1;
-        if (grippingHand.handType == GrippingHand.HandType.left) { rotation = OffsetManager.Instance.currentHandsOffset.LeftHandRotationOffset; multiplier = OffsetManager.Instance.currentHandsOffset.LeftHandMultiplierOffsetRotation; }
-        if (grippingHand.handType == GrippingHand.HandType.right) { rotation = OffsetManager.Instance.currentHandsOffset.RightHandRotationOffset; multiplier = OffsetManager.Instance.currentHandsOffset.RightHandMultiplierOffsetRotation; }
-        this.transform.localRotation = Quaternion.Euler(_offsetRotation*multiplier + rotation);
+        //if (grippingHand.handType == GrippingHand.HandType.left) { rotation = OffsetManager.Instance.currentHandsOffset.LeftHandRotationOffset; multiplier = OffsetManager.Instance.currentHandsOffset.LeftHandMultiplierOffsetRotation; }
+        //if (grippingHand.handType == GrippingHand.HandType.right) { rotation = OffsetManager.Instance.currentHandsOffset.RightHandRotationOffset; multiplier = OffsetManager.Instance.currentHandsOffset.RightHandMultiplierOffsetRotation; }
+        this.transform.localRotation = Quaternion.Euler(_offsetRotation);
     }
 
     /// <summary>
