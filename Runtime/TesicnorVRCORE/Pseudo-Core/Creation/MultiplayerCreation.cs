@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine.SpatialTracking;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR;
@@ -22,7 +24,7 @@ public class MultiplayerCreation : MonoBehaviour
     static string leftHandPrefabPath = "Assets/Oculus/VR/Prefabs/OVRCustomHandPrefab_L.prefab";
 
     static string lineRendererMatPath = "Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Materials/LineRenderer_Mat.mat";
-
+#if UNITY_EDITOR
     [MenuItem("Tesicnor/Multiplayer/Multiplayer Player")]
     public static void CreateMultiplayerPlayer_Controllers()
     {
@@ -582,4 +584,5 @@ public class MultiplayerCreation : MonoBehaviour
         UniqueIDManager uim = manager.GetComponent<UniqueIDManager>();
         uim.SetIDs();
     }
+#endif
 }

@@ -65,15 +65,17 @@ public class UniqueIDManager : MonoBehaviour
         {
             if (id.GetComponent<ReplicatedObject>())
             {
-                if (id.GetComponent<ReplicatedObject>().insidePlayer)
+                if (id.GetComponent<ReplicatedObject>().insidePlayer || id.ID < 0)
                 {
                     UniqueID[] childrenIDs = id.GetComponentsInChildren<UniqueID>(true);
+                    
                     if(childrenIDs.Length > 0)
-                    foreach(var childID in childrenIDs)
-                    {
-                        if(childID != id && childID.ID > 0);
-                        childID.SetID(-childID.ID);
-                    }
+                    //foreach(var childID in childrenIDs)
+                    //{
+                    //    if(childID != id && childID.ID > 0);
+                    //    childID.SetID(-childID.ID);
+                    //}
+                    if (id.ID > 0) id.SetID(-id.ID);
                 }
             }
         }

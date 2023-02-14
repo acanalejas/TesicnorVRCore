@@ -48,7 +48,7 @@ public class MultiplayerHost : MonoBehaviour
     {
         while (true)
         {
-            manageRequest();
+            
             yield return seconds;
         }
     }
@@ -77,6 +77,8 @@ public class MultiplayerHost : MonoBehaviour
             Debug.LogError("Couldn't get the string for the response");
         }
         lastContent = content;
+
+        manageRequest();
     }
 
     public void CreateLocalSession()

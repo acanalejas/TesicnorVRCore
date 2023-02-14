@@ -365,7 +365,7 @@ public class MultiplayerManager : MonoBehaviour
                             {
                                 GameObject newObj = UniqueIDManager.Instance.GetGameObjectByID(id);
 
-
+                                if (!newObj) continue;
                                 Component[] allComponents = newObj.GetComponentsInChildren<Component>();
                                 if(allComponents.Length > 0)
                                 foreach(var comp in allComponents)
