@@ -689,8 +689,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 685503957}
         m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
+        m_MethodName: No
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1492,7 +1492,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 685503957}
         m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: KeyboardDelete
+        m_MethodName: Yes
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
