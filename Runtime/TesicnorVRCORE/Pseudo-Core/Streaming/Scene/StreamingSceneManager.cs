@@ -24,6 +24,24 @@ public class StreamingSceneManager : MonoBehaviour
         //questionCanvas.SetActive(true);
         //keyboardCanvas.SetActive(false);
         StreamingCSharp.HttpClient_Custom.IntializeClient();
+
+        if(StreamingCSharp.HttpClient_Custom.isStreaming)
+        {
+            questionCanvas.SetActive(true);
+            keyboardCanvas.SetActive(false);
+        }
+    }
+
+    public void Yes()
+    {
+        StreamingCSharp.HttpClient_Custom.url = "";
+        StreamingCSharp.HttpClient_Custom.IntializeClient();
+
+        SceneManager.LoadScene(nextSceneIndex);
+    }
+    public void No()
+    {
+        SceneManager.LoadScene(nextSceneIndex);
     }
 
     public static void GoToStreamingScene(int _nextSceneIndex, string _nextSceneName = "")
