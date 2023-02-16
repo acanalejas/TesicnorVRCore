@@ -124,7 +124,7 @@ public class BackendScene : MonoBehaviour
                     PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
                     //SceneManager.LoadScene(nextBuildIndex);
-                    StreamingSceneManager.GoToStreamingScene(2, "00 Main Menu (Part 2)");
+                    SceneManager.LoadScene(nextBuildIndex);
                 }
                 else
                 {
@@ -155,8 +155,7 @@ public class BackendScene : MonoBehaviour
         PlayerPrefs.SetString(BackendGetter.BackendDataKey, JsonUtility.ToJson(data));
         PlayerPrefs.SetString("Username", "");
 
-        //SceneManager.LoadScene(nextBuildIndex);
-        StreamingSceneManager.GoToStreamingScene(2,"00 Main Menu (Part 2)");
+        SceneManager.LoadScene(nextBuildIndex);
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
