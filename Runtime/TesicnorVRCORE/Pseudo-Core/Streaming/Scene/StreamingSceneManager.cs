@@ -21,8 +21,8 @@ public class StreamingSceneManager : MonoBehaviour
 
     private void Start()
     {
-        questionCanvas.SetActive(true);
-        keyboardCanvas.SetActive(false);
+        //questionCanvas.SetActive(true);
+        //keyboardCanvas.SetActive(false);
     }
 
     public static void GoToStreamingScene(int _nextSceneIndex, string _nextSceneName = "")
