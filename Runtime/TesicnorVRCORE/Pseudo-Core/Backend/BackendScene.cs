@@ -21,6 +21,10 @@ public class BackendScene : MonoBehaviour
 
     public GameObject ConnectionPopUp_go;
 
+    public GameObject MailCanvas;
+
+    public GameObject logOutCanvas;
+
     List<Image> imgs = new List<Image>();
     List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
     List<Text> texts_legacy = new List<Text>();
@@ -33,9 +37,21 @@ public class BackendScene : MonoBehaviour
     #region METHODS
     public void Start()
     {
+        if(PlayerPrefs.HasKey("Username")) { logOutCanvas.SetActive(true); MailCanvas.SetActive(false); }
+        else { logOutCanvas.SetActive(false); MailCanvas.SetActive(true); }
         GetAllRenderedComponentsInWarningPopUp();
         SetWarningPopUpToTransparent();
         httpClient = new HttpClient();
+    }
+
+    public void Yes()
+    {
+        DemoButton();
+    }
+
+    public void No()
+    {
+        SceneManager.LoadScene(nextBuildIndex);
     }
 
     private void GetAllRenderedComponentsInWarningPopUp()
