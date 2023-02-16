@@ -37,7 +37,7 @@ public class BackendScene : MonoBehaviour
     #region METHODS
     public void Start()
     {
-        if(PlayerPrefs.HasKey("Username")) { logOutCanvas.SetActive(true); MailCanvas.SetActive(false); }
+        if(PlayerPrefs.HasKey("Username") && PlayerPrefs.GetString("Username").Length > 0) { logOutCanvas.SetActive(true); MailCanvas.SetActive(false); }
         else { logOutCanvas.SetActive(false); MailCanvas.SetActive(true); }
         GetAllRenderedComponentsInWarningPopUp();
         SetWarningPopUpToTransparent();

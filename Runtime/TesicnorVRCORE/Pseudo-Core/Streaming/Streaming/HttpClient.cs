@@ -59,5 +59,10 @@ namespace StreamingCSharp
             _content = new ByteArrayContent(data);
             return _content;
         }
+
+        public static void StopClient()
+        {
+            client.Dispose();
+        }
     }
 }

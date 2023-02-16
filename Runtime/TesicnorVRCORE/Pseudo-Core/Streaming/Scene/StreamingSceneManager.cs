@@ -23,6 +23,7 @@ public class StreamingSceneManager : MonoBehaviour
     {
         //questionCanvas.SetActive(true);
         //keyboardCanvas.SetActive(false);
+        StreamingCSharp.HttpClient_Custom.IntializeClient();
     }
 
     public static void GoToStreamingScene(int _nextSceneIndex, string _nextSceneName = "")

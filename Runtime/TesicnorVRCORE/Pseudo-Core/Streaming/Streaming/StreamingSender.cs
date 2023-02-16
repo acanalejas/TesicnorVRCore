@@ -29,7 +29,6 @@ public class StreamingSender : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(this);
-
         HttpClient_Custom.IntializeClient();
     }
     private void Start()
