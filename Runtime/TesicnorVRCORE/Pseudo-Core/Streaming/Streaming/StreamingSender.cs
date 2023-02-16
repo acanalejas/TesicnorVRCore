@@ -20,6 +20,8 @@ public class StreamingSender : MonoBehaviour
     public Camera playerCamera;
     private static ImageConverter converter;
     Texture2D parse;
+
+    public bool isStreaming = false;
     #endregion
 
     #region FUNCTIONS
@@ -61,6 +63,7 @@ public class StreamingSender : MonoBehaviour
     {
         while (true)
         {
+            isStreaming = HttpClient_Custom.isStreaming;
             this.WriteTXTFile();
             yield return frame;
         }

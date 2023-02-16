@@ -13,6 +13,7 @@ namespace StreamingCSharp
         public static string url = "http://192.168.20.55:8080";
         private static System.Net.Http.HttpClient client;
         private static byte[] content;
+        public static bool isStreaming = false;
 
         public static void IntializeClient()
         {
@@ -39,6 +40,8 @@ namespace StreamingCSharp
                 request.Content = content;
                 using(HttpResponseMessage result = await client.SendAsync(request, cts.Token))
                 {
+                    if (result.StatusCode == System.Net.HttpStatusCode.OK) isStreaming = true;
+                    else isStreaming = false;
                     result.Content?.Dispose();
                     result.Content = null;
                 }
