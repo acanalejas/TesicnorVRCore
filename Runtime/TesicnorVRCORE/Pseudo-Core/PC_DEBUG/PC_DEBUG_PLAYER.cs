@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -140,11 +138,11 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
     {
         camera.transform.position += new Vector3(0, camera_Height, 0);
 
-        leftController_GrippingHand =       leftController_Anchor.AddComponent<GrippingHand>();
-        leftController_HandInteraction =    leftController_Anchor.AddComponent<HandInteraction>();
+        leftController_GrippingHand = leftController_Anchor.AddComponent<GrippingHand>();
+        leftController_HandInteraction = leftController_Anchor.AddComponent<HandInteraction>();
 
-        rightController_GrippingHand =      rightController_Anchor.AddComponent<GrippingHand>();
-        rightController_HandInteraction =   rightController_Anchor.AddComponent<HandInteraction>();
+        rightController_GrippingHand = rightController_Anchor.AddComponent<GrippingHand>();
+        rightController_HandInteraction = rightController_Anchor.AddComponent<HandInteraction>();
 
         // =============== SETTING UP THE GRIPPING HANDS ======================
 
@@ -181,17 +179,17 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
     /// </summary>
     private void SetControllersPosition()
     {
-        Vector3 leftController_ScreenPoint =    new Vector2(Screen.width * 0.25f, Screen.height * 0.25f);
-        Vector3 rightController_ScreenPoint =   new Vector2(Screen.width * 0.75f, Screen.height * 0.25f);
+        Vector3 leftController_ScreenPoint = new Vector2(Screen.width * 0.25f, Screen.height * 0.25f);
+        Vector3 rightController_ScreenPoint = new Vector2(Screen.width * 0.75f, Screen.height * 0.25f);
 
-        Vector3 leftController_newPosition =    camera.ScreenToWorldPoint(leftController_ScreenPoint);
-        Vector3 rightController_newPosition =   camera.ScreenToWorldPoint(rightController_ScreenPoint);
+        Vector3 leftController_newPosition = camera.ScreenToWorldPoint(leftController_ScreenPoint);
+        Vector3 rightController_newPosition = camera.ScreenToWorldPoint(rightController_ScreenPoint);
 
-        leftController_Anchor.transform.forward =   -camera.transform.forward;
-        rightController_Anchor.transform.forward =  -camera.transform.forward;
+        leftController_Anchor.transform.forward = -camera.transform.forward;
+        rightController_Anchor.transform.forward = -camera.transform.forward;
 
-        leftController_Anchor.transform.position =      leftController_newPosition - leftController_Anchor.transform.forward * 0.5f;
-        rightController_Anchor.transform.position =     rightController_newPosition - rightController_Anchor.transform.forward * 0.5f;
+        leftController_Anchor.transform.position = leftController_newPosition - leftController_Anchor.transform.forward * 0.5f;
+        rightController_Anchor.transform.position = rightController_newPosition - rightController_Anchor.transform.forward * 0.5f;
 
         //leftController_Anchor.transform.localRotation =     Quaternion.Euler(leftController_RotationOffset);
         //rightController_Anchor.transform.localRotation =    Quaternion.Euler(rightController_RotationOffset);
@@ -203,18 +201,18 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
     private void CheckInput()
     {
         //For Grip
-        if (Input.GetKeyDown(gripCode_Left))        leftController_GrippingHand.Grab();
-        else if (Input.GetKeyUp(gripCode_Left))          leftController_GrippingHand.Release();
+        if (Input.GetKeyDown(gripCode_Left)) leftController_GrippingHand.Grab();
+        else if (Input.GetKeyUp(gripCode_Left)) leftController_GrippingHand.Release();
 
-        if (Input.GetKeyDown(gripCode_Right))       rightController_GrippingHand.Grab();
-        else if (Input.GetKeyUp(gripCode_Right))         rightController_GrippingHand.Release();
+        if (Input.GetKeyDown(gripCode_Right)) rightController_GrippingHand.Grab();
+        else if (Input.GetKeyUp(gripCode_Right)) rightController_GrippingHand.Release();
 
         //For Trigger
-        if (Input.GetKeyDown(triggerCode_Left))     leftController_HandInteraction.Click();
-        else if (Input.GetKeyUp(triggerCode_Left))       leftController_HandInteraction.Release();
+        if (Input.GetKeyDown(triggerCode_Left)) leftController_HandInteraction.Click();
+        else if (Input.GetKeyUp(triggerCode_Left)) leftController_HandInteraction.Release();
 
-        if (Input.GetKeyDown(triggerCode_Right))    rightController_HandInteraction.Click();
-        else if (Input.GetKeyUp(triggerCode_Right))      rightController_HandInteraction.Release();
+        if (Input.GetKeyDown(triggerCode_Right)) rightController_HandInteraction.Click();
+        else if (Input.GetKeyUp(triggerCode_Right)) rightController_HandInteraction.Release();
 
         //For Player Movement
         if (Input.GetKey(moveCode_Forward)) MovePlayer(camera.transform.forward);
@@ -233,7 +231,7 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
     /// </summary>
     private void RotatePlayer()
     {
-        if(lastFrameMousePosition != Vector3.zero)
+        if (lastFrameMousePosition != Vector3.zero)
         {
             Vector2 distance = Input.mousePosition - lastFrameMousePosition;
 
@@ -253,7 +251,7 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
 
             ///SETTING AND CLAMPING ROTATION
             camera.transform.rotation *= Quaternion.Euler(0, currentValueY, 0);
-            camera.transform.rotation = Quaternion.Euler(currentValueX, 
+            camera.transform.rotation = Quaternion.Euler(currentValueX,
                 camera.transform.rotation.eulerAngles.y, 0);
         }
         lastFrameMousePosition = Input.mousePosition;

@@ -14,7 +14,7 @@ public class StreamingSceneManager : MonoBehaviour
     public GameObject questionCanvas, keyboardCanvas;
     public TextMeshProUGUI IPText;
 
-    string ip;
+    string ip = "";
     #endregion
 
     #region FUNCTIONS
@@ -71,23 +71,21 @@ public class StreamingSceneManager : MonoBehaviour
 
     public void Keyboard(string input)
     {
-        IPText.text += input;
+       
         ip += input;
+        IPText.text = ip;
     }
     public void KeyboardDelete()
     {
-        char[] chars = IPText.text.ToCharArray();
+        char[] chars = ip.ToCharArray();
         if (chars.Length <= 0) return;
-        char[] deleted = new char[chars.Length - 1];
         string newString = "";
-        for(int i = 0; i < deleted.Length; i++)
+        for(int i = 0; i < chars.Length - 1; i++)
         {
-            deleted[i] = chars[i];
-            newString += deleted[i].ToString();
+            newString += chars[i];
         }
-
-        IPText.text = newString;
         ip = newString;
+        IPText.text = ip;
     }
     public void KeyboardEnter()
     {
