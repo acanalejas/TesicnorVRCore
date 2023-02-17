@@ -25,6 +25,8 @@ public class VRInteractable_Keyboard : MonoBehaviour
     public static bool shifted;
 
     public Dictionary<VRInteractable_Button, KeyboardButton> buttons = new Dictionary<VRInteractable_Button, KeyboardButton>();
+
+    private TextMeshProUGUI[] texts;
     #endregion
 
     #region FUNCTIONS
@@ -37,8 +39,38 @@ public class VRInteractable_Keyboard : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
+
+        texts = GetComponentsInChildren<TextMeshProUGUI>();
+        StartCoroutine(nameof(update));
     }
 
+    WaitForEndOfFrame frame = new WaitForEndOfFrame();
+    IEnumerator update()
+    {
+        while (true)
+        {
+            CheckShift();
+            yield return frame;
+        }
+    }
+
+    private void CheckShift()
+    {
+        if (shifted)
+        {
+            foreach(var text in texts)
+            {
+                text.text = text.text.ToUpper();
+            }
+        }
+        else
+        {
+            foreach(var text in texts)
+            {
+                text.text = text.text.ToLower();
+            }
+        }
+    }
 
     private void PrepareButtons()
     {
