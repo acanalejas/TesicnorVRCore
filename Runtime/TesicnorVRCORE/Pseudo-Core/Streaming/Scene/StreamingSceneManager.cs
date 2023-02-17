@@ -35,7 +35,6 @@ public class StreamingSceneManager : MonoBehaviour
     public void Yes()
     {
         StreamingCSharp.HttpClient_Custom.url = "";
-        StreamingCSharp.HttpClient_Custom.IntializeClient();
 
         SceneManager.LoadScene(nextSceneIndex);
     }
