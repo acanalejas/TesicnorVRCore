@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Net.Http;
 using System.Net;
-using Oculus.Platform;
-using Oculus.Platform.Models;
 using TMPro;
-using System.Text;
 
 [System.Serializable]
 public class VRExperience
