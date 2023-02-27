@@ -146,9 +146,9 @@ public class BackendScene : MonoBehaviour
         BackendData data = new BackendData();
         data.vrExperiences = new VRExperience[1];
         data.vrExperiences[0] = new VRExperience();
-        data.vrExperiences[0].code = "EXT-001";
-        data.vrExperiences[0].name = "House-Kitchen";
-        data.vrExperiences[0].id = 0;
+        data.vrExperiences[0].code = "EXT-002";
+        data.vrExperiences[0].name = "House-Living Room";
+        data.vrExperiences[0].id = 1;
 
         BackendGetter.backendData = data;
 
