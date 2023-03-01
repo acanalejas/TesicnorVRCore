@@ -22,6 +22,11 @@ public class SpritesDrawerWindow : EditorWindow
     #endregion
 
     #region METHODS
+    [MenuItem("Window/Delete Player Prefs")]
+    public static void DeletePlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+    }
     [MenuItem("Window/Sprites Drawer")]
     public static void ShowWindowPutita()
     {

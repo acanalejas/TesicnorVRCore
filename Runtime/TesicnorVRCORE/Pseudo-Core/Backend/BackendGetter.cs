@@ -79,6 +79,7 @@ public class BackendGetter : MonoBehaviour
         {
             using (HttpResponseMessage response = await httpClient.SendAsync(hrm, cts.Token))
             {
+                if (response.IsSuccessStatusCode) 
                 BackendDataFromResponse(response);
             }
         }
@@ -93,8 +94,6 @@ public class BackendGetter : MonoBehaviour
         try
         {
             backendData = JsonUtility.FromJson<BackendData>(buffer);
-            
-            Debug.Log("Number of experiences is : " + backendData.vrExperiences.Length);
 
             if (PlayerPrefs.HasKey(BackendDataKey))
             {
