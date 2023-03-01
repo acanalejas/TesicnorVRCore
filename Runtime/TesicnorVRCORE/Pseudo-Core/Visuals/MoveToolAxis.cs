@@ -134,6 +134,7 @@ public class MoveToolAxis : MonoBehaviour
 
     public void OnDrawGizmos()
     {
+        if (!ModifyModelsWindow.previewCamera) return;
         Gizmos.DrawSphere(ModifyModelsWindow.previewCamera.ViewportToWorldPoint(objectViewportPosition), 0.04f);
         Gizmos.DrawCube(mouseWorldPosition, new Vector3(0.08f,0.08f,0.08f));
         Gizmos.DrawCube(hitPoint, new Vector3(0.07f, 0.07f, 0.07f));
