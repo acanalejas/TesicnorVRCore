@@ -254,14 +254,9 @@ public class SpritesDrawerWindow : EditorWindow
 
         for(int i = 1; i < points.Length; i++)
         {
-            float x = (Mathf.Cos(eachAngle*i)*initialPoint.x - Mathf.Sin(eachAngle * i) * initialPoint.y);
-            float y = (Mathf.Sin(eachAngle*i)*initialPoint.x + Mathf.Cos(eachAngle * i) * initialPoint.y);
-
             Vector2 result = Quaternion.Euler(new Vector3(0,0,eachAngle * i)) * initialPoint;
 
             points[i] = center + result;
-
-            Debug.Log(eachAngle * i);
         }
 
         for(int i = 0; i < sprite.width; i++)
@@ -273,8 +268,6 @@ public class SpritesDrawerWindow : EditorWindow
                 else if(!inside) sprite.SetPixel(i, j, backgroundColor);
             }
         }
-
-        Debug.Log("Draw polygon");
         sprite.Apply();
         this.SaveChanges();
     }
