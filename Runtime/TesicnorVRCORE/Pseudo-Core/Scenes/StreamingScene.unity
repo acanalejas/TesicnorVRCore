@@ -3437,6 +3437,8 @@ MonoBehaviour:
   questionCanvas: {fileID: 158892309}
   keyboardCanvas: {fileID: 1327043262}
   IPText: {fileID: 1832238656}
+  InputIPText: {fileID: 1416675449}
+  EnterText: {fileID: 269268259}
 --- !u!4 &685503958
 Transform:
   m_ObjectHideFlags: 0

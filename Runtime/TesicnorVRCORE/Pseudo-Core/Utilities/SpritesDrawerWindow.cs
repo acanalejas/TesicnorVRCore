@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
+#if UNITY_EDITOR
 public class SpritesDrawerWindow : EditorWindow
 {
     #region FIELDS
@@ -372,3 +373,4 @@ public class SaveWindow : EditorWindow
         this.Close();
     }
 }
+#endif

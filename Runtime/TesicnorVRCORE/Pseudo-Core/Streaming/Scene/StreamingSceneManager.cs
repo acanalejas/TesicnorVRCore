@@ -11,8 +11,13 @@ public class StreamingSceneManager : MonoBehaviour
     public static int nextSceneIndex = 0;
     public static string nextSceneName = "";
 
+    static string InputIP;
+    static string Enter;
+
     public GameObject questionCanvas, keyboardCanvas;
     public TextMeshProUGUI IPText;
+    public TextMeshProUGUI InputIPText;
+    public TextMeshProUGUI EnterText;
 
     string ip = "";
     #endregion
@@ -30,6 +35,9 @@ public class StreamingSceneManager : MonoBehaviour
             questionCanvas.SetActive(true);
             keyboardCanvas.SetActive(false);
         }
+
+        EnterText.text = Enter;
+        InputIPText.text = InputIP;
     }
 
     public void Yes()
@@ -43,11 +51,14 @@ public class StreamingSceneManager : MonoBehaviour
         SceneManager.LoadScene(nextSceneIndex);
     }
 
-    public static void GoToStreamingScene(int _nextSceneIndex, string _nextSceneName = "")
+    public static void GoToStreamingScene(int _nextSceneIndex,  string inputIP, string enter, string _nextSceneName = "")
     {
         nextSceneIndex = _nextSceneIndex;
         nextSceneName = _nextSceneName;
         SceneManager.LoadScene("StreamingScene");
+
+        InputIP = inputIP;
+        Enter = enter;
     }
 
     public void GoToNextScene()

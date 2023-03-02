@@ -32,6 +32,9 @@ public class BackendScene : MonoBehaviour
     List<Image> con_imgs = new List<Image>();
     List<TextMeshProUGUI> con_texts = new List<TextMeshProUGUI>();
     List<Text> con_texts_legacy = new List<Text>();
+
+    static string inputMail_str, incorrectEmail_str, badConnection_str, yes_str, no_str, logout_str;
+    public TextMeshProUGUI inputMail_text, incorrectMail_text, badConnection_text, yes_text, no_text, logout_text;
     #endregion
 
     #region METHODS
@@ -42,6 +45,12 @@ public class BackendScene : MonoBehaviour
         GetAllRenderedComponentsInWarningPopUp();
         SetWarningPopUpToTransparent();
         httpClient = new HttpClient();
+        inputMail_text.text = inputMail_str;
+        incorrectMail_text.text = incorrectEmail_str;
+        badConnection_text.text = badConnection_str;
+        yes_text.text = yes_str;
+        no_text.text = no_str;
+        logout_text.text = logout_str;
     }
 
     public void Yes()
@@ -211,10 +220,16 @@ public class BackendScene : MonoBehaviour
         StopCoroutine(nameof(ShowPopUp));
     }
 
-    public static void GoToBackendScene(int nextSceneBuildIndex)
+    public static void GoToBackendScene(int nextSceneBuildIndex, string InputEmail, string IncorrectEmail, string BadConnection, string logOut, string yes, string no)
     {
         SceneManager.LoadScene(BackendSceneName);
         nextBuildIndex = nextSceneBuildIndex;
+        inputMail_str = InputEmail;
+        incorrectEmail_str = IncorrectEmail;
+        badConnection_str = BadConnection;
+        logout_str = logOut;
+        yes_str = yes;
+        no_str = no;
     }
     #endregion
 }

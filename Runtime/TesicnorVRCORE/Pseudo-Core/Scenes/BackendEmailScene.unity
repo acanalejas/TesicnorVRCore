@@ -5148,6 +5148,12 @@ MonoBehaviour:
   ConnectionPopUp_go: {fileID: 425426189}
   MailCanvas: {fileID: 1082334115}
   logOutCanvas: {fileID: 1669166204}
+  inputMail_text: {fileID: 543917579}
+  incorrectMail_text: {fileID: 1759893314}
+  badConnection_text: {fileID: 1969559235}
+  yes_text: {fileID: 1056912292}
+  no_text: {fileID: 281806392}
+  logout_text: {fileID: 102686503}
 --- !u!4 &1844007479
 Transform:
   m_ObjectHideFlags: 0

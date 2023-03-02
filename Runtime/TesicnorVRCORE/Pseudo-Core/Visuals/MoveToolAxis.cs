@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -141,3 +142,4 @@ public class MoveToolAxis : MonoBehaviour
     }
     #endregion
 }
+#endif
