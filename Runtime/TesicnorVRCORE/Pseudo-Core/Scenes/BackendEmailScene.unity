@@ -247,8 +247,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Do you want to log out?
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -604,8 +605,9 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1949,8 +1951,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: Input your account email
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3143,8 +3146,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: yes
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4785,8 +4789,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'INCORRECT EMAIL, PLEASE TRY AGAIN '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
-  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e,
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5718,8 +5722,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
-  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e,
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}

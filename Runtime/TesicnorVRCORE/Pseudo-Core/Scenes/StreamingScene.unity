@@ -1188,8 +1188,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
-  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e,
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1214,7 +1214,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 71.45
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -5305,8 +5305,8 @@ MonoBehaviour:
 
     INPUT THE IP ADDRESS OF THE COMPUTER'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
-  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e,
+  m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5331,7 +5331,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 54
+  m_fontSize: 46.5
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
