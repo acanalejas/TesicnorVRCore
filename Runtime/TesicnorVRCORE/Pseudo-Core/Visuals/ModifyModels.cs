@@ -158,7 +158,8 @@ public class ModifyModelsWindow : EditorWindow
     {
         GUILayout.BeginArea(new Rect(0, position.height * 0.15f, position.width * 0.2f, position.height));
 
-        GUILayout.Button("Extrude");
+        bool extrude = GUILayout.Button("Extrude");
+        if (extrude) Extrude();
 
         GUILayout.EndArea();
     }
@@ -303,6 +304,20 @@ public class ModifyModelsWindow : EditorWindow
                 if (mode == SelectionMode.Faces) MoveFace();
                 
             }
+            else
+            {
+                if(selectedFace.Count > 0)
+                {
+                    Vector3 center = Vector3.zero;
+
+                    foreach (var i in selectedFace) center += modifiedMesh.vertices[i];
+
+                    center /= selectedFace.Count;
+                    center = modifiedGameObject.transform.TransformPoint(center);
+
+                    MoveTool_comp.AppendToVertex(center);
+                }
+            }
         }
         else if (Event.current.type == EventType.MouseUp) { moving = false; movingAxis = null; }
     }
@@ -349,18 +364,21 @@ public class ModifyModelsWindow : EditorWindow
     {
         Vector3[] _vertices = modifiedMesh.vertices;
 
-        if (selectedFace.Count != 3) return;
+        if (selectedFace.Count < 3) return;
 
-        Vector3 point1 = _vertices[selectedFace[0]];
-        Vector3 point2 = _vertices[selectedFace[1]];
-        Vector3 point3 = _vertices[selectedFace[2]];
+        List<Vector3> points = new List<Vector3>();
 
-        Vector3 center = (point1 + point2 + point3) / 3;
+        foreach (var v in selectedFace) points.Add(_vertices[v]);
+
+        Vector3 center = Vector3.zero;
+
+        foreach (var point in points) center += point;
+
+        center = center/ selectedFace.Count;
+
         Vector3 distance_center = modifiedGameObject.transform.InverseTransformPoint(MoveTool_comp.transform.position - MoveTool_comp.positionOffset) - center;
 
-        _vertices[selectedFace[0]] = point1 + distance_center;
-        _vertices[selectedFace[1]] = point2 + distance_center;
-        _vertices[selectedFace[2]] = point3 + distance_center; 
+        for(int i = 0; i < selectedFace.Count; i++) { _vertices[selectedFace[i]] = points[i] + distance_center; }
 
         modifiedMesh.SetVertices(_vertices);
 
@@ -414,7 +432,8 @@ public class ModifyModelsWindow : EditorWindow
 
         if (Triangle.Count != 3) return;
 
-        selectedFace = Triangle;
+        if (!Event.current.shift) selectedFace.Clear();
+        selectedFace.AddRange(Triangle);
 
         Vector3[] _vertices = modifiedMesh.vertices;
         Vector3 point1 = _vertices[Triangle[0]];
@@ -424,8 +443,6 @@ public class ModifyModelsWindow : EditorWindow
 
         AppendHighlightTriangle();
 
-        MoveTool_comp.transform.position = modifiedGameObject.transform.TransformPoint(_center) + MoveTool_comp.positionOffset;
-
         MoveTool_comp.AppendToVertex(modifiedGameObject.transform.TransformPoint(_center));
     }
 
@@ -434,9 +451,16 @@ public class ModifyModelsWindow : EditorWindow
     /// </summary>
     void AppendHighlightTriangle()
     {
-        if (selectedFace.Count != 3 || !modifiedGameObject || !highlightTriangle_mesh || !highlightTriangle_go || !modifiedMesh) return;
-        Vector3[] highlightTriangle_vertices = { modifiedMesh.vertices[selectedFace[0]], modifiedMesh.vertices[selectedFace[1]], modifiedMesh.vertices[selectedFace[2]] };
-        int[] highlightTriangle_triangles = { 0, 1, 2, 0, 2, 1 };
+        if (selectedFace.Count < 3 || !modifiedGameObject || !highlightTriangle_mesh || !highlightTriangle_go || !modifiedMesh) return;
+        List<Vector3> highlightTriangle_vertices = new List<Vector3>();
+        foreach (var v in selectedFace) highlightTriangle_vertices.Add(modifiedMesh.vertices[v]);
+
+        List<int> highlightTriangle_triangles = new List<int>();
+        for(int i = 0; i < selectedFace.Count - 2; i += 3)
+        {
+            int[] currentTriangle = { i, i + 2, i + 1, i, i + 1, i + 2 };
+            highlightTriangle_triangles.AddRange(currentTriangle);
+        }
 
         highlightTriangle_mesh.SetVertices(highlightTriangle_vertices);
         highlightTriangle_mesh.SetTriangles(highlightTriangle_triangles, 0);
@@ -444,9 +468,12 @@ public class ModifyModelsWindow : EditorWindow
         highlightTriangle_go.transform.position = modifiedGameObject.transform.position + new Vector3(0, 0, -0.01f);
         highlightTriangle_go.transform.rotation = modifiedGameObject.transform.rotation;
         highlightTriangle_go.transform.localScale = modifiedGameObject.transform.localScale;
+
+        if (mode != SelectionMode.Faces) highlightTriangle_go.SetActive(false);
+        else highlightTriangle_go.SetActive(true);
     }
 
-    Dictionary<Vector3, List<int>> _allCenters = new Dictionary<Vector3, List<int>>();
+    Dictionary<List<int>, Vector3> _allCenters = new Dictionary<List<int>, Vector3>();
 
     /// <summary>
     /// Nos devuelve la lista de índices dentro del array de vertices, que componen el triangulo seleccionado
@@ -468,7 +495,7 @@ public class ModifyModelsWindow : EditorWindow
             List<int> indices = new List<int>();
             indices.Add(_triangles[i]); indices.Add(_triangles[i + 1]); indices.Add(_triangles[i + 2]);
 
-            _allCenters.Add((point1 + point2 + point3) / 3, indices);
+            _allCenters.Add(indices , (point1 + point2 + point3)/3);
         }
 
         float distance = 0;
@@ -477,20 +504,23 @@ public class ModifyModelsWindow : EditorWindow
         _mouseViewport.y = 1 - _mouseViewport.y;
         foreach(var center in _allCenters)
         {
-            Vector3 normal1 = modifiedGameObject.transform.TransformDirection(_normals[center.Value[0]]);
-            Vector3 normal2 = modifiedGameObject.transform.TransformDirection(_normals[center.Value[1]]);
-            Vector3 normal3 = modifiedGameObject.transform.TransformDirection(_normals[center.Value[2]]);
+            Vector3 normal1 = modifiedGameObject.transform.TransformDirection(_normals[center.Key[0]]);
+            Vector3 normal2 = modifiedGameObject.transform.TransformDirection(_normals[center.Key[1]]);
+            Vector3 normal3 = modifiedGameObject.transform.TransformDirection(_normals[center.Key[2]]);
 
             Vector3 faceNormal = (normal1 + normal2 + normal3) / 3;
             if (faceNormal.z > 0 || faceNormal.x > 0.5f || faceNormal.x < -0.5f || faceNormal.y > 0.5f || faceNormal.y < -0.5f) continue;
 
-            Vector2 centerViewport = previewCamera.WorldToViewportPoint(modifiedGameObject.transform.TransformPoint(center.Key));
+            Vector2 centerViewport = previewCamera.WorldToViewportPoint(modifiedGameObject.transform.TransformPoint(center.Value));
             float _distance = Vector2.Distance(centerViewport, _mouseViewport);
-            if (distance == 0 || distance > _distance) { distance = _distance; selectedCenter = center.Key; }
+            if (distance == 0 || distance > _distance) { distance = _distance; selectedCenter = center.Value; }
         }
 
         List<int> result = new List<int>();
-        _allCenters.TryGetValue(selectedCenter, out result);
+        foreach (var center in _allCenters)
+        {
+            if (selectedCenter == center.Value) { result = center.Key; break; }
+        }
         return result;
     }
 
@@ -766,6 +796,47 @@ public class ModifyModelsWindow : EditorWindow
         modifiedMesh.triangles = newTriangles.ToArray();
     }
 
+    void Extrude()
+    {
+        if (mode != SelectionMode.Faces) return;
+
+        if (selectedFace.Count < 3) return;
+
+        List<int> alreadyAddedVertex = new List<int>();
+        List<Vector3> newVertex = new List<Vector3>();
+        List<int> newTriangles = new List<int>();
+        List<int> newSelectedTriangles = new List<int>();
+
+        newVertex.AddRange(modifiedMesh.vertices);
+        newTriangles.AddRange(modifiedMesh.triangles);
+
+        for (int i = 0; i < selectedFace.Count - 2; i += 3)
+        {
+            if (!alreadyAddedVertex.Contains(selectedFace[i])) newVertex.Add(modifiedMesh.vertices[selectedFace[i]] + modifiedMesh.normals[selectedFace[i]] *0.1f);
+            if (!alreadyAddedVertex.Contains(selectedFace[i + 1])) newVertex.Add(modifiedMesh.vertices[selectedFace[i + 1]] + modifiedMesh.normals[selectedFace[i]] * 0.1f);
+            if (!alreadyAddedVertex.Contains(selectedFace[i + 2])) newVertex.Add(modifiedMesh.vertices[selectedFace[i + 2]] + modifiedMesh.normals[selectedFace[i]] * 0.1f);
+
+            int[] usedIndexes = { selectedFace[i], selectedFace[i + 1], selectedFace[i + 2] };
+            alreadyAddedVertex.AddRange(usedIndexes);
+
+            int v0 = selectedFace[i]; int v1 = selectedFace[i + 1]; int v2 = selectedFace[i + 2];
+
+            int[] createdTriangles = { newVertex.Count - 3, newVertex.Count - 2, newVertex.Count - 1, newVertex.Count - 3, newVertex.Count - 1, newVertex.Count - 2,
+            selectedFace[i], newVertex.Count - 3, newVertex.Count - 1, selectedFace[i], newVertex.Count - 1, newVertex.Count -3,
+            selectedFace[i+2], selectedFace[i], newVertex.Count - 1, selectedFace[i+2], newVertex.Count - 1, selectedFace[i],
+            selectedFace[i+1], selectedFace[i], newVertex.Count - 3, selectedFace[i+1], newVertex.Count - 3, selectedFace[i],
+            selectedFace[i+1], newVertex.Count - 2, newVertex.Count -3, selectedFace[i+1], newVertex.Count - 3, newVertex.Count - 2,
+            selectedFace[i+1], selectedFace[i+2], newVertex.Count - 1, selectedFace[i+1], newVertex.Count - 1, selectedFace[i+2],
+            newVertex.Count - 2, newVertex.Count - 1, selectedFace[i + 1], newVertex.Count - 2, selectedFace[i+1], newVertex.Count - 1};
+
+            newTriangles.AddRange(createdTriangles);
+            int[] createdSelection = { newVertex.Count - 1, newVertex.Count - 2, newVertex.Count - 3 };
+            newSelectedTriangles.AddRange(createdSelection);
+        }
+        selectedFace = newSelectedTriangles;
+        
+        modifiedMesh.SetVertices(newVertex.ToArray()); modifiedMesh.SetTriangles(newTriangles, 0);
+    }
 }
 
 [RequireComponent(typeof(SphereCollider))]

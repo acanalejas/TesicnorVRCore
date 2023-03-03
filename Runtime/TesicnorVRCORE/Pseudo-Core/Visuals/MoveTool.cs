@@ -84,7 +84,7 @@ public class MoveTool : MonoBehaviour
         //Debug.Log("Object name is : " + name + "\nMouse position is : " + mouseWorldPosition + "\n result position is : " + position);
 
         mouseWorldPosition = ModifyModelsWindow.previewCamera.ViewportToWorldPoint(position);
-        if (position != Vector3.zero)
+        if (position != Vector3.zero && Vector3.Distance(this.transform.position,position) < 2)
             forMove.position = position;
     }
     #endregion
