@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 struct ModifyModelsActions
 {
     public Mesh mesh;
-    public int selectedVertex;
+    public List<int> selectedVertex;
     public List<int> selectedFace;
 }
 public class ModifyModelsWindow : EditorWindow
@@ -42,7 +42,7 @@ public class ModifyModelsWindow : EditorWindow
     public enum SelectionMode { Vertex, Faces}
     public SelectionMode mode = SelectionMode.Vertex;
 
-    int lastModifiedVertex;
+    List<int> lastModifiedVertex = new List<int>();
 
     float scaleMult = 0.5f;
     float axisScaleMult = 1;
@@ -117,6 +117,7 @@ public class ModifyModelsWindow : EditorWindow
 
         GUI.DrawTexture(new Rect(0, 0, position.width, position.height), rt);
         DisplayButtons();
+        DisplayTools();
        
         DetectInput();
         RotatePreview();
@@ -151,6 +152,15 @@ public class ModifyModelsWindow : EditorWindow
         if (_faces) mode = SelectionMode.Faces;
 
         MoveTool_comp.transform.localScale = new Vector3(axisScaleMult * 0.5f, axisScaleMult * 0.5f, axisScaleMult * 0.5f);
+    }
+
+    void DisplayTools()
+    {
+        GUILayout.BeginArea(new Rect(0, position.height * 0.15f, position.width * 0.2f, position.height));
+
+        GUILayout.Button("Extrude");
+
+        GUILayout.EndArea();
     }
 
     public void Update()
@@ -205,7 +215,7 @@ public class ModifyModelsWindow : EditorWindow
         if (!moving && movingAxis == null && mode == SelectionMode.Faces && Event.current.type == EventType.MouseDown)
             DetectFaceInteraction();
 
-        if (selectedVertex >= 0) lastModifiedVertex = selectedVertex;
+        if (selectedVertex.Count > 0) lastModifiedVertex = selectedVertex;
 
         DetectCtrlZ();
         DetectDelete();
@@ -304,10 +314,32 @@ public class ModifyModelsWindow : EditorWindow
     {
         Vector3[] vertices = modifiedMesh.vertices;
         Debug.Log("SelectedVertex is : " + selectedVertex + "\nVertices Length is : " + vertices.Length);
-        if (selectedVertex < 0) selectedVertex = lastModifiedVertex;
-        if (selectedVertex > 0 && selectedVertex < vertices.Length)
-            vertices[selectedVertex] = modifiedGameObject.transform.InverseTransformPoint(MoveTool_comp.transform.position - MoveTool_comp.positionOffset);
+        if (selectedVertex.Count <= 0) selectedVertex = lastModifiedVertex;
+        if (selectedVertex.Count > 0 && ContainsVertex(vertices))
+        {
+            Vector3 center = Vector3.zero;
+            foreach (int v in selectedVertex) center += vertices[v];
+
+            center /= selectedVertex.Count;
+
+            Vector3 distance_center = modifiedGameObject.transform.InverseTransformPoint(MoveTool_comp.transform.position - MoveTool_comp.positionOffset) - center;
+
+            foreach(int v in selectedVertex)
+            {
+                vertices[v] += distance_center;
+            }
+        }
+            
         modifiedMesh.SetVertices(vertices);
+    }
+
+    bool ContainsVertex(Vector3[] vertices)
+    {
+        foreach(var v in selectedVertex)
+        {
+            if (v >= vertices.Length) return false;
+        }
+        return true;
     }
 
     /// <summary>
@@ -335,7 +367,7 @@ public class ModifyModelsWindow : EditorWindow
         AppendHighlightTriangle();
     }
 
-    int selectedVertex;
+    List<int> selectedVertex = new List<int>();
 
     /// <summary>
     /// Detecta la interaccion con los vertices de la malla, seleccionando sobre el que se clicka (mas o menos)
@@ -352,12 +384,22 @@ public class ModifyModelsWindow : EditorWindow
             VertexBall _currentBall = balls[vertexIndex].GetComponent<VertexBall>();
             if (_currentBall != currentBall && currentBall) currentBall.OnNormal();
             currentBall = _currentBall;
-            selectedVertex = vertexIndex;
+            if (!Event.current.shift) selectedVertex.Clear();
+            selectedVertex.Add(vertexIndex);
         }
+        
         if(currentBall && !moving)
-        MoveTool_comp.AppendToVertex(currentBall.transform.position);
+        MoveTool_comp.AppendToVertex(modifiedGameObject.transform.TransformPoint(GetSelectedCenterVertex()));
         if (Event.current.type == EventType.MouseDown && currentBall) currentBall.OnClick();
         else if (currentBall) currentBall.OnHover();
+    }
+
+    Vector3 GetSelectedCenterVertex()
+    {
+        Vector3 center = Vector3.zero;
+        foreach (var v in selectedVertex) center += modifiedMesh.vertices[v];
+        center = center / selectedVertex.Count;
+        return center;
     }
 
     List<int> selectedFace = new List<int>();
@@ -672,31 +714,31 @@ public class ModifyModelsWindow : EditorWindow
 
     void DeleteSelectedVertex()
     {
-        if (selectedVertex < 0) return;
+        if (selectedVertex.Count < 0) return;
 
         Vector3[] _vertices = modifiedMesh.vertices;
         List<Vector3> newVertices = new List<Vector3>();
 
         for(int i = 0; i < _vertices.Length; i++)
         {
-            if (i != selectedVertex) newVertices.Add(_vertices[i]);
+            if (!selectedVertex.Contains(i)) newVertices.Add(_vertices[i]);
         }
 
         DeleteTrianglesContainingOneVertex(selectedVertex);
 
         modifiedMesh.SetVertices(newVertices.ToArray());
-        selectedVertex = -1;
+        selectedVertex.Clear();
         selectedFace.Clear();
     }
 
-    void DeleteTrianglesContainingOneVertex(int containedVertex)
+    void DeleteTrianglesContainingOneVertex(List<int> containedVertex)
     {
         int[] _triangles = modifiedMesh.triangles;
         List<int> newTriangles = new List<int>();
 
         for(int i = 0; i < _triangles.Length - 3; i += 3)
         {
-            if (_triangles[i] != containedVertex && _triangles[i + 1] != containedVertex && _triangles[i + 2] != containedVertex)
+            if (!containedVertex.Contains(_triangles[i])&& !containedVertex.Contains(_triangles[i + 1]) && !containedVertex.Contains(_triangles[i + 2]))
             {
                 newTriangles.Add(_triangles[i]); newTriangles.Add(_triangles[i + 1]); newTriangles.Add(_triangles[i + 2]);
             }
@@ -723,6 +765,7 @@ public class ModifyModelsWindow : EditorWindow
        
         modifiedMesh.triangles = newTriangles.ToArray();
     }
+
 }
 
 [RequireComponent(typeof(SphereCollider))]

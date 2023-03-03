@@ -40,6 +40,7 @@ public class SpritesDrawerWindow : EditorWindow
 
     private void OnGUI()
     {
+        if (!sprite) sprite = new Texture2D(500, 500);
         DisplaySprite();
         //this.position.Set(position.x, position.y, 500, 500);
         if (circle) DrawCircleBack(sprite.width/2 *circleRadius, fillColor);
