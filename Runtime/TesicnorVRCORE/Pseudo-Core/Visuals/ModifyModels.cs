@@ -196,7 +196,7 @@ public class ModifyModelsWindow : EditorWindow
             action.mesh.SetVertices(modifiedMesh.vertices);
             for(int i = 0; i < modifiedMesh.subMeshCount; i++)
             {
-                action.mesh.SetTriangles(modifiedMesh.GetTriangles(i), i);
+                action.mesh.triangles = modifiedMesh.triangles;
             }
             action.mesh.normals = modifiedMesh.normals;
             action.mesh.uv = modifiedMesh.uv;
@@ -616,7 +616,7 @@ public class ModifyModelsWindow : EditorWindow
         List<Vector3> _allVertex = new List<Vector3>();
         modifiedMesh.GetVertices(_allVertex);
         int i = 0;
-        foreach(var v in allVertex)
+        foreach(var v in _allVertex)
         {
             Vector3 localNormal = modifiedGameObject.transform.TransformDirection(allNormals[i]);
 
@@ -812,30 +812,69 @@ public class ModifyModelsWindow : EditorWindow
 
         for (int i = 0; i < selectedFace.Count - 2; i += 3)
         {
-            if (!alreadyAddedVertex.Contains(selectedFace[i])) newVertex.Add(modifiedMesh.vertices[selectedFace[i]] + modifiedMesh.normals[selectedFace[i]] *0.1f);
-            if (!alreadyAddedVertex.Contains(selectedFace[i + 1])) newVertex.Add(modifiedMesh.vertices[selectedFace[i + 1]] + modifiedMesh.normals[selectedFace[i]] * 0.1f);
-            if (!alreadyAddedVertex.Contains(selectedFace[i + 2])) newVertex.Add(modifiedMesh.vertices[selectedFace[i + 2]] + modifiedMesh.normals[selectedFace[i]] * 0.1f);
+            Vector3 v00_v3 = modifiedMesh.vertices[selectedFace[i]] + modifiedMesh.normals[selectedFace[i]] * 0.1f;
+            Vector3 v01_v3 = modifiedMesh.vertices[selectedFace[i + 1]] + modifiedMesh.normals[selectedFace[i]] * 0.1f;
+            Vector3 v02_v3 = modifiedMesh.vertices[selectedFace[i + 2]] + modifiedMesh.normals[selectedFace[i]] * 0.1f;
+
+            bool already0 = false, already1 = false, already2 = false;
+            if (!alreadyAddedVertex.Contains(selectedFace[i])) newVertex.Add(v00_v3);
+            else already0 = true;
+            if (!alreadyAddedVertex.Contains(selectedFace[i + 1])) newVertex.Add(v01_v3);
+            else already1 = true;
+            if (!alreadyAddedVertex.Contains(selectedFace[i + 2])) newVertex.Add(v02_v3);
+            else already2 = true;
 
             int[] usedIndexes = { selectedFace[i], selectedFace[i + 1], selectedFace[i + 2] };
             alreadyAddedVertex.AddRange(usedIndexes);
 
             int v0 = selectedFace[i]; int v1 = selectedFace[i + 1]; int v2 = selectedFace[i + 2];
+            int v00 = newVertex.Count - 3; int v01 = newVertex.Count - 2; int v02 = newVertex.Count - 1;
 
-            int[] createdTriangles = { newVertex.Count - 3, newVertex.Count - 2, newVertex.Count - 1, newVertex.Count - 3, newVertex.Count - 1, newVertex.Count - 2,
-            selectedFace[i], newVertex.Count - 3, newVertex.Count - 1, selectedFace[i], newVertex.Count - 1, newVertex.Count -3,
-            selectedFace[i+2], selectedFace[i], newVertex.Count - 1, selectedFace[i+2], newVertex.Count - 1, selectedFace[i],
-            selectedFace[i+1], selectedFace[i], newVertex.Count - 3, selectedFace[i+1], newVertex.Count - 3, selectedFace[i],
-            selectedFace[i+1], newVertex.Count - 2, newVertex.Count -3, selectedFace[i+1], newVertex.Count - 3, newVertex.Count - 2,
-            selectedFace[i+1], selectedFace[i+2], newVertex.Count - 1, selectedFace[i+1], newVertex.Count - 1, selectedFace[i+2],
-            newVertex.Count - 2, newVertex.Count - 1, selectedFace[i + 1], newVertex.Count - 2, selectedFace[i+1], newVertex.Count - 1};
+            for (int j = 0; j < newVertex.Count; j++)
+            {
+                if (already0)
+                {
+                    if (newVertex[j] == v00_v3)
+                    {
+                        v00 = j;
+                    }
+                }
+                if (already1)
+                {
+                    if (newVertex[j] == v01_v3)
+                    {
+                        v01 = j;
+                    }
+                }
+                if (already2)
+                {
+                    if (newVertex[j] == v02_v3)
+                    {
+                        v02 = j;
+                    }
+                }
+            }
+
+            Debug.Log(v00); Debug.Log(v01); Debug.Log(v02);
+
+            int[] createdTriangles = { v00, v01, v02, v00, v02, v01,
+            v0, v00, v02, v0, v02, v00,
+            v2, v0, v02, v2, v02, v0,
+            v1, v0, v00, v1, v00, v0,
+            v1, v01, v00, v1, v00, v01,
+            v1, v2, v02, v1, v02, v2,
+            v01, v02, v1, v01, v1, v02};
 
             newTriangles.AddRange(createdTriangles);
             int[] createdSelection = { newVertex.Count - 1, newVertex.Count - 2, newVertex.Count - 3 };
             newSelectedTriangles.AddRange(createdSelection);
         }
         selectedFace = newSelectedTriangles;
-        
-        modifiedMesh.SetVertices(newVertex.ToArray()); modifiedMesh.SetTriangles(newTriangles, 0);
+
+        modifiedMesh.vertices = newVertex.ToArray(); modifiedMesh.SetTriangles(newTriangles, 0);
+        modifiedMesh.RecalculateNormals();
+        modifiedMesh.UploadMeshData(false);
+        modifiedMesh.Optimize();
     }
 }
 
