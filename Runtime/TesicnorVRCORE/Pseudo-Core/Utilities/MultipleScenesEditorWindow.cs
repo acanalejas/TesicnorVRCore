@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 #endif
 
@@ -24,9 +24,9 @@ public struct ModifiedComponent
 }
 #endif
 
+#if UNITY_EDITOR
 public class MultipleScenesEditorWindow : EditorWindow 
 {
-#if UNITY_EDITOR
     #region FIELDS
     GameObject selected;
     public static string ScenesFolderPath = "Assets/Scenes";
@@ -311,5 +311,5 @@ public class MultipleScenesEditorWindow : EditorWindow
         oldString = SearchString;
     }
     #endregion
-#endif
 }
+#endif
