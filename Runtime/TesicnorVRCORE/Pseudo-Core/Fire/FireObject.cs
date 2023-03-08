@@ -110,7 +110,7 @@ namespace TesicFire
         {
             fire_GO.GetComponent<ParticleSystem>().Stop();
             if (smoke_GO && !smoke_System) smoke_System = smoke_GO.GetComponent<ParticleSystem>();
-            if(smoke_System)smoke_System.Stop();
+            if (smoke_System) smoke_System.Stop();
             if (sparks_System) sparks_System.Stop();
 
             fire_MR = fire_GO.GetComponent<MeshRenderer>();
@@ -140,7 +140,7 @@ namespace TesicFire
 
         IEnumerator construct()
         {
-            if(completeFire) { StopCoroutine("construct"); }
+            if (completeFire) { StopCoroutine("construct"); }
             yield return FireMesh(initialFirePoint, 4);
             yield return FireMesh(initialFirePoint, 3);
             yield return FireMesh(initialFirePoint, 2);
@@ -148,8 +148,8 @@ namespace TesicFire
             fire_mesh.Add(GetComponent<MeshFilter>().mesh);
 
             yield return new WaitForSeconds(Delay);
-            
-            if(fireutils != null)
+
+            if (fireutils != null)
             {
                 if (!fireutils.OnFire() || fireutils.Extinguished())
                 {
@@ -171,7 +171,7 @@ namespace TesicFire
             StopCoroutine("construct");
         }
 
-        [HideInInspector]public bool reconstructing = false;
+        [HideInInspector] public bool reconstructing = false;
         int index = 0;
         void reconstruct()
         {
@@ -179,7 +179,16 @@ namespace TesicFire
             if (extinguishing || extinguished) return;
             reconstructing = true;
             MeshFilter mf = fire_GO.GetComponent<MeshFilter>();
-            MeshFilter smf = smoke_System.gameObject.GetComponent<MeshFilter>();
+
+            if (!smoke_System)
+            {
+                Transform smoke = transform.Find("Smoke");
+                if (smoke)
+                    smoke_System = smoke.GetComponent<ParticleSystem>();
+            }
+
+            MeshFilter smf = null;
+            if (smoke_System) smf = smoke_System.gameObject.GetComponent<MeshFilter>();
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
 
@@ -189,9 +198,12 @@ namespace TesicFire
                 var shape = fire_System.shape;
                 shape.mesh = fire_mesh[index];
 
-                var smoke_shape = smoke_System.shape;
-                smoke_shape.mesh = fire_mesh[index];
-                smf.mesh = fire_mesh[index];
+                if (smoke_System)
+                {
+                    var smoke_shape = smoke_System.shape;
+                    smoke_shape.mesh = fire_mesh[index];
+                    smf.mesh = fire_mesh[index];
+                }
             }
             else
             {
@@ -216,11 +228,11 @@ namespace TesicFire
             //Vacia la lista de puntos actuales
             if (this.onFire || this.extinguished) return;
             fireutils = utils;
-            if(utils != null)
+            if (utils != null)
             {
-                if(!utils.OnFire() || utils.Extinguished()) return; 
+                if (!utils.OnFire() || utils.Extinguished()) return;
             }
-            meshData_current.vertex.Clear ();
+            meshData_current.vertex.Clear();
             meshData_current.triangles.Clear();
 
             //Obtenemos la mesh del objeto
@@ -268,7 +280,7 @@ namespace TesicFire
 
             BoxCollider[] bcs = GetComponents<BoxCollider>();
             BoxCollider bc = new BoxCollider();
-            foreach (BoxCollider col in bcs) if (col.isTrigger) {bc = col; }
+            foreach (BoxCollider col in bcs) if (col.isTrigger) { bc = col; }
             bc.enabled = true;
         }
 
@@ -279,7 +291,7 @@ namespace TesicFire
             {
                 ParticleSize();
                 if (this.IsExtinguising() || this.extinguished) CancelInvoke(nameof(reconstruct));
-                else if(!this.extinguished && !this.IsExtinguising()) Reconstruct();
+                else if (!this.extinguished && !this.IsExtinguising()) Reconstruct();
                 if (this.Extinguished()) GetComponent<BoxCollider>().enabled = false;
 
                 yield return frame;
@@ -304,7 +316,7 @@ namespace TesicFire
         bool maxSize = false;
         public void Propagate()
         {
-            PropDistance = fire_MR.localBounds.size.magnitude/1.2f;
+            PropDistance = fire_MR.localBounds.size.magnitude / 1.2f;
 
             //var shape = fire_System.shape;
             //shape.scale = Vector3.Lerp(shape.scale, fire_MR.bounds.size, Time.deltaTime);
@@ -351,14 +363,14 @@ namespace TesicFire
             float timeToSubstract = Time.deltaTime;
             if (_try == 0) _try = 1;
             else if (_try == 1) _try = 2;
-            else if(_try == 2) _try = 0;
+            else if (_try == 2) _try = 0;
 
             if (badExtinguisher && _try != 0) timeToSubstract = 0;
 
             TimeToExtinguish -= timeToSubstract;
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
-            for(int i = 0; i < fire_mesh.Count; i++)
+            for (int i = 0; i < fire_mesh.Count; i++)
             {
                 float currentSectionTime = timePerSection * i;
                 if (TimeToExtinguish >= currentSectionTime) { fire_GO.GetComponent<MeshFilter>().mesh = fire_mesh[i]; index = i; }
@@ -373,11 +385,11 @@ namespace TesicFire
                 extinguished = true;
                 fire_System.Stop();
                 if (smoke_System) smoke_System.Stop();
-                if(sparks_System) sparks_System.Stop();
+                if (sparks_System) sparks_System.Stop();
                 if (fire_Source) fire_Source.Stop();
 
                 Collider[] colliders = GetComponents<Collider>();
-                foreach(Collider col in colliders) col.enabled = false;
+                foreach (Collider col in colliders) col.enabled = false;
             }
 
             StopCoroutine("reconstruct");
@@ -414,7 +426,7 @@ namespace TesicFire
             RaycastHit hit;
             Physics.Raycast(ray, out hit, 7);
 
-            if(dot > 0.8f && hit.collider == GetComponent<Collider>())
+            if (dot > 0.8f && hit.collider == GetComponent<Collider>())
             {
                 ExtinguishFire();
             }
@@ -441,7 +453,7 @@ namespace TesicFire
             if (reconstructing) return;
             extinguishing = false;
 
-            InvokeRepeating(nameof(reconstruct), 0.0f, 2/FireSpeed);
+            InvokeRepeating(nameof(reconstruct), 0.0f, 2 / FireSpeed);
         }
 
         struct vertex { public float distance; public int index; }
@@ -469,7 +481,7 @@ namespace TesicFire
 
         }
 
-        
+
         IEnumerator checkVertices(Vector3 center, float radiusMultiplier)
         {
             numVertex = (int)(mesh_original.vertices.Length / radiusMultiplier);
@@ -515,7 +527,7 @@ namespace TesicFire
         {
             return fire_System.particleCount > 0;
         }
-        
+
         public bool CompleteFire()
         {
             return completeFire;
@@ -549,7 +561,7 @@ namespace TesicFire
             //main.startSize = Mathf.Lerp(main.startSize.constant, GetComponent<BoxCollider>().size.magnitude, Time.deltaTime);
 
             emission.rateOverTime = Mathf.Lerp(emission.rateOverTime.constant, currentEmission, Time.deltaTime);
-            
+
             return Vector2.zero;
         }
 
@@ -581,7 +593,7 @@ namespace TesicFire
 
             if (fire_emission.rateMultiplier == 0) smoke_emission.rateMultiplier = 0;
             else smoke_emission.rateMultiplier = 10;
-            smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier*1.5f/this.transform.lossyScale.magnitude;
+            smoke_sol.sizeMultiplier = fire_sol.sizeMultiplier * 1.5f / this.transform.lossyScale.magnitude;
 
             smoke_emission.rateMultiplier *= Density;
 
@@ -593,7 +605,7 @@ namespace TesicFire
             var smoke_col = smoke_System.colorOverLifetime;
             smoke_col.color = Smoke_Color;
 
-            
+
         }
         public void AdaptSparks()
         {
@@ -629,7 +641,7 @@ namespace TesicFire
 
             if (fireUtils != null)
             {
-                if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire() && !this.Extinguished()&& !fireUtils.Extinguished())
+                if (!fireUtils.OnFire() && this.OnFire() && this.CompleteFire() && !this.Extinguished() && !fireUtils.Extinguished())
                 {
                     fireUtils.BeginFire(other.ClosestPoint(fire_MR.bounds.center), this);
                 }
@@ -642,7 +654,7 @@ namespace TesicFire
         /// <returns></returns>
         public Vector3 GetClosestPointToFire()
         {
-            if (!this.OnFire()) return new Vector3(10,10,10);
+            if (!this.OnFire()) return new Vector3(10, 10, 10);
 
             return collider.ClosestPoint(Camera.main.transform.position);
         }
