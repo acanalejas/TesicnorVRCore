@@ -18,6 +18,7 @@ public class MoveTool : MonoBehaviour
 
     #region FIELDS
     public Vector3 positionOffset;
+    [SerializeField] private float test;
     #endregion
 
     

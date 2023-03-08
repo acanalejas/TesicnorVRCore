@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEditor.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
 using UnityEngine.SceneManagement;
+#endif
+
 
 #if UNITY_EDITOR
 public struct ModifiedComponent
@@ -17,6 +18,9 @@ public struct ModifiedComponent
 
     public System.Reflection.FieldInfo[] fields;
     public System.Object[] propertiesValues;
+
+    public System.Reflection.FieldInfo[] private_fields;
+    public System.Object[] privateFieldValues;
 }
 #endif
 
@@ -110,7 +114,9 @@ public class MultipleScenesEditorWindow : EditorWindow
 
             System.Reflection.PropertyInfo[] properties = components[componentSelected].GetType().GetProperties();
             System.Reflection.FieldInfo[] fields = components[componentSelected].GetType().GetFields();
+            System.Reflection.FieldInfo[] privateFields = components[componentSelected].GetType().GetFields(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
 
+            foreach(var field in privateFields) Debug.Log(field.Name);
             foreach(var field in fields)
             {
                 Debug.Log(field.Name);
@@ -120,9 +126,11 @@ public class MultipleScenesEditorWindow : EditorWindow
             component.gameObjectName = selected.name;
             component.properties = properties;
             component.fields = fields;
+            component.private_fields = privateFields;
             component.type = components[componentSelected].GetType();
             List<System.Object> values = new List<System.Object>();
             List<System.Object> properties_values = new List<object>();
+            List<System.Object> private_values = new List<object>();
 
             if(fields.Length > 0)
             foreach (var field in fields)
@@ -135,6 +143,12 @@ public class MultipleScenesEditorWindow : EditorWindow
                     {
                         values.Add(null);
                     }
+            }
+
+            foreach(var field in privateFields)
+            {
+                try { private_values.Add(field.GetValue(components[componentSelected])); }
+                catch { private_values.Add(null); }
             }
 
             foreach(var property in properties)
@@ -150,6 +164,7 @@ public class MultipleScenesEditorWindow : EditorWindow
             }
             component.fieldsValues = values.ToArray();
             component.propertiesValues = properties_values.ToArray();
+            component.privateFieldValues = private_values.ToArray();
 
             modifiedComponent = component;
 
@@ -161,10 +176,12 @@ public class MultipleScenesEditorWindow : EditorWindow
             differences.type = component.type;
             differences.gameObjectName = component.gameObjectName;
             differences.fields = component.fields;
+            differences.private_fields = component.private_fields;
             differences.properties = component.properties;
 
             List<object> list = new List<object>();
             List<object> _list = new List<object>();
+            List<object> privateList = new List<object>();
             if(component.fields.Length > 0)
             for (int i = 0; i < component.fields.Length; i++)
             {
@@ -176,8 +193,14 @@ public class MultipleScenesEditorWindow : EditorWindow
                 if (modifiedComponent.propertiesValues[i] == initialComponent.propertiesValues[i]) _list.Add(null);
                 else _list.Add(modifiedComponent.propertiesValues[i]);
             }
+            for(int i = 0; i < component.private_fields.Length; i++)
+            {
+                if (modifiedComponent.privateFieldValues[i] == initialComponent.privateFieldValues[i]) privateList.Add(null);
+                else privateList.Add(modifiedComponent.privateFieldValues[i]);
+            }
             differences.fieldsValues = list.ToArray();
             differences.propertiesValues = _list.ToArray();
+            differences.privateFieldValues = privateList.ToArray();
         }
         GUILayout.EndScrollView();
         GUILayout.EndArea();
@@ -196,7 +219,7 @@ public class MultipleScenesEditorWindow : EditorWindow
                 Scene scene = EditorSceneManager.OpenScene(scenesPaths[i], OpenSceneMode.Single);
                 EditorSceneManager.SetActiveScene(scene);
                 GameObject go = GameObject.Find(differences.gameObjectName);
-                Debug.Log("Scene opened : " + scene.name);
+                Debug.Log("GO NAME : " + differences.gameObjectName);
                 if (!go) continue;
 
                 Component comp = go.GetComponent(differences.type.Name);
@@ -222,11 +245,21 @@ public class MultipleScenesEditorWindow : EditorWindow
                         Debug.Log(differences.properties[j].Name);
                     }
                 }
+                for(int j = 0; j < differences.private_fields.Length; j++)
+                {
+                    if (differences.privateFieldValues[j] != null)
+                    {
+                        try
+                        {
+                            differences.private_fields[j].SetValue(comp, differences.privateFieldValues[j]);
+                        }
+                        catch { }
+                    }
+                }
                 Scene _scene = EditorSceneManager.GetActiveScene();
                 EditorSceneManager.MarkSceneDirty(_scene);
                 EditorSceneManager.SaveScene(_scene, "", false);
                 EditorSceneManager.SaveOpenScenes();
-                EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             }
         }
         
