@@ -223,7 +223,7 @@ public class MultipleScenesEditorWindow : EditorWindow
                 if (!go) continue;
 
                 Component comp = go.GetComponent(differences.type.Name);
-                if (!comp) continue;
+                if (!comp) { comp = go.AddComponent(differences.type); }
                 if(differences.fields.Length > 0)
                 for(int j = 0; j < differences.fields.Length; j++)
                 {
