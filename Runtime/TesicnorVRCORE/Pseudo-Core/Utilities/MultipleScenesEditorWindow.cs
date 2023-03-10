@@ -218,7 +218,14 @@ public class MultipleScenesEditorWindow : EditorWindow
             {
                 Scene scene = EditorSceneManager.OpenScene(scenesPaths[i], OpenSceneMode.Single);
                 EditorSceneManager.SetActiveScene(scene);
-                GameObject go = GameObject.Find(differences.gameObjectName);
+                Transform[] gos = GameObject.FindObjectsOfType<Transform>(true);
+                GameObject go = null;
+
+                foreach(var _go in gos)
+                {
+                    if (_go.name == differences.gameObjectName) go = _go.gameObject;
+                }
+
                 Debug.Log("GO NAME : " + differences.gameObjectName);
                 if (!go) continue;
 
@@ -299,7 +306,7 @@ public class MultipleScenesEditorWindow : EditorWindow
             string[] splitted = path.Split(".");
             if (splitted.Length == 2)
             {
-                if (splitted[1] == "unity" && splitted[0].Contains(SearchString)) { scenesPaths.Add(path); enabledScenes.Add(false); Debug.Log(splitted[0]); }
+                if (splitted[1] == "unity" && splitted[0].Contains(SearchString)) { scenesPaths.Add(path); enabledScenes.Add(true); Debug.Log(splitted[0]); }
             }
         }
         
