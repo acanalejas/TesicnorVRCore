@@ -36,6 +36,11 @@ public class MultiplayerClient : MonoBehaviour
     }
 
     WaitForSeconds seconds = new WaitForSeconds(1 / 30);
+
+    /// <summary>
+    /// Coroutine que hace de update. Hecho asi para tener mas control sobre el refresco de las peticiones
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator update()
     {
         while (true)
@@ -64,6 +69,10 @@ public class MultiplayerClient : MonoBehaviour
         }
         
     }
+
+    /// <summary>
+    /// Simplemente asigna los valores basicos del cliente
+    /// </summary>
     public void StartClient()
     {
         httpClient = new HttpClient();
@@ -71,6 +80,11 @@ public class MultiplayerClient : MonoBehaviour
         httpClient.DefaultRequestHeaders.Accept.Clear();
     }
 
+    /// <summary>
+    /// Manda los datos que le pasemos
+    /// </summary>
+    /// <param name="data">Datos a mandar</param>
+    /// <returns></returns>
     public async Task SendData(string data)
     {
         var cts = new System.Threading.CancellationTokenSource();
@@ -93,6 +107,10 @@ public class MultiplayerClient : MonoBehaviour
         MultiplayerManager.Instance.fieldDatas.Clear();
     }
 
+    /// <summary>
+    /// Gestiona la respuesta de la petición que enviemos
+    /// </summary>
+    /// <param name="response"></param>
     public async void ManageResponse(HttpResponseMessage response)
     {
         string response_str = await response.Content.ReadAsStringAsync();

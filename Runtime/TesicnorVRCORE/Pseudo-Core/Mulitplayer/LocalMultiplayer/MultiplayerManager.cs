@@ -322,6 +322,12 @@ public class MultiplayerManager : MonoBehaviour
         return result.ToArray();
     }
 
+    /// <summary>
+    /// Comprueba si dos estructuras de tipo BackendData contienen los mismos valores
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <returns></returns>
     public static bool EqualsGameObjectData(GameObjectData data1, GameObjectData data2)
     {
         if (data1.Name == data2.Name && data1.ID == data2.ID && data1.Scale == data2.Scale &&
@@ -337,40 +343,56 @@ public class MultiplayerManager : MonoBehaviour
     /// <param name="input"></param>
     public void FindReplicatedGameObjects(string input)
     {
+        //En caso de que el string este vacio no necesitamos continuar
         if (input == null || input.Length == 0 || input == "") return;
         try
         {
-            string jsonObjects = input.Split(MethodsNJsonSeparator.ToString())[0];
+            //Recoge todas las estructuras de datos de los gameobjects replicados que contiene el string
             GameObjectData[] allData = allData_god(input);
 
+            //Comprobamos que el array no esté vacío para evitar errores y optimizar
             if (allData.Length > 0)
             {
                 foreach (var data in allData)
                 {
                     bool found = false;
+                    //Buscamos el objeto que tiene que replicar los datos entrantes, y comprobamos además que los datos entrantes no sean iguales a los ya existentes para optimizar
                     foreach (var rep in allReplicated)
                     {
                         if (rep.this_data.ID == data.ID && !EqualsGameObjectData(rep.this_data, data)) { rep.Replicate(data); found = true; }
                     }
 
+                    //En caso de no haber encontrado el objeto que se tiene que replicar puede significar una cosa
+                    //que sea un objeto del player, y no podemos replicar directamente el player, puesto que debe poder moverse libremente cada uno, y sino se superpondrian los movimientos de cada uno en un mismo gameobject.
+                    //Por ello debemos crear el objeto y luego asignarle los valores necesarios para que se replique el resto del tiempo
                     if (!found)
                     {
                         added_ro.Clear();
+                        //Comprobamos cada objeto replicado
                         foreach(var rep in allReplicated)
                         {
+                            //Id del objeto local que estamos comprobando en este bucle
                             int this_id = 0; int.TryParse(rep.this_data.ID, out this_id);
+                            //Id de los datos recibidos
                             int id = 0; int.TryParse(data.ID, out id);
 
+                            //En caso de que la ID recibida coincida con el de signo opuesto del gameobject que estamos comprobando
+                            //significa que debemos duplicar este gameobject, porque lo he planteado asi basicamente
                             if (id == -this_id)
                             {
+                                //Recogemos la el GameObject segun la id (En caso de no existir, lo crea duplicando el de la id negativa)
                                 GameObject newObj = UniqueIDManager.Instance.GetGameObjectByID(id);
 
+                                //En caso de dar null de resultado mejor no seguir para evitar errores
                                 if (!newObj) continue;
+                                //Recoge todos los componentes
                                 Component[] allComponents = newObj.GetComponentsInChildren<Component>();
                                 if(allComponents.Length > 0)
                                 foreach(var comp in allComponents)
                                 {
+                                        //Por si acaso da algun valor null pero no deberia
                                         if (!comp) continue;
+                                        //Comprueba diferentes tipos de componentes que no queremos desactivar
                                     if (comp.GetType() != typeof(Transform) && comp.GetType() != typeof(MeshRenderer) &&
                                         comp.GetType() != typeof(SkinnedMeshRenderer) && comp.GetType() != typeof(UnityEngine.UI.Image) &&
                                         comp.GetType() != typeof(MeshFilter) && comp.GetType() != typeof(UnityEngine.UI.Text) &&
@@ -380,24 +402,30 @@ public class MultiplayerManager : MonoBehaviour
                                         comp.GetType() != typeof(CanvasRenderer) && comp.GetType() != typeof(GameObject) &&
                                         comp.GetType() != typeof(ReplicatedObject) && comp.GetType() != typeof(UniqueID))
                                     {
+                                        //Parsea el componente a monobehaviour para poder desactivarlo
                                         MonoBehaviour mono = comp as MonoBehaviour;
 
                                         if (mono)
                                         {
+                                            //Desactiva el componente, principalmente para evitar fallos o que se ejecuten cosas que no se deberia
                                             mono.enabled = false;
                                         }
                                     }
+                                    //En caso de que contenga una camara se deshabilita también
                                     if(comp.GetType() == typeof(Camera)) { Camera cam = comp as Camera; cam.enabled = false; }
                                 }
+                                //Accede al componente ReplicatedObject
                                 ReplicatedObject fromNewObj = newObj.GetComponent<ReplicatedObject>();
                                 if (fromNewObj)
                                 {
+                                    //Le mandamos que replique los datos que nos llegan
                                     fromNewObj.Replicate(data);
                                     fromNewObj.insidePlayer = false;
                                     added_ro.Add(fromNewObj);
                                 }
                                 UniqueID[] added =  newObj.GetComponentsInChildren<UniqueID>();
                                 if(added.Length > 0)
+                                //Guardamos las nuevas IDs que tenemos de los objetos creados en la lista general de IDs
                                 foreach(var addedid in added)
                                 {
                                     if (addedid != newObj.GetComponent<UniqueID>()) { addedid.SetID((int)MathF.Abs(addedid.ID)); UniqueIDManager.Instance.AddID(addedid); }
@@ -405,7 +433,6 @@ public class MultiplayerManager : MonoBehaviour
                                 
                             }
                         }
-                        //allReplicated.AddRange(added_ro);
                     }
                 }
             }

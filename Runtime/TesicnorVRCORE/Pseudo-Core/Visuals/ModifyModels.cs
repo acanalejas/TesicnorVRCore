@@ -154,6 +154,9 @@ public class ModifyModelsWindow : EditorWindow
         MoveTool_comp.transform.localScale = new Vector3(axisScaleMult * 0.5f, axisScaleMult * 0.5f, axisScaleMult * 0.5f);
     }
 
+    /// <summary>
+    /// Se usa para que se muestren las herramientas disponibles en la ventana del editor
+    /// </summary>
     void DisplayTools()
     {
         GUILayout.BeginArea(new Rect(0, position.height * 0.15f, position.width * 0.2f, position.height));
@@ -223,15 +226,23 @@ public class ModifyModelsWindow : EditorWindow
         DetectZoom();
     }
 
+    /// <summary>
+    /// Detecta el input de hacer SHIFT + Z y actúa en consecuencia
+    /// </summary>
     void DetectCtrlZ()
     {
+        //Se está pulsando el shift mientras se ejecuta el evento actual?
         bool ctrl = Event.current.shift;
 
+        //Si no se está pulsando no nos interesa
         if (!ctrl) return;
+        //Si no hay acciones previas no nos interesa
         if (allActions.Count <= 0) return;
+        //Selecciona la ultima accion realizada
         ModifyModelsActions lastAction = allActions[allActions.Count - 1];
         if(Event.current.keyCode == KeyCode.Z && Event.current.type == EventType.KeyDown)
         {
+            //Setea los valores de la malla que se está modificando según la última accion
             modifiedMesh.SetVertices(lastAction.mesh.vertices);
             for(int i = 0; i < modifiedMesh.subMeshCount; i++)
             {
@@ -243,19 +254,28 @@ public class ModifyModelsWindow : EditorWindow
             selectedFace = lastAction.selectedFace;
             selectedVertex = lastAction.selectedVertex;
 
+            //Quita la ultima accion de la lista para poder retroceder mas
             allActions.RemoveAt(allActions.Count - 1);
         }
     }
 
+    /// <summary>
+    /// Detecta el input de pulsar el botón de suprimir en el teclado
+    /// </summary>
     void DetectDelete()
     {
         if(Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Delete)
         {
+            //Se están editando los vertices?
             if (mode == SelectionMode.Vertex) DeleteSelectedVertex();
+            //Se están editando los polígonos?
             else if (mode == SelectionMode.Faces) DeleteSelectedTriangle();
         }
     }
 
+    /// <summary>
+    /// Detecta el input de la rueda del ratón para hacer zoom
+    /// </summary>
     void DetectZoom()
     {
         if(Event.current.type == EventType.ScrollWheel)
@@ -267,22 +287,31 @@ public class ModifyModelsWindow : EditorWindow
         }
     }
 
+    //La pelota asociada a un vertice que está actualmente seleccionada
     VertexBall currentBall;
+    //El rayo que se usa para seleccionar
     Ray ray;
+    //Se está moviendo algun vertice o alguna cara en este momento?
     bool moving;
     string childName = "";
     string _name = "";
     MoveToolAxis movingAxis = null;
+    /// <summary>
+    /// Detecta si se está interactuando con la herramienta de traslación (Las tres flechas que indican para mover un elemento en los ejes globales)
+    /// </summary>
     void DetectMoveToolInteraction()
     {
+        //Busca los ejes
         MoveToolAxis[] axis = GameObject.FindObjectsOfType<MoveToolAxis>();
 
-
+        //En caso de que se esté pulsando el ratón
         if (Event.current.type == EventType.MouseDown)
         {
+            //Recoge el nombre de el eje con el que se está interactuando
             _name = MoveTool_comp.isBeingClicked();
             if (_name != "")
             {
+                //Recoge el transform del eje que se esta usando
                 Transform found = MoveTool_comp.transform.Find(_name);
                 Debug.Log(found);
                 if (found)
@@ -295,8 +324,10 @@ public class ModifyModelsWindow : EditorWindow
                 }
             }
         }
+        //En caso de que el ratón se mueva mientras se sigue clickando
         else if (Event.current.type == EventType.MouseDrag)
         {
+            //En caso de que se esté moviendo
             if (moving)
             {
                 MoveTool_comp.Hastalapolla(MoveTool_comp.transform, _name);
@@ -306,19 +337,23 @@ public class ModifyModelsWindow : EditorWindow
             }
             else
             {
+                //En caso de haber por lo menos una cara seleccionada
                 if(selectedFace.Count > 0)
                 {
                     Vector3 center = Vector3.zero;
-
+                    //Calcula el centro de los puntos que componen el/los polígono/s seleccionado/s
                     foreach (var i in selectedFace) center += modifiedMesh.vertices[i];
 
                     center /= selectedFace.Count;
+                    //Transforma el punto para convertirlo en un punto basado en el espacio global
                     center = modifiedGameObject.transform.TransformPoint(center);
 
+                    //Atamos la herramienta al centro del/ de los polígono/s
                     MoveTool_comp.AppendToVertex(center);
                 }
             }
         }
+        //Cuando se levanta el dedo del ratón, seteamos el bool como que ya no se mueve, y le quitamos el eje seleccionado
         else if (Event.current.type == EventType.MouseUp) { moving = false; movingAxis = null; }
     }
 
@@ -327,27 +362,38 @@ public class ModifyModelsWindow : EditorWindow
     /// </summary>
     void MoverVertex()
     {
+        //Recogemos los vértices de la malla seleccionada
         Vector3[] vertices = modifiedMesh.vertices;
-        Debug.Log("SelectedVertex is : " + selectedVertex + "\nVertices Length is : " + vertices.Length);
+        //En caso de no tener seleccionado ningun vertice
         if (selectedVertex.Count <= 0) selectedVertex = lastModifiedVertex;
+        //En caso de que si haya vértices seleccionados y los índices estén dentro de los parámetros de la malla
         if (selectedVertex.Count > 0 && ContainsVertex(vertices))
         {
+            //Calculamos el centro de los vertices seleccionados
             Vector3 center = Vector3.zero;
             foreach (int v in selectedVertex) center += vertices[v];
 
             center /= selectedVertex.Count;
 
+            //Calculamos la distancia al centro de la herramienta de traslación (ya que normalmente está atada al centro asi que la distancia
+            //que se mueva del centro es la distancia que se debe mover cada vértice)
             Vector3 distance_center = modifiedGameObject.transform.InverseTransformPoint(MoveTool_comp.transform.position - MoveTool_comp.positionOffset) - center;
 
+            //Aplicamos esa distancia a cada vértice seleccionado
             foreach(int v in selectedVertex)
             {
                 vertices[v] += distance_center;
             }
         }
-            
+        //Aplicamos los cambios en los vertices a la malla
         modifiedMesh.SetVertices(vertices);
     }
 
+    /// <summary>
+    /// Los vértices seleccionados están en la malla?
+    /// </summary>
+    /// <param name="vertices"></param>
+    /// <returns></returns>
     bool ContainsVertex(Vector3[] vertices)
     {
         foreach(var v in selectedVertex)
@@ -364,22 +410,28 @@ public class ModifyModelsWindow : EditorWindow
     {
         Vector3[] _vertices = modifiedMesh.vertices;
 
+        //Si hay menos de 3 puntos en la lista, no puede haber un triángulo seleccionado, asi que no nos interesa
         if (selectedFace.Count < 3) return;
 
         List<Vector3> points = new List<Vector3>();
 
+        //Cogemos los puntos que corresponden a los vértices de las caras seleccionadas
         foreach (var v in selectedFace) points.Add(_vertices[v]);
 
+        //Calculamos el centro de los polígonos seleccionados
         Vector3 center = Vector3.zero;
 
         foreach (var point in points) center += point;
 
         center = center/ selectedFace.Count;
 
+        //Calculamos la distancia que se mueve la herramienta de traslación respecto al centro de los poligonos para saber que distancia debe moverse cada vertex
         Vector3 distance_center = modifiedGameObject.transform.InverseTransformPoint(MoveTool_comp.transform.position - MoveTool_comp.positionOffset) - center;
 
+        //Aplicamos esa distancia a cada vertice
         for(int i = 0; i < selectedFace.Count; i++) { _vertices[selectedFace[i]] = points[i] + distance_center; }
 
+        //Se aplican los cambios a la malla
         modifiedMesh.SetVertices(_vertices);
 
         AppendHighlightTriangle();
@@ -392,6 +444,7 @@ public class ModifyModelsWindow : EditorWindow
     /// </summary>
     void DetectVertexInteraction()
     {
+        //Si se está moviendo la herramienta de traslación no nos interesa seguir para no liar interacciones
         if (moving || movingAxis != null) return;
         Vector2[] screenPoints = VertexScreenPoints();
 
@@ -412,6 +465,10 @@ public class ModifyModelsWindow : EditorWindow
         else if (currentBall) currentBall.OnHover();
     }
 
+    /// <summary>
+    /// Devuelve el punto central de los vertices seleccionados
+    /// </summary>
+    /// <returns></returns>
     Vector3 GetSelectedCenterVertex()
     {
         Vector3 center = Vector3.zero;
@@ -643,6 +700,10 @@ public class ModifyModelsWindow : EditorWindow
 
     int pixelsThreshold = 17;
 
+    /// <summary>
+    /// Devuelve los puntos de la pantalla donde se encuentran los vértices visibles
+    /// </summary>
+    /// <returns></returns>
     Vector2[] VertexScreenPoints()
     {
         List<Vector2> result = new List<Vector2>();
@@ -655,15 +716,24 @@ public class ModifyModelsWindow : EditorWindow
         return result.ToArray();
     }
 
+    /// <summary>
+    /// En función de la posición del ratón al clickar y las posiciones en pantalla de los vértices, detecta si está lo suficientemente cerca el raton
+    /// de algun vertice para asumir que se desea interactuar por el, y en caso afirmativo, devuelve el indice en la lista de vertices del que se asume que se desea interactuar
+    /// </summary>
+    /// <param name="screenPoints"></param>
+    /// <returns></returns>
     int GetClickedVertex(Vector2[] screenPoints)
     {
         int index = 0;
+        //Si no hay vértices visibles no nos interesa seguir al bucle ya que daria error
         if(screenPoints.Length > 0)
         foreach(var point in screenPoints)
         {
+            //Ajusta el eje y de cada punto para evitar el error que lo invierte, y se calcula la distancia a donde se encuentra el ratón
             Vector2 _point = new Vector2(point.x, Screen.height - point.y);
             float distance = Vector2.Distance(_point, Event.current.mousePosition);
 
+            //En caso de que la distancia sea menor al margen de error y el vértice esté activo, se selecciona ese vertice
             if (distance <= pixelsThreshold && balls[index].activeSelf) return index;
             index++;
                 
@@ -671,14 +741,18 @@ public class ModifyModelsWindow : EditorWindow
         return -1;
     }
 
+    //las pelotas que sirven como representación visual de los vertices
     List<GameObject> balls = new List<GameObject>();
     /// <summary>
     /// Creates the balls for showing the vertex
     /// </summary>
     void CreateVertexBalls()
     {
+        //Si no hay ninguna malla seleccionada no debe seguir
         if (!modifiedMesh) return;
+        //En caso de que haya el mismo numero de bolas que de vértices es que ya están creadas
         if (balls.Count == modifiedMesh.vertices.Length) { 
+            //Les ajusta la escala 
             foreach(var ball in balls)
             {
                 ball.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f) * scaleMult;
@@ -686,11 +760,15 @@ public class ModifyModelsWindow : EditorWindow
             return;
         } 
 
+        //Malla para aplicar a las esferas
         Mesh sphereMesh = AssetDatabase.LoadAssetAtPath<Mesh>("Packages/com.tesicnor.tesicnorvrcore/Runtime/TesicnorVRCORE/Pseudo-Core/Models/UVSphere.fbx") as Mesh;
+        //Material para aplicar a los materiales
         Material ball_mat = AssetDatabase.LoadAssetAtPath(spritePath, typeof(Material)) as Material;
+        //Borra todas las esferas
         EmptyBallsPool();
 
         int index = 0;
+        //Crea y setea cada bola
         foreach(var v in modifiedMesh.vertices)
         {
             GameObject ball = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -742,8 +820,12 @@ public class ModifyModelsWindow : EditorWindow
         lastvertex = vertex;
     }
 
+    /// <summary>
+    /// Borra los vértices seleccionados
+    /// </summary>
     void DeleteSelectedVertex()
     {
+        //Si no hay vertices seleccionados pa que seguir
         if (selectedVertex.Count < 0) return;
 
         Vector3[] _vertices = modifiedMesh.vertices;
@@ -751,38 +833,54 @@ public class ModifyModelsWindow : EditorWindow
 
         for(int i = 0; i < _vertices.Length; i++)
         {
+            //Rehace la lista de vértices sin los vértices seleccionados
             if (!selectedVertex.Contains(i)) newVertices.Add(_vertices[i]);
         }
 
+        //Buscamos los triangulos que contengan los vertices y se borran de la lista
         DeleteTrianglesContainingOneVertex(selectedVertex);
 
+        //Se aplica a la malla y se deseleccionan los vertices y las caras
         modifiedMesh.SetVertices(newVertices.ToArray());
         selectedVertex.Clear();
         selectedFace.Clear();
     }
 
+    /// <summary>
+    /// Borra los triangulos de una malla que contengan los vertices que se aplican a la funcion
+    /// </summary>
+    /// <param name="containedVertex">vertices para comprobar y borrar sus triangulos</param>
     void DeleteTrianglesContainingOneVertex(List<int> containedVertex)
     {
+        //Recogemos los triangulos de la malla
         int[] _triangles = modifiedMesh.triangles;
         List<int> newTriangles = new List<int>();
 
+        //Recorremos cada triangulos (cada triangulo en el array esta compuesto de tres indices por ejemplo: el primer triangulo seria {triangles[0], triangles[1], triangles[2]}
         for(int i = 0; i < _triangles.Length - 3; i += 3)
         {
+            //En caso de que el triangulo no contenga ninguno de los vértices de los seleccionados, se añade a la nueva lista de triangulos
             if (!containedVertex.Contains(_triangles[i])&& !containedVertex.Contains(_triangles[i + 1]) && !containedVertex.Contains(_triangles[i + 2]))
             {
                 newTriangles.Add(_triangles[i]); newTriangles.Add(_triangles[i + 1]); newTriangles.Add(_triangles[i + 2]);
             }
         }
 
+        //Se le aplican los triangulos a la malla
         modifiedMesh.triangles = newTriangles.ToArray();
     }
 
+    /// <summary>
+    /// Borra el poligono seleccionado
+    /// </summary>
     void DeleteSelectedTriangle()
     {
+        //Si no tiene por lo menos 3 posiciones quiere decir que no tiene un triangulo seleccionado
         if (selectedFace.Count != 3) return;
         int[] _triangles = modifiedMesh.triangles;
         List<int> newTriangles = new List<int>();
 
+        //Recorremos cada triangulo de la malla buscando si coinciden. En caso de no coincidir se añade a la nueva lista de triangulos de la malla
         for(int i = 0; i < _triangles.Length - 3; i += 3)
         {
             if (_triangles[i] != selectedFace[0] || _triangles[i + 1] != selectedFace[1] || _triangles[i + 2] != selectedFace[2])
@@ -791,31 +889,40 @@ public class ModifyModelsWindow : EditorWindow
             }
         }
 
+        //Se deselecciona la cara
         selectedFace.Clear();
        
+        //Se aplican los cambios a la malla
         modifiedMesh.triangles = newTriangles.ToArray();
     }
 
+    //Crea una extrusión cubica en las caras seleccionadas
     void Extrude()
     {
+        //Si no estamos en el modo de modificar poligonos no nos interesa seguir
         if (mode != SelectionMode.Faces) return;
 
+        //Si no tiene seleccionado por lo menos 3 puntos, quiere decir que no tiene ni un poligono seleccionado y no nos interesa seguir
         if (selectedFace.Count < 3) return;
 
+        //Inicializamos las listas necesarias para guardar datos
         List<int> alreadyAddedVertex = new List<int>();
         List<Vector3> newVertex = new List<Vector3>();
         List<int> newTriangles = new List<int>();
         List<int> newSelectedTriangles = new List<int>();
 
+        //Añadimos los vertices y triangulos que ya existen en la geometria a las nuevas listas que se usarán
         newVertex.AddRange(modifiedMesh.vertices);
         newTriangles.AddRange(modifiedMesh.triangles);
 
         for (int i = 0; i < selectedFace.Count - 2; i += 3)
         {
+            //Crea los nuevos puntos que compartirán posición con los originales pero les añadimos un pequeño offset por si acaso
             Vector3 v00_v3 = modifiedMesh.vertices[selectedFace[i]] + modifiedMesh.normals[selectedFace[i]] * 0.1f;
             Vector3 v01_v3 = modifiedMesh.vertices[selectedFace[i + 1]] + modifiedMesh.normals[selectedFace[i]] * 0.1f;
             Vector3 v02_v3 = modifiedMesh.vertices[selectedFace[i + 2]] + modifiedMesh.normals[selectedFace[i]] * 0.1f;
 
+            //Comprueba si los nuevos vértices ya se han añadido a la geometría, y en caso negativo los añade
             bool already0 = false, already1 = false, already2 = false;
             if (!alreadyAddedVertex.Contains(selectedFace[i])) newVertex.Add(v00_v3);
             else already0 = true;
@@ -824,12 +931,15 @@ public class ModifyModelsWindow : EditorWindow
             if (!alreadyAddedVertex.Contains(selectedFace[i + 2])) newVertex.Add(v02_v3);
             else already2 = true;
 
+            //Guarda los vertices que ya se han usado para no repetirse al crear los poligonos
             int[] usedIndexes = { selectedFace[i], selectedFace[i + 1], selectedFace[i + 2] };
             alreadyAddedVertex.AddRange(usedIndexes);
 
+            //Establecemos los indices de los vertices seleccionados y los creados para mayor facilidad a la hora de operar
             int v0 = selectedFace[i]; int v1 = selectedFace[i + 1]; int v2 = selectedFace[i + 2];
             int v00 = newVertex.Count - 3; int v01 = newVertex.Count - 2; int v02 = newVertex.Count - 1;
 
+            //Se comprueba si ya se han añadido por si acaso para setear el indice en consecuencia y no generar errores por ello
             for (int j = 0; j < newVertex.Count; j++)
             {
                 if (already0)
@@ -855,8 +965,29 @@ public class ModifyModelsWindow : EditorWindow
                 }
             }
 
-            Debug.Log(v00); Debug.Log(v01); Debug.Log(v02);
-
+            //Creamos una lista con los nuevos poligonos definidos
+            //Si no se puede ver gráficamente como funciona, seguir el siguiente esquema
+            //TRIANGULO SUPERIOR O EXTRUIDO
+            //
+            //|\ v00
+            //| \
+            //|  \
+            //|   \
+            //|    \
+            //|_____\
+            //v01\     v02
+            //
+            //TRIANGULO ORIGINAL O INFERIOR
+            //|\v0    
+            //| \     
+            //|  \    
+            //|   \   
+            //|    \  
+            //|     \ 
+            //|______\v2
+            //v1
+            //
+            //
             int[] createdTriangles = { v00, v01, v02, v00, v02, v01,
             v0, v00, v02, v0, v02, v00,
             v2, v0, v02, v2, v02, v0,
@@ -865,12 +996,15 @@ public class ModifyModelsWindow : EditorWindow
             v1, v2, v02, v1, v02, v2,
             v01, v02, v1, v01, v1, v02};
 
+            //Se le aplican estos cambios a las listas que hemos creado anteriormente
             newTriangles.AddRange(createdTriangles);
             int[] createdSelection = { newVertex.Count - 1, newVertex.Count - 2, newVertex.Count - 3 };
             newSelectedTriangles.AddRange(createdSelection);
         }
+        //Seleccionamos las nuevas caras
         selectedFace = newSelectedTriangles;
 
+        //Le aplicamos los cambios a la malla
         modifiedMesh.vertices = newVertex.ToArray(); modifiedMesh.SetTriangles(newTriangles, 0);
         modifiedMesh.RecalculateNormals();
         modifiedMesh.UploadMeshData(false);

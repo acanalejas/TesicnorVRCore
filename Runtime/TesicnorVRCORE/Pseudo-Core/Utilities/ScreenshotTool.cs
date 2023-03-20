@@ -48,34 +48,47 @@ public class ScreenshotTool : EditorWindow
         window.ShowUtility();
     }
 
+    /// <summary>
+    /// Cuando la ventana se activa
+    /// </summary>
     public void OnEnable()
     {
+        //Crea las render textures que necesitamos
         renderTexture = new RenderTexture(1920,1080, 32, RenderTextureFormat.ARGB32);
         screenshotTexture = new RenderTexture(1920, 1080, 24, RenderTextureFormat.ARGB4444);
 
-        videoPlayer = new VideoPlayer();
-
+        //Crea las camaras necesarias
         GameObject renderCamera_go = new GameObject("RenderCamera_GO", typeof(Camera));
         GameObject screenshotCamera_go = new GameObject("ScreenshotCamera_GO", typeof(Camera));
 
+        //Asigna las variables de las camaras para no andar buscando todo el rato en el gameobject
         renderCamera = renderCamera_go.GetComponent<Camera>();
         screenShotCamera = screenshotCamera_go.GetComponent<Camera>();
 
+        //Asigna las rendertextures
         renderCamera.targetTexture = renderTexture;
         screenShotCamera.targetTexture = screenshotTexture;
     }
 
+    /// <summary>
+    /// Se lanza cuando la ventana se cierra
+    /// </summary>
     public void OnDisable()
     {
+        //Destruye las camaras
         DestroyImmediate(screenShotCamera.gameObject);
         DestroyImmediate(renderCamera.gameObject);
     }
 
+    //Bool para el boton de sacar screenshot
     bool screenshot;
     public void OnGUI()
     {
+        //En caso de que se haya pulsado el botón de screenshot
         if (screenshot) TakeScreenshot();
-        else { DisplayRender();
+        else { 
+            DisplayRender();
+            //Crea un area a la izquierda con unos márgenes para situar ahi las variables
             GUILayout.BeginArea(new Rect(20, 80, this.position.width / 6 - 20, this.position.height - 160), EditorStyles.helpBox);
             DisplayCameraSettings();
 
@@ -87,7 +100,8 @@ public class ScreenshotTool : EditorWindow
 
         screenshot = GUILayout.Button("TAKE SCREENSHOT");
 
-        Rect windowRect = new Rect(0, 0, 1920, 1080);
+        //Establece la posición y tamaño de la ventana para que no cambie
+        Rect windowRect = new Rect(this.position.x, this.position.y, 1920, 1080);
         this.position = windowRect;
 
         MoveCamera();
@@ -96,6 +110,9 @@ public class ScreenshotTool : EditorWindow
         this.Repaint();
     }
 
+    /// <summary>
+    /// Dibuja lo que renderiza la camara en la ventana
+    /// </summary>
     public void DisplayRender()
     {
         renderCamera.Render();
@@ -103,35 +120,48 @@ public class ScreenshotTool : EditorWindow
         GUI.DrawTexture(new Rect(0, 0, this.position.width, this.position.height), renderTexture);
     }
 
+    /// <summary>
+    /// Renderiza con la camara de screenshot y guarda el resultado en un archivo
+    /// </summary>
     public void TakeScreenshot()
     {
+        //Establece la renderTexture activa y la asigna a la camara
         RenderTexture.active = screenshotTexture;
         screenShotCamera.targetTexture = screenshotTexture;
 
+        //Copia los valores del transform de la otra cámara
         screenShotCamera.transform.position = renderCamera.transform.position;
         screenShotCamera.transform.rotation = renderCamera.transform.rotation;
         screenShotCamera.transform.localScale = renderCamera.transform.localScale;
 
+        //Copia los valores del componente de la camara de la otra camara
         screenShotCamera.CopyFrom(renderCamera);
 
         screenShotCamera.Render();
+        //Creamos la textura que usaremos para guardar la imagen, debe ser del mismo formato que la render texture o dara error
         Texture2D toSave = new Texture2D(1920, 1080, TextureFormat.RGBA32, false);
 
+        //La textura copia lo que renderiza la otra camara
         toSave.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
         toSave.Apply();
 
+        //Creamos los buffer en los que guardaremos la información de la imagen en bytes segun el formato de archivo que queramos guardar
         byte[] toSave_jpg = null;
         byte[] toSave_png = null;
         byte[] toSave_tga = null;
 
+        //Comprueba los formatos de archivo seleccionados y rellena los buffers en consecuencia
         if (jpg) toSave_jpg = toSave.EncodeToJPG();
         if (png) toSave_png = toSave.EncodeToPNG();
         if (tga) toSave_tga = toSave.EncodeToTGA();
 
+        //Recogemos el path del archivo a guardar excepto el formato ej: .png
         string path = savePath + "/" + fileName;
 
+        //En caso de que no exista la carpeta en la que queremos guardar las capturas, la creamos
         if(!Directory.Exists(savePath)) Directory.CreateDirectory(savePath);
 
+        //Guarda la imagen como jpg
         if(toSave_jpg != null)
         {
             FileStream fs = File.Open(path + ".jpg", FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -140,6 +170,7 @@ public class ScreenshotTool : EditorWindow
             fs.Close();
         }
 
+        //Guarda la imagen como png
         if(toSave_png != null)
         {
             FileStream fs = File.Open(path + ".png", FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -147,14 +178,20 @@ public class ScreenshotTool : EditorWindow
             fs.Close();
         }
 
+        //Guarda la imagen como tga
         if(toSave_tga != null)
         {
             FileStream fs = File.Open(path + ".tga", FileMode.OpenOrCreate, FileAccess.ReadWrite);
             fs.Write(toSave_tga,0, toSave_tga.Length);
             fs.Close();
         }
+
+        //El formato EXR se ha dejado fuera dado que daba error directamente
     }
 
+    /// <summary>
+    /// Enseña settings de la camara en la ventana para modificarlas a nuestro gusto
+    /// </summary>
     public void DisplayCameraSettings()
     {
         GUILayout.Label("Camera Settings", EditorStyles.boldLabel);
@@ -187,6 +224,9 @@ public class ScreenshotTool : EditorWindow
         renderCamera.farClipPlane = farPlane;
     }
 
+    /// <summary>
+    /// Enseña en la ventana las settings que se usan para guardar la foto para que se puedan retocar al gusto
+    /// </summary>
     public void DisplaySaveSettings()
     {
         GUILayout.Label("Save Settings", EditorStyles.boldLabel);
@@ -203,6 +243,9 @@ public class ScreenshotTool : EditorWindow
         fileName = GUILayout.TextField(fileName, EditorStyles.miniTextField);
     }
 
+    /// <summary>
+    /// Mueve la camara segun el input del teclado, tipico WASD
+    /// </summary>
     public void MoveCamera()
     {
         Vector3 direction = Vector3.zero;
@@ -232,6 +275,9 @@ public class ScreenshotTool : EditorWindow
     Vector3 finalMousePosition;
     Vector3 initialCameraRotation;
     Vector3 finalCameraRotation;
+    /// <summary>
+    /// Rota la camara en funcion del raton cuando se clicka y arrastra
+    /// </summary>
     public void RotateCamera()
     {
         if(Event.current.type == EventType.MouseDown)

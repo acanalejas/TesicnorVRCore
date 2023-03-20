@@ -10,14 +10,18 @@ using System.IO;
 public class SpritesDrawerWindow : EditorWindow
 {
     #region FIELDS
+    //Textura que se enseña y que luego se guarda
     Texture2D sprite;
 
+    //Bools que sirven para los botones de la ventana
     bool circle, square, roundSquare, triangle, reset, save;
 
+    //Modificadores de las figuras
     float circleRadius = 1, squareX = 1, squareY = 1, squareCornerRadius = 20, polygonSize;
 
     int polygonSides = 3;
 
+    //Colores que se van a usar
     Color fillColor = Color.black;
     Color backgroundColor = Color.clear;
     #endregion
@@ -29,7 +33,7 @@ public class SpritesDrawerWindow : EditorWindow
         PlayerPrefs.DeleteAll();
     }
     [MenuItem("Window/Sprites Drawer")]
-    public static void ShowWindowPutita()
+    public static void ShowWindow()
     {
         EditorWindow window = GetWindow<SpritesDrawerWindow>();
 
@@ -58,6 +62,9 @@ public class SpritesDrawerWindow : EditorWindow
         ResetSprite();
     }
 
+    /// <summary>
+    /// Muestra todo en la ventana
+    /// </summary>
     void DisplaySprite()
     {
         Vector2 size = GetAreaAdaptativeSize();
@@ -70,6 +77,7 @@ public class SpritesDrawerWindow : EditorWindow
         //Zona donde se encuentran los botones laterales
         GUILayout.BeginArea(new Rect(0, 20, size.x * 0.2f, size.y));
         GUI.backgroundColor = Color.yellow;
+        //Botones para crear las distintas formas
         circle = GUILayout.Button("Circle", EditorStyles.miniButton);
         square = GUILayout.Button("Square", EditorStyles.miniButton);
         roundSquare = GUILayout.Button("Round Square", EditorStyles.miniButton);
@@ -77,10 +85,12 @@ public class SpritesDrawerWindow : EditorWindow
 
         GUILayout.Space(20);
 
+        //Para seleccionar el color de la figura geometrica a dibujar
         fillColor = EditorGUILayout.ColorField("Fill Color", fillColor);
 
         GUILayout.Space(20);
 
+        //Los parámetros para dibujar las formas
         GUILayout.Label("CircleRadius", EditorStyles.boldLabel);
         circleRadius = GUILayout.HorizontalSlider(circleRadius, 0.2f, 1f);
 
@@ -111,6 +121,7 @@ public class SpritesDrawerWindow : EditorWindow
         GUI.DrawTexture(new Rect(position.size.x/2 - size.x/2, position.size.y/2 - size.y/2, size.x, size.y), sprite);
     }
 
+    //Adapta la previsualización del sprite creado al tamaño de la ventana
     Vector2 GetAreaAdaptativeSize()
     {
         Vector2 window_size = position.size;
@@ -135,6 +146,12 @@ public class SpritesDrawerWindow : EditorWindow
         return new Vector2(sizeX, sizeY);
     }
 
+    /// <summary>
+    /// Dibuja un círculo en la textura
+    /// </summary>
+    /// <param name="radius">Radio del circulo</param>
+    /// <param name="center">Centro de la circunferencia</param>
+    /// <param name="color">Color del que se va a rellenar</param>
     void DrawCircle(float radius, Vector2 center, Color color)
     {
         float _radius = radius;
@@ -151,6 +168,11 @@ public class SpritesDrawerWindow : EditorWindow
         sprite.Apply();
         this.SaveChanges();
     }
+    /// <summary>
+    /// Dibuja un círculo en la textura
+    /// </summary>
+    /// <param name="radius">Radio de la circunferencia</param>
+    /// <param name="color">Color del que se va a rellenar</param>
     void DrawCircle(float radius, Color color)
     {
         Vector2 center = new Vector2((int)sprite.width / 2, (int)sprite.height / 2);
@@ -168,6 +190,12 @@ public class SpritesDrawerWindow : EditorWindow
         sprite.Apply();
         this.SaveChanges();
     }
+
+    /// <summary>
+    /// Dibuja un circulo en la textura
+    /// </summary>
+    /// <param name="radius">Radio del circulo</param>
+    /// <param name="color">Color del que se va a rellenar</param>
     void DrawCircleBack(float radius, Color color)
     {
         Vector2 center = new Vector2((int)sprite.width / 2, (int)sprite.height / 2);
@@ -186,6 +214,12 @@ public class SpritesDrawerWindow : EditorWindow
         this.SaveChanges();
     }
 
+    /// <summary>
+    /// Dibuja un cuadrilátero en la textura
+    /// </summary>
+    /// <param name="x">Acnhura del cuadrilátero</param>
+    /// <param name="y">Altura del cuadrilátero</param>
+    /// <param name="color">Color del que se va a rellenar</param>
     void DrawSquare(float x, float y, Color color)
     {
         Vector2 center = new Vector2((int)sprite.width / 2, (int)sprite.height / 2);
@@ -207,6 +241,13 @@ public class SpritesDrawerWindow : EditorWindow
         this.SaveChanges();
     }
 
+    /// <summary>
+    /// Dibuja un cuadrilátero con las esquinas redondeadas
+    /// </summary>
+    /// <param name="x">Anchura del cuadrilátero</param>
+    /// <param name="y">Altura del cuadrilátero</param>
+    /// <param name="radius">Radio de la circunferencia de la esquina</param>
+    /// <param name="color">Color del que se va a rellenar</param>
     void DrawRoundedSquare(float x, float y, float radius, Color color)
     {
         DrawSquare(x, y, color);
@@ -243,6 +284,12 @@ public class SpritesDrawerWindow : EditorWindow
         this.SaveChanges();
     }
 
+    /// <summary>
+    /// Dibuja un polígono regular
+    /// </summary>
+    /// <param name="sides">Número de lados del polígono</param>
+    /// <param name="size">Tamaño del polígono (0 - 1)</param>
+    /// <param name="color">Color del que se va a rellenar</param>
     void DrawPolygon(int sides, float size, Color color)
     {
         Vector2 center = new Vector2(sprite.width / 2, sprite.height / 2);
@@ -279,6 +326,13 @@ public class SpritesDrawerWindow : EditorWindow
         this.SaveChanges();
     }
 
+    /// <summary>
+    /// Devuelve la distancia entre dos píxeles de la textura
+    /// Se calcula por pitágoras
+    /// </summary>
+    /// <param name="pixel1">Posición del pixel inicial</param>
+    /// <param name="pixel2">Posicion del pixel final</param>
+    /// <returns></returns>
     float DistanceBetweenPixels(Vector2 pixel1, Vector2 pixel2)
     {
         float xdist = pixel1.x - pixel2.x;
@@ -287,6 +341,12 @@ public class SpritesDrawerWindow : EditorWindow
         return Mathf.Sqrt(xdist * xdist + ydist * ydist);
     }
 
+    /// <summary>
+    /// Está el punto dentro del polígono?
+    /// </summary>
+    /// <param name="point">Punto a comprobar</param>
+    /// <param name="polygon">Vertices del poligono</param>
+    /// <returns></returns>
     bool IsPointInsidePolygon(Vector2 point, Vector2[] polygon)
     {
         int ptNum = polygon.Length;
@@ -313,6 +373,9 @@ public class SpritesDrawerWindow : EditorWindow
         return oddNodes;
     }
 
+    /// <summary>
+    /// Borra el contenido actual de la textura
+    /// </summary>
     void ResetSprite()
     {
         for(int i = 0; i < sprite.width; i++)
@@ -325,6 +388,9 @@ public class SpritesDrawerWindow : EditorWindow
         sprite.Apply();
     }
 
+    /// <summary>
+    /// Activa la ventana de guardado
+    /// </summary>
     void SaveSprite()
     {
         SaveWindow sw = EditorWindow.GetWindow<SaveWindow>();

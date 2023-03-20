@@ -15,7 +15,6 @@
     "includePlatforms": [],
     "excludePlatforms": [
         "CloudRendering",
-        "EmbeddedLinux",
         "GameCoreScarlett",
         "GameCoreXboxOne",
         "iOS",

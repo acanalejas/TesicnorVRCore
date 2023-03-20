@@ -24,12 +24,22 @@ public class MoveTool : MonoBehaviour
     
 
     #region METHODS
+    /// <summary>
+    /// Ata la herramienta de traslación a un punto
+    /// </summary>
+    /// <param name="vertex"></param>
     public void AppendToVertex(Vector3 vertex)
     {
         this.transform.position = vertex + positionOffset;
         UnityEditor.Handles.ArrowHandleCap(0, vertex, Quaternion.identity, UnityEditor.HandleUtility.GetHandleSize(vertex), EventType.Repaint);
     }
 
+    /// <summary>
+    /// Se está clickando la herramienta de traslación?
+    /// Si -> Devuelve el nombre del eje seleccionado
+    /// No -> Devuelve un string vacio
+    /// </summary>
+    /// <returns></returns>
     public string isBeingClicked()
     {
         Vector2 mouse = ModifyModelsWindow.previewCamera.ScreenToViewportPoint(Event.current.mousePosition);
@@ -55,10 +65,18 @@ public class MoveTool : MonoBehaviour
     Vector2 mouseViewport;
     Vector3 mouseWorldPosition;
 
+    /// <summary>
+    /// Mueve el trasnform seleccionado dependiendo de la interacción del ratón
+    /// </summary>
+    /// <param name="forMove"></param>
+    /// <param name="name"></param>
     public void Hastalapolla(Transform forMove, string name)
     {
+        //Punto del viewport que se está clickando
         mouseViewport = ModifyModelsWindow.previewCamera.ScreenToViewportPoint(Event.current.mousePosition);
+        //Se invierten las coordenadas en el eje Y para hacerlo coincidir ya que sino por un error sale al revés
         mouseViewport = new Vector2(mouseViewport.x, 1 - mouseViewport.y);
+        //Se saca un rayo desde el punto que se clicka hacia adelante basado en la vista de la camara
         Ray mouseRay = ModifyModelsWindow.previewCamera.ViewportPointToRay(mouseViewport);
         Vector3 position = Vector3.zero;
 
@@ -67,6 +85,7 @@ public class MoveTool : MonoBehaviour
 
 
         mouseWorldPosition = hit.point;
+        //En funcion del eje seleccionado mueve en una direccion u otra
         switch (name)
         {
             case "X":
