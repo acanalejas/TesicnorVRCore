@@ -216,17 +216,18 @@ public class RopeV2 : MonoBehaviour
         return totalDistance / ropeSections;
     }
 
-#endregion
+    #endregion
 
 
-#region Simulation
+    #region Simulation
     /// <summary>
     /// Devuelve el sumatorio de fuerzas de cada seccion
     /// </summary>
     /// <returns></returns>
+    List<Vector3> allForces = new List<Vector3>();
     public List<Vector3> GetAllForces()
     {
-        List<Vector3> allForces = new List<Vector3>();
+        allForces.Clear();
 
         for(int i = 0; i < Sections.Count; i++)
         {
@@ -247,14 +248,15 @@ public class RopeV2 : MonoBehaviour
     /// Devuelve la aceleracion de cada seccion
     /// </summary>
     /// <returns></returns>
+    List<Vector3> result_a = new List<Vector3>();
     public List<Vector3> GetAllAccelerations()
     {
-        List<Vector3> result = new List<Vector3>();
+        result_a.Clear();
         List<Vector3> allForces = GetAllForces();
         int index = 0;
         foreach (Vector3 force in allForces)
         {
-            result.Add(force / Sections[index].mass);
+            result_a.Add(force / Sections[index].mass);
             //if (isFinalAttached && index == Sections.Count - 1) result[index] = Vector3.zero;
             index++;
         }
@@ -265,21 +267,20 @@ public class RopeV2 : MonoBehaviour
     /// Devuelve la velocidad de cada seccion
     /// </summary>
     /// <returns></returns>
+    List<Vector3> result_v = new List<Vector3>();
     public List<Vector3> GetAllVelocities()
     {
-        List<Vector3> result = new List<Vector3>();
+        result_v.Clear();
         List<Vector3> allAccelerations = GetAllAccelerations();
 
         int index = 0;
         foreach (var acceleration in allAccelerations)
         {
             Vector3 velocity = Sections[index].velocity + Time.deltaTime * acceleration;
-            result.Add(velocity);
+            result_v.Add(velocity);
             Sections[index].velocity = velocity;
             index++;
         }
-
-        Debug.Log("Get velocity");
         return result;
     }
 
@@ -287,9 +288,10 @@ public class RopeV2 : MonoBehaviour
     /// Devuelve la posicion de cada seccion
     /// </summary>
     /// <returns></returns>
+     List<Vector3> result = new List<Vector3>();
     public List<Vector3> GetAllPositions()
     {
-        List<Vector3> result = new List<Vector3>();
+        result.Clear();
         List<Vector3> allVelocities = GetAllVelocities();
 
         //Euler's method

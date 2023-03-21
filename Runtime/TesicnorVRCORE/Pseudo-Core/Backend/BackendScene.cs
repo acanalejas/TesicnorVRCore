@@ -121,7 +121,7 @@ public class BackendScene : MonoBehaviour
         string appCode = BackendGetter.appCode.ToString();
 
         var cts = new System.Threading.CancellationTokenSource();
-        using (var request = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "?applicationId=" + appCode + "&" + "userName=" + user))
+        using (var request = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "applicationId=" + appCode + "&" + "userName=" + user))
         {
             using(var response = await httpClient.SendAsync(request, cts.Token))
             {

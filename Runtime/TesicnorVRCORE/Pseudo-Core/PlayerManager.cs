@@ -144,6 +144,8 @@ public class PlayerManager : MonoBehaviour
             useHandsCanvas.SetActive(true);
             rightHandAnchor.SetActive(false);
             leftHandAnchor.SetActive(false);
+            leftController.SetActive(true);
+            rightController.SetActive(true);
 
             //useHandsCanvas.transform.position = Vector3.Lerp(useHandsCanvas.transform.position, handsCanvasParent.position, Time.deltaTime * 2);
             //useHandsCanvas.transform.LookAt(mainCamera);
@@ -155,6 +157,8 @@ public class PlayerManager : MonoBehaviour
             useHandsCanvas.SetActive(false);
             rightHandAnchor.SetActive(true);
             leftHandAnchor.SetActive(true);
+            leftController.SetActive(false);
+            rightController.SetActive(false);
 
             if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true; Debug.Log("RECENTERING FROM PLAYER MANAGER"); }
             //playerControllers.SetActive(false);
