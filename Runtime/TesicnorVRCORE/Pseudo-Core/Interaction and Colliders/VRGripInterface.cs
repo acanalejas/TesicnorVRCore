@@ -116,5 +116,11 @@ public interface VRHandInterface
     /// <returns></returns>
     public bool isGrabbing();
 
+    /// <summary>
+    /// Devuelve la velocidad en m/s a la que se mueve la mano
+    /// </summary>
+    /// <returns></returns>
+    public Vector3 GetVelocity();
+
 
 }

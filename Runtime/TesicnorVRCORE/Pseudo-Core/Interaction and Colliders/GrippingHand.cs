@@ -89,6 +89,8 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
     public static bool PC_Debug_Editor;
 
+    private Vector3 lastPosition;
+
     #endregion
 
     #region FUNCTIONS
@@ -336,6 +338,15 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             lastTrackedRotation = this.transform.rotation.eulerAngles;
         }
     }
+    /// <summary>
+    /// Devuelve la velocidad a la que se mueve la mano en m/s
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public Vector3 GetVelocity()
+    {
+        return velocity;
+    }
 
     #region Trigger
     private void OnTriggerEnter(Collider other)
@@ -364,7 +375,6 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             }
         }
     }
-
     #endregion
     #endregion
     #endregion
