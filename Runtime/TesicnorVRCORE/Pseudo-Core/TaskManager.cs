@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
@@ -131,6 +129,33 @@ public class TaskManager : MonoBehaviour
         activeTask--;
         if (!isInOrder) totalTasks[orderOfIndexes[activeTask]].enabled = true;
         else totalTasks[activeTask].enabled = true;
+    }
+
+    public void GoToTask(VR_Task task)
+    {
+        bool exists = totalTasks.Contains(task);
+        if (!exists) return;
+
+        totalTasks[activeTask].StopAllCoroutines();
+        totalTasks[activeTask].enabled = false;
+
+        for(int i = 0; i < totalTasks.Length; i++)
+        {
+            if (totalTasks[i] == task) activeTask = i;
+        }
+        totalTasks[activeTask].enabled = true;
+    }
+
+    public void GoToTask(int index)
+    {
+        if (index > totalTasks.Length || index < 0) return;
+
+        totalTasks[activeTask].enabled = false;
+        totalTasks[activeTask].StopAllCoroutines();
+
+        activeTask = index;
+
+        totalTasks[activeTask].enabled = true;
     }
 
     /// <summary>
