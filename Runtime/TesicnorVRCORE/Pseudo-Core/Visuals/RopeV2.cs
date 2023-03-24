@@ -240,7 +240,6 @@ public class RopeV2 : MonoBehaviour
             allForces.Add(RopePhysics.gravityForce(sectionMass) + RopePhysics.dampForce(coeficent, Sections[i].velocity.magnitude, -Sections[i].velocity.normalized) + 
                 (RopePhysics.elasticForce(krope, positionDiference, previousDiference, previousKDirection, kDirection)));
         }
-
         return allForces;
     }
 
