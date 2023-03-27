@@ -259,7 +259,7 @@ public class RopeV2 : MonoBehaviour
             //if (isFinalAttached && index == Sections.Count - 1) result[index] = Vector3.zero;
             index++;
         }
-        return result;
+        return result_a;
     }
 
     /// <summary>
@@ -280,7 +280,7 @@ public class RopeV2 : MonoBehaviour
             Sections[index].velocity = velocity;
             index++;
         }
-        return result;
+        return result_v;
     }
 
     /// <summary>
