@@ -658,6 +658,12 @@ namespace TesicFire
 
             return collider.ClosestPoint(Camera.main.transform.position);
         }
+        public Vector3 GetClosestPointToFire(Vector3 point)
+        {
+            if (!this.OnFire()) return new Vector3(10, 10, 10);
+
+            return collider.ClosestPoint(point);
+        }
         #endregion
         #endregion
     }

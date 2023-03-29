@@ -7,14 +7,28 @@ using UnityEngine;
 using System.IO;
 
 #if UNITY_EDITOR
+public class SpriteLayer
+{
+    public Texture2D texture;
+    public Texture2D displayTexture;
+    public Vector2 position;
+    public Vector2 size;
+    public int id;
+    public float opacity;
+}
 public class SpritesDrawerWindow : EditorWindow
 {
     #region FIELDS
     //Textura que se enseña y que luego se guarda
-    Texture2D sprite;
+    public Texture2D sprite;
+    Texture2D additionalSprite;
+
+    public List<SpriteLayer> spriteLayers = new List<SpriteLayer>();
+    public List<Texture2D> displayTextures = new List<Texture2D>();
+    public int actualLayer;
 
     //Bools que sirven para los botones de la ventana
-    bool circle, square, roundSquare, triangle, reset, save;
+    bool circle, square, roundSquare, triangle, reset, save, import;
 
     //Modificadores de las figuras
     float circleRadius = 1, squareX = 1, squareY = 1, squareCornerRadius = 20, polygonSize;
@@ -24,6 +38,10 @@ public class SpritesDrawerWindow : EditorWindow
     //Colores que se van a usar
     Color fillColor = Color.black;
     Color backgroundColor = Color.clear;
+
+    public Vector2 positionOffset { get { Vector2 size = GetAreaAdaptativeSize(); return new Vector2(this.position.size.x / 2 - size.x / 2, this.position.size.y / 2 - size.y / 2); } }
+
+    LayersWindow lw;
     #endregion
 
     #region METHODS
@@ -44,7 +62,7 @@ public class SpritesDrawerWindow : EditorWindow
 
     private void OnGUI()
     {
-        if (!sprite) sprite = new Texture2D(500, 500);
+        if (!sprite) sprite = new Texture2D(500, 500, TextureFormat.ARGB32, false);
         DisplaySprite();
         //this.position.Set(position.x, position.y, 500, 500);
         if (circle) DrawCircleBack(sprite.width/2 *circleRadius, fillColor);
@@ -53,25 +71,63 @@ public class SpritesDrawerWindow : EditorWindow
         if (triangle) DrawPolygon(polygonSides, polygonSize, fillColor);
         if (reset) ResetSprite();
         if (save) SaveSprite();
+        if (import) Import();
+
+        lw.Repaint();
+        if (!lw) CreateLayerWindow();
+        else UpdateLayersWindow();
+
+        if(spriteLayers.Count > 0 && actualLayer < spriteLayers.Count)
+        sprite = spriteLayers[actualLayer].texture;
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         if(!sprite)
-        sprite = new Texture2D(500, 500);
+        sprite = new Texture2D(500, 500, TextureFormat.ARGB32, false);
         ResetSprite();
+
+        spriteLayers.Clear();
+        SpriteLayer initialLayer = new SpriteLayer();
+        initialLayer.texture = sprite;
+        Vector2 size = GetAreaAdaptativeSize();
+        initialLayer.position = new Vector2(position.size.x / 2 - size.x / 2, position.size.y / 2 - size.y / 2);
+        initialLayer.size = size;
+        
+        spriteLayers.Add(initialLayer);
+
+        DragAndDropWindow.DragAndDropManipulator.onDrop += OnDrop;
+
+        CreateLayerWindow();
     }
 
+    void CreateLayerWindow()
+    {
+        lw = EditorWindow.GetWindow<LayersWindow>();
+        lw.parent = this;
+    }
+
+    void UpdateLayersWindow()
+    {
+        lw.parent = this;
+        lw.spriteLayers = spriteLayers.ToArray();
+    }
+    private void OnDisable()
+    {
+        lw.Close();
+    }
     /// <summary>
     /// Muestra todo en la ventana
     /// </summary>
     void DisplaySprite()
     {
         Vector2 size = GetAreaAdaptativeSize();
+        SetLayerValues(new Vector2(position.size.x / 2 - size.x / 2, position.size.y / 2 - size.y / 2), size, 0);
         //Zona donde están los botones de guardar y resetear
         GUILayout.BeginHorizontal();
         save = GUILayout.Button("Save", EditorStyles.miniButtonMid);
         reset = GUILayout.Button("Reset", EditorStyles.miniButtonRight);
+        import = GUILayout.Button("Import", EditorStyles.miniButtonLeft);
         GUILayout.EndHorizontal();
 
         //Zona donde se encuentran los botones laterales
@@ -118,11 +174,56 @@ public class SpritesDrawerWindow : EditorWindow
         GUILayout.EndArea();
 
         //Dibujado de la textura en la ventana
-        GUI.DrawTexture(new Rect(position.size.x/2 - size.x/2, position.size.y/2 - size.y/2, size.x, size.y), sprite);
+        DisplayLayers();
+    }
+
+    public void DisplayLayers()
+    {
+        GetDisplayTextures();
+        foreach(var layer in spriteLayers)
+        {
+            GUI.DrawTexture(new Rect(layer.position + new Vector2(0,30), layer.size - new Vector2(40,40)), layer.displayTexture);
+        }
+    }
+    void GetDisplayTextures()
+    {
+
+        int[] OpacityValues = lw.opacities.ToArray();
+        float[] OpacityMultipliers = new float[OpacityValues.Length];
+
+        for(int i = 0;i < OpacityValues.Length; i++)
+        {
+            OpacityMultipliers[i] = OpacityValues[i] / 100;
+        }
+
+        int index = 0;
+        foreach(var layer in spriteLayers)
+        {
+            Color[] texturePixels = layer.texture.GetPixels();
+            if (index > OpacityMultipliers.Length) continue;
+            for(int i = 0; i < texturePixels.Length; i++)
+            {
+                if (texturePixels[i].a > layer.opacity) texturePixels[i].a = layer.opacity;
+            }
+            Texture2D texture = new Texture2D(layer.texture.width, layer.texture.height, TextureFormat.ARGB32, false);
+            texture.SetPixels(texturePixels);
+            texture.Apply();
+            layer.displayTexture = texture;
+            index++;
+            Debug.Log(layer.opacity);
+        }
+    }
+
+    private void SetLayerValues(Vector2 position, Vector2 size, int index)
+    {
+        SpriteLayer layer = spriteLayers[index];
+        layer.position = position; layer.size = size;
+
+        spriteLayers[index] = layer;
     }
 
     //Adapta la previsualización del sprite creado al tamaño de la ventana
-    Vector2 GetAreaAdaptativeSize()
+    public Vector2 GetAreaAdaptativeSize()
     {
         Vector2 window_size = position.size;
 
@@ -376,7 +477,7 @@ public class SpritesDrawerWindow : EditorWindow
     /// <summary>
     /// Borra el contenido actual de la textura
     /// </summary>
-    void ResetSprite()
+    public void ResetSprite()
     {
         for(int i = 0; i < sprite.width; i++)
         {
@@ -386,6 +487,32 @@ public class SpritesDrawerWindow : EditorWindow
             }
         }
         sprite.Apply();
+        if(spriteLayers.Count > 1)
+        spriteLayers.RemoveRange(1, spriteLayers.Count - 1);
+    }
+    
+    public void ResetSprite(bool _)
+    {
+        for (int i = 0; i < sprite.width; i++)
+        {
+            for (int j = 0; j < sprite.height; j++)
+            {
+                sprite.SetPixel(i, j, backgroundColor);
+            }
+        }
+        sprite.Apply();
+    }
+
+    public void ResetSprite(Texture2D source)
+    {
+        for(int i = 0; i < source.width; i++)
+        {
+            for(int j = 0; j < source.height; j++)
+            {
+                source.SetPixel(i, j, Color.clear);
+            }
+        }
+        source.Apply();
     }
 
     /// <summary>
@@ -394,7 +521,157 @@ public class SpritesDrawerWindow : EditorWindow
     void SaveSprite()
     {
         SaveWindow sw = EditorWindow.GetWindow<SaveWindow>();
-        sw.sprite = sprite;
+        Texture2D forSave = new Texture2D(500, 500, TextureFormat.ARGB32, false);
+
+        System.Drawing.Bitmap b = new System.Drawing.Bitmap(500, 500);
+        System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)b);
+        
+        ResetSprite(forSave);
+        int index = 0;
+        foreach(var layer in spriteLayers)
+        {
+            Texture2D used = resizeImage(layer.displayTexture, new Vector2(500, 500));
+            System.Drawing.Image img = Texture2Image(used);
+            g.DrawImage(img, 0,0,img.Width,img.Height);
+            //Vector2 position = layer.position - positionOffset;
+            //int h = 0, k = 0;
+            //for(int i = (int)position.x; i < forSave.width; i++)
+            //{
+            //    for(int j = (int)position.y; j < forSave.height; j++)
+            //    {
+            //        Color color = used.GetPixel(h, k);
+            //        if(color.a > 0)
+            //        forSave.SetPixel(i, j, color);
+            //        k++;
+            //    }
+            //    h++;
+            //}
+            //index++;
+        }
+        forSave = Image2Texture(b);
+        sw.sprite = forSave;
+    }
+
+    void Import()
+    {
+        DragAndDropWindow ddw = EditorWindow.GetWindow<DragAndDropWindow>();
+    }
+
+    void OnDrop(Object dropped)
+    {
+        if (dropped.GetType() != typeof(Texture2D)) return;
+
+        Texture2D texture = (Texture2D)dropped;
+        Vector2 size = GetAreaAdaptativeSize();
+
+        Vector2 _position = new Vector2(this.position.size.x / 2 - size.x / 2, this.position.size.y / 2 - size.y / 2);
+        int id = spriteLayers.Count;
+
+        SpriteLayer layer = new SpriteLayer();
+        layer.texture = texture;
+        layer.size = size;
+        layer.position = _position;
+        layer.id = id;
+
+        spriteLayers.Add(layer);
+
+        DragAndDropWindow ddw = EditorWindow.GetWindow<DragAndDropWindow>();
+        ddw.Close();
+    }
+
+    public static System.Drawing.Image Texture2Image(Texture2D texture)
+    {
+        System.Drawing.Image img;
+        byte[] png = texture.EncodeToPNG();
+        using (MemoryStream MS = new MemoryStream(png))
+        {
+            //Create the image based on the stream.
+            img = System.Drawing.Bitmap.FromStream(MS);
+        }
+        return img;
+    }
+
+    public Texture2D Image2Texture(System.Drawing.Bitmap image)
+    {
+        Texture2D result = new Texture2D(500,500, TextureFormat.ARGB32, false);
+
+        for(int i = 0; i < image.Width; i++)
+        {
+            for(int j = 0; j < image.Height; j++)
+            {
+                System.Drawing.Color color = image.GetPixel(i, j);
+                UnityEngine.Color _color = fromSystemColor(color);
+
+                result.SetPixel(i,j,_color);
+            }
+        }
+        result.Apply();
+        return result;
+    }
+
+    Texture2D resizeImage(Texture2D toResize, Vector2 size)
+    {
+        System.Drawing.Image image = Texture2Image(toResize);
+
+        int sourceWidth = image.Width;
+        int sourceHeight = image.Height;
+
+        float nPercent = 0;
+        float nPercentW = 0;
+        float nPercentH = 0;
+
+        nPercentW = ((float)size.x / (float)sourceWidth);
+        nPercentH = size.y / (float)sourceHeight;
+
+        if (nPercentH < nPercentW) nPercent = nPercentW;
+        else nPercent = nPercentH;
+
+        int dstWidth = (int)(sourceWidth * nPercentW);
+        int dstHeight = (int)(sourceHeight * nPercentH);
+
+        System.Drawing.Bitmap b = new System.Drawing.Bitmap(500, 500);
+        System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)b);
+        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+        g.DrawImage(image, 0,0,dstWidth,dstHeight);
+        g.Dispose();
+
+        //b.RotateFlip(System.Drawing.RotateFlipType.Rotate180FlipX);
+
+        Texture2D resized = Image2Texture(b);
+        return resized;
+    }
+
+    System.Drawing.Color fromUnityColor(UnityEngine.Color source)
+    {
+        float r = source.r, g = source.g, b = source.b, a = source.a;
+
+        int _r = fromUnityValueToRGB(r);
+        int _g = fromUnityValueToRGB(g);
+        int _b = fromUnityValueToRGB(b);
+        int _a = fromUnityValueToRGB(a);
+
+        return System.Drawing.Color.FromArgb(_a, _r, _g, _b);
+    }
+
+    UnityEngine.Color fromSystemColor(System.Drawing.Color source)
+    {
+        int r = source.R, g = source.G, b = source.B, a = source.A;
+
+        float _r = fromRGBToUnityValue(r);
+        float _g = fromRGBToUnityValue(g);
+        float _b = fromRGBToUnityValue(b);
+        float _a = fromRGBToUnityValue(a);
+
+        return new Color(_r,_g,_b,_a);
+    }
+
+    int fromUnityValueToRGB(float value)
+    {
+        return (int)(value / 1 * 255);
+    }
+    float fromRGBToUnityValue(int value)
+    {
+        return (float)value / 255;
     }
     #endregion
 }
@@ -438,6 +715,100 @@ public class SaveWindow : EditorWindow
         fs.Close();
 
         this.Close();
+    }
+}
+
+public class LayersWindow : EditorWindow
+{
+    public SpriteLayer[] spriteLayers;
+    List<bool> layersButtons = new List<bool>();
+    public List<int> opacities = new List<int>();
+    public EditorWindow parent;
+    Vector2 scrollPosition;
+
+    bool newLayer;
+    private void OnGUI()
+    {
+        if(parent != null)
+        this.position = new Rect(parent.position.position - new Vector2(parent.position.size.x/5,0), new Vector2(parent.position.size.x / 5, parent.position.size.y));
+
+        DisplayContent();
+        CheckButtons();
+        parent.Repaint();
+    }
+
+    void DisplayContent()
+    {
+        GUILayout.BeginArea(new Rect(0, 0, this.position.size.x, this.position.size.y - this.position.size.y / 6));
+        scrollPosition = GUILayout.BeginScrollView(scrollPosition);
+        DisplayLayers();
+        GUILayout.EndScrollView();
+        GUILayout.EndArea();
+        GUILayout.BeginArea(new Rect(0, this.position.size.y - this.position.size.y / 6, this.position.size.x, this.position.size.y / 6));
+        newLayer = GUILayout.Button("Create new layer");
+        GUILayout.EndArea();
+    }
+
+    void DisplayLayers()
+    {
+        if (spriteLayers == null) return;
+        if (layersButtons.Count > spriteLayers.Length)
+        {
+            int difference = layersButtons.Count - spriteLayers.Length;
+            layersButtons.RemoveRange(layersButtons.Count - difference, difference);
+        }
+        if(opacities.Count > spriteLayers.Length)
+        {
+            int differences = opacities.Count - spriteLayers.Length;
+            opacities.RemoveRange(opacities.Count - differences, differences);
+        }
+
+        if(spriteLayers.Length > 0)
+            for(int j = 0; j < spriteLayers.Length; j++)
+            {
+                GUILayout.BeginHorizontal();
+                bool value = GUILayout.Button("Layer " + spriteLayers[j].id.ToString());
+                if (j >= opacities.Count) opacities.Add(100);
+                opacities[j] = EditorGUILayout.IntField(opacities[j]);
+                opacities[j] = Mathf.Clamp(opacities[j], 0, 100);
+                SpritesDrawerWindow sd = (SpritesDrawerWindow)parent;
+                sd.spriteLayers[j].opacity = (float)opacities[j]/100;
+                GUILayout.EndHorizontal();
+                if (j >= layersButtons.Count) layersButtons.Add(value);
+                else layersButtons[j] = value;
+            }
+    }
+
+    void CheckButtons()
+    {
+        if (newLayer) CreateNewLayer();
+
+        for(int i = 0; i < layersButtons.Count; i++)
+        {
+            if (layersButtons[i])
+            {
+                SpritesDrawerWindow sd = parent as SpritesDrawerWindow;
+                sd.actualLayer = i;
+                Debug.Log(i);
+            }
+        }
+    }
+
+    void CreateNewLayer()
+    {
+        SpritesDrawerWindow sd = EditorWindow.GetWindow<SpritesDrawerWindow>();
+        SpriteLayer layer = new SpriteLayer();
+        layer.size = sd.GetAreaAdaptativeSize();
+        layer.position = sd.positionOffset;
+        layer.id = sd.spriteLayers.Count;
+        layer.texture = new Texture2D(500, 500, TextureFormat.ARGB32, false);
+        layer.opacity = 1;
+
+        sd.spriteLayers.Add(layer);
+        sd.actualLayer = layer.id;
+        sd.sprite = layer.texture;
+        sd.ResetSprite(true);
+        spriteLayers = sd.spriteLayers.ToArray();
     }
 }
 #endif
