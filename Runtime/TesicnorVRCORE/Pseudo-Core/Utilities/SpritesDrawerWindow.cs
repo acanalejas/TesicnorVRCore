@@ -11,10 +11,15 @@ public class SpriteLayer
 {
     public Texture2D texture;
     public Texture2D displayTexture;
-    public Vector2 position;
-    public Vector2 size;
+    public Vector2 position { get { return _position; } set { _position = new Vector2(positionX * 250 + value.x, positionY * 250 + value.y); } }
+    private Vector2 _position;
+    public Vector2 size { get { return _size; } set { _size = value * scale; } }
+    private Vector2 _size;
     public int id;
     public float opacity;
+    public float positionX = 0f;
+    public float positionY = 0f;
+    public float scale = 1f;
 }
 public class SpritesDrawerWindow : EditorWindow
 {
@@ -91,7 +96,7 @@ public class SpritesDrawerWindow : EditorWindow
         SpriteLayer initialLayer = new SpriteLayer();
         initialLayer.texture = sprite;
         Vector2 size = GetAreaAdaptativeSize();
-        initialLayer.position = new Vector2(position.size.x / 2 - size.x / 2, position.size.y / 2 - size.y / 2);
+        initialLayer.position = positionOffset;
         initialLayer.size = size;
         
         spriteLayers.Add(initialLayer);
@@ -180,8 +185,10 @@ public class SpritesDrawerWindow : EditorWindow
     public void DisplayLayers()
     {
         GetDisplayTextures();
-        foreach(var layer in spriteLayers)
+        for(int i = 0; i < spriteLayers.Count; i++)
         {
+            SpriteLayer layer = spriteLayers[i];
+            SetLayerValues(positionOffset, GetAreaAdaptativeSize(), i);
             GUI.DrawTexture(new Rect(layer.position + new Vector2(0,30), layer.size - new Vector2(40,40)), layer.displayTexture);
         }
     }
@@ -532,7 +539,7 @@ public class SpritesDrawerWindow : EditorWindow
         {
             Texture2D used = resizeImage(layer.displayTexture, new Vector2(500, 500));
             System.Drawing.Image img = Texture2Image(used);
-            g.DrawImage(img, 0,0,img.Width,img.Height);
+            g.DrawImage(img, layer.positionX * 250,-layer.positionY *250 + (1- layer.scale) * 540,img.Width * layer.scale,img.Height * layer.scale);
             //Vector2 position = layer.position - positionOffset;
             //int h = 0, k = 0;
             //for(int i = (int)position.x; i < forSave.width; i++)
@@ -766,6 +773,7 @@ public class LayersWindow : EditorWindow
         if(spriteLayers.Length > 0)
             for(int j = 0; j < spriteLayers.Length; j++)
             {
+                GUILayout.BeginVertical();
                 GUILayout.BeginHorizontal();
                 bool value = GUILayout.Button("Layer " + spriteLayers[j].id.ToString());
                 if (j >= opacities.Count) opacities.Add(100);
@@ -774,6 +782,17 @@ public class LayersWindow : EditorWindow
                 SpritesDrawerWindow sd = (SpritesDrawerWindow)parent;
                 sd.spriteLayers[j].opacity = (float)opacities[j]/100;
                 GUILayout.EndHorizontal();
+                GUILayout.Label("Horizontal Position");
+                sd.spriteLayers[j].positionX = GUILayout.HorizontalSlider(sd.spriteLayers[j].positionX, -1, 1);
+                GUILayout.Space(5);
+                GUILayout.Label("Vertical Position");
+                sd.spriteLayers[j].positionY = GUILayout.HorizontalSlider(sd.spriteLayers[j].positionY, -1, 1);
+                GUILayout.Space(5);
+                GUILayout.Label("Scale");
+                sd.spriteLayers[j].scale = GUILayout.HorizontalSlider(sd.spriteLayers[j].scale, 0, 1);
+
+                GUILayout.EndVertical();
+                GUILayout.Space(15);
                 if (j >= layersButtons.Count) layersButtons.Add(value);
                 else layersButtons[j] = value;
             }

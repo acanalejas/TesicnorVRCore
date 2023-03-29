@@ -123,7 +123,7 @@ public class BackendGetter : MonoBehaviour
         }
         catch
         {
-            Debug.Log("Coudn´t parse the string from the backend to the struct");
+            
         }
     }
     #endregion
