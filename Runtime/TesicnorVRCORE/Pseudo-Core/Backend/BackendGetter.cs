@@ -50,7 +50,7 @@ public class BackendGetter : MonoBehaviour
     public static  BackendData backendData = new BackendData();
     public TextMeshProUGUI username;
     string username_str;
-    public static int appCode { get { return 1; } }
+    public static int appCode = 1;
     public static string urlNoParams { get { return "https://app.e-xtinguisher.com/api/vr-users/public?"; } }
 
     public static string BackendDataKey { get { return "BackendData"; } }

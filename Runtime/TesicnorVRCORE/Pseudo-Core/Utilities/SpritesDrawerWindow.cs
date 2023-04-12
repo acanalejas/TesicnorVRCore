@@ -539,7 +539,7 @@ public class SpritesDrawerWindow : EditorWindow
         {
             Texture2D used = resizeImage(layer.displayTexture, new Vector2(500, 500));
             System.Drawing.Image img = Texture2Image(used);
-            g.DrawImage(img, layer.positionX * 250,-layer.positionY *250 + (1- layer.scale) * 540,img.Width * layer.scale,img.Height * layer.scale);
+            g.DrawImage(img, layer.positionX * 210,-layer.positionY *250 + (1- layer.scale) * 540,img.Width * layer.scale,img.Height * layer.scale);
             //Vector2 position = layer.position - positionOffset;
             //int h = 0, k = 0;
             //for(int i = (int)position.x; i < forSave.width; i++)
