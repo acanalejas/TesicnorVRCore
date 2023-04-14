@@ -160,11 +160,11 @@ public class PlayerManager : MonoBehaviour
             leftController.SetActive(false);
             rightController.SetActive(false);
 
-            if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true; Debug.Log("RECENTERING FROM PLAYER MANAGER"); }
+            //if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true; Debug.Log("RECENTERING FROM PLAYER MANAGER"); }
             //playerControllers.SetActive(false);
         }
-        if(room)scenario.SetActive(!useHandsCanvas.activeSelf);
-        if(room)room.SetActive(useHandsCanvas.activeSelf);
+        //if(room)scenario.SetActive(!useHandsCanvas.activeSelf);
+        //if(room)room.SetActive(useHandsCanvas.activeSelf);
     }
 
     bool alreadyChanged = false;
@@ -197,8 +197,8 @@ public class PlayerManager : MonoBehaviour
             leftController.SetActive(true);
         }
 
-        if(room)scenario.SetActive(!useControllersCanvas.activeSelf);
-        if(room)room.SetActive(useControllersCanvas.activeSelf);
+        //if(room)scenario.SetActive(!useControllersCanvas.activeSelf);
+        //if(room)room.SetActive(useControllersCanvas.activeSelf);
     }
     #endregion
 }
