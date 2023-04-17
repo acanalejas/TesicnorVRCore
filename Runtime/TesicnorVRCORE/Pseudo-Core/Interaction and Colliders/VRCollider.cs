@@ -427,6 +427,26 @@ public class VRCollider : MonoBehaviour, VRGripInterface
             else if (actualCollider.GetType() == typeof(SphereCollider)) dropCollider = gameObject.AddComponent<SphereCollider>();
             else if (actualCollider.GetType() == typeof(CapsuleCollider)) dropCollider = gameObject.AddComponent<CapsuleCollider>();
             else dropCollider = gameObject.AddComponent<BoxCollider>();
+
+            if(actualCollider.GetType() == typeof(BoxCollider))
+            {
+                BoxCollider box = dropCollider as BoxCollider;
+                BoxCollider actual = actualCollider as BoxCollider;
+                box.size = actual.size; box.center = actual.center;
+            }
+            else if(actualCollider.GetType() == typeof(CapsuleCollider))
+            {
+                CapsuleCollider capsule = dropCollider as CapsuleCollider;
+                CapsuleCollider actual = actualCollider as CapsuleCollider;
+                capsule.radius = actual.radius; capsule.center = actual.center; capsule.direction = actual.direction; capsule.height = actual.height;
+            }
+            else if(actualCollider.GetType() == typeof(SphereCollider))
+            {
+                SphereCollider sphere = dropCollider as SphereCollider;
+                SphereCollider actual = actualCollider as SphereCollider;
+                sphere.radius = actual.radius; sphere.center = actual.center;
+            }
+            
         }
 
         AddImpulseAtRelease();
