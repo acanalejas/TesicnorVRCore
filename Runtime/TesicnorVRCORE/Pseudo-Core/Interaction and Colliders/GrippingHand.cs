@@ -124,7 +124,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     }
     public void Update()
     {
-        CheckListSecurity();
+        //CheckListSecurity();
     }
 
     Vector3 lastFramePosition = Vector3.zero;
