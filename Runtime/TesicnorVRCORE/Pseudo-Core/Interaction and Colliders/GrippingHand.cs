@@ -157,7 +157,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
             bool ecuation = (point.x - center.x) * (point.x - center.x) + (point.y - center.y) * (point.y - center.y) + (point.z - center.z) * (point.z - center.z) < colliderRadius;
 
-            if (!ecuation) { overlappingObjects.Remove(go); return; }
+            if (!ecuation) { overlappingObjects.Remove(go);}
 
         }
     }
@@ -349,7 +349,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     }
 
     #region Trigger
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         VRGripInterface gripInterface = other.gameObject.GetComponent<VRGripInterface>();
         if (gripInterface != null)
