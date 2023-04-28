@@ -160,7 +160,7 @@ public class PlayerManager : MonoBehaviour
             leftController.SetActive(false);
             rightController.SetActive(false);
 
-            //if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true; Debug.Log("RECENTERING FROM PLAYER MANAGER"); }
+            if (!alreadyUsingHands) { recenterWorld.StartCoroutine("RecenterFromControllers"); alreadyUsingHands = true;}
             //playerControllers.SetActive(false);
         }
         //if(room)scenario.SetActive(!useHandsCanvas.activeSelf);

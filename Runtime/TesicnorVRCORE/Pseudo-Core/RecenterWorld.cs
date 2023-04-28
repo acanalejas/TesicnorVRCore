@@ -129,16 +129,17 @@ public class RecenterWorld : MonoBehaviour
         //First we are rotating the virtual body
         if (virtualPerson)
         {
-            virtualPerson.parent = rightController;
-            virtualPerson.localRotation = Quaternion.Euler(new Vector3(/*virtualPerson.localRotation.eulerAngles.x*/ 223, virtualPerson.localRotation.eulerAngles.y, 0));
-            virtualPerson.parent = virtualPersonParent;
+            rightController_holder.transform.parent = rightController;
+            rightController_holder.localPosition = Vector3.zero;
+            rightController_holder.localRotation = Quaternion.Euler(0, 0, 0);
+            rightController_holder.parent = null;
         }
         
 
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        if(virtualPerson) virtualPerson.Rotate(new Vector3(0, 180, 0));
+        //if(virtualPerson) virtualPerson.Rotate(new Vector3(0, 180, 0));
         //Then we are moving the world to center the player 
         Vector3 centerBetweenHolders = (rightController_holder.position - leftController_holder.position) / 2 + leftController_holder.position;
 
@@ -146,7 +147,7 @@ public class RecenterWorld : MonoBehaviour
 
         Vector3 positionDifference = rightController.position - rightController_holder.position;
 
-        worldTransform.position +=positionDifference;
+        worldTransform.position -=positionDifference;
 
         //Disable the visual holders
         leftController_holder.gameObject.SetActive(false);
