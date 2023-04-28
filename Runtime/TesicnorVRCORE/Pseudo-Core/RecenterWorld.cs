@@ -139,12 +139,6 @@ public class RecenterWorld : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        //if(virtualPerson) virtualPerson.Rotate(new Vector3(0, 180, 0));
-        //Then we are moving the world to center the player 
-        Vector3 centerBetweenHolders = (rightController_holder.position - leftController_holder.position) / 2 + leftController_holder.position;
-
-        Vector3 centerBetweenControllers = (rightController.position - leftController.position) / 2 + leftController.position;
-
         Vector3 positionDifference = rightController.position - rightController_holder.position;
 
         worldTransform.position -=positionDifference;
@@ -153,7 +147,7 @@ public class RecenterWorld : MonoBehaviour
         leftController_holder.gameObject.SetActive(false);
         rightController_holder.gameObject.SetActive(false);
 
-        if(rightHiddenGo) rightHiddenGo.SetActive(false);
+        //if(rightHiddenGo) rightHiddenGo.SetActive(false);
         if(leftHiddenGo) leftHiddenGo.SetActive(false);
 
         playerControllersTransform.gameObject.SetActive(false);
