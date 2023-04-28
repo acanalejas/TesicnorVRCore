@@ -145,7 +145,7 @@ public class RecenterWorld : MonoBehaviour
 
         //Disable the visual holders
         leftController_holder.gameObject.SetActive(false);
-        rightController_holder.gameObject.SetActive(false);
+        //rightController_holder.gameObject.SetActive(false);
 
         //if(rightHiddenGo) rightHiddenGo.SetActive(false);
         if(leftHiddenGo) leftHiddenGo.SetActive(false);
