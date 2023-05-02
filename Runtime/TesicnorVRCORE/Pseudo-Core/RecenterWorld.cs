@@ -126,6 +126,7 @@ public class RecenterWorld : MonoBehaviour
     {
         if (alreadyCentered || !canRecenterWithControllers) yield break;
 
+        Vector3 holderInitialPosition = rightController_holder.position;
         //First we are rotating the virtual body
         if (virtualPerson)
         {
@@ -139,9 +140,9 @@ public class RecenterWorld : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
-        Vector3 positionDifference = rightController.position - rightController_holder.position;
+        Vector3 positionDifference = rightController.position - holderInitialPosition;
 
-        worldTransform.position -=positionDifference;
+        worldTransform.position +=positionDifference;
 
         //Disable the visual holders
         leftController_holder.gameObject.SetActive(false);
