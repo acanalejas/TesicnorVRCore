@@ -124,7 +124,7 @@ public class RecenterWorld : MonoBehaviour
     /// <returns></returns>
     public IEnumerator RecenterFromControllers()
     {
-        if (alreadyCentered || !canRecenterWithControllers) yield break;
+        if (!canRecenterWithControllers) yield break;
 
         Vector3 holderInitialPosition = rightController_holder.position;
         //First we are rotating the virtual body
@@ -151,10 +151,10 @@ public class RecenterWorld : MonoBehaviour
         //if(rightHiddenGo) rightHiddenGo.SetActive(false);
         if(leftHiddenGo) leftHiddenGo.SetActive(false);
 
-        //playerControllersTransform.gameObject.SetActive(false);
+        playerControllersTransform.gameObject.SetActive(false);
         //Debug.Log("RECENTERING PLAYER");
 
-        alreadyCentered = true;
+        //alreadyCentered = true;
         StopCoroutine("RecenterFromControllers");
     }
 
