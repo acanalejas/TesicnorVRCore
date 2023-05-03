@@ -151,8 +151,8 @@ public class RecenterWorld : MonoBehaviour
         //if(rightHiddenGo) rightHiddenGo.SetActive(false);
         if(leftHiddenGo) leftHiddenGo.SetActive(false);
 
-        playerControllersTransform.gameObject.SetActive(false);
-        Debug.Log("RECENTERING PLAYER");
+        //playerControllersTransform.gameObject.SetActive(false);
+        //Debug.Log("RECENTERING PLAYER");
 
         alreadyCentered = true;
         StopCoroutine("RecenterFromControllers");
