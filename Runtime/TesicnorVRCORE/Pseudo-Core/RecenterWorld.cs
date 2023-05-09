@@ -135,14 +135,14 @@ public class RecenterWorld : MonoBehaviour
             rightController_holder.localRotation = Quaternion.Euler(0, 0, 0);
             rightController_holder.parent = null;
         }
-        
+        virtualPerson.parent = null;
 
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
 
         Vector3 positionDifference = rightController.position - holderInitialPosition;
 
-        worldTransform.position +=positionDifference;
+        //worldTransform.position +=positionDifference;
 
         //Disable the visual holders
         leftController_holder.gameObject.SetActive(false);
