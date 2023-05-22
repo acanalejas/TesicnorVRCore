@@ -1,0 +1,29 @@
+Aqui se explica como usar y cómo está hecho el sistema de fuego.
+
+Tenemos 3 clases principales que definen la utilidad:
+	- FireObject -> Funcionalidades necesarias para que un objeto arda y se apague
+	- FireObjectEditor -> Contiene lo necesario para poder tener el editor de la clase FireObject más bonito y organizado
+	- FireUtils -> Interfaz que contiene las funciones principales para la comunicación en caso de que se desarollen más tipos de objetos que ardan
+
+FireObject:
+	Es la clase que añadimos a un objeto para hacer posible su combustión. Al añadirla ya nos crea todo lo necesario en cuanto a componentes e hijos para su correcto funcionamiento.
+	Parámetros importantes:
+	- InitialFire -> bool que determina si se enciende automáticamente al principio de la escena o no.
+	- UsesSmoke -> Para saber si el fuego genera humo o no
+	- UsesSparks -> Para saber si el fuego genera chispas o no
+	- Delay -> Tiempo que tarda el fuego en empezar a arder desde que le decimos que arda
+	- FireSpeed -> Velocidad a la que se propaga el fuego.
+	- MaxTimeToExtinguish -> Tiempo que se tarda en extinguir por completo el fuego
+	- TimeToExtinguish -> El tiempo actual que falta para apagar el fuego
+	- MaxEmission -> La emisión máxima de particulas que puede alcanzar este objeto
+	- MaxSize -> El tamaño máximo que se tendrá en cuenta para ajustar la emisión de particulas
+	- PropOffset -> El tamaño adicional partiendo del BoxCollider que debe tener el objeto, que es el area que servira para detectar la propagación del fuego.
+	- BadExtinguisher -> Se esta apagando con el extintor correcto o no?
+	- Density -> Densidad del humo, afecta a la emisión de particulas de humo
+	- Smoke_Color -> Color que tendrá el humo
+
+Funcionamiento del objeto:
+El objeto detecta la maya asignada al objeto, y en el start, genera 4 mallas 3D, en función de un radio constante dependiente del tamaño del objeto, y desde el punto asignado como punto de inicio.
+Lo que hacemos es guardar la información de dichas mallas que hemos generado, y ya que la emision del fuego se va a basar en un MeshRenderer, vamos cambiando la Mesh asociada al renderer para dar el efecto de propagación,
+y viceversa para el apagado.
+	
