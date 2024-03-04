@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 [System.Serializable]
 public class BackendPostTime
 {
-    // Propiedades para almacenar la información del tiempo.
+    // Propiedades para almacenar la informaciÃ³n del tiempo.
     public string hwInfo;
     public string start;
     public string end;
@@ -46,7 +46,7 @@ public class BackendLoadData : BackendGetTimeUse
 
     public override void Start()
     {
-        base.Start();                                       // Llamamos el método start de BackendGetTimeUse.
+        base.Start();                                       // Llamamos el mÃ©todo start de BackendGetTimeUse.
         StartCoroutine(StartScene());                       // Llamamos la corrutina que actualizara los datos cada 1seg.
     }
 
@@ -89,11 +89,12 @@ public class BackendLoadData : BackendGetTimeUse
             AddList(dataOnDisable);
         }
 
-        if (HasInternetConnection())                                            // Validamos si hay conexión a Internet.
+        if (HasInternetConnection())                                            // Validamos si hay conexiÃ³n a Internet.
         {
             foreach (string jsString in dataToUpload)
             {
-                BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);    // Deserializar cada cadena JSON en un objeto BackendPostTime.
+                BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);  
+                // Deserializar cada cadena JSON en un objeto BackendPostTime.
                 SendDataToAPI(jsonSerialize(data));                                                 // Enviamos los datos por medio de la API.                                     
             }
         }
@@ -101,16 +102,18 @@ public class BackendLoadData : BackendGetTimeUse
         dataToUpload.Clear();       // Limpiamos la lista.
     }
 
-    // Método para agregar un elemento a la lista.
+    // MÃ©todo para agregar un elemento a la lista.
     public void AddList(string data)
     {
+        if (dataToUpload.Contains(data)) return;
+        
         dataToUpload.Add(data);                                             // Agregar los datos a la lista de datos pendientes para cargar.
         string jsString = JsonConvert.SerializeObject(dataToUpload);        // Convertir la lista de datos a formato JSON.
         PlayerPrefs.SetString("jsonDatos", jsString);                       // Guardar el JSON en PlayerPrefs.
         PlayerPrefs.DeleteKey("DataOnDisable");                             // Limpiar los datos guardados de la experiencia.
     }
 
-    // Método para convertir y formatear el tiempo restante en horas:minutos:segundos
+    // MÃ©todo para convertir y formatear el tiempo restante en horas:minutos:segundos
     private void FormatTime(float timeInSeconds)
     {
         int hours = Mathf.FloorToInt(timeInSeconds / 3600);
@@ -125,10 +128,10 @@ public class BackendLoadData : BackendGetTimeUse
         }
     }
 
-    // Método para convertir el tiempo y actualizar el texto del tiempo.
+    // MÃ©todo para convertir el tiempo y actualizar el texto del tiempo.
     private void ValidateTimeLeft()
     {
-        FormatTime(vrTimeUse.timeLeft);  // Uso del método para formatear el tiempo.
+        FormatTime(vrTimeUse.timeLeft);  // Uso del mÃ©todo para formatear el tiempo.
 
         if (vrTimeUse.timeLeft < 300)
         {
@@ -150,9 +153,9 @@ public class BackendLoadData : BackendGetTimeUse
                 if (obj is GameObject)
                 {
                     GameObject gameObj = (GameObject)obj;
-                    if ((gameObj.CompareTag("Block") || gameObj.CompareTag("DemoBlock")) && !gameObj.activeSelf)    // Verificar si el objeto tiene el tag que estás buscando y si no está activo
+                    if ((gameObj.CompareTag("Block") || gameObj.CompareTag("DemoBlock")) && !gameObj.activeSelf)    // Verificar si el objeto tiene el tag que estÃ¡s buscando y si no estÃ¡ activo
                     {
-                        gameObj.SetActive(true);                                // Activar todos los demás objetos desactivados
+                        gameObj.SetActive(true);                                // Activar todos los demÃ¡s objetos desactivados
                         this.timeOut = true;
                     }
                 }
@@ -184,20 +187,20 @@ public class BackendLoadData : BackendGetTimeUse
         }
     }
 
-    // Función para cargar los datos pendientes a una lista.
+    // FunciÃ³n para cargar los datos pendientes a una lista.
     void LoadPendingData()
     {
         string jsonDatosString = PlayerPrefs.GetString("jsonDatos", "");                                        // Obtener la cadena JSON desde PlayerPrefs
 
-        if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
+        if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacÃ­a
         {
             List<string> data = JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
 
             if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
             {
-                foreach (string jsonString in data)                                                             // Ahora puedes manipular la lista de cadenas según tus necesidades
+                foreach (string jsonString in data)                                                             // Ahora puedes manipular la lista de cadenas segÃºn tus necesidades
                 {
-                    BackendPostTime dataBackend = JsonConvert.DeserializeObject<BackendPostTime>(jsonString);   // Deserializar cada cadena JSON en un objeto o manipular según sea necesario
+                    BackendPostTime dataBackend = JsonConvert.DeserializeObject<BackendPostTime>(jsonString);   // Deserializar cada cadena JSON en un objeto o manipular segÃºn sea necesario
                     dataToUpload.Add(jsonSerialize(dataBackend));                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
                 }
             }
@@ -218,7 +221,7 @@ public class BackendLoadData : BackendGetTimeUse
         return jsonData;
     }
 
-    // Función para verificar la conectividad a Internet.
+    // FunciÃ³n para verificar la conectividad a Internet.
     public bool HasInternetConnection()
     {
         if (Application.internetReachability != NetworkReachability.NotReachable)
