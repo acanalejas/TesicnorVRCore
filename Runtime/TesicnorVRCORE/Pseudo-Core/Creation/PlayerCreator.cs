@@ -425,7 +425,7 @@ public static class PlayerCreator
 
                 poseDetector_right = handPoseDetector_right.GetComponent<HandPoseDetector>();
                 poseDetector_right.skeleton = rightHand_GO.GetComponent<OVRCustomSkeleton>();
-                poseDetector_right.skeleton.TryAutoMapBonesByName();
+                //poseDetector_right.skeleton.TryAutoMapBonesByName();
                 
             }
             else if(child.gameObject.name == "LeftHandAnchor")
@@ -442,7 +442,7 @@ public static class PlayerCreator
 
                 poseDetector_left = handPoseDetector_left.GetComponent<HandPoseDetector>();
                 poseDetector_left.skeleton = leftHand_GO.GetComponent<OVRCustomSkeleton>();
-                poseDetector_left.skeleton.TryAutoMapBonesByName();
+                //poseDetector_left.skeleton.TryAutoMapBonesByName();
             }
         }
 
