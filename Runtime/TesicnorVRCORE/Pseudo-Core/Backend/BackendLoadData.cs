@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using System.Text;
 using TMPro;
 using System.Net.Http;
@@ -21,33 +22,45 @@ public class BackendPostTime
     public string? userName;
 }
 
-public class BackendLoadData : BackendGetTimeUse
+public class BackendLoadData : BackendGetter
 {
+    #region PARAMETERS
+
+    #region Unity Objects
+
     // Variables de Unity
     [SerializeField] private GameObject panelTime;          // Variable para el panel donde se muestra el tiempo disponible.
     [SerializeField] private TMP_Text txtTime;              // Variable para almacenar el componente text del tiempo.
     [SerializeField] private GameObject buttonChargeTime;   // Array para guardar los botones de bloqueo de cada escena.
     [SerializeField] private GameObject popUp;              // Variable para almacenar el popUp.
 
-    // Constantes
-    const string ApiURL = url + "usage-records?";           // URL de la API del backend para enviar los datos.
+    #endregion
+
+    #region Constantes
+
     const string NoLimitType = "NO_LIMIT_TYPE";             // Tipo de limite indefinido.
     const string TimeType = "TIME_TYPE";                    // Tipo de limite de tiempo.
 
+    #endregion
+
+
+    #region Backend Parameters
+
     private List<string> dataToUpload = new List<string>(); // Lista con los datos pendientes de envio.
-
-    private BackendDataTime vrTimeUse;                      // Instancia de la clase BackendDataTime.
-
-    private string jsonString = "";
-
-    [HideInInspector] public bool timeOut = false;
     
-    // Cadena JSON para almacenar datos.
+    public int reloadTime = 5;                              // Tiempo que tarda en volver a checkear el tiempo de uso
+
+    [HideInInspector] public bool timeOut = false;          // Se ha acabado el tiempo de espera?
+
+    #endregion
+
+    #endregion
+    
 
     public override void Start()
     {
-        base.Start();                                       // Llamamos el método start de BackendGetTimeUse.
-        StartCoroutine(StartScene());                       // Llamamos la corrutina que actualizara los datos cada 1seg.
+        base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
+        StartCoroutine(StartScene());                         // Llamamos la corrutina que actualizara los datos cada 1seg.
     }
 
     private IEnumerator StartScene()
@@ -56,20 +69,20 @@ public class BackendLoadData : BackendGetTimeUse
         {
             if(PlayerPrefs.GetString("Username") != "")
             {
-                jsonString = PlayerPrefs.GetString(BackendGetTimeUse.BackendDataKey);   // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
+                string jsonString = PlayerPrefs.GetString(BackendGetTimeUse.BackendDataKey);       // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
 
                 if (!string.IsNullOrEmpty(jsonString))
                 {
-                    vrTimeUse = JsonUtility.FromJson<BackendDataTime>(jsonString);      // Convertir el JSON a un objeto de la clase BackendDataTime
+                    backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);          // Convertir el JSON a un objeto de la clase BackendDataTime
 
-                    panelTime.SetActive(vrTimeUse.usageType == TimeType);               // Comparamos el tipo de tiempo de uso que tiene el usuario.
-                    if (vrTimeUse.usageType == TimeType) ValidateTimeLeft();
+                    if(panelTime) panelTime.SetActive(backendDataTime.usageType == TimeType);     // Comparamos el tipo de tiempo de uso que tiene el usuario.
+                    if (backendDataTime.usageType == TimeType) ValidateTimeLeft();
                 }
             }
             else
             {
-                panelTime.SetActive(false);
-                buttonChargeTime.SetActive(false);
+                if(panelTime) panelTime.SetActive(false);
+                if(buttonChargeTime) buttonChargeTime.SetActive(false);
             }
 
             LoadDataOnDisable();
@@ -120,9 +133,9 @@ public class BackendLoadData : BackendGetTimeUse
         int minutes = Mathf.FloorToInt((timeInSeconds % 3600) / 60);
         int seconds = Mathf.FloorToInt(timeInSeconds % 60);
 
-        this.txtTime.text = $"{hours:00}:{minutes:00}:{seconds:00}";
+        if(txtTime) this.txtTime.text = $"{hours:00}:{minutes:00}:{seconds:00}";
 
-        if (timeInSeconds < 0)
+        if (timeInSeconds < 0 && txtTime)
         {
             this.txtTime.text = "00:00:00";
         }
@@ -131,12 +144,12 @@ public class BackendLoadData : BackendGetTimeUse
     // Método para convertir el tiempo y actualizar el texto del tiempo.
     private void ValidateTimeLeft()
     {
-        FormatTime(vrTimeUse.timeLeft);  // Uso del método para formatear el tiempo.
+        FormatTime(backendDataTime.timeLeft);  // Uso del método para formatear el tiempo.
 
-        if (vrTimeUse.timeLeft < 300)
+        if (backendDataTime.timeLeft < 300)
         {
             txtTime.color = Color.red;
-            buttonChargeTime.SetActive(true);
+            if(buttonChargeTime) buttonChargeTime.SetActive(true);
             StartCoroutine(BlinkText());
         }
         else
@@ -144,7 +157,7 @@ public class BackendLoadData : BackendGetTimeUse
             txtTime.color = Color.white;
         }
 
-        if (vrTimeUse.timeLeft < 0f)
+        if (backendDataTime.timeLeft < 0f)
         {
             Object[] allObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject));   // Buscar todos los objetos desactivados con el tag especificado
 
@@ -173,7 +186,7 @@ public class BackendLoadData : BackendGetTimeUse
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");    // Convierte los datos a un StringContent con tipo de medio "application/json"
 
         // Realiza la solicitud POST con los datos en el cuerpo
-        using (HttpResponseMessage response = await httpClient.PostAsync(BackendLoadData.ApiURL, content, cts.Token))
+        using (HttpResponseMessage response = await httpClient.PostAsync(urlForTime, content, cts.Token))
         {
             if (response.IsSuccessStatusCode)
             {
@@ -244,11 +257,20 @@ public class BackendLoadData : BackendGetTimeUse
 
     public void ShowPopUp()
     {
-        popUp.SetActive(true);
+        if(popUp) popUp.SetActive(true);
+        else Debug.LogError("Pop up not assigned in BackendLoadData Class");
     }
 
     public void HidePopUp()
     {
-        popUp.SetActive(false);
+        if(popUp) popUp.SetActive(false);
+        else Debug.LogError("Pop up not assigned in BackendLoadData Class");
     }
+}
+
+[CustomEditor(typeof(BackendLoadData), true)]
+[CanEditMultipleObjects]
+public class BackendLoadDataEditor : Editor
+{
+    
 }

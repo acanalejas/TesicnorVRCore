@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Net.Http;
 using System.Net;
@@ -43,17 +44,56 @@ public class BackendData
     public VRProperty[] vrproperties;
 }
 
+public class BackendTimeData
+{
+    public string usageType;
+    public float timeLeft;
+    public string updated;
+    public string clientId;
+}
+
+public enum BackendDataType {UserData, TimeData}
+
 public class BackendGetter : MonoBehaviour
 {
     #region PARAMETERS
-    HttpClient httpClient;
+    protected HttpClient httpClient;
     public static  BackendData backendData = new BackendData();
+    public static BackendTimeData backendDataTime = new BackendTimeData();
     public TextMeshProUGUI username;
     string username_str;
     public static int appCode = 1;
-    public static string urlNoParams { get { return "https://app.e-xtinguisher.com/api/vr-users/public?"; } }
 
-    public static string BackendDataKey { get { return "BackendData"; } }
+    #region API URLS
+    public static string urlNoParams
+    {
+        get { return "https://app.e-xtinguisher.com/api/vr-users/public?"; }
+    }
+    public static string urlForParams
+    {
+        get { return "https://app.e-xtinguisher.com/api/vr-users/public/"; }
+    }
+
+    public static string urlForTime
+    {
+        get { return urlForParams + "client-time-uses?"; }
+    }
+
+    public static string BackendDataKey
+    {
+        get { return "BackendData"; }
+    }
+
+    public static string BackendTimeDataKey
+    {
+        get { return "BackendTimeData"; }
+    }
+
+    public static string IncorrectKey
+    {
+        get { return "IncorrectKey"; }
+    }
+    #endregion
     #endregion
 
     #region FUNCTIONS
@@ -66,13 +106,14 @@ public class BackendGetter : MonoBehaviour
     public virtual void Start()
     {
         backendData = JsonUtility.FromJson<BackendData>(PlayerPrefs.GetString(BackendDataKey));
+        backendDataTime = JsonUtility.FromJson<BackendTimeData>(PlayerPrefs.GetString(BackendTimeDataKey));
     }
 
     #region Connecting and getting the data
     /// <summary>
-    /// Realiza la petición al backend para recoger los datos
+    /// Realiza la peticiï¿½n al backend para recoger los datos
     /// </summary>
-    /// <param name="appCode">Código de la aplicación en la que estemos</param>
+    /// <param name="appCode">Cï¿½digo de la aplicaciï¿½n en la que estemos</param>
     public async virtual void GetBackendData(string appCode)
     {
         //Recomendable, no se por que pero creandole el source para asignar el token funciona mejor, mierdas de .net
@@ -94,32 +135,49 @@ public class BackendGetter : MonoBehaviour
     /// Parsea el contenido de la respuesta HTTP del servidor para obtener los datos que nos envia el backend
     /// </summary>
     /// <param name="response"></param>
-    private async void BackendDataFromResponse(HttpResponseMessage response)
+    protected async void BackendDataFromResponse(HttpResponseMessage response, BackendDataType backendDataType = BackendDataType.UserData)
     {
         //Recogemos los datos en un string
         string buffer = await response.Content.ReadAsStringAsync();
         //En caso de que no haya nada en el string de los datos no nos interesa seguir
         if (buffer == "" || buffer == null) return;
-        //En caso de que la petición no haya salido bien tampoco nos interesa seguir
+        //En caso de que la peticiï¿½n no haya salido bien tampoco nos interesa seguir
         if (response.StatusCode != HttpStatusCode.OK) return;
+        
+        //Elegir que claves usar
+        string currentKey = "";
 
         //Por si peta algo o se ha corrompido algo en el mensaje y no se puede parsear, mejor un try
         try
         {
             //Parseamos el string donde guardamos el contenido de la respuesta a la estructura de datos del backend
-            backendData = JsonUtility.FromJson<BackendData>(buffer);
 
-            //Guarda el resultado en local para cuando no haya conexión
-            if (PlayerPrefs.HasKey(BackendDataKey))
+            switch (backendDataType)
             {
-                string oldData = PlayerPrefs.GetString(BackendDataKey);
+                case BackendDataType.UserData:
+                    backendData = JsonUtility.FromJson<BackendData>(buffer);
+                    currentKey = BackendDataKey;
+                    break;
+                case BackendDataType.TimeData:
+                    backendDataTime = JsonUtility.FromJson<BackendTimeData>(buffer);
+                    currentKey = BackendTimeDataKey;
+                    break;
+                default:
+                    currentKey = IncorrectKey;
+                    break;
+            }
+
+            //Guarda el resultado en local para cuando no haya conexiï¿½n
+            if (PlayerPrefs.HasKey(currentKey))
+            {
+                string oldData = PlayerPrefs.GetString(currentKey);
 
                 if(oldData != buffer)
                 {
-                    PlayerPrefs.SetString(BackendDataKey, buffer);
+                    PlayerPrefs.SetString(currentKey, buffer);
                 }
             }
-            else { PlayerPrefs.SetString(BackendDataKey, buffer); }
+            else { PlayerPrefs.SetString(currentKey, buffer); }
         }
         catch
         {

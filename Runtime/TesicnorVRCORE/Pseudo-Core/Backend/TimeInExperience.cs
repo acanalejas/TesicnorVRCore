@@ -12,19 +12,16 @@ public class TimeInExperience : BackendLoadData
     // Almacena el tiempo que transcurre en la experiencia en segundos.
     float timeInSeconds;
 
-    // Crear una instancia de la clase BackendDataTime
-    private BackendDataTime vrTimeUse;
-
     private int vrApplicationId = 1;
     public int vrExperienceId = 1;
 
     private void Start()
     {
-        // Seteamos los datos guardados en el PlayerPrefs (Se hizo de está forma porque poniendo directamente el PlayerPrefs no convertia bien a VRTimeUse).
+        // Seteamos los datos guardados en el PlayerPrefs (Se hizo de estï¿½ forma porque poniendo directamente el PlayerPrefs no convertia bien a VRTimeUse).
         string jsonString = PlayerPrefs.GetString(BackendDataKey);
 
         // Convierte el JSON a un objeto de la clase VRTimeUse.
-        vrTimeUse = JsonUtility.FromJson<BackendDataTime>(jsonString);
+        backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);
 
         inputTime = System.DateTime.Now.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
     }
@@ -73,7 +70,7 @@ public class TimeInExperience : BackendLoadData
 
         if (PlayerPrefs.GetString("Username", "") != "")
         {
-            clientId = vrTimeUse.clientId;
+            clientId = backendDataTime.clientId;
             user = PlayerPrefs.GetString("Username");
 
             // Corregido el formato JSON y manejo de tipos de datos

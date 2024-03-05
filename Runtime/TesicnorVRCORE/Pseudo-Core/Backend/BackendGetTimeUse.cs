@@ -4,22 +4,13 @@ using System.Net;
 using TMPro;
 using System;
 
-[System.Serializable]
-public class BackendDataTime
-{
-    public string usageType;
-    public float timeLeft;
-    public string updated;
-    public string clientId;
-}
-
 public class BackendGetTimeUse : MonoBehaviour
 {
     #region PARAMETERS
     public HttpClient httpClient;
-    public static BackendDataTime backendDataTime = new BackendDataTime();
+    public static BackendTimeData backendDataTime = new BackendTimeData();
 
-    protected const string url = "https://app.e-xtinguisher.com/api/public/";
+    protected const string url = "https://pre.app.e-xtinguisher.com/api/public/";
 
     const string apiURL = url + "client-time-uses?";
 
@@ -38,7 +29,7 @@ public class BackendGetTimeUse : MonoBehaviour
 
     public virtual void Start()
     {
-        BackendDataTime backendDataTime = JsonUtility.FromJson<BackendDataTime>(PlayerPrefs.GetString(BackendDataKey));
+        BackendTimeData backendDataTime = JsonUtility.FromJson<BackendTimeData>(PlayerPrefs.GetString(BackendDataKey));
     }
 
     #region Connecting and getting the data
@@ -90,7 +81,7 @@ public class BackendGetTimeUse : MonoBehaviour
         try
         {
             //Parseamos el string donde guardamos el contenido de la respuesta a la estructura de datos del backend
-            backendDataTime = JsonUtility.FromJson<BackendDataTime>(buffer);
+            backendDataTime = JsonUtility.FromJson<BackendTimeData>(buffer);
 
             //Guarda el resultado en local para cuando no haya conexión
             if (PlayerPrefs.HasKey(BackendDataKey))
