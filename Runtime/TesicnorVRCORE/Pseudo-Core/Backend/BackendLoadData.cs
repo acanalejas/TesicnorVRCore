@@ -29,38 +29,38 @@ public class BackendLoadData : BackendGetter
     #region Unity Objects
 
     // Variables de Unity
-    [SerializeField] private GameObject panelTime;          // Variable para el panel donde se muestra el tiempo disponible.
-    [SerializeField] private TMP_Text txtTime;              // Variable para almacenar el componente text del tiempo.
-    [SerializeField] private GameObject buttonChargeTime;   // Array para guardar los botones de bloqueo de cada escena.
-    [SerializeField] private GameObject popUp;              // Variable para almacenar el popUp.
-
-    #endregion
-
-    #region Constantes
-
-    const string NoLimitType = "NO_LIMIT_TYPE";             // Tipo de limite indefinido.
-    const string TimeType = "TIME_TYPE";                    // Tipo de limite de tiempo.
+    [HideInInspector][SerializeField] private GameObject panelTime;          // Variable para el panel donde se muestra el tiempo disponible.
+    [HideInInspector][SerializeField] private TMP_Text txtTime;              // Variable para almacenar el componente text del tiempo.
+    [HideInInspector][SerializeField] private GameObject buttonChargeTime;   // Array para guardar los botones de bloqueo de cada escena.
+    [HideInInspector][SerializeField] private GameObject popUp;              // Variable para almacenar el popUp.
 
     #endregion
 
 
     #region Backend Parameters
 
-    private List<string> dataToUpload = new List<string>(); // Lista con los datos pendientes de envio.
-    
-    public int reloadTime = 5;                              // Tiempo que tarda en volver a checkear el tiempo de uso
+    private List<string> dataToUpload = new List<string>();                     // Lista con los datos pendientes de envio.
 
-    [HideInInspector] public bool timeOut = false;          // Se ha acabado el tiempo de espera?
+    [HideInInspector] public float reloadTime = 5;                                // Tiempo que tarda en volver a checkear el tiempo de uso
+
+    [HideInInspector] public bool timeOut = false;                              // Se ha acabado el tiempo de espera?
+
+    #endregion
+
+    #region Working Parameters
+
+    public enum WorkingMethod { RetrieveTime, SpendTime, CheckUserInfo}                 //Enum for setting the work method of the instanced object
+    [HideInInspector] public WorkingMethod workingMethod = WorkingMethod.RetrieveTime;  //Current state of work of the instanced object
 
     #endregion
 
     #endregion
-    
+
 
     public override void Start()
     {
         base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
-        StartCoroutine(StartScene());                         // Llamamos la corrutina que actualizara los datos cada 1seg.
+        StartCoroutine(StartScene());                               // Llamamos la corrutina que actualizara los datos cada 1seg.
     }
 
     private IEnumerator StartScene()
@@ -69,14 +69,14 @@ public class BackendLoadData : BackendGetter
         {
             if(PlayerPrefs.GetString("Username") != "")
             {
-                string jsonString = PlayerPrefs.GetString(BackendGetTimeUse.BackendDataKey);       // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
+                string jsonString = PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey);                    // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
 
                 if (!string.IsNullOrEmpty(jsonString))
                 {
                     backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);          // Convertir el JSON a un objeto de la clase BackendDataTime
 
-                    if(panelTime) panelTime.SetActive(backendDataTime.usageType == TimeType);     // Comparamos el tipo de tiempo de uso que tiene el usuario.
-                    if (backendDataTime.usageType == TimeType) ValidateTimeLeft();
+                    if(panelTime) panelTime.SetActive(backendDataTime.usageType == BackendConstants.TimeType);     // Comparamos el tipo de tiempo de uso que tiene el usuario.
+                    if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
                 }
             }
             else
@@ -106,6 +106,7 @@ public class BackendLoadData : BackendGetter
         {
             foreach (string jsString in dataToUpload)
             {
+                //TODO quitar la deserializacion que luego se vuelve a serialiar inmediaamente sin sentido alguno
                 BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);  
                 // Deserializar cada cadena JSON en un objeto BackendPostTime.
                 SendDataToAPI(jsonSerialize(data));                                                 // Enviamos los datos por medio de la API.                                     
@@ -121,7 +122,7 @@ public class BackendLoadData : BackendGetter
         if (dataToUpload.Contains(data)) return;
         
         dataToUpload.Add(data);                                             // Agregar los datos a la lista de datos pendientes para cargar.
-        string jsString = JsonConvert.SerializeObject(dataToUpload);        // Convertir la lista de datos a formato JSON.
+        string jsString = JsonUtility.ToJson(dataToUpload);        // Convertir la lista de datos a formato JSON.
         PlayerPrefs.SetString("jsonDatos", jsString);                       // Guardar el JSON en PlayerPrefs.
         PlayerPrefs.DeleteKey("DataOnDisable");                             // Limpiar los datos guardados de la experiencia.
     }
@@ -178,6 +179,8 @@ public class BackendLoadData : BackendGetter
 
     public async virtual void SendDataToAPI(string jsonData)
     {
+
+        //TODO quitar deserializacion completamente inutil
         BackendPostTime dataUser = JsonConvert.DeserializeObject<BackendPostTime>(jsonData);
 
         var cts = new System.Threading.CancellationTokenSource();
@@ -186,7 +189,7 @@ public class BackendLoadData : BackendGetter
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");    // Convierte los datos a un StringContent con tipo de medio "application/json"
 
         // Realiza la solicitud POST con los datos en el cuerpo
-        using (HttpResponseMessage response = await httpClient.PostAsync(urlForTime, content, cts.Token))
+        using (HttpResponseMessage response = await httpClient.PostAsync(BackendConstants.urlForTime, content, cts.Token))
         {
             if (response.IsSuccessStatusCode)
             {
@@ -207,14 +210,15 @@ public class BackendLoadData : BackendGetter
 
         if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
         {
-            List<string> data = JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
+            List<string> data = JsonUtility.FromJson<List<string>>(jsonDatosString);//JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
 
             if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
             {
                 foreach (string jsonString in data)                                                             // Ahora puedes manipular la lista de cadenas según tus necesidades
                 {
+                    //TODO quitar la deserializacion completamente innecesaria
                     BackendPostTime dataBackend = JsonConvert.DeserializeObject<BackendPostTime>(jsonString);   // Deserializar cada cadena JSON en un objeto o manipular según sea necesario
-                    dataToUpload.Add(jsonSerialize(dataBackend));                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
+                    dataToUpload.Add(jsonString);                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
                 }
             }
         }
@@ -272,5 +276,62 @@ public class BackendLoadData : BackendGetter
 [CanEditMultipleObjects]
 public class BackendLoadDataEditor : Editor
 {
-    
+    BackendLoadData Target;
+    private void OnEnable()
+    {
+        Target = (BackendLoadData)target;
+    }
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        GUILayout.Space(20);
+
+        GUILayout.Label("Esta clase se usa para la comunicación con el backend de Tesicnor", EditorStyles.boldLabel);
+
+        GUILayout.Space(20);
+
+        GUILayout.Label("Selecciona el modo de funcionamiento del objecto", EditorStyles.boldLabel);
+        Target.workingMethod = (BackendLoadData.WorkingMethod)EditorGUILayout.EnumPopup(Target.workingMethod);
+
+        GUILayout.Space(15);
+
+        if(Target.workingMethod == BackendLoadData.WorkingMethod.RetrieveTime)
+        {
+            GUILayout.Label("Panel donde se muestra el timepo restante");
+            SerializedProperty timePanel = serializedObject.FindProperty("panelTime");
+            EditorGUILayout.PropertyField(timePanel);
+
+            GUILayout.Space(15);
+
+            GUILayout.Label("Texto donde se muestra el tiempo restante");
+            SerializedProperty timeText = serializedObject.FindProperty("txtTime");
+            EditorGUILayout.PropertyField(timeText);
+
+            GUILayout.Space(15);
+
+            GUILayout.Label("Botón de recargar tiempo");
+            SerializedProperty buttonChargeTIme = serializedObject.FindProperty("buttonChargeTime");
+            EditorGUILayout.PropertyField(buttonChargeTIme);
+
+            GUILayout.Space(15);
+
+            GUILayout.Label("Pop up para recargar el tiempo");
+            SerializedProperty timePopUp = serializedObject.FindProperty("popUp");
+            EditorGUILayout.PropertyField(timePopUp);
+
+            GUILayout.Space(15);
+        }
+
+        if(Target.workingMethod == BackendLoadData.WorkingMethod.SpendTime)
+        {
+            GUILayout.Label("Periodo de tiempo entre calculo de tiempo restante");
+            Target.reloadTime = EditorGUILayout.FloatField(Target.reloadTime, EditorStyles.miniTextField);
+        }
+
+        #region Unity Parameters
+        
+        #endregion
+    }
 }

@@ -63,37 +63,6 @@ public class BackendGetter : MonoBehaviour
     public TextMeshProUGUI username;
     string username_str;
     public static int appCode = 1;
-
-    #region API URLS
-    public static string urlNoParams
-    {
-        get { return "https://app.e-xtinguisher.com/api/vr-users/public?"; }
-    }
-    public static string urlForParams
-    {
-        get { return "https://app.e-xtinguisher.com/api/vr-users/public/"; }
-    }
-
-    public static string urlForTime
-    {
-        get { return urlForParams + "client-time-uses?"; }
-    }
-
-    public static string BackendDataKey
-    {
-        get { return "BackendData"; }
-    }
-
-    public static string BackendTimeDataKey
-    {
-        get { return "BackendTimeData"; }
-    }
-
-    public static string IncorrectKey
-    {
-        get { return "IncorrectKey"; }
-    }
-    #endregion
     #endregion
 
     #region FUNCTIONS
@@ -105,8 +74,8 @@ public class BackendGetter : MonoBehaviour
     }
     public virtual void Start()
     {
-        backendData = JsonUtility.FromJson<BackendData>(PlayerPrefs.GetString(BackendDataKey));
-        backendDataTime = JsonUtility.FromJson<BackendTimeData>(PlayerPrefs.GetString(BackendTimeDataKey));
+        backendData = JsonUtility.FromJson<BackendData>(PlayerPrefs.GetString(BackendConstants.BackendDataKey));
+        backendDataTime = JsonUtility.FromJson<BackendTimeData>(PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey));
     }
 
     #region Connecting and getting the data
@@ -121,7 +90,7 @@ public class BackendGetter : MonoBehaviour
 
         username_str = PlayerPrefs.GetString("Username");
 
-        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "applicationId=" + appCode + "&" + "userName=" + username_str))
+        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendConstants.urlNoParams + "applicationId=" + appCode + "&" + "userName=" + username_str))
         {
             using (HttpResponseMessage response = await httpClient.SendAsync(hrm, cts.Token))
             {
@@ -156,14 +125,14 @@ public class BackendGetter : MonoBehaviour
             {
                 case BackendDataType.UserData:
                     backendData = JsonUtility.FromJson<BackendData>(buffer);
-                    currentKey = BackendDataKey;
+                    currentKey = BackendConstants.BackendDataKey;
                     break;
                 case BackendDataType.TimeData:
                     backendDataTime = JsonUtility.FromJson<BackendTimeData>(buffer);
-                    currentKey = BackendTimeDataKey;
+                    currentKey = BackendConstants.BackendTimeDataKey;
                     break;
                 default:
-                    currentKey = IncorrectKey;
+                    currentKey = BackendConstants.IncorrectKey;
                     break;
             }
 
