@@ -18,7 +18,7 @@ public class TimeInExperience : BackendLoadData
     private void Start()
     {
         // Seteamos los datos guardados en el PlayerPrefs (Se hizo de est� forma porque poniendo directamente el PlayerPrefs no convertia bien a VRTimeUse).
-        string jsonString = PlayerPrefs.GetString(BackendDataKey);
+        string jsonString = PlayerPrefs.GetString(BackendConstants.BackendDataKey);
 
         // Convierte el JSON a un objeto de la clase VRTimeUse.
         backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);

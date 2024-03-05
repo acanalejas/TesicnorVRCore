@@ -38,7 +38,7 @@ public class BackendGetTimeUse : MonoBehaviour
     /// </summary>
     public async virtual void GetBackendDataTime()
     {
-        string jsonString = PlayerPrefs.GetString(BackendGetter.BackendDataKey);
+        string jsonString = PlayerPrefs.GetString(BackendConstants.BackendDataKey);
         BackendData dataUser = JsonUtility.FromJson<BackendData>(jsonString);
 
         string username = PlayerPrefs.GetString("Username");

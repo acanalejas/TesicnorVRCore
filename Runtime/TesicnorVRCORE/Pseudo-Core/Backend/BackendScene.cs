@@ -121,7 +121,7 @@ public class BackendScene : MonoBehaviour
         string appCode = BackendGetter.appCode.ToString();
 
         var cts = new System.Threading.CancellationTokenSource();
-        using (var request = new HttpRequestMessage(HttpMethod.Get, BackendGetter.urlNoParams + "applicationId=" + appCode + "&" + "userName=" + user))
+        using (var request = new HttpRequestMessage(HttpMethod.Get, BackendConstants.urlNoParams + "applicationId=" + appCode + "&" + "userName=" + user))
         {
             using(var response = await httpClient.SendAsync(request, cts.Token))
             {
@@ -130,7 +130,7 @@ public class BackendScene : MonoBehaviour
                     string content = response.Content.ReadAsStringAsync().Result;
                     BackendData data = JsonUtility.FromJson<BackendData>(content);
                     BackendGetter.backendData = data;
-                    PlayerPrefs.SetString(BackendGetter.BackendDataKey, content);
+                    PlayerPrefs.SetString(BackendConstants.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
                     //SceneManager.LoadScene(nextBuildIndex);
                     SceneManager.LoadScene(nextBuildIndex);
@@ -161,7 +161,7 @@ public class BackendScene : MonoBehaviour
 
         BackendGetter.backendData = data;
 
-        PlayerPrefs.SetString(BackendGetter.BackendDataKey, JsonUtility.ToJson(data));
+        PlayerPrefs.SetString(BackendConstants.BackendDataKey, JsonUtility.ToJson(data));
         PlayerPrefs.SetString("Username", "");
 
         SceneManager.LoadScene(nextBuildIndex);
