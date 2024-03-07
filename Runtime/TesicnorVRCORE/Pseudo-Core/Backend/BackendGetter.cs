@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Net.Http;
 using System.Net;
 using TMPro;
+using System.Text;
 
 [System.Serializable]
 public class VRExperience
@@ -62,7 +63,7 @@ public class BackendGetter : MonoBehaviour
     public static BackendTimeData backendDataTime = new BackendTimeData();
     public TextMeshProUGUI username;
     string username_str;
-    public static int appCode = 1;
+    public static int appCode = 3;
     #endregion
 
     #region FUNCTIONS
@@ -100,6 +101,28 @@ public class BackendGetter : MonoBehaviour
                 if (response.IsSuccessStatusCode)
                     BackendDataFromResponse(response);
                 else Debug.LogError("Failed to retrieve user data from backend");
+            }
+        }
+    }
+
+    public async virtual void SendDataToAPI(string jsonData, string url)
+    {
+        var cts = new System.Threading.CancellationTokenSource();
+
+        Debug.Log(jsonData);// Convierte el objeto a formato JSON
+        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");       // Convierte los datos a un StringContent con tipo de medio "application/json"
+
+        // Realiza la solicitud POST con los datos en el cuerpo
+        using (HttpResponseMessage response = await httpClient.PostAsync(url, content))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                Debug.Log($"Solicitud Enviada: {response.StatusCode}");
+                PlayerPrefs.SetString(BackendConstants.TimeQueueKey, "");
+            }
+            else
+            {
+                Debug.LogError($"Error en la solicitud: {response.StatusCode}");
             }
         }
     }

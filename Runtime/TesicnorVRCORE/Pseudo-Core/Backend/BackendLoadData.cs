@@ -21,6 +21,18 @@ public class BackendPostTime
     public string vrApplicationId;
     public string vrExperienceId;
     public string? userName;
+
+    public BackendPostTime(string hwInfo, string start, string end, string period, string clientId, string vrApplicationId, string vrExperienceId, string userName)
+    {
+        this.hwInfo = hwInfo;
+        this.start = start;
+        this.end = end;
+        this.period = period;
+        this.clientId = clientId;
+        this.vrApplicationId = vrApplicationId;
+        this.vrExperienceId = vrExperienceId;
+        this.userName = userName;
+    }
 }
 
 public class BackendLoadData : BackendGetter
@@ -82,6 +94,7 @@ public class BackendLoadData : BackendGetter
         base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
         StartCoroutine(StartScene());                               // Llamamos la corrutina que actualizara los datos cada 1seg.
 
+        //Lo que se haga aqui dentro variara dependiendo del modo de funcionamiento
         switch (workingMethod)
         {
             case WorkingMethod.RetrieveTime:
@@ -121,6 +134,11 @@ public class BackendLoadData : BackendGetter
         }
     }
 
+    /// <summary>
+    /// Update usado cuando se tiene que recoger el tiempo de uso
+    /// 
+    /// TODO mirar si realmente se necesita un update, se podria cambiar todo a eventos o poner un bool para saber si debe o no usar update
+    /// </summary>
     private void RetrieveTimeUpdate()
     {
         if (PlayerPrefs.GetString("Username") != "")
@@ -145,6 +163,11 @@ public class BackendLoadData : BackendGetter
         ValidateTimeLeft();
     }
 
+    /// <summary>
+    /// Guarda los datos sobre el tiempo que se ha usado la experincia
+    /// Este método es el que se añade a los eventos correspondientes de la aplicación.
+    /// Los datos se sustituyen para asegurarnos de que no se envian varios registros que den un resultado erroneo en la resta de tiempo
+    /// </summary>
     private void SpendTime()
     {
         System.DateTime currentDate = System.DateTime.Now;
@@ -156,12 +179,16 @@ public class BackendLoadData : BackendGetter
         PlayerPrefs.SetString(BackendConstants.DataOnDisableKey, DataTime());
     }
 
+    /// <summary>
+    /// Carga los datos que esten guardados en memoria para mandarlos al backend
+    /// </summary>
     public void LoadDataOnDisable()
     {
         LoadPendingData();
 
         string dataOnDisable = PlayerPrefs.GetString(BackendConstants.DataOnDisableKey, "");                          // Guardamos los datos almacenados en el PlayerPrefs "DataOnDisable".
 
+        //Checkea si los datos guardados no estan vacios para añadir a la lista
         if (!string.IsNullOrEmpty(dataOnDisable))
         {
             AddList(dataOnDisable);
@@ -169,15 +196,14 @@ public class BackendLoadData : BackendGetter
 
         if (BackendConstants.bHasInternetConnection)                                                                // Validamos si hay conexión a Internet.
         {
+            //Envia cada dato guardado al backend
             foreach (string jsString in dataToUpload)
             {
-                //TODO quitar la deserializacion que luego se vuelve a serialiar inmediaamente sin sentido alguno
-                //BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);  
-                //Deserializar cada cadena JSON en un objeto BackendPostTime.
-                SendDataToAPI(jsString);                                                 // Enviamos los datos por medio de la API.                                     
+                SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.                                     
             }
         }
 
+        //Limpia la lista de datos a mandar
         dataToUpload.Clear();       // Limpiamos la lista.
     }
 
@@ -241,32 +267,7 @@ public class BackendLoadData : BackendGetter
         }
     }
 
-    public async virtual void SendDataToAPI(string jsonData)
-    {
-
-        //TODO quitar deserializacion completamente inutil
-        BackendPostTime dataUser = JsonConvert.DeserializeObject<BackendPostTime>(jsonData);
-
-        var cts = new System.Threading.CancellationTokenSource();
-
-        string jsonPostData = JsonUtility.ToJson(dataUser);
-        Debug.Log(jsonData);// Convierte el objeto a formato JSON
-        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");       // Convierte los datos a un StringContent con tipo de medio "application/json"
-
-        // Realiza la solicitud POST con los datos en el cuerpo
-        using (HttpResponseMessage response = await httpClient.PostAsync(BackendConstants.urlForPostTime, content))
-        {
-            if (response.IsSuccessStatusCode)
-            {
-                Debug.Log($"Solicitud Enviada: {response.StatusCode}");
-                PlayerPrefs.SetString(BackendConstants.TimeQueueKey, "");
-            }
-            else
-            {
-                Debug.LogError($"Error en la solicitud: {response.StatusCode}");
-            }
-        }
-    }
+    
 
     // Función para cargar los datos pendientes a una lista.
     void LoadPendingData()
@@ -289,20 +290,6 @@ public class BackendLoadData : BackendGetter
         }
     }
 
-    public string jsonSerialize(BackendPostTime data)
-    {
-        string jsonData = "{\"hwInfo\": \"" + data.hwInfo + "\", " +
-                            "\"start\": \"" + data.start + "\", " +
-                            "\"end\": \"" + data.end + "\", " +
-                            "\"period\": " + data.period + ", " +
-                            "\"clientId\": \"" + data.clientId + "\", " +
-                            "\"vrApplicationId\": " + data.vrApplicationId + ", " +
-                            "\"vrExperienceId\": " + data.vrExperienceId + ", " +
-                            "\"userName\": \"" + data.userName + "\"}";
-
-        return jsonData;
-    }
-
     IEnumerator BlinkText()
     {
         txtTime.color = new Color(1f, 0f, 0f, 1f);
@@ -323,44 +310,31 @@ public class BackendLoadData : BackendGetter
         else Debug.LogError("Pop up not assigned in BackendLoadData Class");
     }
 
+    /// <summary>
+    /// Retrieve the needed info about the elapsed time using the experience in a json
+    /// </summary>
+    /// <returns></returns>
     private string DataTime()
     {
-        string jsonData;
-
+        //Set the base variables for constructing the data object
         var hwInfoaux = SystemInfo.deviceUniqueIdentifier;
         string startDateTime = InitialDate.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
         string endDateTime = System.DateTime.Now.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
         int duration = (int)timeInSeconds;
-        string clientId;
-        string user;
+        string clientId = "";
+        string user = "";
 
+        //Check for the stored data about the user
         if (PlayerPrefs.GetString("Username", "") != "")
         {
             clientId = backendData.client.id.ToString();
             user = PlayerPrefs.GetString("Username");
+        }
+        //Construct the data object
+        BackendPostTime PostTime = new BackendPostTime(hwInfoaux, startDateTime, endDateTime, duration.ToString(), clientId, appCode.ToString(), vrExperienceId.ToString(), user);
 
-            // Corregido el formato JSON y manejo de tipos de datos
-            jsonData = "{\"hwInfo\": \"" + hwInfoaux.ToString() + "\", " +
-                              "\"start\": \"" + startDateTime + "\", " +
-                              "\"end\": \"" + endDateTime + "\", " +
-                              "\"period\": " + duration + ", " +
-                              "\"clientId\": " + clientId + ", " +
-                              "\"vrApplicationId\": " + appCode + ", " +
-                              "\"vrExperienceId\": " + vrExperienceId + ", " +
-                              "\"userName\": \"" + user + "\"}";
-        }
-        else
-        {
-            // Corregido el formato JSON y manejo de tipos de datos
-            jsonData = "{\"hwInfo\": \"" + hwInfoaux.ToString() + "\", " +
-                              "\"start\": \"" + startDateTime + "\", " +
-                              "\"end\": \"" + endDateTime + "\", " +
-                              "\"period\": " + duration + ", " +
-                              "\"clientId\": \"" + null + "\", " +
-                              "\"vrApplicationId\": " + appCode + ", " +
-                              "\"vrExperienceId\": " + vrExperienceId + ", " +
-                              "\"userName\": \"" + "\"}";
-        }
+        //Parse the object to Json for sending
+        string jsonData = JsonUtility.ToJson(PostTime);
 
         return jsonData;
     }
