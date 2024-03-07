@@ -145,7 +145,7 @@ public class BackendLoadData : BackendGetter
 
         timeInSeconds = (int)elapsedTime.TotalSeconds;
 
-        PlayerPrefs.SetString(BackendConstants.TimeQueueKey, DataTime());
+        PlayerPrefs.SetString(BackendConstants.DataOnDisableKey, DataTime());
     }
 
     public void LoadDataOnDisable()
