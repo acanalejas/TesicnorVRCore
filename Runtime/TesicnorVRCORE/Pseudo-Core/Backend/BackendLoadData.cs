@@ -354,6 +354,7 @@ public class BackendLoadData : BackendGetter
         return jsonData;
     }
 }
+#if UNITY_EDITOR
 
 [CustomEditor(typeof(BackendLoadData), true)]
 [CanEditMultipleObjects]
@@ -428,4 +429,6 @@ public class BackendLoadDataEditor : Editor
         
         #endregion
     }
+
 }
+#endif
