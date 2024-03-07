@@ -417,6 +417,11 @@ public class BackendLoadDataEditor : Editor
         {
             GUILayout.Label("Periodo de tiempo entre calculo de tiempo restante");
             Target.reloadTime = EditorGUILayout.FloatField(Target.reloadTime, EditorStyles.miniTextField);
+
+            GUILayout.Space(15);
+
+            GUILayout.Label("Id correspondiente al backend de la experiencia actual");
+            Target.vrExperienceId = EditorGUILayout.IntField(Target.vrExperienceId, EditorStyles.miniTextField);
         }
 
         #region Unity Parameters
