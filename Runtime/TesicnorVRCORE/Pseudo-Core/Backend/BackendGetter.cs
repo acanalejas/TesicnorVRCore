@@ -80,7 +80,7 @@ public class BackendGetter : MonoBehaviour
 
     #region Connecting and getting the data
     /// <summary>
-    /// Realiza la petici�n al backend para recoger los datos
+    /// Realiza la petici�n al backend para recoger los datos de usuario
     /// </summary>
     /// <param name="appCode">C�digo de la aplicaci�n en la que estemos</param>
     public async virtual void GetBackendData(string appCode)
@@ -96,6 +96,28 @@ public class BackendGetter : MonoBehaviour
             {
                 if (response.IsSuccessStatusCode) 
                 BackendDataFromResponse(response);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Realiza la peticion al backend para obtener los datos de tiempo de uso del usuario
+    /// </summary>
+    /// <param name="appCode"></param>
+    public async virtual void GetBackendTimeData(string appCode)
+    {
+        var cts = new System.Threading.CancellationTokenSource();
+
+        username_str = PlayerPrefs.GetString("Username");
+
+        string jsonString = PlayerPrefs.GetString(BackendConstants.BackendDataKey);
+        BackendData dataUser = JsonUtility.FromJson<BackendData>(jsonString);
+
+        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendConstants.urlForTime + "clientId=" + dataUser.client.id + "&" + "name=" + username))
+        {
+            using (HttpResponseMessage response = await httpClient.SendAsync(hrm, cts.Token))
+            {
+                if (response.IsSuccessStatusCode) BackendDataFromResponse(response, BackendDataType.TimeData);
             }
         }
     }

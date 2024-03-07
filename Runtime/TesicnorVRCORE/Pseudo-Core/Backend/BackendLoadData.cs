@@ -7,6 +7,7 @@ using TMPro;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Object = UnityEngine.Object;
+using System.Globalization;
 
 [System.Serializable]
 public class BackendPostTime
@@ -32,18 +33,30 @@ public class BackendLoadData : BackendGetter
     [HideInInspector][SerializeField] private GameObject panelTime;          // Variable para el panel donde se muestra el tiempo disponible.
     [HideInInspector][SerializeField] private TMP_Text txtTime;              // Variable para almacenar el componente text del tiempo.
     [HideInInspector][SerializeField] private GameObject buttonChargeTime;   // Array para guardar los botones de bloqueo de cada escena.
-    [HideInInspector][SerializeField] private GameObject popUp;              // Variable para almacenar el popUp.
+    [HideInInspector][SerializeField] private GameObject popUp;
+    [HideInInspector][SerializeField] List<GameObject> BlockGameObjects = new List<GameObject>();
+        
 
     #endregion
 
 
     #region Backend Parameters
 
-    private List<string> dataToUpload = new List<string>();                     // Lista con los datos pendientes de envio.
+    private List<string> dataToUpload = new List<string>();                         // Lista con los datos pendientes de envio.
 
-    [HideInInspector] public float reloadTime = 5;                                // Tiempo que tarda en volver a checkear el tiempo de uso
+    [HideInInspector] public float reloadTime = 5;                                  // Tiempo que tarda en volver a checkear el tiempo de uso
 
-    [HideInInspector] public bool timeOut = false;                              // Se ha acabado el tiempo de espera?
+    [HideInInspector] public bool timeOut = false;                                  // Se ha acabado el tiempo de espera?
+
+    private string inputTime;
+
+    [HideInInspector] public int vrExperienceId = 0;
+
+    private int timeInSeconds;
+
+    //Spend time parameters
+
+    System.DateTime InitialDate;
 
     #endregion
 
@@ -61,55 +74,99 @@ public class BackendLoadData : BackendGetter
     {
         base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
         StartCoroutine(StartScene());                               // Llamamos la corrutina que actualizara los datos cada 1seg.
+
+        switch (workingMethod)
+        {
+            case WorkingMethod.RetrieveTime:
+
+                break;
+
+            case WorkingMethod.SpendTime:
+
+                InitialDate = System.DateTime.Now;
+
+                ApplicationEventsManager.Instance.onSceneLoaded.AddListener(SpendTime);
+                ApplicationEventsManager.Instance.onApplicationQuit.AddListener(SpendTime);
+                ApplicationEventsManager.Instance.onApplicationFocus.AddListener((bool b) => { SpendTime(); });
+                break;
+            default: break;
+        }
     }
 
     private IEnumerator StartScene()
     {
         while (true)
         {
-            if(PlayerPrefs.GetString("Username") != "")
+            switch (workingMethod)
             {
-                string jsonString = PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey);                    // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
+                case WorkingMethod.RetrieveTime:
+                    RetrieveTimeUpdate();
+                    break;
 
-                if (!string.IsNullOrEmpty(jsonString))
-                {
-                    backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);          // Convertir el JSON a un objeto de la clase BackendDataTime
+                case WorkingMethod.SpendTime:
 
-                    if(panelTime) panelTime.SetActive(backendDataTime.usageType == BackendConstants.TimeType);     // Comparamos el tipo de tiempo de uso que tiene el usuario.
-                    if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
-                }
+                    break;
+                    default: break;
             }
-            else
-            {
-                if(panelTime) panelTime.SetActive(false);
-                if(buttonChargeTime) buttonChargeTime.SetActive(false);
-            }
-
-            LoadDataOnDisable();
+            
 
             yield return new WaitForSeconds(reloadTime);
         }
+    }
+
+    private void RetrieveTimeUpdate()
+    {
+        if (PlayerPrefs.GetString("Username") != "")
+        {
+            string jsonString = PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey);                     // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
+
+            if (!string.IsNullOrEmpty(jsonString))
+            {
+                backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);                            // Convertir el JSON a un objeto de la clase BackendDataTime
+
+                if (panelTime) panelTime.SetActive(backendDataTime.usageType == BackendConstants.TimeType);      // Comparamos el tipo de tiempo de uso que tiene el usuario.
+                if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
+            }
+        }
+        else
+        {
+            if (panelTime) panelTime.SetActive(false);
+            if (buttonChargeTime) buttonChargeTime.SetActive(false);
+        }
+
+        LoadDataOnDisable();
+    }
+
+    private void SpendTime()
+    {
+        System.DateTime currentDate = System.DateTime.Now;
+
+        System.TimeSpan elapsedTime = currentDate - InitialDate;
+
+        timeInSeconds = (int)elapsedTime.TotalSeconds;
+
+        PlayerPrefs.SetString(BackendConstants.TimeQueueKey, DataTime());
     }
 
     public void LoadDataOnDisable()
     {
         LoadPendingData();
 
-        string dataOnDisable = PlayerPrefs.GetString("DataOnDisable", "");      // Guardamos los datos almacenados en el PlayerPrefs "DataOnDisable".
+        string dataOnDisable = PlayerPrefs.GetString(BackendConstants.DataOnDisableKey, "");                          // Guardamos los datos almacenados en el PlayerPrefs "DataOnDisable".
 
         if (!string.IsNullOrEmpty(dataOnDisable))
         {
             AddList(dataOnDisable);
         }
 
-        if (HasInternetConnection())                                            // Validamos si hay conexión a Internet.
+        if (BackendConstants.bHasInternetConnection)                                                                // Validamos si hay conexión a Internet.
         {
             foreach (string jsString in dataToUpload)
             {
                 //TODO quitar la deserializacion que luego se vuelve a serialiar inmediaamente sin sentido alguno
-                BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);  
-                // Deserializar cada cadena JSON en un objeto BackendPostTime.
-                SendDataToAPI(jsonSerialize(data));                                                 // Enviamos los datos por medio de la API.                                     
+                //BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);  
+                //Deserializar cada cadena JSON en un objeto BackendPostTime.
+                SendDataToAPI(/*jsonSerialize(data)*/ jsString);                                                 // Enviamos los datos por medio de la API.                                     
             }
         }
 
@@ -122,9 +179,9 @@ public class BackendLoadData : BackendGetter
         if (dataToUpload.Contains(data)) return;
         
         dataToUpload.Add(data);                                             // Agregar los datos a la lista de datos pendientes para cargar.
-        string jsString = JsonUtility.ToJson(dataToUpload);        // Convertir la lista de datos a formato JSON.
-        PlayerPrefs.SetString("jsonDatos", jsString);                       // Guardar el JSON en PlayerPrefs.
-        PlayerPrefs.DeleteKey("DataOnDisable");                             // Limpiar los datos guardados de la experiencia.
+        string jsString = JsonUtility.ToJson(dataToUpload);                 // Convertir la lista de datos a formato JSON.
+        PlayerPrefs.SetString(BackendConstants.TimeQueueKey, jsString);                       // Guardar el JSON en PlayerPrefs.
+        PlayerPrefs.DeleteKey(BackendConstants.DataOnDisableKey);                             // Limpiar los datos guardados de la experiencia.
     }
 
     // Método para convertir y formatear el tiempo restante en horas:minutos:segundos
@@ -151,7 +208,7 @@ public class BackendLoadData : BackendGetter
         {
             txtTime.color = Color.red;
             if(buttonChargeTime) buttonChargeTime.SetActive(true);
-            StartCoroutine(BlinkText());
+            StartCoroutine(nameof(BlinkText));
         }
         else
         {
@@ -160,18 +217,15 @@ public class BackendLoadData : BackendGetter
 
         if (backendDataTime.timeLeft < 0f)
         {
-            Object[] allObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject));   // Buscar todos los objetos desactivados con el tag especificado
+            Object[] allObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject));                               // Buscar todos los objetos desactivados con el tag especificado
 
-            foreach (Object obj in allObjects)
+            foreach (GameObject obj in BlockGameObjects)
             {
-                if (obj is GameObject)
+                GameObject gameObj = obj;
+                if (!gameObj.activeSelf)    // Verificar si el objeto tiene el tag que estás buscando y si no está activo
                 {
-                    GameObject gameObj = (GameObject)obj;
-                    if ((gameObj.CompareTag("Block") || gameObj.CompareTag("DemoBlock")) && !gameObj.activeSelf)    // Verificar si el objeto tiene el tag que estás buscando y si no está activo
-                    {
-                        gameObj.SetActive(true);                                // Activar todos los demás objetos desactivados
-                        this.timeOut = true;
-                    }
+                    gameObj.SetActive(true);                                                                    // Activar todos los demás objetos desactivados
+                    this.timeOut = true;
                 }
             }
         }
@@ -181,12 +235,12 @@ public class BackendLoadData : BackendGetter
     {
 
         //TODO quitar deserializacion completamente inutil
-        BackendPostTime dataUser = JsonConvert.DeserializeObject<BackendPostTime>(jsonData);
+        //BackendPostTime dataUser = JsonConvert.DeserializeObject<BackendPostTime>(jsonData);
 
         var cts = new System.Threading.CancellationTokenSource();
 
-        string jsonPostData = JsonUtility.ToJson(dataUser);                              // Convierte el objeto a formato JSON
-        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");    // Convierte los datos a un StringContent con tipo de medio "application/json"
+        //string jsonPostData = JsonUtility.ToJson(dataUser);                               // Convierte el objeto a formato JSON
+        var content = new StringContent(jsonData, Encoding.UTF8, "application/json");       // Convierte los datos a un StringContent con tipo de medio "application/json"
 
         // Realiza la solicitud POST con los datos en el cuerpo
         using (HttpResponseMessage response = await httpClient.PostAsync(BackendConstants.urlForTime, content, cts.Token))
@@ -194,7 +248,7 @@ public class BackendLoadData : BackendGetter
             if (response.IsSuccessStatusCode)
             {
                 Debug.LogError($"Solicitud Enviada: {response.StatusCode}");
-                PlayerPrefs.SetString("jsonDatos", "");
+                PlayerPrefs.SetString(BackendConstants.TimeQueueKey, "");
             }
             else
             {
@@ -206,7 +260,7 @@ public class BackendLoadData : BackendGetter
     // Función para cargar los datos pendientes a una lista.
     void LoadPendingData()
     {
-        string jsonDatosString = PlayerPrefs.GetString("jsonDatos", "");                                        // Obtener la cadena JSON desde PlayerPrefs
+        string jsonDatosString = PlayerPrefs.GetString(BackendConstants.TimeQueueKey, "");                                        // Obtener la cadena JSON desde PlayerPrefs
 
         if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
         {
@@ -218,7 +272,7 @@ public class BackendLoadData : BackendGetter
                 {
                     //TODO quitar la deserializacion completamente innecesaria
                     BackendPostTime dataBackend = JsonConvert.DeserializeObject<BackendPostTime>(jsonString);   // Deserializar cada cadena JSON en un objeto o manipular según sea necesario
-                    dataToUpload.Add(jsonString);                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
+                    dataToUpload.Add(jsonString);                                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
                 }
             }
         }
@@ -236,19 +290,6 @@ public class BackendLoadData : BackendGetter
                             "\"userName\": \"" + data.userName + "\"}";
 
         return jsonData;
-    }
-
-    // Función para verificar la conectividad a Internet.
-    public bool HasInternetConnection()
-    {
-        if (Application.internetReachability != NetworkReachability.NotReachable)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     IEnumerator BlinkText()
@@ -269,6 +310,48 @@ public class BackendLoadData : BackendGetter
     {
         if(popUp) popUp.SetActive(false);
         else Debug.LogError("Pop up not assigned in BackendLoadData Class");
+    }
+
+    private string DataTime()
+    {
+        string jsonData;
+
+        var hwInfoaux = SystemInfo.deviceUniqueIdentifier;
+        string startDateTime = inputTime;
+        string endDateTime = System.DateTime.Now.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
+        int duration = (int)timeInSeconds;
+        string clientId;
+        string user;
+
+        if (PlayerPrefs.GetString("Username", "") != "")
+        {
+            clientId = backendDataTime.clientId;
+            user = PlayerPrefs.GetString("Username");
+
+            // Corregido el formato JSON y manejo de tipos de datos
+            jsonData = "{\"hwInfo\": \"" + hwInfoaux.ToString() + "\", " +
+                              "\"start\": \"" + startDateTime + "\", " +
+                              "\"end\": \"" + endDateTime + "\", " +
+                              "\"period\": " + duration + ", " +
+                              "\"clientId\": " + clientId + ", " +
+                              "\"vrApplicationId\": " + appCode + ", " +
+                              "\"vrExperienceId\": " + vrExperienceId + ", " +
+                              "\"userName\": \"" + user + "\"}";
+        }
+        else
+        {
+            // Corregido el formato JSON y manejo de tipos de datos
+            jsonData = "{\"hwInfo\": \"" + hwInfoaux.ToString() + "\", " +
+                              "\"start\": \"" + startDateTime + "\", " +
+                              "\"end\": \"" + endDateTime + "\", " +
+                              "\"period\": " + duration + ", " +
+                              "\"clientId\": \"" + null + "\", " +
+                              "\"vrApplicationId\": " + appCode + ", " +
+                              "\"vrExperienceId\": " + vrExperienceId + ", " +
+                              "\"userName\": \"" + "\"}";
+        }
+
+        return jsonData;
     }
 }
 
@@ -320,6 +403,12 @@ public class BackendLoadDataEditor : Editor
             GUILayout.Label("Pop up para recargar el tiempo");
             SerializedProperty timePopUp = serializedObject.FindProperty("popUp");
             EditorGUILayout.PropertyField(timePopUp);
+
+            GUILayout.Space(15);
+
+            GUILayout.Label("Lista de objectos bloqueantes para activar cuando se acaba el tiempo de uso");
+            SerializedProperty blockingObjects = serializedObject.FindProperty("BlockGameObjects");
+            EditorGUILayout.PropertyField(blockingObjects);
 
             GUILayout.Space(15);
         }

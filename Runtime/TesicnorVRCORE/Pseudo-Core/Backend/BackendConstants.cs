@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public static class BackendConstants
 {
@@ -47,4 +48,13 @@ public static class BackendConstants
     /// Tipo de usuario que NO funciona con tiempo de uso
     /// </summary>
     public static string NoLimitType { get { return "NO_LIMIT_TYPE"; }}
+
+    /// <summary>
+    /// La aplicación tiene conexion a internet?
+    /// </summary>
+    public static bool bHasInternetConnection { get { return Application.internetReachability != NetworkReachability.NotReachable; } }
+
+    public static string TimeQueueKey { get { return "jsonDatos"; } }
+
+    public static string DataOnDisableKey { get { return "DataOnDisable"; } }
 }

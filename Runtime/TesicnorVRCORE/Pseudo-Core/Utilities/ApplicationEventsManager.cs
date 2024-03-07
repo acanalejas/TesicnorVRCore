@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Clase usada para tener eventos en cada punto importante de la ejecución de la aplicación
@@ -20,12 +21,20 @@ public class ApplicationEventsManager : MonoBehaviour
     [Header("Evento usado cuando se vuelve o se deja en segundo plano a la aplicación")]
     public UnityEvent<bool> onApplicationFocus;
 
+    [Header("Evento usado cuando se cambia la escena activa")]
+    public UnityEvent onActiveSceneChange;
+
+    [Header("Evento usado cuando se carga una escena")]
+    public UnityEvent onSceneLoaded;
+
     #endregion
 
     #region METHODS
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        SceneManager.activeSceneChanged += OnSceneChanged;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnApplicationQuit()
@@ -41,6 +50,16 @@ public class ApplicationEventsManager : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         onApplicationPause.Invoke(pause);
+    }
+
+    private void OnSceneChanged(Scene firstScene, Scene secondScene)
+    {
+        onActiveSceneChange.Invoke();
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        onSceneLoaded.Invoke();
     }
     #endregion
 

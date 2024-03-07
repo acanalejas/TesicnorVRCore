@@ -24,6 +24,12 @@ public class TimeInExperience : BackendLoadData
         backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);
 
         inputTime = System.DateTime.Now.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
+
+        var startDate = System.DateTime.Now;
+        var testDate = System.DateTime.Now;
+
+        var timeSpan = startDate - testDate;
+        int secondsElapsed = (int)timeSpan.TotalSeconds; 
     }
 
     private void Update()
