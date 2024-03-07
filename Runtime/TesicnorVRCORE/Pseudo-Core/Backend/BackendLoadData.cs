@@ -13,7 +13,7 @@ using System.Globalization;
 public class BackendPostTime
 {
     // Propiedades para almacenar la información del tiempo.
-    public string hwInfo;
+    public string hwInfo = "Test Oculus";
     public string start;
     public string end;
     public string period;
@@ -63,13 +63,20 @@ public class BackendLoadData : BackendGetter
     #region Working Parameters
 
     public enum WorkingMethod { RetrieveTime, SpendTime, CheckUserInfo}                 //Enum for setting the work method of the instanced object
-    [HideInInspector] public WorkingMethod workingMethod = WorkingMethod.RetrieveTime;  //Current state of work of the instanced object
+    public WorkingMethod workingMethod = WorkingMethod.RetrieveTime;                    //Current state of work of the instanced object
 
     #endregion
 
     #endregion
 
-
+    private void Awake()
+    {
+#if UNITY_EDITOR
+        PlayerPrefs.SetString("Username", "vr@tesicnor.com");
+#endif
+        base.Awake();
+    }
+ 
     public override void Start()
     {
         base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
@@ -135,6 +142,7 @@ public class BackendLoadData : BackendGetter
         }
 
         LoadDataOnDisable();
+        ValidateTimeLeft();
     }
 
     private void SpendTime()
@@ -144,7 +152,7 @@ public class BackendLoadData : BackendGetter
         System.TimeSpan elapsedTime = currentDate - InitialDate;
 
         timeInSeconds = (int)elapsedTime.TotalSeconds;
-
+        
         PlayerPrefs.SetString(BackendConstants.DataOnDisableKey, DataTime());
     }
 
@@ -166,7 +174,7 @@ public class BackendLoadData : BackendGetter
                 //TODO quitar la deserializacion que luego se vuelve a serialiar inmediaamente sin sentido alguno
                 //BackendPostTime data = JsonConvert.DeserializeObject<BackendPostTime>(jsString);  
                 //Deserializar cada cadena JSON en un objeto BackendPostTime.
-                SendDataToAPI(/*jsonSerialize(data)*/ jsString);                                                 // Enviamos los datos por medio de la API.                                     
+                SendDataToAPI(jsString);                                                 // Enviamos los datos por medio de la API.                                     
             }
         }
 
@@ -202,6 +210,8 @@ public class BackendLoadData : BackendGetter
     // Método para convertir el tiempo y actualizar el texto del tiempo.
     private void ValidateTimeLeft()
     {
+        GetBackendTimeData(appCode.ToString());
+        if(backendDataTime == null) { Debug.LogError("No data from the backend was retrieved for time, it is null"); return; } 
         FormatTime(backendDataTime.timeLeft);  // Uso del método para formatear el tiempo.
 
         if (backendDataTime.timeLeft < 300)
@@ -235,19 +245,20 @@ public class BackendLoadData : BackendGetter
     {
 
         //TODO quitar deserializacion completamente inutil
-        //BackendPostTime dataUser = JsonConvert.DeserializeObject<BackendPostTime>(jsonData);
+        BackendPostTime dataUser = JsonConvert.DeserializeObject<BackendPostTime>(jsonData);
 
         var cts = new System.Threading.CancellationTokenSource();
 
-        //string jsonPostData = JsonUtility.ToJson(dataUser);                               // Convierte el objeto a formato JSON
+        string jsonPostData = JsonUtility.ToJson(dataUser);
+        Debug.Log(jsonData);// Convierte el objeto a formato JSON
         var content = new StringContent(jsonData, Encoding.UTF8, "application/json");       // Convierte los datos a un StringContent con tipo de medio "application/json"
 
         // Realiza la solicitud POST con los datos en el cuerpo
-        using (HttpResponseMessage response = await httpClient.PostAsync(BackendConstants.urlForTime, content, cts.Token))
+        using (HttpResponseMessage response = await httpClient.PostAsync(BackendConstants.urlForPostTime, content))
         {
             if (response.IsSuccessStatusCode)
             {
-                Debug.LogError($"Solicitud Enviada: {response.StatusCode}");
+                Debug.Log($"Solicitud Enviada: {response.StatusCode}");
                 PlayerPrefs.SetString(BackendConstants.TimeQueueKey, "");
             }
             else
@@ -317,7 +328,7 @@ public class BackendLoadData : BackendGetter
         string jsonData;
 
         var hwInfoaux = SystemInfo.deviceUniqueIdentifier;
-        string startDateTime = inputTime;
+        string startDateTime = InitialDate.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
         string endDateTime = System.DateTime.Now.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
         int duration = (int)timeInSeconds;
         string clientId;
@@ -325,7 +336,7 @@ public class BackendLoadData : BackendGetter
 
         if (PlayerPrefs.GetString("Username", "") != "")
         {
-            clientId = backendDataTime.clientId;
+            clientId = backendData.client.id.ToString();
             user = PlayerPrefs.GetString("Username");
 
             // Corregido el formato JSON y manejo de tipos de datos
@@ -357,7 +368,7 @@ public class BackendLoadData : BackendGetter
 #if UNITY_EDITOR
 
 [CustomEditor(typeof(BackendLoadData), true)]
-[CanEditMultipleObjects]
+//[CanEditMultipleObjects]
 public class BackendLoadDataEditor : Editor
 {
     BackendLoadData Target;
@@ -376,10 +387,10 @@ public class BackendLoadDataEditor : Editor
 
         GUILayout.Space(20);
 
-        GUILayout.Label("Selecciona el modo de funcionamiento del objecto", EditorStyles.boldLabel);
-        Target.workingMethod = (BackendLoadData.WorkingMethod)EditorGUILayout.EnumPopup(Target.workingMethod);
-
-        GUILayout.Space(15);
+       //GUILayout.Label("Selecciona el modo de funcionamiento del objecto", EditorStyles.boldLabel);
+       //Target.workingMethod = (BackendLoadData.WorkingMethod)EditorGUILayout.EnumPopup(Target.workingMethod);
+       //
+       //GUILayout.Space(15);
 
         if(Target.workingMethod == BackendLoadData.WorkingMethod.RetrieveTime)
         {
@@ -428,6 +439,8 @@ public class BackendLoadDataEditor : Editor
         #region Unity Parameters
         
         #endregion
+
+        serializedObject.ApplyModifiedProperties();
     }
 
 }

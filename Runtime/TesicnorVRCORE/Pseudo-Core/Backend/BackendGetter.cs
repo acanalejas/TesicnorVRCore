@@ -71,11 +71,13 @@ public class BackendGetter : MonoBehaviour
     {
         httpClient = new HttpClient();
         GetBackendData(appCode.ToString());
+        GetBackendTimeData(appCode.ToString());
+        backendData = JsonUtility.FromJson<BackendData>(PlayerPrefs.GetString(BackendConstants.BackendDataKey));
+        backendDataTime = JsonUtility.FromJson<BackendTimeData>(PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey));
     }
     public virtual void Start()
     {
-        backendData = JsonUtility.FromJson<BackendData>(PlayerPrefs.GetString(BackendConstants.BackendDataKey));
-        backendDataTime = JsonUtility.FromJson<BackendTimeData>(PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey));
+       
     }
 
     #region Connecting and getting the data
@@ -85,6 +87,7 @@ public class BackendGetter : MonoBehaviour
     /// <param name="appCode">C�digo de la aplicaci�n en la que estemos</param>
     public async virtual void GetBackendData(string appCode)
     {
+        if (httpClient == null) httpClient = new HttpClient();
         //Recomendable, no se por que pero creandole el source para asignar el token funciona mejor, mierdas de .net
         var cts = new System.Threading.CancellationTokenSource();
 
@@ -94,8 +97,9 @@ public class BackendGetter : MonoBehaviour
         {
             using (HttpResponseMessage response = await httpClient.SendAsync(hrm, cts.Token))
             {
-                if (response.IsSuccessStatusCode) 
-                BackendDataFromResponse(response);
+                if (response.IsSuccessStatusCode)
+                    BackendDataFromResponse(response);
+                else Debug.LogError("Failed to retrieve user data from backend");
             }
         }
     }
@@ -106,6 +110,8 @@ public class BackendGetter : MonoBehaviour
     /// <param name="appCode"></param>
     public async virtual void GetBackendTimeData(string appCode)
     {
+        if (httpClient == null) httpClient = new HttpClient();
+
         var cts = new System.Threading.CancellationTokenSource();
 
         username_str = PlayerPrefs.GetString("Username");
@@ -113,12 +119,13 @@ public class BackendGetter : MonoBehaviour
         string jsonString = PlayerPrefs.GetString(BackendConstants.BackendDataKey);
         BackendData dataUser = JsonUtility.FromJson<BackendData>(jsonString);
 
-        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendConstants.urlForTime + "clientId=" + dataUser.client.id + "&" + "name=" + username))
+        Debug.Log("url is: " + BackendConstants.urlForTime + "\n" + "username is : " + username_str + "\n" + "client id is : " + dataUser.client.id);
+        using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, BackendConstants.urlForTime + "clientId=" + dataUser.client.id + "&" + "name=" + username_str))
         {
             using (HttpResponseMessage response = await httpClient.SendAsync(hrm, cts.Token))
             {
                 if (response.IsSuccessStatusCode) BackendDataFromResponse(response, BackendDataType.TimeData);
-            }
+                else Debug.LogError("Failed to retrieve time from backend");            }
         }
     }
 
@@ -172,7 +179,7 @@ public class BackendGetter : MonoBehaviour
         }
         catch
         {
-            
+            Debug.LogError("Exception catched on try to manage backend response");
         }
     }
     #endregion

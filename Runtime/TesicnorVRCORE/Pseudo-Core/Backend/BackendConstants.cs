@@ -12,7 +12,7 @@ public static class BackendConstants
     /// <summary>
     /// Url base usada para añadir el campo de parámetro para recibir datos especificos de un usuario
     /// </summary>
-    public static string urlForParams { get { return "https://app.e-xtinguisher.com/api/vr-users/public/"; } }
+    public static string urlForParams { get { return "https://pre.app.e-xtinguisher.com/api/public/"; } }
 
     /// <summary>
     /// Parámetro de tiempo de uso del usuario
@@ -20,9 +20,19 @@ public static class BackendConstants
     public static string TimeParam { get { return "client-time-uses?"; } }
 
     /// <summary>
+    /// Parámetro para el post del tiempo de uso
+    /// </summary>
+    public static string TimePostParam { get { return "usage-records?"; } }
+
+    /// <summary>
     /// Url completa usada para obtener el tiempo de uso
     /// </summary>
     public static string urlForTime { get { return urlForParams + TimeParam; } }
+
+    /// <summary>
+    /// Url para enviar los datos de tiempo de uso
+    /// </summary>
+    public static string urlForPostTime { get { return urlForParams + TimePostParam; } }
 
     /// <summary>
     /// Key del player prefs para los datos generales de usuario

@@ -35,6 +35,7 @@ public class ApplicationEventsManager : MonoBehaviour
         DontDestroyOnLoad(this);
         SceneManager.activeSceneChanged += OnSceneChanged;
         SceneManager.sceneLoaded += OnSceneLoaded;
+        CheckSingleton();
     }
 
     private void OnApplicationQuit()
@@ -72,5 +73,7 @@ public class ApplicationEventsManager : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(this);
     }
+    
+
     #endregion
 }
