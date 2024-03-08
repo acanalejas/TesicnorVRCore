@@ -27,6 +27,9 @@ public class ApplicationEventsManager : MonoBehaviour
     [Header("Evento usado cuando se carga una escena")]
     public UnityEvent onSceneLoaded;
 
+    [Header("Evento usado cuando se descarga una escena")]
+    public UnityEvent onSceneUnloaded;
+
     #endregion
 
     #region METHODS
@@ -35,7 +38,14 @@ public class ApplicationEventsManager : MonoBehaviour
         DontDestroyOnLoad(this);
         SceneManager.activeSceneChanged += OnSceneChanged;
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
         CheckSingleton();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) SceneManager.LoadScene("Menu");
+        if (Input.GetKeyDown(KeyCode.I)) SceneManager.LoadScene("Avanti");
     }
 
     private void OnApplicationQuit()
@@ -61,6 +71,13 @@ public class ApplicationEventsManager : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         onSceneLoaded.Invoke();
+
+        Debug.Log("Scene loaded");
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        onSceneUnloaded.Invoke();
     }
     #endregion
 

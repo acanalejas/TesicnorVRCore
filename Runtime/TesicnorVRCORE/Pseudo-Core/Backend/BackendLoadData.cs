@@ -56,7 +56,7 @@ public class BackendLoadData : BackendGetter
 
     private List<string> dataToUpload = new List<string>();                         // Lista con los datos pendientes de envio.
 
-    [HideInInspector] public float reloadTime = 5;                                  // Tiempo que tarda en volver a checkear el tiempo de uso
+    [HideInInspector] public float reloadTime = 30;                                  // Tiempo que tarda en volver a checkear el tiempo de uso
 
     [HideInInspector] public bool timeOut = false;                                  // Se ha acabado el tiempo de espera?
 
@@ -105,8 +105,9 @@ public class BackendLoadData : BackendGetter
 
                 InitialDate = System.DateTime.Now;
 
-                ApplicationEventsManager.Instance.onSceneLoaded.AddListener(SpendTime);
+                //ApplicationEventsManager.Instance.onSceneLoaded.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onActiveSceneChange.AddListener(SpendTime);
+                ApplicationEventsManager.Instance.onSceneUnloaded.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onApplicationQuit.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onApplicationFocus.AddListener((bool b) => { SpendTime(); });
                 break;
@@ -297,10 +298,13 @@ public class BackendLoadData : BackendGetter
 
     IEnumerator BlinkText()
     {
-        txtTime.color = new Color(1f, 0f, 0f, 1f);
-        yield return new WaitForSeconds(0.5f);
-        txtTime.color = new Color(1f, 0f, 0f, 0.2f);
-        yield return new WaitForSeconds(0.5f);
+        while (true)
+        {
+            txtTime.color = new Color(1f, 0f, 0f, 1f);
+            yield return new WaitForSeconds(0.5f);
+            txtTime.color = new Color(1f, 0f, 0f, 0.2f);
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 
     public void ShowPopUp()
