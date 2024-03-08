@@ -169,7 +169,7 @@ public class BackendLoadData : BackendGetter
     /// Este método es el que se añade a los eventos correspondientes de la aplicación.
     /// Los datos se sustituyen para asegurarnos de que no se envian varios registros que den un resultado erroneo en la resta de tiempo
     /// </summary>
-    private void SpendTime()
+    public void SpendTime()
     {
         System.DateTime currentDate = System.DateTime.Now;
 
