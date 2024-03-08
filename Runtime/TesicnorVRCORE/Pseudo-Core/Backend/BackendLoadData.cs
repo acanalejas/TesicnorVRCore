@@ -106,6 +106,7 @@ public class BackendLoadData : BackendGetter
                 InitialDate = System.DateTime.Now;
 
                 ApplicationEventsManager.Instance.onSceneLoaded.AddListener(SpendTime);
+                ApplicationEventsManager.Instance.onActiveSceneChange.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onApplicationQuit.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onApplicationFocus.AddListener((bool b) => { SpendTime(); });
                 break;
@@ -201,6 +202,10 @@ public class BackendLoadData : BackendGetter
             {
                 SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.                                     
             }
+        }
+        else
+        {
+
         }
 
         //Limpia la lista de datos a mandar
