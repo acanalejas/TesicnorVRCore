@@ -92,13 +92,13 @@ public class BackendLoadData : BackendGetter
     public override void Start()
     {
         base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
-        StartCoroutine(StartScene());                               // Llamamos la corrutina que actualizara los datos cada 1seg.
+        //StartCoroutine(StartScene());                               // Llamamos la corrutina que actualizara los datos cada 1seg.
 
         //Lo que se haga aqui dentro variara dependiendo del modo de funcionamiento
         switch (workingMethod)
         {
             case WorkingMethod.RetrieveTime:
-
+                RetrieveTimeUpdate();
                 break;
 
             case WorkingMethod.SpendTime:
@@ -122,7 +122,7 @@ public class BackendLoadData : BackendGetter
             switch (workingMethod)
             {
                 case WorkingMethod.RetrieveTime:
-                    RetrieveTimeUpdate();
+                    //RetrieveTimeUpdate();
                     break;
 
                 case WorkingMethod.SpendTime:
@@ -206,7 +206,7 @@ public class BackendLoadData : BackendGetter
         }
         else
         {
-
+            PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonUtility.ToJson(dataToUpload));
         }
 
         //Limpia la lista de datos a mandar
