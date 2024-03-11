@@ -36,7 +36,7 @@ public class BackendPostTime
 }
 
 [System.Serializable]
-public class BackendLoadData : BackendGetter
+public class BackendTimeManager : BackendGetter
 {
     #region PARAMETERS
 
@@ -375,14 +375,14 @@ public class BackendLoadData : BackendGetter
 }
 #if UNITY_EDITOR
 
-[CustomEditor(typeof(BackendLoadData), true)]
+[CustomEditor(typeof(BackendTimeManager), true)]
 //[CanEditMultipleObjects]
 public class BackendLoadDataEditor : Editor
 {
-    BackendLoadData Target;
+    BackendTimeManager Target;
     private void OnEnable()
     {
-        Target = (BackendLoadData)target;
+        Target = (BackendTimeManager)target;
     }
 
     public override void OnInspectorGUI()
@@ -400,7 +400,7 @@ public class BackendLoadDataEditor : Editor
        //
        //GUILayout.Space(15);
 
-        if(Target.workingMethod == BackendLoadData.WorkingMethod.RetrieveTime)
+        if(Target.workingMethod == BackendTimeManager.WorkingMethod.RetrieveTime)
         {
             GUILayout.Label("Panel donde se muestra el timepo restante");
             SerializedProperty timePanel = serializedObject.FindProperty("panelTime");
@@ -433,7 +433,7 @@ public class BackendLoadDataEditor : Editor
             GUILayout.Space(15);
         }
 
-        if(Target.workingMethod == BackendLoadData.WorkingMethod.SpendTime)
+        if(Target.workingMethod == BackendTimeManager.WorkingMethod.SpendTime)
         {
             GUILayout.Label("Periodo de tiempo entre calculo de tiempo restante");
             Target.reloadTime = EditorGUILayout.FloatField(Target.reloadTime, EditorStyles.miniTextField);
