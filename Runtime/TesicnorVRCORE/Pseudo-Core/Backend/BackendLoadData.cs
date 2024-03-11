@@ -65,6 +65,7 @@ public class BackendLoadData : BackendGetter
     [HideInInspector] public int vrExperienceId = 0;
 
     private int timeInSeconds;
+    private int secondsToSubstractLocal;
 
     //Spend time parameters
 
@@ -201,16 +202,31 @@ public class BackendLoadData : BackendGetter
             //Envia cada dato guardado al backend
             foreach (string jsString in dataToUpload)
             {
-                SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.                                     
+                SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.
+                StartCoroutine(nameof(UpdateTimeData));
             }
         }
         else
         {
             PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonUtility.ToJson(dataToUpload));
+            foreach(string jsString in dataToUpload)
+            {
+                BackendPostTime timeData = JsonUtility.FromJson<BackendPostTime>(jsString);
+                secondsToSubstractLocal += int.Parse(timeData.period);
+            }
         }
 
         //Limpia la lista de datos a mandar
         dataToUpload.Clear();       // Limpiamos la lista.
+    }
+
+    IEnumerator UpdateTimeData()
+    {
+        yield return new WaitForSeconds(reloadTime);
+
+        GetBackendTimeData(appCode.ToString());
+        ValidateTimeLeft();
+        StopCoroutine(nameof(UpdateTimeData));
     }
 
     // Método para agregar un elemento a la lista.
@@ -227,13 +243,14 @@ public class BackendLoadData : BackendGetter
     // Método para convertir y formatear el tiempo restante en horas:minutos:segundos
     private void FormatTime(float timeInSeconds)
     {
-        int hours = Mathf.FloorToInt(timeInSeconds / 3600);
-        int minutes = Mathf.FloorToInt((timeInSeconds % 3600) / 60);
-        int seconds = Mathf.FloorToInt(timeInSeconds % 60);
+        float _timeInSeconds = timeInSeconds - secondsToSubstractLocal;
+        int hours = Mathf.FloorToInt(_timeInSeconds / 3600);
+        int minutes = Mathf.FloorToInt((_timeInSeconds % 3600) / 60);
+        int seconds = Mathf.FloorToInt(_timeInSeconds % 60);
 
         if(txtTime) this.txtTime.text = $"{hours:00}:{minutes:00}:{seconds:00}";
 
-        if (timeInSeconds < 0 && txtTime)
+        if (_timeInSeconds < 0 && txtTime)
         {
             this.txtTime.text = "00:00:00";
         }
