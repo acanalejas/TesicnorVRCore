@@ -99,7 +99,7 @@ public class BackendLoadData : BackendGetter
         switch (workingMethod)
         {
             case WorkingMethod.RetrieveTime:
-                RetrieveTimeUpdate();
+                StartCoroutine(nameof(RetrieveTimeUpdate));
                 break;
 
             case WorkingMethod.SpendTime:
@@ -142,8 +142,9 @@ public class BackendLoadData : BackendGetter
     /// 
     /// TODO mirar si realmente se necesita un update, se podria cambiar todo a eventos o poner un bool para saber si debe o no usar update
     /// </summary>
-    private void RetrieveTimeUpdate()
+    private IEnumerator RetrieveTimeUpdate()
     {
+        yield return new WaitForSeconds(reloadTime);
         if (PlayerPrefs.GetString("Username") != "")
         {
             string jsonString = PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey);                     // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
@@ -235,8 +236,8 @@ public class BackendLoadData : BackendGetter
         if (dataToUpload.Contains(data)) return;
         
         dataToUpload.Add(data);                                             // Agregar los datos a la lista de datos pendientes para cargar.
-        string jsString = JsonUtility.ToJson(dataToUpload);                 // Convertir la lista de datos a formato JSON.
-        PlayerPrefs.SetString(BackendConstants.TimeQueueKey, jsString);                       // Guardar el JSON en PlayerPrefs.
+        //string jsString = JsonUtility.ToJson(dataToUpload);                 // Convertir la lista de datos a formato JSON.
+        //PlayerPrefs.SetString(BackendConstants.TimeQueueKey, jsString);                       // Guardar el JSON en PlayerPrefs.
         PlayerPrefs.DeleteKey(BackendConstants.DataOnDisableKey);                             // Limpiar los datos guardados de la experiencia.
     }
 
