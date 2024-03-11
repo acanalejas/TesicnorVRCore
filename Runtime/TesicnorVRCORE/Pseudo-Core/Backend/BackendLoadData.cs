@@ -203,8 +203,8 @@ public class BackendLoadData : BackendGetter
             foreach (string jsString in dataToUpload)
             {
                 SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.
-                StartCoroutine(nameof(UpdateTimeData));
             }
+            StartCoroutine(nameof(UpdateTimeData));
         }
         else
         {
@@ -222,9 +222,9 @@ public class BackendLoadData : BackendGetter
 
     IEnumerator UpdateTimeData()
     {
-        yield return new WaitForSeconds(reloadTime);
-
+        yield return new WaitForSeconds(1);
         GetBackendTimeData(appCode.ToString());
+        yield return new WaitForSeconds(reloadTime);
         ValidateTimeLeft();
         StopCoroutine(nameof(UpdateTimeData));
     }
@@ -295,21 +295,21 @@ public class BackendLoadData : BackendGetter
     // Función para cargar los datos pendientes a una lista.
     void LoadPendingData()
     {
-        string jsonDatosString = PlayerPrefs.GetString(BackendConstants.TimeQueueKey, "");                                        // Obtener la cadena JSON desde PlayerPrefs
+        string jsonDatosString = PlayerPrefs.GetString(BackendConstants.TimeQueueKey);                                        // Obtener la cadena JSON desde PlayerPrefs
 
         if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
         {
-            List<string> data = JsonUtility.FromJson<List<string>>(jsonDatosString);//JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
+            dataToUpload = JsonUtility.FromJson<List<string>>(jsonDatosString);//JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
 
-            if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
-            {
-                foreach (string jsonString in data)                                                             // Ahora puedes manipular la lista de cadenas según tus necesidades
-                {
-                    //TODO quitar la deserializacion completamente innecesaria
-                    BackendPostTime dataBackend = JsonConvert.DeserializeObject<BackendPostTime>(jsonString);   // Deserializar cada cadena JSON en un objeto o manipular según sea necesario
-                    dataToUpload.Add(jsonString);                                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
-                }
-            }
+            //if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
+            //{
+            //    foreach (string jsonString in data)                                                             // Ahora puedes manipular la lista de cadenas según tus necesidades
+            //    {
+            //        //TODO quitar la deserializacion completamente innecesaria
+            //        //BackendPostTime dataBackend = JsonConvert.DeserializeObject<BackendPostTime>(jsonString);   // Deserializar cada cadena JSON en un objeto o manipular según sea necesario
+            //        dataToUpload.Add(jsonString);                                                               // Realizar manipulaciones necesarias con el objeto 'dataBackend' y rellenamos la lista nuevamente.
+            //    }
+            //}
         }
     }
 
