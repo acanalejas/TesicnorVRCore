@@ -35,6 +35,7 @@ public class BackendPostTime
     }
 }
 
+[System.Serializable]
 public class BackendLoadData : BackendGetter
 {
     #region PARAMETERS
@@ -100,6 +101,7 @@ public class BackendLoadData : BackendGetter
         {
             case WorkingMethod.RetrieveTime:
                 StartCoroutine(nameof(RetrieveTimeUpdate));
+                //PlayerPrefs.DeleteKey(BackendConstants.TimeQueueKey);
                 break;
 
             case WorkingMethod.SpendTime:
@@ -144,7 +146,6 @@ public class BackendLoadData : BackendGetter
     /// </summary>
     private IEnumerator RetrieveTimeUpdate()
     {
-        yield return new WaitForSeconds(reloadTime);
         if (PlayerPrefs.GetString("Username") != "")
         {
             string jsonString = PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey);                     // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
@@ -164,6 +165,8 @@ public class BackendLoadData : BackendGetter
         }
 
         LoadDataOnDisable();
+
+        yield return new WaitForSeconds(reloadTime);
         ValidateTimeLeft();
     }
 
@@ -200,16 +203,19 @@ public class BackendLoadData : BackendGetter
 
         if (BackendConstants.bHasInternetConnection)                                                                // Validamos si hay conexión a Internet.
         {
+            Debug.Log("Amount of usage records to send is : " + dataToUpload.Count);
             //Envia cada dato guardado al backend
             foreach (string jsString in dataToUpload)
             {
                 SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.
             }
+            PlayerPrefs.DeleteKey(BackendConstants.TimeQueueKey);
             StartCoroutine(nameof(UpdateTimeData));
         }
         else
         {
-            PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonUtility.ToJson(dataToUpload));
+            Debug.Log("Queue to save is : " + JsonConvert.SerializeObject(dataToUpload));
+            PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonConvert.SerializeObject(dataToUpload));
             foreach(string jsString in dataToUpload)
             {
                 BackendPostTime timeData = JsonUtility.FromJson<BackendPostTime>(jsString);
@@ -300,7 +306,8 @@ public class BackendLoadData : BackendGetter
 
         if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
         {
-            dataToUpload = JsonUtility.FromJson<List<string>>(jsonDatosString);//JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
+            Debug.Log(jsonDatosString);
+            dataToUpload = JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
 
             //if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
             //{
