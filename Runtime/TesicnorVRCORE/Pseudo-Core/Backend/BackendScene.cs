@@ -150,6 +150,16 @@ public class BackendScene : MonoBehaviour
         }
     }
 
+    public void WaitDemoButton()
+    {
+        StartCoroutine(nameof(waitDemoButton));
+    }
+
+    IEnumerator waitDemoButton()
+    {
+        yield return new WaitForSeconds(1);
+        DemoButton();
+    }
     public void DemoButton()
     {
         BackendData data = new BackendData();
@@ -170,7 +180,7 @@ public class BackendScene : MonoBehaviour
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
     private IEnumerator ShowPopUp()
     {
-        if (imgs[0].color.a > 0) yield break;
+        //if (imgs[0].color.a > 0) yield break;
         float alpha = 0;
         while(alpha < 1)
         {
