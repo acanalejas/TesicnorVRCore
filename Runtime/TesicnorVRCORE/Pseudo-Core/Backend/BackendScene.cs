@@ -137,7 +137,7 @@ public class BackendScene : MonoBehaviour
                 }
                 else
                 {
-                    if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    if(BackendConstants.bHasInternetConnection)
                     {
                         StartCoroutine(nameof(ShowPopUp));
                     }
