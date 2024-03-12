@@ -118,7 +118,7 @@ public class BackendGetter : MonoBehaviour
             if (response.IsSuccessStatusCode)
             {
                 Debug.Log($"Solicitud Enviada: {response.StatusCode}");
-                //PlayerPrefs.SetString(BackendConstants.TimeQueueKey, "");
+                PlayerPrefs.SetString(BackendConstants.TimeQueueKey, "");
             }
             else
             {
