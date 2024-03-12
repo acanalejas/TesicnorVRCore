@@ -8,6 +8,9 @@ using UnityEngine.Events;
 public class PlayerDetector : MonoBehaviour
 {
     #region PARAMETERS
+    [Header("Tag que se usa para la detección del personaje")]
+    [SerializeField] private string PlayerTag = "Player";
+
     [Header("Evento usado para cuando el jugador entra en la detección")]
     public UnityEvent OnPlayerDetected;
 
@@ -31,7 +34,7 @@ public class PlayerDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == PlayerTag)
         {
             OnPlayerDetected.Invoke();
         }
@@ -39,7 +42,7 @@ public class PlayerDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == PlayerTag)
         {
             OnPlayerExitDetection.Invoke();
         }
@@ -47,7 +50,7 @@ public class PlayerDetector : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.tag == PlayerTag)
         {
             OnPlayerStayDetection.Invoke();
         }
