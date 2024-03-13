@@ -155,7 +155,7 @@ public class BackendTimeManager : BackendGetter
                 backendDataTime = JsonUtility.FromJson<BackendTimeData>(jsonString);                            // Convertir el JSON a un objeto de la clase BackendDataTime
 
                 if (panelTime) panelTime.SetActive(backendDataTime.usageType == BackendConstants.TimeType);      // Comparamos el tipo de tiempo de uso que tiene el usuario.
-                if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
+                //if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
             }
         }
         else
@@ -167,7 +167,7 @@ public class BackendTimeManager : BackendGetter
         LoadDataOnDisable();
 
         yield return new WaitForSeconds(reloadTime);
-        ValidateTimeLeft();
+        if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
     }
 
     /// <summary>
@@ -278,6 +278,7 @@ public class BackendTimeManager : BackendGetter
         }
         else
         {
+            StopCoroutine(nameof(BlinkText));
             txtTime.color = Color.white;
         }
 
