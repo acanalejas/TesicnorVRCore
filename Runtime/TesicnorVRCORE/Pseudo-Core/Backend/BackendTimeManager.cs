@@ -286,10 +286,10 @@ public class BackendTimeManager : BackendGetter
         {
             Object[] allObjects = Resources.FindObjectsOfTypeAll(typeof(GameObject));                               // Buscar todos los objetos desactivados con el tag especificado
 
-            foreach (GameObject obj in BlockGameObjects)
+            foreach (GameObject obj in allObjects)
             {
                 GameObject gameObj = obj;
-                if (!gameObj.activeSelf)    // Verificar si el objeto tiene el tag que estás buscando y si no está activo
+                if (!gameObj.activeSelf && gameObj.tag.Contains("Block"))    // Verificar si el objeto tiene el tag que estás buscando y si no está activo
                 {
                     gameObj.SetActive(true);                                                                    // Activar todos los demás objetos desactivados
                     this.timeOut = true;
