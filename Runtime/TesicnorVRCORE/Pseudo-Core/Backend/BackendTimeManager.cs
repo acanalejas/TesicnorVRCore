@@ -146,6 +146,7 @@ public class BackendTimeManager : BackendGetter
     /// </summary>
     private IEnumerator RetrieveTimeUpdate()
     {
+        if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
         if (PlayerPrefs.GetString("Username") != "")
         {
             string jsonString = PlayerPrefs.GetString(BackendConstants.BackendTimeDataKey);                     // Cargar y procesar los datos guardados del tiempo de uso desde PlayerPrefs
