@@ -55,12 +55,26 @@ public class BackendScene : MonoBehaviour
 
     public void Yes()
     {
+        StartCoroutine(nameof(WaitUntilYes));
+    }
+
+    IEnumerator WaitUntilYes()
+    {
+        yield return new WaitForSeconds(1);
         DemoButton();
+        StopCoroutine(nameof(WaitUntilYes));
     }
 
     public void No()
     {
+        StartCoroutine(nameof(WaitUntilNo));
+    }
+
+    IEnumerator WaitUntilNo()
+    {
+        yield return new WaitForSeconds(1);
         SceneManager.LoadScene(nextBuildIndex);
+        StopCoroutine(nameof(WaitUntilNo));
     }
 
     private void GetAllRenderedComponentsInWarningPopUp()
