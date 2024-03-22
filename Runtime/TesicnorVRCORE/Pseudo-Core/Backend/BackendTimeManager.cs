@@ -267,7 +267,8 @@ public class BackendTimeManager : BackendGetter
     private void ValidateTimeLeft()
     {
         GetBackendTimeData(appCode.ToString());
-        if(backendDataTime == null) { Debug.LogError("No data from the backend was retrieved for time, it is null"); return; } 
+        if(backendDataTime == null) { Debug.LogError("No data from the backend was retrieved for time, it is null"); return; }
+        if (backendDataTime.usageType == BackendConstants.NoLimitType) return;
         FormatTime(backendDataTime.timeLeft);  // Uso del método para formatear el tiempo.
 
         if (backendDataTime.timeLeft < 300)
