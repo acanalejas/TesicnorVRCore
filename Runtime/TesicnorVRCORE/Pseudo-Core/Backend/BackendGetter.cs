@@ -63,7 +63,7 @@ public class BackendGetter : MonoBehaviour
     public static BackendTimeData backendDataTime = new BackendTimeData();
     public TextMeshProUGUI username;
     string username_str;
-    public static int appCode = 3;
+    public static int appCode = 1;
     #endregion
 
     #region FUNCTIONS
