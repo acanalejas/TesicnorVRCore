@@ -5,7 +5,6 @@ using UnityEditor;
 using System.Text;
 using TMPro;
 using System.Net.Http;
-using Newtonsoft.Json;
 using Object = UnityEngine.Object;
 using System.Globalization;
 
@@ -214,8 +213,8 @@ public class BackendTimeManager : BackendGetter
         }
         else
         {
-            Debug.Log("Queue to save is : " + JsonConvert.SerializeObject(dataToUpload));
-            PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonConvert.SerializeObject(dataToUpload));
+            Debug.Log("Queue to save is : " + JsonUtility.ToJson(dataToUpload));
+            PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonUtility.ToJson(dataToUpload));
             foreach(string jsString in dataToUpload)
             {
                 BackendPostTime timeData = JsonUtility.FromJson<BackendPostTime>(jsString);
@@ -309,7 +308,7 @@ public class BackendTimeManager : BackendGetter
         if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
         {
             Debug.Log(jsonDatosString);
-            dataToUpload = JsonConvert.DeserializeObject<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
+            dataToUpload = JsonUtility.FromJson<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
 
             //if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
             //{
