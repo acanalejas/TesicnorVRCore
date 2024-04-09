@@ -45,12 +45,12 @@ public class BackendScene : MonoBehaviour
         GetAllRenderedComponentsInWarningPopUp();
         SetWarningPopUpToTransparent();
         httpClient = new HttpClient();
-        //inputMail_text.text = inputMail_str;
-        //incorrectMail_text.text = incorrectEmail_str;
-        //badConnection_text.text = badConnection_str;
-        //yes_text.text = yes_str;
-        //no_text.text = no_str;
-        //logout_text.text = logout_str;
+        inputMail_text.text = inputMail_str;
+        incorrectMail_text.text = incorrectEmail_str;
+        badConnection_text.text = badConnection_str;
+        yes_text.text = yes_str;
+        no_text.text = no_str;
+        logout_text.text = logout_str;
     }
 
     public void Yes()
