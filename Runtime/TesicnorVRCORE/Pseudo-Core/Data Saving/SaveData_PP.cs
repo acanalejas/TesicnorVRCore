@@ -139,7 +139,7 @@ public static class SaveData_PP
 
         foreach(string s in split)
         {
-            if(string.IsNullOrEmpty(s)) result.Add(s);
+            if(!string.IsNullOrEmpty(s)) result.Add(s);
         }
 
         return result;
