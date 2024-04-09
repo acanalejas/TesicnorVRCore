@@ -66,7 +66,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
                     if(collider.GetGrippingHand())collider.GetGrippingHand().Release();
                     //collider.Release();
                     collider.SetGrabbable(false);
-                    collider.onTargetReached.Invoke();
+                    collider.onTargetReached.Invoke(this.gameObject);
                     if (DisableWhenRelease)
                     {
                         collider.gameObject.SetActive(false);

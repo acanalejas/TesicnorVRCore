@@ -204,7 +204,9 @@ public class BackendTimeManager : BackendGetter
         {
             Debug.Log("Amount of usage records to send is : " + dataToUpload.Count);
             //Envia cada dato guardado al backend
-            Debug.Log("List in json is : " + JsonUtility.ToJson(dataToUpload));
+            SaveData_PP.SetStringList(BackendConstants.TimeQueueKey, dataToUpload);
+            Debug.Log("List in json is : " + PlayerPrefs.GetString(BackendConstants.TimeQueueKey));
+
             foreach (string jsString in dataToUpload)
             {
                 SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.

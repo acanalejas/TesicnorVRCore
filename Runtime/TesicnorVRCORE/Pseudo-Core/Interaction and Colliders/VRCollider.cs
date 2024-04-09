@@ -80,7 +80,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     /// Evento que se ejecuta cuando el objeto se suelta en el objetivo
     /// </summary>
     [Header("Evento que se ejecuta cuando el objeto se suelta en el objetivo")]
-    [HideInInspector] public UnityEvent onTargetReached;
+    [HideInInspector] public UnityEvent<GameObject> onTargetReached;
 
     /// <summary>
     /// Maneja si se puede agarrar

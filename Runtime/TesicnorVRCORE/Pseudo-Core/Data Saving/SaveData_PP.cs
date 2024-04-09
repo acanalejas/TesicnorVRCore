@@ -135,7 +135,7 @@ public static class SaveData_PP
 
         string storedValue = PlayerPrefs.GetString(key);
 
-        string[] split = storedValue.Split("|");
+        string[] split = storedValue.Split('|');
 
         foreach(string s in split)
         {
