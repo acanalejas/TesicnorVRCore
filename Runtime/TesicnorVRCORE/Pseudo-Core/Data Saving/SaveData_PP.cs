@@ -52,6 +52,18 @@ public static class SaveData_PP
         PlayerPrefs.SetString(key,_value);
     }
 
+    public static void SetStringList(string key, List<string> value)
+    {
+        string result = "";
+
+        foreach(string s in value)
+        {
+            result += s + "|";
+        }
+
+        PlayerPrefs.SetString(key, result);
+    }
+
     #endregion
 
     #region Getting Data
@@ -112,6 +124,22 @@ public static class SaveData_PP
             float y; float.TryParse(_values[1], out y);
 
             result = new Vector2(x, y);
+        }
+
+        return result;
+    }
+
+    public static List<string> GetStringList(string key)
+    {
+        List<string> result = new List<string>();
+
+        string storedValue = PlayerPrefs.GetString(key);
+
+        string[] split = storedValue.Split("|");
+
+        foreach(string s in split)
+        {
+            if(string.IsNullOrEmpty(s)) result.Add(s);
         }
 
         return result;

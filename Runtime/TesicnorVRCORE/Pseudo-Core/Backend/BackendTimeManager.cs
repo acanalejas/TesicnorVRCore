@@ -204,6 +204,7 @@ public class BackendTimeManager : BackendGetter
         {
             Debug.Log("Amount of usage records to send is : " + dataToUpload.Count);
             //Envia cada dato guardado al backend
+            Debug.Log("List in json is : " + JsonUtility.ToJson(dataToUpload));
             foreach (string jsString in dataToUpload)
             {
                 SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.
@@ -214,7 +215,7 @@ public class BackendTimeManager : BackendGetter
         else
         {
             Debug.Log("Queue to save is : " + JsonUtility.ToJson(dataToUpload));
-            PlayerPrefs.SetString(BackendConstants.TimeQueueKey, JsonUtility.ToJson(dataToUpload));
+            SaveData_PP.SetStringList(BackendConstants.TimeQueueKey, dataToUpload);
             foreach(string jsString in dataToUpload)
             {
                 BackendPostTime timeData = JsonUtility.FromJson<BackendPostTime>(jsString);
@@ -308,7 +309,7 @@ public class BackendTimeManager : BackendGetter
         if (!string.IsNullOrEmpty(jsonDatosString))                                                             // Verificar si la cadena no es nula o vacía
         {
             Debug.Log(jsonDatosString);
-            dataToUpload = JsonUtility.FromJson<List<string>>(jsonDatosString);                   // Deserializar la cadena JSON a una lista de cadenas
+            dataToUpload = SaveData_PP.GetStringList(BackendConstants.TimeQueueKey);                   // Deserializar la cadena JSON a una lista de cadenas
 
             //if (data != null)                                                                                   // Verificar si la lista no es nula antes de continuar
             //{
