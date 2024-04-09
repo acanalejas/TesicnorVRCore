@@ -33,6 +33,9 @@ public class MainMenuRCP : MainMenuManager
     [Header("Posicion en el centro de la mascara")]
     public Transform centerPosition;
 
+    [Header("Lista de objectos que bloquean los botones")]
+    [SerializeField] private List<GameObject> BlockingObjects = new List<GameObject>();
+
     [HideInInspector]public int currentPanel;
     #endregion
 
@@ -42,6 +45,25 @@ public class MainMenuRCP : MainMenuManager
     {
         CheckSingleton();
         SetInitialPanel();
+    }
+
+    protected virtual void Start()
+    {
+        string Username = PlayerPrefs.GetString("Username");
+
+        if (string.IsNullOrEmpty(Username))
+        {
+            ToggleBlock(true);
+        }
+        else ToggleBlock(false);
+    }
+
+    protected void ToggleBlock(bool toggle)
+    {
+        foreach(GameObject obj in BlockingObjects)
+        {
+            obj.SetActive(toggle);
+        }
     }
 
     private void SetInitialPanel()

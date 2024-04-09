@@ -151,7 +151,7 @@ public class BackendScene : MonoBehaviour
                 }
                 else
                 {
-                    if(BackendConstants.bHasInternetConnection)
+                    if(Application.internetReachability != NetworkReachability.NotReachable)
                     {
                         StartCoroutine(nameof(ShowPopUp));
                     }
