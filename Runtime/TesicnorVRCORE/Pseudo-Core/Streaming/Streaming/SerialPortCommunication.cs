@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO.Ports;
-using UnityEditor.PackageManager;
-using System;
 
 public class SerialPortCommunication : MonoBehaviour
 {
@@ -13,28 +11,12 @@ public class SerialPortCommunication : MonoBehaviour
     bool portDetected;
 
     string checkString = "Streaming";
+
+    public static byte[] BTBytes;
     #endregion
 
     #region METHODS
     
-    public virtual void SearchConnectedPort(string id = "Arduino")
-    {
-        USBDeviceInfo info = UsbCommunication.GetUSBDeviceFromDescription(id);
-        if (info == null) return;
-
-        string[] portNames = SerialPort.GetPortNames();
-
-        foreach(string name in portNames)
-        {
-            if(name.Contains(info.DeviceID) || info.DeviceID.Contains(name))
-            {
-                Debug.Log("Serial port for arduino found");
-                return;
-            }
-        }
-        Debug.Log("Unable to find an arduino");
-
-    }
 
     //void GetPortByName(string name)
     //{
@@ -77,7 +59,14 @@ public class SerialPortCommunication : MonoBehaviour
         Port.Disposed += (Object, EventHandler) => { portDetected = false; };
         while (portDetected)
         {
-            
+            string bytes_str = Port.ReadLine();
+            List<byte> bytes = new List<byte>();
+            foreach(char c in bytes_str)
+            {
+                byte b = byte.Parse(c.ToString());
+                bytes.Add(b);
+            }
+            BTBytes = bytes.ToArray();
             yield return Frame;
         }
 

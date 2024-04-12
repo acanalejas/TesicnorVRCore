@@ -7,12 +7,12 @@ public static class BackendConstants
     /// <summary>
     /// Url usada para obtener los datos generales de usuario y experiencias adquiridas
     /// </summary>
-    public static string urlNoParams { get { return "https://pre.app.e-xtinguisher.com/api/vr-users/public?"; } }
+    public static string urlNoParams { get { return "https://app.e-xtinguisher.com/api/vr-users/public?"; } }
 
     /// <summary>
     /// Url base usada para añadir el campo de parámetro para recibir datos especificos de un usuario
     /// </summary>
-    public static string urlForParams { get { return "https://pre.app.e-xtinguisher.com/api/public/"; } }
+    public static string urlForParams { get { return "https://app.e-xtinguisher.com/api/public/"; } }
 
     /// <summary>
     /// Parámetro de tiempo de uso del usuario
