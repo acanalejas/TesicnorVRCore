@@ -359,13 +359,13 @@ public class BackendTimeManager : BackendGetter
         string startDateTime = InitialDate.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
         string endDateTime = System.DateTime.Now.ToString("yyyy-MM-dd" + "T" + "HH:mm:ss", CultureInfo.InvariantCulture);
         int duration = (int)timeInSeconds;
-        string clientId = "";
-        string user = "";
+        string clientId = "null";
+        string user = "null";
 
         //Check for the stored data about the user
         if (PlayerPrefs.GetString("Username", "") != "")
         {
-            clientId = backendData.client.id.ToString();
+            clientId = backendData.client.id != 0 ? backendData.client.id.ToString() : "null";
             user = PlayerPrefs.GetString("Username");
         }
         //Construct the data object
