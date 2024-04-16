@@ -10202,9 +10202,9 @@ MonoBehaviour:
   usesCollision: 0
   canvasTransform: {fileID: 0}
   changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.6415094, g: 0.63243145, b: 0.63243145, a: 1}
-  PressedColor: {r: 0.3773585, g: 0.3755785, b: 0.3755785, a: 1}
+  NormalColor: {r: 0.25882354, g: 0.8470589, b: 0.19607845, a: 1}
+  HoverColor: {r: 0.18516676, g: 0.606, b: 0.14027779, a: 1}
+  PressedColor: {r: 0.13341932, g: 0.44, b: 0.10219353, a: 1}
   onClick:
     m_PersistentCalls:
       m_Calls: []
@@ -14716,9 +14716,9 @@ MonoBehaviour:
   usesCollision: 0
   canvasTransform: {fileID: 0}
   changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.6415094, g: 0.63243145, b: 0.63243145, a: 1}
-  PressedColor: {r: 0.3773585, g: 0.3755785, b: 0.3755785, a: 1}
+  NormalColor: {r: 0.8313726, g: 0.10980393, b: 0.10980393, a: 1}
+  HoverColor: {r: 0.59599996, g: 0.078716986, b: 0.078716986, a: 1}
+  PressedColor: {r: 0.319, g: 0.041973677, b: 0.041973677, a: 1}
   onClick:
     m_PersistentCalls:
       m_Calls: []
