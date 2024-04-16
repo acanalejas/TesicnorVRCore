@@ -97,6 +97,8 @@ public class BackendScene : MonoBehaviour
     }
     private void SetWarningPopUpToTransparent()
     {
+        WarningPopUp_go.SetActive(true);
+
         foreach(var img in imgs)
         {
             img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
@@ -194,6 +196,7 @@ public class BackendScene : MonoBehaviour
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
     private IEnumerator ShowPopUp()
     {
+        WarningPopUp_go.SetActive(true);
         //if (imgs[0].color.a > 0) yield break;
         float alpha = 0;
         while(alpha < 1)
@@ -220,6 +223,7 @@ public class BackendScene : MonoBehaviour
 
     private IEnumerator ShowConPopUp()
     {
+        ConnectionPopUp_go.SetActive(true);
         if (con_imgs[0].color.a > 0) yield break;
         float alpha = 0;
         while (alpha < 1)

@@ -44,15 +44,15 @@ public class VRInteractable_Dropdown : VR_Interactable
     /// <summary>
     /// El GameObject que contiene el layout donde aparecerán las opciones
     /// </summary>
-    [HideInInspector] public GameObject vl;
+    public GameObject vl;
     /// <summary>
     /// La imagen del dropdown
     /// </summary>
-    [HideInInspector] public Image image;
+    public Image image;
     /// <summary>
     /// El texto del dropdown
     /// </summary>
-    [HideInInspector] public TextMeshProUGUI text;
+    public TextMeshProUGUI text;
 
     /// <summary>
     /// La opción que está ahora seleccionada
