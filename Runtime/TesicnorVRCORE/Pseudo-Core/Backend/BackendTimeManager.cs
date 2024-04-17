@@ -276,7 +276,7 @@ public class BackendTimeManager : BackendGetter
         if (backendDataTime.timeLeft < 300)
         {
             txtTime.color = Color.red;
-            if(buttonChargeTime) buttonChargeTime.SetActive(true);
+            if(buttonChargeTime && PlayerPrefs.GetString("Username") != "") buttonChargeTime.SetActive(true);
             StartCoroutine(nameof(BlinkText));
         }
         else
