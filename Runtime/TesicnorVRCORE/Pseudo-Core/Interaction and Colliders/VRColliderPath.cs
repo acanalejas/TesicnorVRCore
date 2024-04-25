@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public class VRColliderPath : VRCollider
 {
@@ -22,6 +22,12 @@ public class VRColliderPath : VRCollider
     [Space(20)][Header("============ SPECIFIC ATRIBUTES ============")][Space(10)]
     [Header("Define el tipo de camino de este objeto")]
     public PathType pathType = PathType.Position;
+
+    [Header("Evento que se lanza al llegar al final del camino")]
+    public UnityEvent OnPathEndReached;
+
+    [Header("Se deberia desactivar al llegar al final?")]
+    public bool bShouldDisableOnEnd;
 
     /// <summary>
     /// Numero de puntos en los que se divide el camino
@@ -135,6 +141,16 @@ public class VRColliderPath : VRCollider
     {
         base.Awake();
         SetPathPoints();
+
+        if (bShouldDisableOnEnd) OnPathEndReached.AddListener(DisableOnEnd);
+
+        currentAngles = this.transform.rotation.y;
+    }
+
+    private void DisableOnEnd()
+    {
+        this.Release();
+        this.GetComponent<Collider>().enabled = false;
     }
 
     /// <summary>
@@ -201,6 +217,7 @@ public class VRColliderPath : VRCollider
         {
             handDistance = grippingHand.transform.position - initialHandPosition;
             this.transform.localPosition = pathPoints[pointToMove(handDistance)];
+            if (isPathCompleted()) OnPathEndReached.Invoke();
             yield return frame;
         }
     }
@@ -210,7 +227,17 @@ public class VRColliderPath : VRCollider
         initialDistance = grippingHand.transform.position - rotationPivot.position;
         while (isGrabbed())
         {
-            this.transform.localRotation = Quaternion.Euler(GetAxis() * anglesToMove());
+            Vector3 direction = (grippingHand.transform.position - rotationPivot.transform.position).normalized;
+
+            float distance = Vector3.Distance(this.transform.position, this.rotationPivot.transform.position);
+
+            this.transform.position = distance * direction + rotationPivot.position;
+
+            this.transform.forward = new Vector3(-direction.z, 0, direction.x);
+
+            currentAngles = this.transform.rotation.y;
+            //this.transform.localRotation = Quaternion.Euler(GetAxis() * anglesToMove());
+            if (isPathCompleted()) OnPathEndReached.Invoke();
             Debug.Log("Rotating");
             yield return new WaitForEndOfFrame();
         }
