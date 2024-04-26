@@ -10664,7 +10664,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: cd1de4a669393624bbc48a80115902ac, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d2b71d2fe4e55a2428d4322881474de7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15445,7 +15445,7 @@ MonoBehaviour:
   usesCollision: 0
   canvasTransform: {fileID: 0}
   changesColor: 1
-  NormalColor: {r: 0.8313726, g: 0.10980393, b: 0.10980393, a: 1}
+  NormalColor: {r: 0.7735849, g: 0.08392668, b: 0.08392668, a: 1}
   HoverColor: {r: 0.59599996, g: 0.078716986, b: 0.078716986, a: 1}
   PressedColor: {r: 0.319, g: 0.041973677, b: 0.041973677, a: 1}
   onClick:
@@ -15554,7 +15554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 7983247624b122246b2eb3275ae6e143, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b61cd42d25ba9f24583a628e3818aa6c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
