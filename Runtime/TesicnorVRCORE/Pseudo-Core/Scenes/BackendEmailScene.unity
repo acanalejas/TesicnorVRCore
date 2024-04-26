@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1036,8 +1036,7 @@ MonoBehaviour:
   m_text: Do you want to log out?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
-    type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1911,8 +1910,7 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
-    type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2460,8 +2458,7 @@ MonoBehaviour:
   m_text: DEMO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
-  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e,
-    type: 2}
+  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4085,8 +4082,7 @@ MonoBehaviour:
   m_text: Input your account email
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
-    type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4116,7 +4112,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 17
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -5081,8 +5077,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
-    type: 3}
+  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7281,6 +7276,7 @@ MonoBehaviour:
   captured: {fileID: 8400000, guid: 1143044c53edc1847892c83b15a55eb7, type: 2}
   path: 
   playerCamera: {fileID: 1282932516}
+  BTSender: {fileID: 0}
   isStreaming: 0
 --- !u!4 &996430187
 Transform:
@@ -7890,8 +7886,7 @@ MonoBehaviour:
   m_text: yes
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
-    type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9188,8 +9183,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8278380930669122163, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
-    type: 3}
+  m_Sprite: {fileID: -8278380930669122163, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11270,8 +11264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
-    type: 3}
+  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13058,8 +13051,7 @@ MonoBehaviour:
   m_text: 'INCORRECT EMAIL, PLEASE TRY AGAIN '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
-    type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13089,7 +13081,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 17
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -13190,8 +13182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -934127045814069214, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
-    type: 3}
+  m_Sprite: {fileID: -934127045814069214, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15643,8 +15634,7 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
-    type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15674,7 +15664,7 @@ MonoBehaviour:
   m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 17
+  m_fontStyle: 16
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
