@@ -504,6 +504,7 @@ namespace TesicFire
             yield return new WaitForEndOfFrame();
             for (int k = numVertex - 1; k >= 0; k--)
             {
+                if(meshData_original.vertex.Count > distances[k].index)
                 meshData_current.vertex.Add(meshData_original.vertex[distances[k].index]);
                 VertexInside.Add(distances[k].index);
             }

@@ -71,6 +71,12 @@ public class TutorialVideo : MonoBehaviour
     [Header("La pantalla en la que se pregunta")]
     [SerializeField] private GameObject AskScreen_GO;
 
+    [Header("El GameObject que nos indica la posicion del player para ver el video")]
+    [SerializeField] private GameObject PlayerHolder;
+
+    [Header("El GameObject del player en si")]
+    [SerializeField] private GameObject PlayerGO;
+
     [Header("La velocidad de interpolación al moverse")]
     [SerializeField] private float interpSpeed = 1;
 
@@ -90,6 +96,8 @@ public class TutorialVideo : MonoBehaviour
     /// Reproductor de video
     /// </summary>
     protected VideoPlayer videoPlayer;
+
+    protected Vector3 initialPlayerPosition;
 
     [Header("El GO de la cabeza del player")]
     [SerializeField] private GameObject Head_GO;
@@ -167,6 +175,25 @@ public class TutorialVideo : MonoBehaviour
     private Vector3 GetCurrentScale()
     {
         return videoPlayer.isPlaying ? playingScale : normalScale;
+    }
+
+    public void MovePlayerToVideo()
+    {
+        if (!PlayerGO) return;
+
+        initialPlayerPosition = PlayerGO.transform.position;
+        Vector3 playerPosition = Vector3.zero;
+        if (PlayerHolder) playerPosition = PlayerHolder.transform.position;
+        else playerPosition = this.transform.position + new Vector3(0, 0, playingDistance);
+
+        PlayerGO.transform.position = playerPosition;
+    }
+
+    public void ReturnPlayerToInitialPosition()
+    {
+        if (!PlayerGO || initialPlayerPosition == Vector3.zero) return;
+
+        PlayerGO.transform.position = initialPlayerPosition;
     }
 
     public void EnableAskScreen()

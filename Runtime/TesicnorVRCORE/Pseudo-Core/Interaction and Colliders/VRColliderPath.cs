@@ -354,7 +354,14 @@ public class VRColliderPath : VRCollider
                 if (currentPoint == pathPoints.Count - 1) result = true;
                 break;
             case PathType.Rotation:
-                if (currentAngles >= (finalRotation - Threshold)) result = true;
+                if(finalRotation > initialRotation)
+                {
+                    if (currentAngles > finalRotation - Threshold) result = true;
+                }
+                else
+                {
+                    if(currentAngles < finalRotation + Threshold) result = true;
+                }
                 break;
         }
 
