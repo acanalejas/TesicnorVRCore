@@ -144,7 +144,7 @@ public class VRColliderPath : VRCollider
 
         if (bShouldDisableOnEnd) OnPathEndReached.AddListener(DisableOnEnd);
 
-        currentAngles = this.transform.rotation.y;
+        currentAngles = this.transform.localRotation.y;
     }
 
     private void DisableOnEnd()
@@ -185,7 +185,7 @@ public class VRColliderPath : VRCollider
     public override void Grab(GrippingHand hand)
     {
         base.Grab(hand);
-        initialRotation = currentAngles;
+        //initialRotation = currentAngles;
         initialHandPosition = hand.transform.position;
         SelectCoroutine();
     }
@@ -235,7 +235,7 @@ public class VRColliderPath : VRCollider
 
             this.transform.forward = new Vector3(-direction.z, 0, direction.x);
 
-            currentAngles = this.transform.rotation.y;
+            currentAngles = this.transform.localRotation.y;
             //this.transform.localRotation = Quaternion.Euler(GetAxis() * anglesToMove());
             if (isPathCompleted()) OnPathEndReached.Invoke();
             Debug.Log("Rotating");
@@ -348,6 +348,10 @@ public class VRColliderPath : VRCollider
     {
         bool result = false;
 
+        if(target != null)
+        {
+            if (target.conditionCompleted) return true;
+        }
         switch (pathType)
         {
             case PathType.Position:
@@ -356,7 +360,7 @@ public class VRColliderPath : VRCollider
             case PathType.Rotation:
                 if(finalRotation > initialRotation)
                 {
-                    if (currentAngles > finalRotation - Threshold) result = true;
+                    if (currentAngles >= finalRotation - Threshold) result = true;
                 }
                 else
                 {

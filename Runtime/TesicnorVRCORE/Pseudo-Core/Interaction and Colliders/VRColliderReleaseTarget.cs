@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
@@ -16,6 +17,9 @@ public class VRColliderReleaseTarget : MonoBehaviour
     [Header("Indica si queremos que se desactive el objeto al llegar al target")]
     public bool DisableWhenRelease = true;
 
+    [Header("Queremos que no se pueda volver a agarrar?")]
+    public bool MakeUngrababble = false;
+
     [Header("Se puede soltar ya el objeto aqui?")]
     public bool canReleaseObject = false;
 
@@ -27,6 +31,9 @@ public class VRColliderReleaseTarget : MonoBehaviour
 
     [Header("Necesita estar agarrado?")]
     public bool needsGrabbing = false;
+
+    [Header("Evento para cuando se el objeto llega al target")]
+    public UnityEvent OnTargetReached;
 
     private bool wasUsingGravity;
     private bool wasKinematic;
@@ -60,6 +67,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
             if(isGoodTarget(go) && canReleaseObject && collider.hasTarget && (!needsGrabbing || (needsGrabbing && collider.isGrabbed())))
             {
                 conditionCompleted = true;
+                OnTargetReached.Invoke();
                 if (collider.targetSound != null) {collider.targetSound.loop = false; collider.targetSound.Play();}
                 if (collider.DropTeleport)
                 {
@@ -70,6 +78,11 @@ public class VRColliderReleaseTarget : MonoBehaviour
                     if (DisableWhenRelease)
                     {
                         collider.gameObject.SetActive(false);
+                    }
+                    if (MakeUngrababble)
+                    {
+                        collider.enabled = false;
+                        go.GetComponent<Collider>().enabled = false;
                     }
                     if (seeksTarget)
                     {
