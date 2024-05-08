@@ -187,6 +187,11 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         else DetectInteraction_Controllers();
     }
 
+    public void ToggleRay(bool Value)
+    {
+        this.usesRay = Value;
+    }
+
     public void SetLineRendererColor(bool detected) 
     {
         Color color = Color.black;
