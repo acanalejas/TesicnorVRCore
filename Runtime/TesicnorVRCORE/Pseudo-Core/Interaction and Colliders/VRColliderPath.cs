@@ -233,7 +233,9 @@ public class VRColliderPath : VRCollider
 
             this.transform.position = distance * direction + rotationPivot.position;
 
+            if(isPositive)
             this.transform.forward = new Vector3(-direction.z, 0, direction.x);
+            else this.transform.right = -new Vector3(-direction.z, 0, direction.x);
 
             currentAngles = this.transform.localRotation.y;
             //this.transform.localRotation = Quaternion.Euler(GetAxis() * anglesToMove());
