@@ -74,6 +74,9 @@ public class TutorialVideo : MonoBehaviour
     [Header("El GameObject que nos indica la posicion del player para ver el video")]
     [SerializeField] private GameObject PlayerHolder;
 
+    [Header("El GameObject que nos indica a donde devolver el player")]
+    [SerializeField] private GameObject PlayerReturnPoint;
+
     [Header("El GameObject del player en si")]
     [SerializeField] private GameObject PlayerGO;
 
@@ -193,7 +196,7 @@ public class TutorialVideo : MonoBehaviour
     {
         if (!PlayerGO || initialPlayerPosition == Vector3.zero) return;
 
-        PlayerGO.transform.position = initialPlayerPosition;
+        PlayerGO.transform.position = PlayerReturnPoint != null ? PlayerReturnPoint.transform.position : initialPlayerPosition;
     }
 
     public void EnableAskScreen()
