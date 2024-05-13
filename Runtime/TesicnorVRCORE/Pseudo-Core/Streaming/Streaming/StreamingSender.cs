@@ -20,7 +20,7 @@ public class StreamingSender : MonoBehaviour
     public Camera playerCamera;
     private static ImageConverter converter;
     Texture2D parse;
-    private StreamingBTSender BTSender;
+    //private StreamingBTSender BTSender;
 
     public bool isStreaming = false;
     #endregion
@@ -34,7 +34,7 @@ public class StreamingSender : MonoBehaviour
     }
     private void Start()
     {
-        BTSender = this.gameObject.AddComponent<StreamingBTSender>();
+        //BTSender = this.gameObject.AddComponent<StreamingBTSender>();
 
         SetTextureForCamera();
         StartCoroutine("update");
@@ -95,7 +95,7 @@ public class StreamingSender : MonoBehaviour
             {
                 str_data += number.ToString();
             }
-            BTSender.SendData(str_data);
+            //BTSender.SendData(str_data);
         }
         catch
         {
