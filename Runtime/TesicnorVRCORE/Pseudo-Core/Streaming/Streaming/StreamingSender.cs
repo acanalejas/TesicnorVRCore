@@ -1,14 +1,7 @@
 using UnityEngine;
 using StreamingCSharp;
-using UnityEngine.SceneManagement;
 using System.Drawing;
-using System.IO.Compression;
-using System.IO;
-using System.Threading.Tasks;
-using UnityEngine.Rendering;
-using System.Collections.Generic;
 using System.Collections;
-using System;
 
 public class StreamingSender : MonoBehaviour
 {
