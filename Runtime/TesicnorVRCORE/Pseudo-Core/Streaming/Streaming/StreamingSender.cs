@@ -90,11 +90,11 @@ public class StreamingSender : MonoBehaviour
             await HttpClient_Custom.SendData(_data);
             alreadySent = true;
 
-            string str_data = "";
-            foreach(byte number in _data)
-            {
-                str_data += number.ToString();
-            }
+            //string str_data = "";
+            //foreach(byte number in _data)
+            //{
+            //    str_data += number.ToString();
+            //}
             //BTSender.SendData(str_data);
         }
         catch
