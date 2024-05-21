@@ -76,6 +76,9 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Evento que se ejecuta cuando el jugador agarra el objeto")]
     [HideInInspector] public UnityEvent onGrab;
 
+    [Header("Evento que se ejecuta cuando el jugador suelta el objeto")]
+    [HideInInspector] public UnityEvent onRelease;
+
     /// <summary>
     /// Evento que se ejecuta cuando el objeto se suelta en el objetivo
     /// </summary>
@@ -374,6 +377,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         if (canBeReleased()) NormalRelease();
         else ConditionsRelease();
 
+        onRelease?.Invoke();
         SetSoundOnRelease();
     }
 
@@ -652,6 +656,9 @@ public class VRColliderEditor : Editor
 
         SerializedProperty onGrab = serializedObject.FindProperty("onGrab");
         EditorGUILayout.PropertyField(onGrab, new GUIContent("On Grab"));
+
+        SerializedProperty onRelease = serializedObject.FindProperty("onRelease");
+        EditorGUILayout.PropertyField(onRelease, new GUIContent("On Release"));
 
         serializedObject.ApplyModifiedProperties();
     }

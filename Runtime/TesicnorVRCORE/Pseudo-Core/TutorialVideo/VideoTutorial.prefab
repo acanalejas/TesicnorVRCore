@@ -150,6 +150,7 @@ MonoBehaviour:
   bShouldPlayAtStart: 1
   AskScreen_GO: {fileID: 8207421702226871874}
   PlayerHolder: {fileID: 0}
+  PlayerReturnPoint: {fileID: 0}
   PlayerGO: {fileID: 0}
   interpSpeed: 1
   normalScale: {x: 0.00033023296, y: 0.00033023296, z: 0.024767473}
