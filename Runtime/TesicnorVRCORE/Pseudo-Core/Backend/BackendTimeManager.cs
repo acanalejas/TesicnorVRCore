@@ -85,7 +85,7 @@ public class BackendTimeManager : BackendGetter
     private void Awake()
     {
 #if UNITY_EDITOR
-        PlayerPrefs.SetString("Username", "vr@tesicnor.com");
+        PlayerPrefs.SetString("Username", "vr-001@tesicnor.com");
 #endif
         base.Awake();
     }

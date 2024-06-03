@@ -79,6 +79,9 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Evento que se ejecuta cuando el jugador suelta el objeto")]
     [HideInInspector] public UnityEvent onRelease;
 
+    [Header("Evento que se ejecuta cuando el objeto llega al objetivo")]
+    [HideInInspector] public UnityEvent OnTargetReached;
+
     /// <summary>
     /// Evento que se ejecuta cuando el objeto se suelta en el objetivo
     /// </summary>
@@ -279,6 +282,8 @@ public class VRCollider : MonoBehaviour, VRGripInterface
             this.transform.position = target.gameObject.transform.position;
             this.transform.rotation = target.gameObject.transform.rotation;
             if (target.DisableWhenRelease) this.gameObject.SetActive(false);
+            OnTargetReached.Invoke();
+            onTargetReached.Invoke(target.gameObject);
         }
         else
         {
@@ -524,6 +529,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(VRCollider), true)]
+[CanEditMultipleObjects]
 public class VRColliderEditor : Editor
 {
     [HideInInspector] public VRCollider collider;
@@ -659,6 +665,9 @@ public class VRColliderEditor : Editor
 
         SerializedProperty onRelease = serializedObject.FindProperty("onRelease");
         EditorGUILayout.PropertyField(onRelease, new GUIContent("On Release"));
+
+        SerializedProperty onTargetReached = serializedObject.FindProperty("OnTargetReached");
+        EditorGUILayout.PropertyField(onTargetReached, new GUIContent("On Target Reached"));
 
         serializedObject.ApplyModifiedProperties();
     }
