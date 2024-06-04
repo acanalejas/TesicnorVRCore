@@ -67,6 +67,8 @@ public class BackendTimeManager : BackendGetter
     private int timeInSeconds;
     private int secondsToSubstractLocal;
 
+    protected int elapsedSeconds = 0;
+
     //Spend time parameters
 
     System.DateTime InitialDate;
@@ -93,7 +95,7 @@ public class BackendTimeManager : BackendGetter
     public override void Start()
     {
         base.Start();                                               // Llamamos el método start de BackendGetTimeUse.
-        //StartCoroutine(StartScene());                               // Llamamos la corrutina que actualizara los datos cada 1seg.
+        StartCoroutine(nameof(StartScene));                             // Llamamos la corrutina que actualizara los datos cada 1seg.
 
         //Lo que se haga aqui dentro variara dependiendo del modo de funcionamiento
         switch (workingMethod)
@@ -128,7 +130,7 @@ public class BackendTimeManager : BackendGetter
                     break;
 
                 case WorkingMethod.SpendTime:
-
+                    CountTime();
                     break;
                     default: break;
             }
@@ -136,6 +138,12 @@ public class BackendTimeManager : BackendGetter
 
             yield return new WaitForSeconds(reloadTime);
         }
+    }
+    protected void CountTime()
+    {
+        elapsedSeconds += (int)reloadTime;
+
+        PlayerPrefs.SetInt(BackendConstants.ElapsedTimeKey, elapsedSeconds);
     }
 
     /// <summary>
@@ -180,7 +188,7 @@ public class BackendTimeManager : BackendGetter
 
         System.TimeSpan elapsedTime = currentDate - InitialDate;
 
-        timeInSeconds = (int)elapsedTime.TotalSeconds;
+        timeInSeconds = elapsedSeconds;
         
         PlayerPrefs.SetString(BackendConstants.DataOnDisableKey, DataTime());
     }

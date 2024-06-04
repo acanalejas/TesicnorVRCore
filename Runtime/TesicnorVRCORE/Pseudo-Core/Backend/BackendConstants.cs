@@ -67,4 +67,6 @@ public static class BackendConstants
     public static string TimeQueueKey { get { return "jsonDatos"; } }
 
     public static string DataOnDisableKey { get { return "DataOnDisable"; } }
+
+    public static string ElapsedTimeKey { get { return "ElapsedTime"; } }
 }
