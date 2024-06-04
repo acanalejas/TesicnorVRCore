@@ -166,7 +166,7 @@ public class VRColliderPath : VRCollider
         Vector3 _initialPosition = Vector3.zero;
 
         //Elijo cual es la posicion inicial, dependiendo de si se elige la del objeto, o se setea aparte
-        if (initOnPosition) _initialPosition = this.transform.position;
+        if (initOnPosition) _initialPosition = this.transform.localPosition;
         else _initialPosition = initialPosition;
 
         //Obtengo la longitud de cada segmento y la direccion del camino
@@ -186,7 +186,7 @@ public class VRColliderPath : VRCollider
     {
         base.Grab(hand);
         //initialRotation = currentAngles;
-        initialHandPosition = hand.transform.position;
+        initialHandPosition = this.transform.parent.InverseTransformPoint(hand.transform.position);
         SelectCoroutine();
     }
     public override void Release()
@@ -215,7 +215,7 @@ public class VRColliderPath : VRCollider
     {
         while (isGrabbed())
         {
-            handDistance = grippingHand.transform.position - initialHandPosition;
+            handDistance = this.transform.parent.InverseTransformPoint(grippingHand.transform.position) - initialHandPosition;
             this.transform.localPosition = pathPoints[pointToMove(handDistance)];
             if (isPathCompleted()) OnPathEndReached.Invoke();
             yield return frame;
