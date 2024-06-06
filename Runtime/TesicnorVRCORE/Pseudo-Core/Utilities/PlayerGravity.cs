@@ -6,7 +6,10 @@ public class PlayerGravity : MonoBehaviour
 {
     #region PARAMETERS
     [Header("El GameObject del cuerpo")]
-    [SerializeField] private GameObject BodyGO;
+    [SerializeField] public GameObject BodyGO;
+
+    [Header("Esta activa la gravedad?")]
+    public bool IsGravtyActive = true;
 
     private Rigidbody BodyRB;
     private CapsuleCollider BodyColl;
@@ -22,6 +25,8 @@ public class PlayerGravity : MonoBehaviour
 
         BodyColl.height = 1.75f;
         BodyColl.radius = 0.3f;
+
+        BodyRB.isKinematic = true;
     }
 
     void TransferVelocity()
@@ -31,7 +36,19 @@ public class PlayerGravity : MonoBehaviour
 
     private void Start()
     {
+        if (!IsGravtyActive) return;
         SetupBodyGO();
+        StartCoroutine(nameof(CustomUpdate));
+    }
+
+    WaitForEndOfFrame Frame = new WaitForEndOfFrame();
+    IEnumerator CustomUpdate()
+    {
+        while (true)
+        {
+            BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
+            yield return Frame;
+        }
     }
     #endregion
 }

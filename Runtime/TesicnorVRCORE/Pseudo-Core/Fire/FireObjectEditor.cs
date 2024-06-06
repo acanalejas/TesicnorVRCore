@@ -132,6 +132,12 @@ public class FireObjectEditor : Editor
             GUILayout.Label("El tamaño de referencia", EditorStyles.boldLabel);
             manager.MaxSize = EditorGUILayout.FloatField(manager.MaxSize, EditorStyles.miniTextField);
 
+            GUILayout.Space(10);
+
+            GUILayout.Label("Evento que se lanza cuando se prende el objeto");
+            SerializedProperty onFireStart = serializedObject.FindProperty("OnFireStarted");
+            EditorGUILayout.PropertyField(onFireStart);
+
             GUILayout.Space(20);
 
             if (GUILayout.Button("Reset Fire", EditorStyles.miniButton))

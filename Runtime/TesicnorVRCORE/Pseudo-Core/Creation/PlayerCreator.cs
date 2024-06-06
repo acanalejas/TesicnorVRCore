@@ -35,6 +35,8 @@ public static class PlayerCreator
         playerControllers.transform.localPosition = Vector3.zero;
         playerControllers.transform.localRotation = Quaternion.Euler(Vector3.zero);
         playerControllers.transform.localScale = Vector3.one;
+        PlayerGravity gravity = playerControllers.AddComponent<PlayerGravity>();
+        gravity.IsGravtyActive = true;
 
         // ================================== CREANDO LOS HIJOS DIRECTOS ==============================================
         GameObject cameraOffset = new GameObject("Camera Offset");
@@ -60,6 +62,7 @@ public static class PlayerCreator
         bodyHolder.transform.localPosition = new Vector3(0,-0.34f,0);  
         bodyHolder.transform.localRotation = Quaternion.Euler(Vector3.zero);
         bodyHolder.transform.localScale = Vector3.one;
+        gravity.BodyGO = bodyHolder;
 
         //=============================================================================================================
 
