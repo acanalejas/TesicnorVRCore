@@ -66,6 +66,11 @@ public class Wind_Elevator : MonoBehaviour
     [SerializeField] protected float minHeight = 0;
 
     /// <summary>
+    /// Deberia mover al jugador al desplazarse?
+    /// </summary>
+    [HideInInspector] public bool ShouldMovePlayer = false;
+
+    /// <summary>
     /// Referencia publica para acceder a la altura maxima
     /// </summary>
     public float MaxHeight { get { return maxHeight; }}
@@ -101,6 +106,15 @@ public class Wind_Elevator : MonoBehaviour
 
     [Header("Esta la puerta abierta?")]
     public bool DoorOpened = false;
+
+    [Header("Puede ir hacia arriba?")]
+    public bool CanGoUp = true;
+
+    [Header("Puede ir hacia abajo?")]
+    public bool CanGoDown = true;
+
+    [Header("Esta el player dentro del elevador?")]
+    public bool InsideElevator = false;
 
     #endregion
 
