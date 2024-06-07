@@ -393,6 +393,9 @@ public static class PlayerCreator
         playerHands.transform.localRotation = Quaternion.Euler(Vector3.zero);
         playerHands.transform.localScale = Vector3.one;
 
+        PlayerGravity gravity = playerHands.AddComponent<PlayerGravity>();
+        gravity.IsGravtyActive = true;
+
         //CREANDO EL PRIMER HIJO
 
         GameObject ovrCameraRig = new GameObject("OVR Camera Rig", typeof(OVRCameraRig), typeof(OVRManager), typeof(OVRHeadsetEmulator));
