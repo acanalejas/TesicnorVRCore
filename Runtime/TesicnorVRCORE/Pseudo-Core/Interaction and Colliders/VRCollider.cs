@@ -160,6 +160,9 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Si se teletransporta al entrar al trigger \n o si hay que soltarlo manualmente")]
     [HideInInspector] public bool DropTeleport = true;
 
+    [Header("Se quita el parent al soltar el objeto?")]
+    [HideInInspector] public bool ReparentOnRelease = true;
+
     /// <summary>
     /// Si vuelve a una posicion fija, o a la posición del último agarre
     /// </summary>
@@ -264,7 +267,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     protected virtual void NormalRelease()
     {
         StopCoroutine("Attach");
-        this.transform.parent = null;
+        if(ReparentOnRelease) this.transform.parent = null;
         if (simulateOnDrop) SetSimulateOnDrop();
         if (grippingHand) grippingHand.grippedObject = null;
 

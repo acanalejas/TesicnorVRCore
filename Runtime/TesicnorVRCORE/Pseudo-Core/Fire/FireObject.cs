@@ -76,6 +76,8 @@ namespace TesicFire
         [HideInInspector] public BoxCollider trigger;
         [HideInInspector] public BoxCollider collider;
 
+        [HideInInspector] public UnityEvent OnFireStarted;
+
         private float timeOnFire = 0;
 
         private bool onFire = false;
@@ -273,6 +275,8 @@ namespace TesicFire
             initialFirePoint = initialPoint;
 
             TimeToExtinguish = MaxTimeToExtinguish;
+
+            OnFireStarted.Invoke();
 
             StartCoroutine("construct");
 
