@@ -73,7 +73,6 @@ public class VRColliderReleaseTarget : MonoBehaviour
                 {
                     if(collider.GetGrippingHand())collider.GetGrippingHand().Release();
                     //collider.Release();
-                    collider.SetGrabbable(false);
                     collider.onTargetReached.Invoke(this.gameObject);
                     if (DisableWhenRelease)
                     {
@@ -83,6 +82,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
                     {
                         collider.enabled = false;
                         go.GetComponent<Collider>().enabled = false;
+                        collider.SetGrabbable(false);
                     }
                     if (seeksTarget)
                     {
