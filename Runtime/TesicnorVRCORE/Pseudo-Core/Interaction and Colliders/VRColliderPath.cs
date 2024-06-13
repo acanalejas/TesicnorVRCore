@@ -186,7 +186,9 @@ public class VRColliderPath : VRCollider
     {
         base.Grab(hand);
         //initialRotation = currentAngles;
+        if(this.transform.parent != null)
         initialHandPosition = this.transform.parent.InverseTransformPoint(hand.transform.position);
+        else initialHandPosition = hand.transform.position;
         SelectCoroutine();
     }
     public override void Release()
