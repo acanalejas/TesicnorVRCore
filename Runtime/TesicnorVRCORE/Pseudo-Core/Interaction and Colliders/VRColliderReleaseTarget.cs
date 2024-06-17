@@ -35,6 +35,9 @@ public class VRColliderReleaseTarget : MonoBehaviour
     [Header("Evento para cuando se el objeto llega al target")]
     public UnityEvent OnTargetReached;
 
+    [Header("Evento para cuando se retira el objeto")]
+    public UnityEvent OnTargetRelease;
+
     private bool wasUsingGravity;
     private bool wasKinematic;
     #endregion
@@ -119,6 +122,8 @@ public class VRColliderReleaseTarget : MonoBehaviour
             if(isGoodTarget(go))
             {
                 if(canBeCanceled) conditionCompleted = false;
+
+                OnTargetRelease.Invoke();
 
                 if (go.GetComponent<Rigidbody>())
                 {
