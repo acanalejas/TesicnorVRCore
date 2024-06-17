@@ -108,7 +108,7 @@ public class BackendTimeManager : BackendGetter
             case WorkingMethod.SpendTime:
 
                 InitialDate = System.DateTime.Now;
-
+                if (!ApplicationEventsManager.Instance) { break; }
                 //ApplicationEventsManager.Instance.onSceneLoaded.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onActiveSceneChange.AddListener(SpendTime);
                 ApplicationEventsManager.Instance.onSceneUnloaded.AddListener(SpendTime);
