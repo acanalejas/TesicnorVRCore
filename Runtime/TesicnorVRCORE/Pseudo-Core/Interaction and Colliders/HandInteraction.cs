@@ -190,6 +190,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     public void ToggleRay(bool Value)
     {
         this.usesRay = Value;
+        lineRenderer.enabled = Value;
     }
 
     public void SetLineRendererColor(bool detected) 
