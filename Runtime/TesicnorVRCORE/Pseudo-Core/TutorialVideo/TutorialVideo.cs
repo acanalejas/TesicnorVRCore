@@ -110,7 +110,8 @@ public class TutorialVideo : MonoBehaviour
     #region Buttons
     public void ToggleVideo()
     {
-        if (videoPlayer.clip == null) videoPlayer.clip = clip;
+        if (!videoPlayer) return;
+        if (videoPlayer.clip != null) videoPlayer.clip = clip;
 
         if (!videoPlayer.isPlaying || videoPlayer.isPaused) { videoPlayer.Play(); OnPlay.Invoke(); }
         else if (videoPlayer.isPlaying) { videoPlayer.Pause(); OnPause.Invoke(); }

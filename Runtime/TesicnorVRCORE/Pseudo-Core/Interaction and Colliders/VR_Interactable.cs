@@ -123,7 +123,7 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         {
             onClick?.Invoke();
             ChangeColor(2);
-            if(!isClicking) StartCoroutine("follow");
+            if(!isClicking && this.isActiveAndEnabled) StartCoroutine("follow");
             isClicking = true;
         }
         bHasBeenClicked = true;
