@@ -208,5 +208,13 @@ public class TutorialVideo : MonoBehaviour
     {
         AskScreen_GO.SetActive(false);
     }
+
+    public void ChangeVideoClip(VideoClip clip)
+    {
+        if (!videoPlayer) return;
+        if (!clip) return;
+
+        videoPlayer.clip = clip;
+    }
     #endregion
 }
