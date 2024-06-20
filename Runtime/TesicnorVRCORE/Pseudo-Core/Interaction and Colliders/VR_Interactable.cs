@@ -80,6 +80,8 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         if (!is3DObject) SetupUICollider();
 
         hands = GameObject.FindObjectsOfType<HandInteraction>();
+
+        this.gameObject.layer = 5;
     }
 
     public virtual void Update()

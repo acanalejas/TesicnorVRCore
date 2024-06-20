@@ -223,7 +223,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         lineRenderer.SetPosition(0, origin);
         Vector3 addedDistance = direction.normalized * maxDistance;
 
-        if (Physics.Raycast(ray, out interactionHit, maxDistance))
+        if (Physics.Raycast(ray, out interactionHit, maxDistance, LayerMask.GetMask("UI")))
         {
             if (interactionHit.collider)
             {
