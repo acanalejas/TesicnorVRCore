@@ -15,7 +15,7 @@ public class TutorialVideo : MonoBehaviour
     public VideoClip clip;
 
     [Header("El GameObject que contiene todo el reproductor, el padre")]
-    [SerializeField] private GameObject Parent;
+    [SerializeField] public GameObject Parent;
 
     [Header("Lista de objetos a desactivar en el start")]
     [SerializeField] private GameObject[] ObjectsToDisable_Start;
