@@ -215,6 +215,7 @@ public class TutorialVideo : MonoBehaviour
         if (!clip) return;
 
         videoPlayer.clip = clip;
+        this.clip = clip;
     }
     #endregion
 }
