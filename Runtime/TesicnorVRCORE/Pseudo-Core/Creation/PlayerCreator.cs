@@ -30,7 +30,7 @@ public static class PlayerCreator
     [MenuItem("Tesicnor/Players/PlayerControllers_Hands")]
     public static void CreatePlayerControllers_Hands()
     {
-        GameObject playerControllers = new GameObject("PlayerControllers", typeof(CameraOffset));
+        GameObject playerControllers = new GameObject("PlayerControllers", typeof(CameraOffset), typeof(TesicnorPlayer));
         if (Selection.gameObjects.Length > 0) playerControllers.transform.parent = Selection.gameObjects[0].transform;
         playerControllers.transform.localPosition = Vector3.zero;
         playerControllers.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -230,7 +230,7 @@ public static class PlayerCreator
     [MenuItem("Tesicnor/Players/PlayerControllers_Controllers")]
     public static void CreatePlayerControllers_Controllers()
     {
-        GameObject playerControllers = new GameObject("PlayerControllers", typeof(CameraOffset));
+        GameObject playerControllers = new GameObject("PlayerControllers", typeof(CameraOffset), typeof(TesicnorPlayer));
         if (Selection.gameObjects.Length > 0) playerControllers.transform.parent = Selection.gameObjects[0].transform;
         playerControllers.transform.localPosition = Vector3.zero;
         playerControllers.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -387,7 +387,7 @@ public static class PlayerCreator
     [MenuItem("Tesicnor/Players/PlayerHands")]
     public static void CreatePlayerHands()
     {
-        GameObject playerHands = new GameObject("Player Hands", typeof(CharacterController), typeof(OVRPlayerController), typeof(OVRSceneSampleController), typeof(OVRDebugInfo));
+        GameObject playerHands = new GameObject("Player Hands", typeof(CharacterController), typeof(OVRPlayerController), typeof(OVRSceneSampleController), typeof(OVRDebugInfo), typeof(TesicnorPlayer));
         if (Selection.gameObjects.Length > 0) playerHands.transform.parent = Selection.gameObjects[0].transform;
         playerHands.transform.localPosition = Vector3.zero;
         playerHands.transform.localRotation = Quaternion.Euler(Vector3.zero);
