@@ -266,6 +266,20 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         {
             CheckIfControllerGrabs();
             CheckIfControllerGrabs_Trigger();
+            if(this.handController.controllerNode == XRNode.LeftHand)
+            {
+                bool pressed = false;
+                bool doOnce = false;
+                if (handController.inputDevice.TryGetFeatureValue(CommonUsages.menuButton, out pressed) && pressed && !doOnce)
+                {
+                    TesicnorPlayer player = TesicnorPlayer.Instance;
+
+                    if(player != null)
+                    player.TogglePause(!player.bIsInPause);
+                    doOnce = true;
+                }
+                else if(!pressed && doOnce) doOnce = false;
+            }
         }
         else
         {

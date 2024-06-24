@@ -12,6 +12,8 @@ public class TesicnorPlayer : MonoBehaviour
     #region Bools
     [Header("Se va a usar la pausa?")]
     public bool bUsePause = true;
+
+    [HideInInspector] public bool bIsInPause = false;
     #endregion
     [Header("El PREFAB de la pantalla de pausa")]
     public GameObject PauseScreenPrefab;
@@ -91,11 +93,13 @@ public class TesicnorPlayer : MonoBehaviour
         PauseScreen = GameObject.Instantiate(PauseScreenPrefab, PauseParent);
     }
 
-    private void TogglePause(bool Value)
+    public void TogglePause(bool Value)
     {
         this.PauseScreen.SetActive(Value);
         if (Value) OnPause.Invoke();
         else OnResume.Invoke();
+
+        bIsInPause = Value;
     }
     #endregion
     #endregion
