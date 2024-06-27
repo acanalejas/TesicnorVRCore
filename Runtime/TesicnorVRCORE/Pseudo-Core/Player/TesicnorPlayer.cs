@@ -99,6 +99,9 @@ public class TesicnorPlayer : MonoBehaviour
         if (Value) OnPause.Invoke();
         else OnResume.Invoke();
 
+        if (Value) PlayerPauseManager.Instance.Pause();
+        else PlayerPauseManager.Instance.Continue();
+
         bIsInPause = Value;
     }
     #endregion

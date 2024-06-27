@@ -87,7 +87,7 @@ public class BackendTimeManager : BackendGetter
     private void Awake()
     {
 #if UNITY_EDITOR
-        PlayerPrefs.SetString("Username", "vr-001@tesicnor.com");
+        PlayerPrefs.SetString("Username", "vr@tesicnor.com");
 #endif
         base.Awake();
     }
@@ -144,6 +144,16 @@ public class BackendTimeManager : BackendGetter
         elapsedSeconds += (int)reloadTime;
 
         PlayerPrefs.SetInt(BackendConstants.ElapsedTimeKey, elapsedSeconds);
+    }
+
+    public void PauseTime()
+    {
+        StopCoroutine(nameof(StartScene));
+    }
+
+    public void ResumeTime()
+    {
+        StartCoroutine(nameof(StartScene));
     }
 
     /// <summary>
