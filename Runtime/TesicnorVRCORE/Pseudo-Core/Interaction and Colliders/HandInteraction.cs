@@ -240,6 +240,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                     if (interactingObject != null)
                     {
                         interactingObject.GetComponent<VRInteractableInterface>().ChangeColor(0);
+                        interactingObject.GetComponent<VRInteractableInterface>().OnExitHover();
                         //if(interactingObject.GetComponent<VRInteractableInterface>().GetIsClicking()) interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
                         interactingObject = null;
                     }

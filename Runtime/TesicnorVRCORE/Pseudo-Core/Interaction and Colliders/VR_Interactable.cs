@@ -43,6 +43,8 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
     [HideInInspector] public UnityEvent onClick;
     [Header("Evento que se lanza cuando el 'puntero' se posiciona sobre el objeto")]
     [HideInInspector] public UnityEvent onHover;
+    [Header("Evento que se lanza cuando el puntero deja de estar posicionado sobre el objeto")]
+    [HideInInspector] public UnityEvent onHoverExit;
     [Header("Evento que se lanza cuando se deja de hacer click sobre el objeto")]
     [HideInInspector]public UnityEvent onRelease;
 
@@ -144,6 +146,13 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         }
     }
 
+    public virtual void OnExitHover()
+    {
+        if (canBePressed)
+        {
+            onHoverExit?.Invoke();
+        }
+    }
     /// <summary>
     /// Cuando dejamos de hacer click sobre el objeto
     /// </summary>
@@ -384,6 +393,9 @@ public class InteractableEditor : Editor
 
         SerializedProperty onHover = serializedObject.FindProperty("onHover");
         EditorGUILayout.PropertyField(onHover, new GUIContent("On Hover"));
+
+        SerializedProperty onHoverExit = serializedObject.FindProperty("onHoverExit");
+        EditorGUILayout.PropertyField(onHoverExit, new GUIContent("On Hover Exit"));
 
         SerializedProperty onRelease = serializedObject.FindProperty("onRelease");
         EditorGUILayout.PropertyField(onRelease, new GUIContent("On Release"));

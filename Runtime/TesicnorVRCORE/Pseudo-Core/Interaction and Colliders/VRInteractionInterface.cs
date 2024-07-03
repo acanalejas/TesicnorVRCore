@@ -84,6 +84,11 @@ public interface VRInteractableInterface
     /// Funcion que se lanza al poner el puntero por encima
     /// </summary>
     void OnHovered();
+
+    /// <summary>
+    /// Funcion que se lanza al dejar de señalar el objeto
+    /// </summary>
+    void OnExitHover();
     /// <summary>
     /// Funcion para cuando se suelta el interactable
     /// </summary>
