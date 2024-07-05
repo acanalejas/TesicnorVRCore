@@ -64,6 +64,14 @@ public class PlayerPauseManager : MonoBehaviour
     public void Restart()
     {
         OnRestart.Invoke();
+
+        BackendTimeManager timeManager = FindObjectOfType<BackendTimeManager>();
+        if (timeManager != null)
+        {
+            timeManager.SpendTime();
+            timeManager.LoadDataOnDisable();
+        }
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     public void ReturnToMenu()
