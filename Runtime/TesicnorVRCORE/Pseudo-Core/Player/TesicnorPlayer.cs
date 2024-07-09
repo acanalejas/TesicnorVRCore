@@ -32,6 +32,8 @@ public class TesicnorPlayer : MonoBehaviour
 
     [Header("Evento que se usa al reanudar la experiencia")]
     public UnityEvent OnResume;
+
+    public bool bShouldSearch = true;
     
     #endregion
 
@@ -40,6 +42,7 @@ public class TesicnorPlayer : MonoBehaviour
     {
         CheckSingleton();
 
+        if (!bShouldSearch) return;
         //Activate Ray
         OnPause.AddListener(() =>
         {
