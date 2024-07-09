@@ -55,7 +55,7 @@ public class PlayerPauseManager : MonoBehaviour
 
     public void Continue()
     {
-        TogglePause(false);
+        TesicnorPlayer.Instance.TogglePause(false);
         OnContinue.Invoke();
 
         BackendTimeManager timeManager = FindObjectOfType<BackendTimeManager>();
