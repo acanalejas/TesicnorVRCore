@@ -256,10 +256,12 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         if (grippedObject) grippedObject = null;
         isGripping = false;
     }
-    
+
     /// <summary>
     /// Usar en el update, detecta el input del botón con el que queramos agarrar
     /// </summary>
+    /// 
+    bool doOnce = false;
     public void DetectTheInput()
     {
         if (isController)
@@ -269,7 +271,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
             if(this.handController.controllerNode == XRNode.LeftHand)
             {
                 bool pressed = false;
-                bool doOnce = false;
+               
                 if (handController.inputDevice.TryGetFeatureValue(CommonUsages.menuButton, out pressed) && pressed && !doOnce)
                 {
                     TesicnorPlayer player = TesicnorPlayer.Instance;
