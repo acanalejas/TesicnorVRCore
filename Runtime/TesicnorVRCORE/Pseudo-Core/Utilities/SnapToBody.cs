@@ -8,6 +8,9 @@ public class SnapToBody : MonoBehaviour
     [Header("La cámara que actúa como cabeza del jugador")]
     public Transform camera;
 
+    [Header("La distancia de la camara")]
+    public float CamDistance = 0.75f;
+
     [Header("Tiene que rotar?")]
     public bool bShouldRotate = true;
 
@@ -53,7 +56,7 @@ public class SnapToBody : MonoBehaviour
 
     private void SnapByDistance()
     {
-        this.transform.position = camera.position + initialDistance;
+        this.transform.position = camera.position + new Vector3(0,-Mathf.Abs(CamDistance), 0);
         this.transform.rotation = Quaternion.Euler(new Vector3(0, camera.rotation.eulerAngles.y, 0));
     }
     #endregion

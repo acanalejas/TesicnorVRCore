@@ -445,6 +445,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -868,6 +871,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -1164,6 +1170,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -1418,6 +1427,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -1647,6 +1659,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
