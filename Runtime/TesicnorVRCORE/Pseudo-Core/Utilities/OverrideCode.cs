@@ -20,7 +20,7 @@ public static class OverrideCode
     /// <returns></returns>
     public static FileStream WriteStream(string path)
     {
-        return File.Open(path, FileMode.OpenOrCreate, FileAccess.Write);
+        return File.Open(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public static class OverrideCode
     /// <returns></returns>
     public static FileStream ReadStream(string path)
     {
-        return File.Open(path, FileMode.OpenOrCreate, FileAccess.Read);
+        return File.Open(path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.ReadWrite);
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public static class OverrideCode
     /// <returns></returns>
     public static FileStream BothStream(string path)
     {
-        return File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+        return File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
     }
 
     public static void CloseFileStream(FileStream stream)
@@ -118,7 +118,7 @@ public static class OverrideCode
     public static void AddField(FileStream stream, string fieldName, string fieldValue, string className, string fieldType, bool _public)
     {
         if (!stream.CanWrite || !stream.CanRead) return;
-        if (fieldName == "" || fieldName == null || fieldValue == "" || fieldValue == null || fieldType == "" || fieldType == null) return;
+        if (fieldName == "" || fieldName == null || fieldType == "" || fieldType == null) return;
 
         string value = fieldValue != "" ? " = " + fieldValue : "";
         string field = (_public ? "public" : "private") + " " + fieldType + " " + fieldName + value + ";";
@@ -173,6 +173,7 @@ public static class OverrideCode
         MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(result_str));
         ms.CopyTo(stream);
         stream.SetLength(0);
+
         stream.Write(Encoding.UTF8.GetBytes(result_str), 0, result_str.Length);
     }
 
@@ -500,6 +501,53 @@ public static class OverrideCode
             if (path.Contains(obj.GetType().Name)) return path;
         }
         return "";
+    }
+
+    public static bool bFileContainsClass(FileStream stream, string path, string className)
+    {
+        FileStream fs = stream;
+
+        char[] buffer = new char[(int)fs.Length];
+
+        StreamReader sr = new StreamReader(fs);
+
+        sr.ReadBlock(buffer, 0, (int)fs.Length);
+        fs.Close();
+        return SearchWordInCharArray(className, buffer, 0) != 0;
+        
+    }
+
+    public static void AddClassToFile(FileStream stream, string path, string className, bool bIsMonobehaviour)
+    {
+
+        FileStream fs = stream;
+        int startIndex = (int)fs.Length - 1;
+
+        string _content = "using UnityEngine; \n using UnityEngine.Events; \n \n";
+
+        //StreamWriter sw_2 = new StreamWriter(fs);
+        //sw_2.WriteLine(_content);
+        fs.Close();
+
+        FileStream fs_2 = OverrideCode.BothStream(path);
+        string content = _content + "public class " + className + (bIsMonobehaviour ? ": MonoBehaviour" : "") + "{" + "\n" +
+            "\n" +
+            "private void Start() {" + "\n" +
+            "\n" +
+            "}" + "\n" +
+            "\n" +
+            "private void Update() {" + "\n" +
+            "\n" +
+            "}" + "\n" +
+            "}";
+
+       // byte[] bytes = Encoding.UTF8.GetBytes(content);
+
+        StreamWriter sw = new StreamWriter(fs_2);
+        sw.WriteLine(content);
+        sw.Flush();
+        //fs.Write(bytes, startIndex, bytes.Length);
+        fs.Close();
     }
 #endif
 #endregion
