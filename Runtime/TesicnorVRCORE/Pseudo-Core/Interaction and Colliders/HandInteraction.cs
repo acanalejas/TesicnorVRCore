@@ -232,6 +232,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                 {
                     addedDistance = direction.normalized * interactionHit.distance;
 
+                    if (interactingObject != null && interactingObject != interactionHit.collider.gameObject) interactingObject.GetComponent<VRInteractableInterface>().OnExitHover();
                     interactingObject = interactionHit.collider.gameObject;
                     interactable.OnHovered();
                 }
@@ -254,6 +255,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         else if (interactingObject != null)
         {
             interactingObject.GetComponent<VRInteractableInterface>().ChangeColor(0);
+            interactingObject.GetComponent<VRInteractableInterface>().OnExitHover();
             interactingObject = null;
         }
         lineRenderer.SetPosition(1, origin + addedDistance);

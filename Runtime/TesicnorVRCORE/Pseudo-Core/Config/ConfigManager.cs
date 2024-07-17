@@ -25,8 +25,9 @@ public class ConfigManager : MonoBehaviour
 public class EventHandlerAttribute : Attribute
 {
 
-    public EventHandlerAttribute(string boolName, string className, bool isStatic, string FileName = "ConfigEventsManager.cs")
+    public EventHandlerAttribute(string paramType, string boolName, string className, bool isStatic, string FileName = "ConfigEventsManager.cs")
     {
+#if UNITY_EDITOR
         string path = Application.dataPath + "/" + FileName;
 
         FileStream stream = OverrideCode.BothStream(path);
@@ -36,11 +37,12 @@ public class EventHandlerAttribute : Attribute
         if (!classExists) { FileStream stream_2 = OverrideCode.BothStream(path); OverrideCode.AddClassToFile(stream_2, path, "ConfigEventsManager", true); }
 
         FileStream stream_3 = OverrideCode.BothStream(path);
-        OverrideCode.AddField(stream_3, "on" + boolName + "Event", "", "ConfigEventsManager", "UnityEvent<bool>", true);
+        OverrideCode.AddField(stream_3, "on" + boolName + "Event", "", "ConfigEventsManager", "UnityEvent<" + paramType + ">", true);
         stream_3.Close();
         FileStream stream_4 = OverrideCode.BothStream(path);
         OverrideCode.AddCodeToMethod(stream_4, "Start", "on" + boolName + "Event" + ".Invoke(" + (isStatic ? (className + "." + boolName) : ("FindObjectByType<" + className + ">()." + boolName)) + ");", "ConfigEventsManager");
         stream_4.Close();
+#endif
     }
 }
 
