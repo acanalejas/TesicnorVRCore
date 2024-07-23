@@ -403,7 +403,7 @@ namespace TesicFire
         {
             RaycastHit hit;
             extinguishing = true;
-            if (Physics.Raycast(raycast, out hit, 8))
+            if (Physics.Raycast(raycast, out hit, Vector3.Distance(raycast.origin, this.transform.position)))
             {
                 if (hit.collider == GetComponent<Collider>())
                 {
