@@ -231,15 +231,30 @@ public class VRColliderPath : VRCollider
         {
             Vector3 direction = (grippingHand.transform.position - rotationPivot.transform.position).normalized;
 
+            float handDistance = Vector3.Distance(grippingHand.transform.position, this.transform.position);
+
             float distance = Vector3.Distance(this.transform.position, this.rotationPivot.transform.position);
 
             this.transform.position = distance * direction + rotationPivot.position;
 
-            if(isPositive)
-            this.transform.forward = new Vector3(-direction.z, 0, direction.x);
+            if (isPositive)
+            {
+                if(axis == Axis.y)
+                this.transform.forward = new Vector3(-direction.z, 0, direction.x);
+
+                if (axis == Axis.z)
+                {
+                    //this.transform.up = new Vector3(-direction.x, direction.y, this.transform.parent.up.z);
+                    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(handDistance, 0,0.5f) / 0.5f * finalRotation));
+                }
+                   
+            }
+            
             else this.transform.right = -new Vector3(-direction.z, 0, direction.x);
 
-            currentAngles = this.transform.localRotation.y;
+            if (axis == Axis.y) currentAngles = this.transform.localRotation.y;
+            else if (axis == Axis.x) currentAngles = this.transform.localRotation.x;
+            else if (axis == Axis.z) currentAngles = this.transform.localRotation.z;
             //this.transform.localRotation = Quaternion.Euler(GetAxis() * anglesToMove());
             if (isPathCompleted()) OnPathEndReached.Invoke();
             Debug.Log("Rotating");

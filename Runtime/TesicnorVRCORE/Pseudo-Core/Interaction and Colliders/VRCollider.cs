@@ -656,6 +656,10 @@ public class VRColliderEditor : Editor
                 }
             }
         }
+        GUILayout.Space(10);
+
+        GUILayout.Label("Se reemparenta al soltar?", EditorStyles.boldLabel);
+        collider.ReparentOnRelease = GUILayout.Toggle(collider.ReparentOnRelease, "ReparentOnRelease");
 
         SerializedProperty onGrabAudio = serializedObject.FindProperty("grabSound");
         EditorGUILayout.PropertyField(onGrabAudio, new GUIContent("OPCIONAL : Grab sound"));

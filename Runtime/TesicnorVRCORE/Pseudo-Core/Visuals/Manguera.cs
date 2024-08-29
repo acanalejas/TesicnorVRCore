@@ -103,6 +103,7 @@ public class Manguera : MonoBehaviour
             lastJoint.yMotion = ConfigurableJointMotion.Locked;
             lastJoint.zMotion = ConfigurableJointMotion.Locked;
             if (ResetOnReparent) lastJoint.transform.localPosition = Vector3.zero;
+            lastJoint.transform.Rotate(new Vector3(0, 0, 0));
         }
         //foreach(var collider in Colliders)
         //{
