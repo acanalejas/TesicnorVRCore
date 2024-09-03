@@ -99,6 +99,7 @@ public class Manguera : MonoBehaviour
         if (LastBoneHolder)
         {
             lastJoint.transform.parent = LastBoneHolder;
+            lastJoint.transform.localRotation = Quaternion.Euler(Vector3.zero);
             lastJoint.xMotion = ConfigurableJointMotion.Locked;
             lastJoint.yMotion = ConfigurableJointMotion.Locked;
             lastJoint.zMotion = ConfigurableJointMotion.Locked;
