@@ -216,7 +216,7 @@ namespace TesicFire
             AdaptSmoke();
             AdaptSparks();
             Propagate();
-
+            Debug.Log(TimeToExtinguish);
             TimeToExtinguish = timePerSection * (index);
             if (index == fire_mesh.Count - 1) completeFire = true;
             else completeFire = false;
@@ -372,6 +372,8 @@ namespace TesicFire
             if (badExtinguisher && _try != 0) timeToSubstract = 0;
 
             TimeToExtinguish -= timeToSubstract;
+
+            Debug.Log("Time to extinguish " + TimeToExtinguish);
 
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
             for (int i = 0; i < fire_mesh.Count; i++)
