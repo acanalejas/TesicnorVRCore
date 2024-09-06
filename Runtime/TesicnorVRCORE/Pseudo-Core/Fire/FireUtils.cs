@@ -12,7 +12,7 @@ namespace TesicFire
         public void EndFire();
 
         public void UpdateFire(Vector3 initialPoint);
-        public void ExtinguishFire();
+        public void ExtinguishFire(float damage);
 
         public void ExtinguishWithRaycast(Ray raycast);
 

@@ -357,14 +357,14 @@ namespace TesicFire
         }
 
         int _try = 0;
-        public void ExtinguishFire()
+        public void ExtinguishFire(float damage)
         {
             if (this.Extinguished() || !this.OnFire()) return;
 
             extinguishing = true;
             reconstructing = false;
 
-            float timeToSubstract = Time.deltaTime;
+            float timeToSubstract = damage;
             if (_try == 0) _try = 1;
             else if (_try == 1) _try = 2;
             else if (_try == 2) _try = 0;
@@ -409,7 +409,7 @@ namespace TesicFire
             {
                 if (hit.collider == GetComponent<Collider>())
                 {
-                    ExtinguishFire();
+                    ExtinguishFire(Time.deltaTime);
                 }
                 else Reconstruct();
             }
@@ -418,7 +418,7 @@ namespace TesicFire
 
         public void ExtinguishWithParticles()
         {
-            ExtinguishFire();
+            ExtinguishFire(Time.deltaTime);
         }
 
         public void ExtinguishWithCone(Vector3 origin, Vector3 forward)
@@ -434,7 +434,7 @@ namespace TesicFire
 
             if (dot > 0.8f && hit.collider == GetComponent<Collider>())
             {
-                ExtinguishFire();
+                ExtinguishFire(Time.deltaTime);
             }
             else { Reconstruct(); }
         }
