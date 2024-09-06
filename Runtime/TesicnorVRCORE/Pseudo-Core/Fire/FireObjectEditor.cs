@@ -111,6 +111,7 @@ public class FireObjectEditor : Editor
 
             GUILayout.Label("El tiempo que tarda en apagarse el fuego", EditorStyles.boldLabel);
             manager.MaxTimeToExtinguish = EditorGUILayout.FloatField(manager.MaxTimeToExtinguish, EditorStyles.miniTextField);
+            manager.TimeToExtinguish = manager.MaxTimeToExtinguish;
 
             GUILayout.Space(10);
 
