@@ -134,6 +134,8 @@ public class VRColliderPath : VRCollider
     [Header("Eje sobre el que se gira para hacer el camino")]
     public Axis axis = Axis.y;
 
+    private float initialZAngle = 0;
+
     #endregion
 
     #region FUNCTIONS
@@ -189,6 +191,8 @@ public class VRColliderPath : VRCollider
         if(this.transform.parent != null)
         initialHandPosition = this.transform.parent.InverseTransformPoint(hand.transform.position);
         else initialHandPosition = hand.transform.position;
+
+        if (axis == Axis.z) initialZAngle = GetAngleBetweenHandAndUp();
         SelectCoroutine();
     }
     public override void Release()
@@ -242,11 +246,22 @@ public class VRColliderPath : VRCollider
                 if(axis == Axis.y)
                 this.transform.forward = new Vector3(-direction.z, 0, direction.x);
 
-                if (axis == Axis.z)
+                if(axis == Axis.z)
                 {
-                    //this.transform.up = new Vector3(-direction.x, direction.y, this.transform.parent.up.z);
-                    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(handDistance, 0,0.5f) / 0.5f * finalRotation));
+                    this.transform.up = direction;
+                    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(-this.transform.localRotation.eulerAngles.z, initialRotation, finalRotation)));
                 }
+
+                //if (axis == Axis.z)
+                //{
+                //    //this.transform.up = new Vector3(-direction.x, direction.y, this.transform.parent.up.z);
+                //
+                //    float anglesDiff = GetAngleBetweenHandAndUp() - initialZAngle;
+                //    Quaternion rotation = Quaternion.FromToRotation(this.transform.position, grippingHand.transform.position);
+                //    this.transform.up = rotation * Vector3.forward;
+                //    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, this.transform.localRotation.eulerAngles.z));
+                //
+                //}
                    
             }
             
@@ -361,6 +376,16 @@ public class VRColliderPath : VRCollider
         }
 
         return _axis;
+    }
+
+    float GetAngleBetweenHandAndUp()
+    {
+        Vector2 _up = this.transform.up;
+        Vector2 _handDistance = (Vector2)(grippingHand.transform.position - this.transform.position).normalized;
+
+        float angles = Mathf.Acos((Vector3.Dot(_up, _handDistance)) / (_up.magnitude * _handDistance.magnitude)) * 57.2958f;
+
+        return angles;
     }
 
     public bool isPathCompleted()
