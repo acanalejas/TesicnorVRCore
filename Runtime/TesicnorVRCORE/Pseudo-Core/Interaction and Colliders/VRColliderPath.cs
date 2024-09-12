@@ -249,7 +249,11 @@ public class VRColliderPath : VRCollider
                 if(axis == Axis.z)
                 {
                     this.transform.up = new Vector3(direction.x, direction.y, 0);
-                    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(this.transform.localRotation.eulerAngles.z, initialRotation, finalRotation)));
+                    float angles = this.transform.localRotation.eulerAngles.z;
+
+                    if (angles > finalRotation && angles < finalRotation + finalRotation / 2) angles = finalRotation;
+                    else if (angles > finalRotation + finalRotation / 2 || angles < initialRotation) angles = initialRotation;
+                    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(angles, initialRotation, finalRotation)));
                 }
 
                 //if (axis == Axis.z)
