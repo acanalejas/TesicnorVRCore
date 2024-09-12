@@ -136,6 +136,10 @@ public class VRColliderPath : VRCollider
 
     private float initialZAngle = 0;
 
+    private float anglePerSection = 0;
+
+    private Vector2 initialDirection;
+
     #endregion
 
     #region FUNCTIONS
@@ -143,6 +147,7 @@ public class VRColliderPath : VRCollider
     {
         base.Awake();
         SetPathPoints();
+        SetRotationPath();
 
         if (bShouldDisableOnEnd) OnPathEndReached.AddListener(DisableOnEnd);
 
@@ -184,6 +189,25 @@ public class VRColliderPath : VRCollider
         pathPoints.Add(finalPosition);
     }
 
+    void SetRotationPath()
+    {
+        if (axis != Axis.z) return;
+
+        float xExtent = this.GetComponent<MeshRenderer>().bounds.extents.x;
+        float yExtent = this.GetComponent<MeshRenderer>().bounds.extents.y;
+
+        float extent = xExtent > yExtent ? xExtent : yExtent;
+
+        Vector3 _up = this.transform.up * extent;
+        float angleDiff = finalRotation - initialRotation;
+        anglePerSection = angleDiff / pointNumber;
+
+        for(int i = 0; i < pointNumber - 1; i++)
+        {
+            Vector3 point = Quaternion.AngleAxis(initialRotation + i * anglePerSection, Vector3.forward) * _up;
+            pathPoints.Add(point);
+        }
+    }
     public override void Grab(GrippingHand hand)
     {
         base.Grab(hand);
@@ -191,6 +215,8 @@ public class VRColliderPath : VRCollider
         if(this.transform.parent != null)
         initialHandPosition = this.transform.parent.InverseTransformPoint(hand.transform.position);
         else initialHandPosition = hand.transform.position;
+
+        initialDirection = ((Vector2)(grippingHand.transform.position - this.transform.position)).normalized;
 
         if (axis == Axis.z) initialZAngle = GetAngleBetweenHandAndUp();
         SelectCoroutine();
@@ -248,12 +274,15 @@ public class VRColliderPath : VRCollider
 
                 if(axis == Axis.z)
                 {
-                    this.transform.up = new Vector3(direction.x, direction.y, 0);
-                    float angles = this.transform.localRotation.eulerAngles.z;
+                    //this.transform.up = new Vector3(direction.x, direction.y, 0);
+                    float angles = pointToRotate() * anglePerSection + initialRotation;//this.transform.localRotation.eulerAngles.z; 
+                    //float angles = 0;
+                    //if (initialDirection.x < direction.x) angles = Vector2.Angle(initialDirection, (Vector2)direction);
 
                     if (angles > finalRotation && angles < finalRotation + finalRotation / 2) angles = finalRotation;
                     else if (angles > finalRotation + finalRotation / 2 || angles < initialRotation) angles = initialRotation;
                     this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(angles, initialRotation, finalRotation)));
+                    
                 }
 
                 //if (axis == Axis.z)
@@ -311,6 +340,31 @@ public class VRColliderPath : VRCollider
         return currentPoint;
     }
 
+    protected virtual int pointToRotate()
+    {
+        int previousIndex = currentPoint - 1;
+        if (currentPoint == 0) previousIndex = 0;
+        int nextIndex = currentPoint + 1;
+        if (currentPoint == pathPoints.Count - 1) nextIndex = currentPoint;
+
+        Vector3 _currentPoint = pathPoints[currentPoint];
+        Vector3 _previousPoint = pathPoints[previousIndex];
+        Vector3 _nextPoint = pathPoints[nextIndex];
+
+        Vector3 currentLocalPosition = this.transform.InverseTransformPoint(grippingHand.transform.position);
+        float _currentDistance = Vector3.Distance(currentLocalPosition, _currentPoint);
+        float _previousDistance = Vector3.Distance(currentLocalPosition, _previousPoint);
+        float _nextDistance = Vector3.Distance(currentLocalPosition, _nextPoint);
+
+        if (_previousDistance < _currentDistance || _nextDistance < _currentDistance)
+        {
+            if (_previousDistance < _nextDistance) { currentPoint = previousIndex; return previousIndex; }
+
+            else if (_nextDistance < _previousDistance) { currentPoint = nextIndex; return nextIndex; }
+        }
+
+        return currentPoint;
+    }
     /// <summary>
     /// Detecta el punto al que moverse, comparando entre el punto actual, el anterior y el siguiente.
     /// Se usa como referencia la distancia que se ha desplazado la mano desde que se agarra
