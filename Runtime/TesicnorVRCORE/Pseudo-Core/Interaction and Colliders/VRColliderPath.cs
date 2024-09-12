@@ -248,8 +248,8 @@ public class VRColliderPath : VRCollider
 
                 if(axis == Axis.z)
                 {
-                    this.transform.up = new Vector3(direction.x, direction.y, 0);
-                    float angles = this.transform.localRotation.eulerAngles.z;
+                    //this.transform.up = new Vector3(direction.x, direction.y, 0);
+                    float angles = GetAngleBetweenHandAndUp() - initialZAngle;
 
                     if (angles > finalRotation && angles < finalRotation + finalRotation / 2) angles = finalRotation;
                     else if (angles > finalRotation + finalRotation / 2 || angles < initialRotation) angles = initialRotation;
