@@ -447,7 +447,7 @@ namespace TesicFire
             if (valueToCheck == TimeToExtinguish) framesChecked++;
             else framesChecked = 0;
 
-            if (framesChecked > 50) extinguishing = false;
+            if (framesChecked > 72) extinguishing = false;
 
             valueToCheck = TimeToExtinguish;
 
