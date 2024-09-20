@@ -13,6 +13,9 @@ public class ObjectPainter : MonoBehaviour
     [Header("El objeto que va a servir de origen para pintar")]
     [SerializeField] private GameObject brushContainer;
 
+    [Header("El objeto que sirve como prefab del pincel")]
+    [SerializeField] private GameObject brushPrefab;
+
     [Header("La Render Texture sobre la que se va a proyectar la textura pintada")]
     [SerializeField] private RenderTexture proyectionRT;
 
@@ -59,21 +62,21 @@ public class ObjectPainter : MonoBehaviour
     private int maxBrushCount = 100;
 
     /// <summary>
-    /// El prefab que creamos al inicio para partir de ahi
-    /// </summary>
-    private GameObject brushPrefab;
-
-    /// <summary>
     /// La lista de pinceles spawneados
     /// </summary>
-    private List<GameObject> spawnedBrushes;
+    private List<GameObject> spawnedBrushes = new List<GameObject>();
+
+    /// <summary>
+    /// El ultimo objeto que se pinto
+    /// </summary>
+    private GameObject lastPainted;
     #endregion
 
     #region METHODS
 
     private void Awake()
     {
-        
+        CheckSingleton();
     }
 
     private void Start()
@@ -84,6 +87,8 @@ public class ObjectPainter : MonoBehaviour
 
     private void CreateBrushPrefab()
     {
+        if (brushPrefab != null) return;
+
         brushPrefab = new GameObject("brushPrefab DO NOT TOUCH", typeof(SpriteRenderer));
         SpriteRenderer img = brushPrefab.GetComponent<SpriteRenderer>();
 
@@ -130,18 +135,23 @@ public class ObjectPainter : MonoBehaviour
         proyectionCamera.nearClipPlane = 0.3f;
         proyectionCamera.farClipPlane = 5;
     }
-    public void Paint(Vector3 uvCoordinates, GameObject GO = null)
+    #endregion
+    public void Paint(Vector3 uvCoordinates, GameObject GO)
     {
         if (GO)
         {
+            Debug.Log("Detecta el gameObject");
             if (GO.GetComponent<MeshRenderer>())
             {
-                proyectionRenderer.sharedMaterial = GO.GetComponent<MeshRenderer>().sharedMaterial;
+                Debug.Log("Intentando asignar la textura");
+                //proyectionRenderer.material.mainTexture = GO.GetComponent<MeshRenderer>().materials[0].mainTexture;
             }
             else if (GO.GetComponent<SkinnedMeshRenderer>())
             {
-                proyectionRenderer.sharedMaterial = GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial;
+                proyectionRenderer.materials[0].mainTexture = GO.GetComponent<SkinnedMeshRenderer>().materials[0].mainTexture;
             }
+
+            lastPainted = GO;
         }
 
         Vector3 worldPosition = Vector3.zero;
@@ -154,22 +164,47 @@ public class ObjectPainter : MonoBehaviour
         spawnedBrushes.Add(newBrush);
 
         RenderTexture.active = proyectionRT;
-        proyectionRT.width = proyectionRenderer.sharedMaterial.mainTexture ? proyectionRenderer.sharedMaterial.mainTexture.width : 512;
-        proyectionRT.height = proyectionRenderer.sharedMaterial.mainTexture ? proyectionRenderer.sharedMaterial.mainTexture.height : 512;
-
+        //proyectionRT.width = proyectionRenderer.sharedMaterial.mainTexture ? proyectionRenderer.sharedMaterial.mainTexture.width : 512;
+        //proyectionRT.height = proyectionRenderer.sharedMaterial.mainTexture ? proyectionRenderer.sharedMaterial.mainTexture.height : 512;
+        
         Texture2D _texture = new Texture2D(proyectionRT.width, proyectionRT.height, TextureFormat.ARGB32, false);
         _texture.ReadPixels(new Rect(0, 0, proyectionRT.width, proyectionRT.height), 0, 0);
+        //for(int h = 0; h < proyectionRT.height; h++)
+        //{
+        //    for(int w = 0; w < proyectionRT.width; w++)
+        //    {
+        //        if (_texture.GetPixel(w, h) == Color.white) _texture.SetPixel(w, h, Color.clear);
+        //    }
+        //}
         _texture.Apply();
 
-        proyectionRenderer.sharedMaterial.mainTexture = _texture;
-        
+        //proyectionRenderer.sharedMaterial.mainTexture = _texture;
+        if (lastPainted && lastPainted.GetComponent<MeshRenderer>())
+        {
+            lastPainted.GetComponent<MeshRenderer>().sharedMaterial.SetTexture(1, _texture);
+        }
+        else if (lastPainted && lastPainted.GetComponent<SkinnedMeshRenderer>())
+        {
+            lastPainted.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _texture;
+        }
+
+        //Destroy(newBrush);
         if(spawnedBrushes.Count > maxBrushCount)
         {
-            foreach (var brush in spawnedBrushes) Destroy(brush);
-
+            foreach(var brush in spawnedBrushes) Destroy(brush);
             spawnedBrushes.Clear();
         }
     }
     #endregion
+
+    #region SINGLETON
+    private static ObjectPainter instance;
+    public static ObjectPainter Instance { get { return instance; } }
+
+    void CheckSingleton()
+    {
+        if (!instance) instance = this;
+        else Destroy(this);
+    }
     #endregion
 }
