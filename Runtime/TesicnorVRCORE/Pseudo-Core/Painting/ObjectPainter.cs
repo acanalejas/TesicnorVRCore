@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Camera))]
 public class ObjectPainter : MonoBehaviour
 {
     #region PARAMETERS
@@ -70,6 +69,10 @@ public class ObjectPainter : MonoBehaviour
     /// El ultimo objeto que se pinto
     /// </summary>
     private GameObject lastPainted;
+
+    private Texture2D _texture;
+
+    Rect rect = new Rect(0, 0, 512, 512);
     #endregion
 
     #region METHODS
@@ -83,6 +86,7 @@ public class ObjectPainter : MonoBehaviour
     {
         CreateBrushPrefab();
         ConfigureCamera();
+        _texture = new Texture2D(512, 512, TextureFormat.RGB24, false);
     }
 
     private void CreateBrushPrefab()
@@ -138,20 +142,20 @@ public class ObjectPainter : MonoBehaviour
     #endregion
     public void Paint(Vector3 uvCoordinates, GameObject GO)
     {
-        if (GO)
+        if (GO && lastPainted != GO)
         {
             Debug.Log("Detecta el gameObject");
             if (GO.GetComponent<MeshRenderer>())
             {
                 Debug.Log("Intentando asignar la textura");
-                //proyectionRenderer.material.mainTexture = GO.GetComponent<MeshRenderer>().materials[0].mainTexture;
+                proyectionRenderer.material.mainTexture = GO.GetComponent<MeshRenderer>().material.mainTexture;
             }
             else if (GO.GetComponent<SkinnedMeshRenderer>())
             {
                 proyectionRenderer.materials[0].mainTexture = GO.GetComponent<SkinnedMeshRenderer>().materials[0].mainTexture;
             }
-
             lastPainted = GO;
+            //if (lastPainted == proyectionRenderer.gameObject) lastPainted = null;
         }
 
         Vector3 worldPosition = Vector3.zero;
@@ -163,36 +167,50 @@ public class ObjectPainter : MonoBehaviour
         newBrush.transform.localPosition = worldPosition;
         spawnedBrushes.Add(newBrush);
 
+        proyectionCamera.targetTexture = proyectionRT;
         RenderTexture.active = proyectionRT;
-        //proyectionRT.width = proyectionRenderer.sharedMaterial.mainTexture ? proyectionRenderer.sharedMaterial.mainTexture.width : 512;
-        //proyectionRT.height = proyectionRenderer.sharedMaterial.mainTexture ? proyectionRenderer.sharedMaterial.mainTexture.height : 512;
-        
-        Texture2D _texture = new Texture2D(proyectionRT.width, proyectionRT.height, TextureFormat.ARGB32, false);
-        _texture.ReadPixels(new Rect(0, 0, proyectionRT.width, proyectionRT.height), 0, 0);
-        //for(int h = 0; h < proyectionRT.height; h++)
-        //{
-        //    for(int w = 0; w < proyectionRT.width; w++)
-        //    {
-        //        if (_texture.GetPixel(w, h) == Color.white) _texture.SetPixel(w, h, Color.clear);
-        //    }
-        //}
+        proyectionCamera.Render();
+
+        _texture.ReadPixels(rect, 0, 0, false);
         _texture.Apply();
 
         //proyectionRenderer.sharedMaterial.mainTexture = _texture;
-        if (lastPainted && lastPainted.GetComponent<MeshRenderer>())
+        if (GO && GO.GetComponent<MeshRenderer>())
         {
-            lastPainted.GetComponent<MeshRenderer>().sharedMaterial.SetTexture(1, _texture);
+            Debug.Log("Aplicando textura nueva");
+            //GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
         }
-        else if (lastPainted && lastPainted.GetComponent<SkinnedMeshRenderer>())
+        else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
         {
-            lastPainted.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _texture;
+            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _texture;
         }
 
         //Destroy(newBrush);
         if(spawnedBrushes.Count > maxBrushCount)
         {
-            foreach(var brush in spawnedBrushes) Destroy(brush);
+            //proyectionRenderer.material.mainTexture = _texture;
+            foreach (var brush in spawnedBrushes) Destroy(brush);
             spawnedBrushes.Clear();
+        }
+        //StartCoroutine(ParseTextureAndApply(GO));
+    }
+
+    IEnumerator ParseTextureAndApply(GameObject GO)
+    {
+        yield return new WaitForEndOfFrame();
+
+        _texture.ReadPixels(rect, 0, 0, false);
+        _texture.Apply();
+
+        //proyectionRenderer.sharedMaterial.mainTexture = _texture;
+        if (GO && GO.GetComponent<MeshRenderer>())
+        {
+            Debug.Log("Aplicando textura nueva");
+            GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
+        }
+        else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
+        {
+            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _texture;
         }
     }
     #endregion
