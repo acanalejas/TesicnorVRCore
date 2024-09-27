@@ -72,7 +72,7 @@ public class ObjectPainter : MonoBehaviour
 
     private Texture2D _texture;
 
-    Rect rect = new Rect(0, 0, 512, 512);
+    Rect rect = new Rect(0, 0, 1024, 1024);
     #endregion
 
     #region METHODS
@@ -86,7 +86,7 @@ public class ObjectPainter : MonoBehaviour
     {
         CreateBrushPrefab();
         ConfigureCamera();
-        _texture = new Texture2D(512, 512, TextureFormat.RGB24, false);
+        _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
     }
 
     private void CreateBrushPrefab()
@@ -144,6 +144,7 @@ public class ObjectPainter : MonoBehaviour
     {
         if (GO && lastPainted != GO)
         {
+            _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
             Debug.Log("Detecta el gameObject");
             if (GO.GetComponent<MeshRenderer>())
             {
@@ -155,6 +156,8 @@ public class ObjectPainter : MonoBehaviour
                 proyectionRenderer.materials[0].mainTexture = GO.GetComponent<SkinnedMeshRenderer>().materials[0].mainTexture;
             }
             lastPainted = GO;
+
+            goto DestroyBrushes;
             //if (lastPainted == proyectionRenderer.gameObject) lastPainted = null;
         }
 
@@ -178,7 +181,7 @@ public class ObjectPainter : MonoBehaviour
         if (GO && GO.GetComponent<MeshRenderer>())
         {
             Debug.Log("Aplicando textura nueva");
-            //GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
+            GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
         }
         else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
         {
@@ -188,10 +191,14 @@ public class ObjectPainter : MonoBehaviour
         //Destroy(newBrush);
         if(spawnedBrushes.Count > maxBrushCount)
         {
-            //proyectionRenderer.material.mainTexture = _texture;
-            foreach (var brush in spawnedBrushes) Destroy(brush);
-            spawnedBrushes.Clear();
+            proyectionRenderer.material.mainTexture = _texture;
+            goto DestroyBrushes;
         }
+
+        DestroyBrushes:
+        foreach (var brush in spawnedBrushes) Destroy(brush);
+        spawnedBrushes.Clear();
+
         //StartCoroutine(ParseTextureAndApply(GO));
     }
 
