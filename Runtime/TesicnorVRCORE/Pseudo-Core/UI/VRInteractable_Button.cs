@@ -175,6 +175,8 @@ public class VRInteractableButtonEditor: InteractableEditor
 
             GUILayout.Space(10);
         }
+
+        serializedObject.ApplyModifiedProperties();
     }
 }
 #endif
