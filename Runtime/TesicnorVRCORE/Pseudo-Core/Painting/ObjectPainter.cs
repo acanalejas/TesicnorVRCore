@@ -145,6 +145,7 @@ public class ObjectPainter : MonoBehaviour
         if (GO && lastPainted != GO)
         {
             _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
+
             Debug.Log("Detecta el gameObject");
             if (GO.GetComponent<MeshRenderer>())
             {

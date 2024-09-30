@@ -31,13 +31,16 @@ public class VRInteractable_Button : VR_Interactable
     public override void Awake()
     {
         base.Awake();
-        CreateGameObjectForEffect();
+        if (this.bClickByHover && bUsesDefaultHoverEffect)
+        {
+            CreateGameObjectForEffect();
 
-        timeElapsed = Time.deltaTime;
+            timeElapsed = Time.deltaTime;
 
-        this.onHover.AddListener(CheckHoverClick);
-        this.onHoverExit.AddListener(ResetHoverClick);
-        this.onClick.AddListener(ResetHoverClick);
+            this.onHover.AddListener(CheckHoverClick);
+            this.onHoverExit.AddListener(ResetHoverClick);
+            this.onClick.AddListener(ResetHoverClick);
+        }
     }
 
     protected virtual void CheckHoverClick()
