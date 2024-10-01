@@ -151,6 +151,7 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         if (canBePressed)
         {
             onHoverExit?.Invoke();
+            isHovered = false;
         }
     }
     /// <summary>

@@ -46,6 +46,11 @@ public class VRInteractable_Button : VR_Interactable
         }
     }
 
+    public override void Update()
+    {
+        base.Update();
+        if (!GetIsHovered() && this.effectImage.fillAmount != 0) ResetHoverClick();
+    }
     protected virtual void CheckHoverClick()
     {
         timeHovered += timeElapsed;
@@ -57,7 +62,7 @@ public class VRInteractable_Button : VR_Interactable
             alreadyClicked = true;
         }
 
-        if (bUsesDefaultHoverEffect)
+        if (bUsesDefaultHoverEffect && !alreadyClicked)
         {
             UpdateDefaultEffect();
         }
@@ -66,15 +71,20 @@ public class VRInteractable_Button : VR_Interactable
     protected virtual void ResetHoverClick()
     {
         timeHovered = 0;
+        effectImage.fillAmount = 0;
     }
 
     protected virtual void CreateGameObjectForEffect()
     {
         effectObject = new GameObject("HoverEffect", typeof(Image));
-        effectImage = effectObject.GetComponent<Image>();
-
-        effectObject.transform.localScale = this.transform.localScale * 1.1f;
         effectObject.transform.parent = this.transform.parent;
+        effectImage = effectObject.GetComponent<Image>();
+        RectTransform objectRect = effectObject.GetComponent<RectTransform>();
+        RectTransform selfRect = this.GetComponent<RectTransform>();
+        objectRect.sizeDelta = selfRect.sizeDelta;
+
+        effectObject.transform.localPosition = this.transform.localPosition;
+        effectObject.transform.localScale = this.transform.localScale * 1.2f;
 
         if (this.transform.GetSiblingIndex() > 0)
             effectObject.transform.SetSiblingIndex(this.transform.GetSiblingIndex() - 1);
@@ -93,6 +103,8 @@ public class VRInteractable_Button : VR_Interactable
     protected virtual void UpdateDefaultEffect()
     {
         effectImage.fillAmount = timeHovered / fTimeToClickByHover;
+
+        effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
     }
 
     #endregion

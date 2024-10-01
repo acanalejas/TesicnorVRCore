@@ -113,7 +113,11 @@ public class ObjectPainter : MonoBehaviour
         brushPrefab.transform.localEulerAngles = Vector3.one * CurrentBrushScale;
 
         Image img = brushPrefab.GetComponent<Image>();
-        img.sprite = brushSprite;
+
+        if (!img) return;
+        if(brushSprite)
+            img.sprite = brushSprite;
+
         img.color = new Color(brushColor.r, brushColor.g, brushColor.b, brushOpacity);
     }
 
