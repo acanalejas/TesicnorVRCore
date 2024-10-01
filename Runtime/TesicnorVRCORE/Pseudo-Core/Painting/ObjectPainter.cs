@@ -142,6 +142,9 @@ public class ObjectPainter : MonoBehaviour
     #endregion
     public void Paint(Vector3 uvCoordinates, GameObject GO)
     {
+        goto NormalLoop;
+
+        NormalLoop:
         if (GO && lastPainted != GO)
         {
             _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
