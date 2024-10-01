@@ -36,6 +36,9 @@ public class ObjectPainter : MonoBehaviour
     [Header("El tamaño mínimo del pincel (escala)")]
     [SerializeField] private float minBrushScale = 1;
 
+    [Header("El tamaño inicial del pincel")]
+    [SerializeField] private float initialBrushScale = 0.2f;
+
     /// <summary>
     /// Valor de almacenamiento, no usar
     /// </summary>
@@ -86,6 +89,7 @@ public class ObjectPainter : MonoBehaviour
     {
         CreateBrushPrefab();
         ConfigureCamera();
+        CurrentBrushScale = initialBrushScale;
         _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
     }
 
@@ -142,9 +146,6 @@ public class ObjectPainter : MonoBehaviour
     #endregion
     public void Paint(Vector3 uvCoordinates, GameObject GO)
     {
-        goto NormalLoop;
-
-        NormalLoop:
         if (GO && lastPainted != GO)
         {
             _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
@@ -161,7 +162,7 @@ public class ObjectPainter : MonoBehaviour
             }
             lastPainted = GO;
 
-            goto DestroyBrushes;
+            DestroyBrushes();
             //if (lastPainted == proyectionRenderer.gameObject) lastPainted = null;
         }
 
@@ -170,8 +171,11 @@ public class ObjectPainter : MonoBehaviour
         worldPosition.y = uvCoordinates.y - proyectionCamera.orthographicSize;
         worldPosition.z = 0.0f;
 
+        Vector3 localScale = new Vector3(CurrentBrushScale, CurrentBrushScale, CurrentBrushScale);
+
         GameObject newBrush = GameObject.Instantiate(brushPrefab, brushContainer.transform);
         newBrush.transform.localPosition = worldPosition;
+        newBrush.transform.localScale = localScale;
         spawnedBrushes.Add(newBrush);
 
         proyectionCamera.targetTexture = proyectionRT;
@@ -196,14 +200,15 @@ public class ObjectPainter : MonoBehaviour
         if(spawnedBrushes.Count > maxBrushCount)
         {
             proyectionRenderer.material.mainTexture = _texture;
-            goto DestroyBrushes;
+            DestroyBrushes();
         }
+        //StartCoroutine(ParseTextureAndApply(GO));
+    }
 
-        DestroyBrushes:
+    private void DestroyBrushes()
+    {
         foreach (var brush in spawnedBrushes) Destroy(brush);
         spawnedBrushes.Clear();
-
-        //StartCoroutine(ParseTextureAndApply(GO));
     }
 
     IEnumerator ParseTextureAndApply(GameObject GO)
