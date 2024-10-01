@@ -24,6 +24,8 @@ public class VRInteractable_Button : VR_Interactable
     private float timeHovered;
 
     private float timeElapsed;
+
+    private bool alreadyClicked;
     #endregion
 
     #region FUNCTIONS
@@ -39,6 +41,7 @@ public class VRInteractable_Button : VR_Interactable
 
             this.onHover.AddListener(CheckHoverClick);
             this.onHoverExit.AddListener(ResetHoverClick);
+            this.onHoverExit.AddListener(() => { alreadyClicked = false; });
             this.onClick.AddListener(ResetHoverClick);
         }
     }
@@ -47,9 +50,11 @@ public class VRInteractable_Button : VR_Interactable
     {
         timeHovered += timeElapsed;
 
-        if(timeHovered >= fTimeToClickByHover)
+        if(timeHovered >= fTimeToClickByHover && !alreadyClicked)
         {
             OnClick();
+            OnRelease();
+            alreadyClicked = true;
         }
 
         if (bUsesDefaultHoverEffect)
