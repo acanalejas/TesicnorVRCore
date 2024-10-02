@@ -61,12 +61,17 @@ public class ObjectPainter : MonoBehaviour
     /// <summary>
     /// La cantidad máxima de brushes que se pueden llegar a instanciar antes de guardar
     /// </summary>
-    private int maxBrushCount = 100;
+    private int maxBrushCount = 30;
 
     /// <summary>
     /// La lista de pinceles spawneados
     /// </summary>
     private List<GameObject> spawnedBrushes = new List<GameObject>();
+
+    /// <summary>
+    /// Lista de pinceles activos
+    /// </summary>
+    private List<GameObject> activeBrushes = new List<GameObject>();
 
     /// <summary>
     /// El ultimo objeto que se pinto
@@ -89,8 +94,48 @@ public class ObjectPainter : MonoBehaviour
     {
         CreateBrushPrefab();
         ConfigureCamera();
+        CreateBrushPool(30);
         CurrentBrushScale = initialBrushScale;
         _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
+    }
+
+    private void CreateBrushPool(int amount)
+    {
+        for(int i = 0; i < amount; i++)
+        {
+            GameObject newBrush = GameObject.Instantiate(brushPrefab, brushContainer.transform);
+            newBrush.transform.localPosition = Vector3.zero;
+            newBrush.transform.localScale = Vector3.one;
+
+            newBrush.SetActive(false);
+            spawnedBrushes.Add(newBrush);
+        }
+    }
+
+    private GameObject GetBrushFromPool(Vector3 worldPosition, Vector3 localScale)
+    {
+        if (spawnedBrushes.Count <= 0) CreateBrushPool(10);
+
+        GameObject brush = spawnedBrushes[0];
+
+        brush.SetActive(true);
+        brush.transform.localPosition = worldPosition;
+        brush.transform.localScale = localScale;
+
+        spawnedBrushes.Remove(brush);
+        activeBrushes.Add(brush);
+
+        return brush;
+    }
+
+    private void ReturnToPool()
+    {
+        foreach(var brush in activeBrushes)
+        {
+            brush.SetActive(false);
+            spawnedBrushes.Add(brush);
+        }
+        activeBrushes.Clear();
     }
 
     private void CreateBrushPrefab()
@@ -177,10 +222,10 @@ public class ObjectPainter : MonoBehaviour
 
         Vector3 localScale = new Vector3(CurrentBrushScale, CurrentBrushScale, CurrentBrushScale);
 
-        GameObject newBrush = GameObject.Instantiate(brushPrefab, brushContainer.transform);
-        newBrush.transform.localPosition = worldPosition;
-        newBrush.transform.localScale = localScale;
-        spawnedBrushes.Add(newBrush);
+        GameObject newBrush = GetBrushFromPool(worldPosition, localScale);
+        //newBrush.transform.localPosition = worldPosition;
+        //newBrush.transform.localScale = localScale;
+        //spawnedBrushes.Add(newBrush);
 
         proyectionCamera.targetTexture = proyectionRT;
         RenderTexture.active = proyectionRT;
@@ -201,7 +246,7 @@ public class ObjectPainter : MonoBehaviour
         }
 
         //Destroy(newBrush);
-        if(spawnedBrushes.Count > maxBrushCount)
+        if(activeBrushes.Count > maxBrushCount)
         {
             proyectionRenderer.material.mainTexture = _texture;
             DestroyBrushes();
@@ -211,8 +256,7 @@ public class ObjectPainter : MonoBehaviour
 
     private void DestroyBrushes()
     {
-        foreach (var brush in spawnedBrushes) Destroy(brush);
-        spawnedBrushes.Clear();
+        ReturnToPool();
     }
 
     IEnumerator ParseTextureAndApply(GameObject GO)
