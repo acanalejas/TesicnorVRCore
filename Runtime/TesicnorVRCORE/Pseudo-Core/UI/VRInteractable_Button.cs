@@ -49,7 +49,7 @@ public class VRInteractable_Button : VR_Interactable
     public override void Update()
     {
         base.Update();
-        if (!GetIsHovered() && this.effectImage.fillAmount != 0) ResetHoverClick();
+        if (!GetIsHovered() && this.effectImage && this.effectImage.fillAmount != 0) ResetHoverClick();
     }
     protected virtual void CheckHoverClick()
     {
