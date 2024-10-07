@@ -78,11 +78,7 @@ public class ObjectPainter : MonoBehaviour
     /// </summary>
     private GameObject lastPainted;
 
-    private Material lastMat;
-
-    private Texture2D _texture;
-
-    List<Texture2D> _textures = new List<Texture2D>();
+    Dictionary<GameObject, Texture2D> _textures = new Dictionary<GameObject, Texture2D>();
 
     Rect rect = new Rect(0, 0, 1024, 1024);
     #endregion
@@ -100,7 +96,6 @@ public class ObjectPainter : MonoBehaviour
         ConfigureCamera();
         CreateBrushPool(30);
         CurrentBrushScale = initialBrushScale;
-        _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
     }
 
     private void CreateBrushPool(int amount)
@@ -202,25 +197,22 @@ public class ObjectPainter : MonoBehaviour
         if (!GO || uvCoordinates == Vector3.zero) return;
         if (lastPainted == null || (lastPainted && lastPainted.name != GO.name))
         {
-            _textures.Add(new Texture2D(1024, 1024, TextureFormat.RGB565, false));
+            if(!_textures.ContainsKey(GO))
+            _textures.Add(GO, new Texture2D(1024, 1024, TextureFormat.RGB565, false));
             Debug.Log(_textures.Count);
             Debug.Log(lastPainted);
 
             if (GO.GetComponent<MeshRenderer>())
             {
                 proyectionRenderer.material.mainTexture = GO.GetComponent<MeshRenderer>().material.mainTexture;
-                lastMat = GO.GetComponent<MeshRenderer>().material;
             }
             else if (GO.GetComponent<SkinnedMeshRenderer>())
             {
                 proyectionRenderer.materials[0].mainTexture = GO.GetComponent<SkinnedMeshRenderer>().materials[0].mainTexture;
-                lastMat = GO.GetComponent<MeshRenderer>().material;
             }
             lastPainted = GO;
 
             DestroyBrushes();
-
-            _textures.Add(new Texture2D(1024, 1024, TextureFormat.RGB565, false));
             Debug.Log(_textures.Count);
             //if (lastPainted == proyectionRenderer.gameObject) lastPainted = null;
         }
@@ -241,23 +233,23 @@ public class ObjectPainter : MonoBehaviour
         RenderTexture.active = proyectionRT;
         proyectionCamera.Render();
 
-        _textures[_textures.Count - 1].ReadPixels(rect, 0, 0, false);
-        _textures[_textures.Count - 1].Apply();
+        _textures[GO].ReadPixels(rect, 0, 0, false);
+        _textures[GO].Apply();
 
         //proyectionRenderer.sharedMaterial.mainTexture = _texture;
         if (GO && GO.GetComponent<MeshRenderer>())
         {
-            GO.GetComponent<MeshRenderer>().material.mainTexture = _textures[_textures.Count - 1];
+            GO.GetComponent<MeshRenderer>().material.mainTexture = _textures[GO];
         }
         else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
         {
-            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _textures[_textures.Count - 1];
+            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _textures[GO];
         }
 
         //Destroy(newBrush);
         if(activeBrushes.Count > maxBrushCount)
         {
-            proyectionRenderer.material.mainTexture = _textures[_textures.Count - 1];
+            proyectionRenderer.material.mainTexture = _textures[GO];
             DestroyBrushes();
         }
         //StartCoroutine(ParseTextureAndApply(GO));
@@ -266,24 +258,6 @@ public class ObjectPainter : MonoBehaviour
     private void DestroyBrushes()
     {
         ReturnToPool();
-    }
-
-    IEnumerator ParseTextureAndApply(GameObject GO)
-    {
-        yield return new WaitForEndOfFrame();
-
-        _texture.ReadPixels(rect, 0, 0, false);
-        _texture.Apply();
-
-        //proyectionRenderer.sharedMaterial.mainTexture = _texture;
-        if (GO && GO.GetComponent<MeshRenderer>())
-        {
-            GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
-        }
-        else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
-        {
-            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _texture;
-        }
     }
     #endregion
 
