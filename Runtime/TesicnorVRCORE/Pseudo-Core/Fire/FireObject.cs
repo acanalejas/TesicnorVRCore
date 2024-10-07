@@ -216,7 +216,7 @@ namespace TesicFire
             AdaptSmoke();
             AdaptSparks();
             Propagate();
-            Debug.Log(TimeToExtinguish);
+            //Debug.Log(TimeToExtinguish);
             TimeToExtinguish = timePerSection * (index);
             if (index == fire_mesh.Count - 1) completeFire = true;
             else completeFire = false;

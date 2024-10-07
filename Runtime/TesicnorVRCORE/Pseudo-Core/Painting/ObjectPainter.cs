@@ -78,7 +78,11 @@ public class ObjectPainter : MonoBehaviour
     /// </summary>
     private GameObject lastPainted;
 
+    private Material lastMat;
+
     private Texture2D _texture;
+
+    List<Texture2D> _textures = new List<Texture2D>();
 
     Rect rect = new Rect(0, 0, 1024, 1024);
     #endregion
@@ -195,23 +199,29 @@ public class ObjectPainter : MonoBehaviour
     #endregion
     public void Paint(Vector3 uvCoordinates, GameObject GO)
     {
-        if (GO && lastPainted != GO)
+        if (!GO || uvCoordinates == Vector3.zero) return;
+        if (lastPainted == null || (lastPainted && lastPainted.name != GO.name))
         {
-            _texture = new Texture2D(1024, 1024, TextureFormat.RGB565, false);
+            _textures.Add(new Texture2D(1024, 1024, TextureFormat.RGB565, false));
+            Debug.Log(_textures.Count);
+            Debug.Log(lastPainted);
 
-            Debug.Log("Detecta el gameObject");
             if (GO.GetComponent<MeshRenderer>())
             {
-                Debug.Log("Intentando asignar la textura");
                 proyectionRenderer.material.mainTexture = GO.GetComponent<MeshRenderer>().material.mainTexture;
+                lastMat = GO.GetComponent<MeshRenderer>().material;
             }
             else if (GO.GetComponent<SkinnedMeshRenderer>())
             {
                 proyectionRenderer.materials[0].mainTexture = GO.GetComponent<SkinnedMeshRenderer>().materials[0].mainTexture;
+                lastMat = GO.GetComponent<MeshRenderer>().material;
             }
             lastPainted = GO;
 
             DestroyBrushes();
+
+            _textures.Add(new Texture2D(1024, 1024, TextureFormat.RGB565, false));
+            Debug.Log(_textures.Count);
             //if (lastPainted == proyectionRenderer.gameObject) lastPainted = null;
         }
 
@@ -231,24 +241,23 @@ public class ObjectPainter : MonoBehaviour
         RenderTexture.active = proyectionRT;
         proyectionCamera.Render();
 
-        _texture.ReadPixels(rect, 0, 0, false);
-        _texture.Apply();
+        _textures[_textures.Count - 1].ReadPixels(rect, 0, 0, false);
+        _textures[_textures.Count - 1].Apply();
 
         //proyectionRenderer.sharedMaterial.mainTexture = _texture;
         if (GO && GO.GetComponent<MeshRenderer>())
         {
-            Debug.Log("Aplicando textura nueva");
-            GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
+            GO.GetComponent<MeshRenderer>().material.mainTexture = _textures[_textures.Count - 1];
         }
         else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
         {
-            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _texture;
+            GO.GetComponent<SkinnedMeshRenderer>().sharedMaterial.mainTexture = _textures[_textures.Count - 1];
         }
 
         //Destroy(newBrush);
         if(activeBrushes.Count > maxBrushCount)
         {
-            proyectionRenderer.material.mainTexture = _texture;
+            proyectionRenderer.material.mainTexture = _textures[_textures.Count - 1];
             DestroyBrushes();
         }
         //StartCoroutine(ParseTextureAndApply(GO));
@@ -269,7 +278,6 @@ public class ObjectPainter : MonoBehaviour
         //proyectionRenderer.sharedMaterial.mainTexture = _texture;
         if (GO && GO.GetComponent<MeshRenderer>())
         {
-            Debug.Log("Aplicando textura nueva");
             GO.GetComponent<MeshRenderer>().material.mainTexture = _texture;
         }
         else if (GO && GO.GetComponent<SkinnedMeshRenderer>())
