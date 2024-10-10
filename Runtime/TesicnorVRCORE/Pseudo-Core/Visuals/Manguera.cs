@@ -71,7 +71,7 @@ public class Manguera : MonoBehaviour
 
             joint.angularXMotion = ConfigurableJointMotion.Limited;
             joint.angularYMotion = ConfigurableJointMotion.Limited;
-            joint.angularZMotion = ConfigurableJointMotion.Limited;
+            joint.angularZMotion = ConfigurableJointMotion.Locked;
 
             SoftJointLimit sjl = new SoftJointLimit();
             sjl.limit = BoneDistance;
