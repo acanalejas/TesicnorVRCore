@@ -10,7 +10,7 @@ using TMPro;
 /// Un dropdown compatible con VR y con el core de Tesicnor 
 /// </summary>
 [RequireComponent(typeof(Image))]
-public class VRInteractable_Dropdown : VR_Interactable
+public class VRInteractable_Dropdown : VRInteractable_Button
 {
     
     #region PARAMETERS
@@ -63,7 +63,7 @@ public class VRInteractable_Dropdown : VR_Interactable
     /// La clase que se añade a cada opción del dropdown
     /// </summary>
     [RequireComponent(typeof(Image))]
-    public class Dropdown_Item : VR_Interactable
+    public class Dropdown_Item : VRInteractable_Button
     {
         public VRInteractable_Dropdown dropdown;
         public Image image;

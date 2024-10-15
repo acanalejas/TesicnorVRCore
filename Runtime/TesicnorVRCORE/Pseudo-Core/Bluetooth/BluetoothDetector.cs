@@ -3,53 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Plugin.BLE;
-//using Plugin.BluetoothLE;
 
-public class BluetoothDetector : MonoBehaviour
+public static class BluetoothDetector
 {
     #region SINGLETON
-    private static BluetoothDetector instance;
-    public static BluetoothDetector Instance {get {return instance;}}
-
-    void CheckSingleton()
-    {
-        if (!instance) instance = this;
-        else Destroy(this);
-    }
+    //private static BluetoothDetector instance;
+    //public static BluetoothDetector Instance {get {return instance;}}
+    //
+    //void CheckSingleton()
+    //{
+    //    if (!instance) instance = this;
+    //    else Destroy(this);
+    //}
     #endregion
 
     #region PARAMETERS
     [Header("Evento usado cuando se conecta un nuevo dispositivo")]
-    public UnityEvent<string> onDeviceConnected;
+    public static UnityEvent<string> onDeviceConnected;
 
     [Header("Evento usado cuando se desconecta un dispositivo")]
-    public UnityEvent<string> onDeviceDisconnected;
+    public static UnityEvent<string> onDeviceDisconnected;
 
     #endregion
 
     #region METHODS
-    private void Awake()
-    {
-        CheckSingleton();
-    }
+    //private void Awake()
+    //{
+    //    CheckSingleton();
+    //}
 
-    private void BindBTEvents()
+    public static void BindBTEvents()
     {
         CrossBluetoothLE.Current.Adapter.DeviceConnected += OnConnected;
         CrossBluetoothLE.Current.Adapter.DeviceDisconnected += OnDisconnected;
     }
 
-    protected void OnConnected(object _sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+    public static void OnConnected(object _sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
     {
         onDeviceConnected.Invoke(e.Device.Name);
     }
 
-    protected void OnDisconnected(object _sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+    public static void OnDisconnected(object _sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
     {
         onDeviceDisconnected.Invoke(e.Device.Name);
     }
 
-    public bool IsDeviceConnected(string _deviceName)
+    public static bool IsDeviceConnected(string _deviceName)
     {
         if (!CrossBluetoothLE.Current.IsOn) return false;
         
@@ -65,13 +64,13 @@ public class BluetoothDetector : MonoBehaviour
         return false;
     }
 
-    public void ConnectToDevice(string _deviceName)
+    public static void ConnectToDevice(string _deviceName)
     {
         if (!CrossBluetoothLE.Current.IsOn) return;
         if(!CrossBluetoothLE.Current.IsAvailable) return;
 
         
     }
-    public int ConnectedDevicesCount { get { return CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count; } }
+    public static int ConnectedDevicesCount { get { return CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count; } }
     #endregion
 }
