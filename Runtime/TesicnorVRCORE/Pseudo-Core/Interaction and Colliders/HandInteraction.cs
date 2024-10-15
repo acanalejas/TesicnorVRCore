@@ -193,6 +193,21 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         lineRenderer.enabled = Value;
     }
 
+    public void EnableRay()
+    {
+        ToggleRay(true);
+    }
+
+    public void DisableRay()
+    {
+        ToggleRay(false);
+    }
+
+    public void WaitAndEnableRay(float _time)
+    {
+        Invoke(nameof(EnableRay), _time);
+    }
+
     public void SetLineRendererColor(bool detected) 
     {
         Color color = Color.black;
