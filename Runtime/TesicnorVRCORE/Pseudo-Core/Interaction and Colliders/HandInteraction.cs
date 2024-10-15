@@ -249,6 +249,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
                     if (interactingObject != null && interactingObject != interactionHit.collider.gameObject) interactingObject.GetComponent<VRInteractableInterface>().OnExitHover();
                     interactingObject = interactionHit.collider.gameObject;
+                    interactable.SetHand(this.gameObject);
                     interactable.OnHovered();
                 }
                 else

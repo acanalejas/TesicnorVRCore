@@ -18,6 +18,9 @@ public class VRInteractable_Button : VR_Interactable
     [Header("Se usa el efecto por defecto de pulsar por tiempo?")]
     [SerializeField, HideInInspector] private bool bUsesDefaultHoverEffect = true;
 
+    [Header("Imagen a usar para en el efecto")]
+    [SerializeField, HideInInspector] private Image ExternalImage;
+
     private GameObject effectObject;
     private Image effectImage;
 
@@ -33,9 +36,15 @@ public class VRInteractable_Button : VR_Interactable
     public override void Awake()
     {
         base.Awake();
-        if (this.bClickByHover && bUsesDefaultHoverEffect)
+        if (this.bClickByHover)
         {
-            CreateGameObjectForEffect();
+            if(bUsesDefaultHoverEffect)
+                CreateGameObjectForEffect();
+            else
+            {
+                effectImage = this.ExternalImage;
+                effectObject = effectImage.gameObject;
+            }
 
             timeElapsed = Time.deltaTime;
 
@@ -62,7 +71,7 @@ public class VRInteractable_Button : VR_Interactable
             alreadyClicked = true;
         }
 
-        if (bUsesDefaultHoverEffect && !alreadyClicked)
+        if (!alreadyClicked)
         {
             UpdateDefaultEffect();
         }
@@ -84,7 +93,10 @@ public class VRInteractable_Button : VR_Interactable
         objectRect.sizeDelta = selfRect.sizeDelta;
 
         effectObject.transform.localPosition = this.transform.localPosition;
+        effectObject.transform.localRotation = this.transform.localRotation;
         effectObject.transform.localScale = this.transform.localScale * 1.2f;
+
+        this.transform.parent = effectObject.transform;
 
         if (this.transform.GetSiblingIndex() > 0)
             effectObject.transform.SetSiblingIndex(this.transform.GetSiblingIndex() - 1);
@@ -104,7 +116,7 @@ public class VRInteractable_Button : VR_Interactable
     {
         effectImage.fillAmount = timeHovered / fTimeToClickByHover;
 
-        effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
+        if(bUsesDefaultHoverEffect)effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
     }
 
     #endregion
@@ -194,6 +206,14 @@ public class VRInteractableButtonEditor: InteractableEditor
             usesDefaultEffect.boolValue = GUILayout.Toggle(usesDefaultEffect.boolValue, "Uses default hover effect");
 
             GUILayout.Space(10);
+
+            if(usesDefaultEffect.boolValue == false)
+            {
+                SerializedProperty externalImage = serializedObject.FindProperty("ExternalImage");
+
+                GUILayout.Label("La imagen que se va a usar para el efecto", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(externalImage);
+            }
         }
 
         serializedObject.ApplyModifiedProperties();
