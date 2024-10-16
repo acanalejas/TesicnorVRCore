@@ -8,7 +8,7 @@ using UnityEditor;
 #endif
 
 
-public class VRInteractable_InputField : VR_Interactable
+public class VRInteractable_InputField : VRInteractable_Button
 {
     #region PARAMETERS
     [Header("El texto sobre el que se va a escribir")]
