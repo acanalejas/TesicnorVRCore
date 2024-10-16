@@ -29,6 +29,8 @@ public class VRInteractable_Button : VR_Interactable
     private float timeElapsed;
 
     private bool alreadyClicked;
+
+    float lastTimeChecked;
     #endregion
 
     #region FUNCTIONS
@@ -57,7 +59,7 @@ public class VRInteractable_Button : VR_Interactable
             effectObject = effectImage.gameObject;
         }
 
-        timeElapsed = Time.deltaTime;
+        timeElapsed = 0.03f;
 
         this.onHover.AddListener(this.CheckHoverClick);
         this.onHoverExit.AddListener(this.ResetHoverClick);
@@ -72,7 +74,10 @@ public class VRInteractable_Button : VR_Interactable
     }
     protected virtual void CheckHoverClick()
     {
+        if (Time.time - lastTimeChecked < timeElapsed) return;
+        lastTimeChecked = Time.time;
         timeHovered += timeElapsed;
+        Debug.Log(timeElapsed);
 
         if(timeHovered >= fTimeToClickByHover && !alreadyClicked)
         {
