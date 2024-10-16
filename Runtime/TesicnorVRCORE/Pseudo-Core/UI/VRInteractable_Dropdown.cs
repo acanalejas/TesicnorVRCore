@@ -70,9 +70,18 @@ public class VRInteractable_Dropdown : VRInteractable_Button
         public TextMeshProUGUI text;
         public int position;
 
+        protected override void Start()
+        {
+            
+        }
+
         public override void Awake()
         {
+            this.bClickByHover = true;
+            this.fTimeToClickByHover = 6;
+
             base.Awake();
+            
             image = GetComponent<Image>();
             image.maskable = false;
 
@@ -193,7 +202,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
 #endif
     public override void Awake()
     {
-        base.Awake();
+        
         SetupDropdown();
         text = GetComponentInChildren<TextMeshProUGUI>();
         text.raycastTarget = false;
@@ -204,6 +213,13 @@ public class VRInteractable_Dropdown : VRInteractable_Button
         vl.SetActive(false);
         vl.transform.parent = this.transform.parent;
         onRelease.AddListener(OpenDropdown);
+
+        base.Awake();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
     }
 
     /// <summary>
@@ -252,6 +268,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
             item.text.color = text.color;
 
             item.SetupUICollider();
+            //item.SetupHover();
         }
     }
 

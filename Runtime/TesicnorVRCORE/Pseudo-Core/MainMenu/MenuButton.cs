@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
-public class MenuButton : VR_Interactable
+public class MenuButton : VRInteractable_Button
 {
     #region PARAMETERS
     [Header("Datos de la escena que queremos cargar")]

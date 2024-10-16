@@ -10,16 +10,16 @@ public class VRInteractable_Button : VR_Interactable
 {
     #region PARAMETERS
     [Header("Se pulsa al mantener el cursor encima?")]
-    [SerializeField, HideInInspector] private bool bClickByHover = false;
+    [SerializeField, HideInInspector] protected bool bClickByHover = false;
 
     [Header("El tiempo que se debe mantener el cursor encima para activar el click")]
-    [SerializeField, HideInInspector] private float fTimeToClickByHover = 1.5f;
+    [SerializeField, HideInInspector] protected float fTimeToClickByHover = 1.5f;
 
     [Header("Se usa el efecto por defecto de pulsar por tiempo?")]
-    [SerializeField, HideInInspector] private bool bUsesDefaultHoverEffect = true;
+    [SerializeField, HideInInspector] protected bool bUsesDefaultHoverEffect = true;
 
     [Header("Imagen a usar para en el efecto")]
-    [SerializeField, HideInInspector] private Image ExternalImage;
+    [SerializeField, HideInInspector] protected Image ExternalImage;
 
     private GameObject effectObject;
     private Image effectImage;
@@ -36,23 +36,33 @@ public class VRInteractable_Button : VR_Interactable
     public override void Awake()
     {
         base.Awake();
+        
+    }
+    protected virtual void Start()
+    {
         if (this.bClickByHover)
         {
-            if(bUsesDefaultHoverEffect)
-                CreateGameObjectForEffect();
-            else
-            {
-                effectImage = this.ExternalImage;
-                effectObject = effectImage.gameObject;
-            }
-
-            timeElapsed = Time.deltaTime;
-
-            this.onHover.AddListener(CheckHoverClick);
-            this.onHoverExit.AddListener(ResetHoverClick);
-            this.onHoverExit.AddListener(() => { alreadyClicked = false; });
-            this.onClick.AddListener(ResetHoverClick);
+            SetupHover();
         }
+    }
+
+    public virtual void SetupHover()
+    {
+
+        if (bUsesDefaultHoverEffect)
+            CreateGameObjectForEffect();
+        else
+        {
+            effectImage = this.ExternalImage;
+            effectObject = effectImage.gameObject;
+        }
+
+        timeElapsed = Time.deltaTime;
+
+        this.onHover.AddListener(this.CheckHoverClick);
+        this.onHoverExit.AddListener(this.ResetHoverClick);
+        this.onHoverExit.AddListener(() => { alreadyClicked = false; });
+        this.onClick.AddListener(this.ResetHoverClick);
     }
 
     public override void Update()
