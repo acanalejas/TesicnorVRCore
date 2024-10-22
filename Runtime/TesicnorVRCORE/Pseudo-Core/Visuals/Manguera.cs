@@ -54,7 +54,7 @@ public class Manguera : MonoBehaviour
             else Joints.Add(bone.GetComponent<ConfigurableJoint>());
         }
 
-        foreach (Rigidbody rb in Rigidbodies) { rb.mass = 0.2f; rb.drag = 1.5f; }
+        foreach (Rigidbody rb in Rigidbodies) { rb.mass = 0.1f; rb.drag = 1.5f; rb.angularDrag = 10; }
 
         Rigidbody StartRB = Rigidbodies[0]; Rigidbody LastRB = Rigidbodies[Rigidbodies.Count - 1];
 
@@ -75,8 +75,9 @@ public class Manguera : MonoBehaviour
 
             SoftJointLimit sjl = new SoftJointLimit();
             sjl.limit = BoneDistance;
-            sjl.bounciness = -BoneDistance;
+            sjl.bounciness = 1;
             sjl.contactDistance = BoneDistance*2;
+        
             joint.linearLimit = sjl;
 
             //joint.enableCollision = true;
