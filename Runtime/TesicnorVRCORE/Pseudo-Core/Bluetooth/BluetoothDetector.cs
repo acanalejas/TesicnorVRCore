@@ -50,6 +50,7 @@ public static class BluetoothDetector
 
     public static bool IsDeviceConnected(string _deviceName)
     {
+        if (!CrossBluetoothLE.Current.IsAvailable) return false;
         if (!CrossBluetoothLE.Current.IsOn) return false;
         
         var _connectedDevices = CrossBluetoothLE.Current.Adapter.ConnectedDevices;
@@ -68,9 +69,8 @@ public static class BluetoothDetector
     {
         if (!CrossBluetoothLE.Current.IsOn) return;
         if(!CrossBluetoothLE.Current.IsAvailable) return;
-
-        
     }
-    public static int ConnectedDevicesCount { get { return CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count; } }
+
+    //public static int ConnectedDevicesCount { get { return CrossBluetoothLE.Current.Adapter.ConnectedDevices.Count; } }
     #endregion
 }
