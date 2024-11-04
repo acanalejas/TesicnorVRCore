@@ -373,8 +373,6 @@ namespace TesicFire
 
             TimeToExtinguish -= timeToSubstract;
 
-            Debug.Log("Time to extinguish " + TimeToExtinguish);
-
             float timePerSection = MaxTimeToExtinguish / fire_mesh.Count;
             for (int i = 0; i < fire_mesh.Count; i++)
             {
