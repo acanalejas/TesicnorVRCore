@@ -87,7 +87,7 @@ public class BackendTimeManager : BackendGetter
     private void Awake()
     {
 #if UNITY_EDITOR
-        PlayerPrefs.SetString("Username", "vr@tesicnor.com");
+        //PlayerPrefs.SetString("Username", "vr@tesicnor.com");
 #endif
         base.Awake();
     }
@@ -119,6 +119,12 @@ public class BackendTimeManager : BackendGetter
         }
     }
 
+    public void UpdateTimeInfo()
+    {
+        if (this.workingMethod != WorkingMethod.RetrieveTime) return;
+
+        StartCoroutine(nameof(RetrieveTimeUpdate));
+    }
     private IEnumerator StartScene()
     {
         while (true)

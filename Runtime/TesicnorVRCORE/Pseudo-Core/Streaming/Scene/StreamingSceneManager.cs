@@ -15,9 +15,13 @@ public class StreamingSceneManager : MonoBehaviour
     static string Enter;
 
     public GameObject questionCanvas, keyboardCanvas;
+    public GameObject SampleText;
+    public GameObject EnterButton;
     public TextMeshProUGUI IPText;
     public TextMeshProUGUI InputIPText;
     public TextMeshProUGUI EnterText;
+
+    public bool ShouldChangeSceneOnEnter = true;
 
     string ip = "";
     #endregion
@@ -32,12 +36,14 @@ public class StreamingSceneManager : MonoBehaviour
 
         if(StreamingCSharp.HttpClient_Custom.isStreaming)
         {
-            questionCanvas.SetActive(true);
-            keyboardCanvas.SetActive(false);
+            if(questionCanvas) questionCanvas.SetActive(true);
+            if(keyboardCanvas) keyboardCanvas.SetActive(false);
         }
 
-        EnterText.text = Enter;
-        InputIPText.text = InputIP;
+        if(EnterText)
+            EnterText.text = Enter;
+        if(InputIPText)
+            InputIPText.text = InputIP;
     }
 
     public void Yes()
@@ -49,6 +55,18 @@ public class StreamingSceneManager : MonoBehaviour
     public void No()
     {
         SceneManager.LoadScene(nextSceneIndex);
+    }
+
+    private int dotAmount(string _input)
+    {
+        int dots = 0;
+
+        foreach(char c in _input)
+        {
+            if (c == '.') dots++;
+        }
+
+        return dots;
     }
 
     public static void GoToStreamingScene(int _nextSceneIndex,  string inputIP, string enter, string _nextSceneName = "")
@@ -75,15 +93,21 @@ public class StreamingSceneManager : MonoBehaviour
     {
         if (!questionCanvas || !keyboardCanvas) return;
 
-        questionCanvas.SetActive(false);
-        keyboardCanvas.SetActive(true);
+        if(questionCanvas)
+            questionCanvas.SetActive(false);
+        if(keyboardCanvas)
+            keyboardCanvas.SetActive(true);
     }
 
     public void Keyboard(string input)
     {
-       
         ip += input;
         IPText.text = ip;
+
+        if(SampleText)
+        SampleText.SetActive(string.IsNullOrEmpty(ip));
+        if(EnterButton)
+        EnterButton.SetActive(dotAmount(ip) >= 3);
     }
     public void KeyboardDelete()
     {
@@ -95,7 +119,13 @@ public class StreamingSceneManager : MonoBehaviour
             newString += chars[i];
         }
         ip = newString;
+        if(IPText)
         IPText.text = ip;
+
+        if(SampleText)
+        SampleText.SetActive(string.IsNullOrEmpty(ip));
+        if(EnterButton)
+        EnterButton.SetActive(dotAmount(ip) >= 3);
     }
     public void KeyboardEnter()
     {
@@ -104,7 +134,8 @@ public class StreamingSceneManager : MonoBehaviour
         Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
 
-        GoToNextScene();
+        if(ShouldChangeSceneOnEnter)
+            GoToNextScene();
     }
 
     #endregion

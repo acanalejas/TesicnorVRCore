@@ -16,6 +16,9 @@ public class VRInteractable_InputField : VRInteractable_Button
 
     [Header("El texto que se usará como preview")]
     public TextMeshProUGUI sampleText;
+
+    [Header("El evento que se lanza cuando se escribe en este input field")]
+    public UnityEngine.Events.UnityEvent onTextWritten;
     #endregion
 
     #region FUNCTIONS

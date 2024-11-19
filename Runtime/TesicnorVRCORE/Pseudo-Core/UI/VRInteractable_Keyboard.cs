@@ -27,6 +27,8 @@ public class VRInteractable_Keyboard : MonoBehaviour
     public Dictionary<VRInteractable_Button, KeyboardButton> buttons = new Dictionary<VRInteractable_Button, KeyboardButton>();
 
     private TextMeshProUGUI[] texts;
+
+    private VRInteractable_InputField inputField;
     #endregion
 
     #region FUNCTIONS
@@ -78,6 +80,7 @@ public class VRInteractable_Keyboard : MonoBehaviour
         foreach(var button in buttons)
         {
             button.Key.onClick.AddListener(button.Value.WriteChar);
+            button.Key.onClick.AddListener(inputField.onTextWritten.Invoke);
         }
     }
 

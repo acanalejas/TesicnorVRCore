@@ -25,6 +25,12 @@ public class BackendScene : MonoBehaviour
 
     public GameObject logOutCanvas;
 
+    public TextMeshProUGUI emailText;
+
+    public bool ShouldBeTraduced = true;
+
+    public bool ShouldChangeSceneOnEnter = true;
+
     List<Image> imgs = new List<Image>();
     List<TextMeshProUGUI> texts = new List<TextMeshProUGUI>();
     List<Text> texts_legacy = new List<Text>();
@@ -35,16 +41,21 @@ public class BackendScene : MonoBehaviour
 
     static string inputMail_str, incorrectEmail_str, badConnection_str, yes_str, no_str, logout_str;
     public TextMeshProUGUI inputMail_text, incorrectMail_text, badConnection_text, yes_text, no_text, logout_text;
+
+    [Header("Para la pantalla del menu principal")]
+    [SerializeField] private GameObject lettersGrid, numbersGrid;
+    [SerializeField] public TMPro.TextMeshProUGUI EmailInputFieldText;
     #endregion
 
     #region METHODS
     public void Start()
     {
-        if(PlayerPrefs.HasKey("Username") && PlayerPrefs.GetString("Username").Length > 0) { logOutCanvas.SetActive(true); MailCanvas.SetActive(false); }
-        else { logOutCanvas.SetActive(false); MailCanvas.SetActive(true); }
+        if(PlayerPrefs.HasKey("Username") && PlayerPrefs.GetString("Username").Length > 0) { if(logOutCanvas)logOutCanvas.SetActive(true); if(MailCanvas)MailCanvas.SetActive(false); }
+        else { if(logOutCanvas)logOutCanvas.SetActive(false); if(MailCanvas)MailCanvas.SetActive(true); }
         GetAllRenderedComponentsInWarningPopUp();
         SetWarningPopUpToTransparent();
         httpClient = new HttpClient();
+        if (!ShouldBeTraduced) return;
         inputMail_text.text = inputMail_str;
         incorrectMail_text.text = incorrectEmail_str;
         badConnection_text.text = badConnection_str;
@@ -79,6 +90,7 @@ public class BackendScene : MonoBehaviour
 
     private void GetAllRenderedComponentsInWarningPopUp()
     {
+        if (!WarningPopUp_go) return;
         imgs.Clear();
         texts.Clear();
         texts_legacy.Clear();
@@ -97,6 +109,7 @@ public class BackendScene : MonoBehaviour
     }
     private void SetWarningPopUpToTransparent()
     {
+        if (!WarningPopUp_go) return;
         WarningPopUp_go.SetActive(true);
 
         foreach(var img in imgs)
@@ -134,6 +147,7 @@ public class BackendScene : MonoBehaviour
     {
         string user = "";
         if (VRInteractable_Keyboard.inputfieldText) user = VRInteractable_Keyboard.inputfieldText.text;
+        if (EmailInputFieldText) user = EmailInputFieldText.text;
         string appCode = BackendGetter.appCode.ToString();
 
         var cts = new System.Threading.CancellationTokenSource();
@@ -149,7 +163,9 @@ public class BackendScene : MonoBehaviour
                     PlayerPrefs.SetString(BackendConstants.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
                     //SceneManager.LoadScene(nextBuildIndex);
-                    SceneManager.LoadScene(nextBuildIndex);
+                    if(ShouldChangeSceneOnEnter)SceneManager.LoadScene(nextBuildIndex);
+                    if (emailText) emailText.text = user;
+                    if (FindObjectOfType<BackendTimeManager>()) FindObjectOfType<BackendTimeManager>().UpdateTimeInfo(); 
                 }
                 else
                 {
@@ -196,6 +212,7 @@ public class BackendScene : MonoBehaviour
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
     private IEnumerator ShowPopUp()
     {
+        if (!WarningPopUp_go) yield break;
         WarningPopUp_go.SetActive(true);
         //if (imgs[0].color.a > 0) yield break;
         float alpha = 0;
@@ -223,6 +240,7 @@ public class BackendScene : MonoBehaviour
 
     private IEnumerator ShowConPopUp()
     {
+        if (!ConnectionPopUp_go) yield break;
         ConnectionPopUp_go.SetActive(true);
         if (con_imgs[0].color.a > 0) yield break;
         float alpha = 0;
@@ -258,6 +276,12 @@ public class BackendScene : MonoBehaviour
         logout_str = logOut;
         yes_str = yes;
         no_str = no;
+    }
+
+    public void SwitchKeyboard()
+    {
+        numbersGrid.SetActive(lettersGrid.activeSelf);
+        lettersGrid.SetActive(!lettersGrid.activeSelf);
     }
     #endregion
 }
