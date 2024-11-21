@@ -684,6 +684,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -1277,7 +1280,7 @@ GameObject:
   - component: {fileID: 277275339}
   - component: {fileID: 277275338}
   - component: {fileID: 277275337}
-  - component: {fileID: 277275336}
+  - component: {fileID: 277275341}
   m_Layer: 5
   m_Name: Punto
   m_TagString: Untagged
@@ -1306,52 +1309,6 @@ RectTransform:
   m_AnchoredPosition: {x: 248, y: -368}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &277275336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277275334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: .
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &277275337
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1419,6 +1376,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277275334}
   m_CullTransparentMesh: 1
+--- !u!114 &277275341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277275334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: .
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &282641967
 GameObject:
   m_ObjectHideFlags: 0
@@ -1485,6 +1495,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -1587,7 +1600,7 @@ GameObject:
   - component: {fileID: 291670099}
   - component: {fileID: 291670098}
   - component: {fileID: 291670097}
-  - component: {fileID: 291670096}
+  - component: {fileID: 291670101}
   m_Layer: 5
   m_Name: 6
   m_TagString: Untagged
@@ -1616,52 +1629,6 @@ RectTransform:
   m_AnchoredPosition: {x: 248.00002, y: -83}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &291670096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 291670094}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 6
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &291670097
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1729,6 +1696,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291670094}
   m_CullTransparentMesh: 1
+--- !u!114 &291670101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291670094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 6
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &299975277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1742,7 +1762,7 @@ GameObject:
   - component: {fileID: 299975282}
   - component: {fileID: 299975281}
   - component: {fileID: 299975280}
-  - component: {fileID: 299975279}
+  - component: {fileID: 299975284}
   m_Layer: 5
   m_Name: 7
   m_TagString: Untagged
@@ -1771,52 +1791,6 @@ RectTransform:
   m_AnchoredPosition: {x: -149, y: -226}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &299975279
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 299975277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 7
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &299975280
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1884,6 +1858,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 299975277}
   m_CullTransparentMesh: 1
+--- !u!114 &299975284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 299975277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 7
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &342070884
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,6 +2230,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 122821920}
+  CamDistance: 0.75
+  bShouldRotate: 1
 --- !u!1 &423292080
 GameObject:
   m_ObjectHideFlags: 0
@@ -2405,6 +2434,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
     m_PersistentCalls:
       m_Calls: []
   onRelease:
@@ -3436,9 +3468,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionCanvas: {fileID: 158892309}
   keyboardCanvas: {fileID: 1327043262}
+  SampleText: {fileID: 0}
+  EnterButton: {fileID: 0}
   IPText: {fileID: 1832238656}
   InputIPText: {fileID: 1416675449}
   EnterText: {fileID: 269268259}
+  ShouldChangeSceneOnEnter: 1
 --- !u!4 &685503958
 Transform:
   m_ObjectHideFlags: 0
@@ -3837,7 +3872,7 @@ GameObject:
   - component: {fileID: 973295956}
   - component: {fileID: 973295955}
   - component: {fileID: 973295954}
-  - component: {fileID: 973295953}
+  - component: {fileID: 973295958}
   m_Layer: 5
   m_Name: 2
   m_TagString: Untagged
@@ -3866,52 +3901,6 @@ RectTransform:
   m_AnchoredPosition: {x: 52, y: 54}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &973295953
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973295951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 2
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &973295954
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3979,6 +3968,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 973295951}
   m_CullTransparentMesh: 1
+--- !u!114 &973295958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 973295951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 2
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &987267192
 GameObject:
   m_ObjectHideFlags: 0
@@ -3992,7 +4034,7 @@ GameObject:
   - component: {fileID: 987267197}
   - component: {fileID: 987267196}
   - component: {fileID: 987267195}
-  - component: {fileID: 987267194}
+  - component: {fileID: 987267199}
   m_Layer: 5
   m_Name: 4
   m_TagString: Untagged
@@ -4021,52 +4063,6 @@ RectTransform:
   m_AnchoredPosition: {x: -149, y: -83.000015}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &987267194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987267192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 4
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &987267195
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4134,6 +4130,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 987267192}
   m_CullTransparentMesh: 1
+--- !u!114 &987267199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987267192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 4
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &990733329
 GameObject:
   m_ObjectHideFlags: 0
@@ -4593,6 +4642,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -4831,7 +4883,7 @@ GameObject:
   - component: {fileID: 1289009446}
   - component: {fileID: 1289009445}
   - component: {fileID: 1289009444}
-  - component: {fileID: 1289009443}
+  - component: {fileID: 1289009448}
   m_Layer: 5
   m_Name: 5
   m_TagString: Untagged
@@ -4860,52 +4912,6 @@ RectTransform:
   m_AnchoredPosition: {x: 52, y: -83.000015}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1289009443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289009441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 5
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1289009444
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4973,6 +4979,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289009441}
   m_CullTransparentMesh: 1
+--- !u!114 &1289009448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1289009441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 5
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &1327043262
 GameObject:
   m_ObjectHideFlags: 0
@@ -5101,7 +5160,7 @@ GameObject:
   - component: {fileID: 1364758355}
   - component: {fileID: 1364758354}
   - component: {fileID: 1364758353}
-  - component: {fileID: 1364758352}
+  - component: {fileID: 1364758357}
   m_Layer: 5
   m_Name: 8
   m_TagString: Untagged
@@ -5130,52 +5189,6 @@ RectTransform:
   m_AnchoredPosition: {x: 52, y: -226}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1364758352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1364758350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 8
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1364758353
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5243,6 +5256,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364758350}
   m_CullTransparentMesh: 1
+--- !u!114 &1364758357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1364758350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 8
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &1416675447
 GameObject:
   m_ObjectHideFlags: 0
@@ -5530,7 +5596,7 @@ GameObject:
   - component: {fileID: 1447671196}
   - component: {fileID: 1447671195}
   - component: {fileID: 1447671194}
-  - component: {fileID: 1447671193}
+  - component: {fileID: 1447671198}
   m_Layer: 5
   m_Name: 3
   m_TagString: Untagged
@@ -5559,52 +5625,6 @@ RectTransform:
   m_AnchoredPosition: {x: 248.00002, y: 54.000015}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1447671193
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1447671191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 3
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1447671194
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5672,6 +5692,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1447671191}
   m_CullTransparentMesh: 1
+--- !u!114 &1447671198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1447671191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 3
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &1483629097
 GameObject:
   m_ObjectHideFlags: 0
@@ -5825,7 +5898,7 @@ GameObject:
   - component: {fileID: 1562550315}
   - component: {fileID: 1562550314}
   - component: {fileID: 1562550313}
-  - component: {fileID: 1562550312}
+  - component: {fileID: 1562550317}
   m_Layer: 5
   m_Name: Del
   m_TagString: Untagged
@@ -5854,52 +5927,6 @@ RectTransform:
   m_AnchoredPosition: {x: -149, y: -368}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1562550312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1562550310}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: KeyboardDelete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1562550313
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5967,6 +5994,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1562550310}
   m_CullTransparentMesh: 1
+--- !u!114 &1562550317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562550310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: KeyboardDelete
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &1571319805
 GameObject:
   m_ObjectHideFlags: 0
@@ -6256,7 +6336,7 @@ GameObject:
   - component: {fileID: 1583800097}
   - component: {fileID: 1583800096}
   - component: {fileID: 1583800095}
-  - component: {fileID: 1583800094}
+  - component: {fileID: 1583800099}
   m_Layer: 5
   m_Name: 1
   m_TagString: Untagged
@@ -6285,52 +6365,6 @@ RectTransform:
   m_AnchoredPosition: {x: -149, y: 54}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1583800094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1583800092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 1
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1583800095
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6398,6 +6432,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583800092}
   m_CullTransparentMesh: 1
+--- !u!114 &1583800099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583800092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 1
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &1613324948
 GameObject:
   m_ObjectHideFlags: 0
@@ -6526,7 +6613,7 @@ GameObject:
   - component: {fileID: 1632573844}
   - component: {fileID: 1632573843}
   - component: {fileID: 1632573842}
-  - component: {fileID: 1632573841}
+  - component: {fileID: 1632573846}
   m_Layer: 5
   m_Name: Enter (1)
   m_TagString: Untagged
@@ -6555,52 +6642,6 @@ RectTransform:
   m_AnchoredPosition: {x: 596, y: 287}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1632573841
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1632573839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: KeyboardEnter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1632573842
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6668,6 +6709,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1632573839}
   m_CullTransparentMesh: 1
+--- !u!114 &1632573846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632573839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: KeyboardEnter
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &1665730299
 GameObject:
   m_ObjectHideFlags: 0
@@ -7191,7 +7285,7 @@ GameObject:
   - component: {fileID: 1992104389}
   - component: {fileID: 1992104388}
   - component: {fileID: 1992104387}
-  - component: {fileID: 1992104386}
+  - component: {fileID: 1992104391}
   m_Layer: 5
   m_Name: 0
   m_TagString: Untagged
@@ -7220,52 +7314,6 @@ RectTransform:
   m_AnchoredPosition: {x: 52, y: -368}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1992104386
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1992104384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 0
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &1992104387
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7333,6 +7381,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1992104384}
   m_CullTransparentMesh: 1
+--- !u!114 &1992104391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1992104384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 0
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
 --- !u!1 &2005152107
 GameObject:
   m_ObjectHideFlags: 0
@@ -7624,7 +7725,7 @@ GameObject:
   - component: {fileID: 2081760720}
   - component: {fileID: 2081760719}
   - component: {fileID: 2081760718}
-  - component: {fileID: 2081760717}
+  - component: {fileID: 2081760722}
   m_Layer: 5
   m_Name: 9
   m_TagString: Untagged
@@ -7653,52 +7754,6 @@ RectTransform:
   m_AnchoredPosition: {x: 248.00002, y: -226}
   m_SizeDelta: {x: 246.7, y: 186.3}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2081760717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2081760715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5aa086aa38d2e1d40b98bd54806b074b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  is3DObject: 0
-  usesRay: 1
-  usesCollision: 0
-  canvasTransform: {fileID: 0}
-  changesColor: 1
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  HoverColor: {r: 0.764151, g: 0.764151, b: 0.764151, a: 1}
-  PressedColor: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 1}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
-  onHover:
-    m_PersistentCalls:
-      m_Calls: []
-  onRelease:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 685503957}
-        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
-        m_MethodName: Keyboard
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 9
-          m_BoolArgument: 0
-        m_CallState: 2
-  canBePressed: 1
-  hasToFollow: 0
-  normalPosition: {x: 0, y: 0, z: 0}
-  pressedPosition: {x: 0, y: 0, z: 0}
-  bHasBeenClicked: 0
 --- !u!54 &2081760718
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7766,3 +7821,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2081760715}
   m_CullTransparentMesh: 1
+--- !u!114 &2081760722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2081760715}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43cea80f8bac24b43953b78455eb8061, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  is3DObject: 0
+  usesRay: 1
+  usesCollision: 0
+  canvasTransform: {fileID: 0}
+  changesColor: 1
+  NormalColor: {r: 1, g: 1, b: 1, a: 1}
+  HoverColor: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+  PressedColor: {r: 0.509434, g: 0.509434, b: 0.509434, a: 1}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
+  onHover:
+    m_PersistentCalls:
+      m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
+  onRelease:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 685503957}
+        m_TargetAssemblyTypeName: StreamingSceneManager, tesicnor.tesicnorvrcore.runtime
+        m_MethodName: Keyboard
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 9
+          m_BoolArgument: 0
+        m_CallState: 2
+  canBePressed: 1
+  hasToFollow: 0
+  normalPosition: {x: 0, y: 0, z: 0}
+  pressedPosition: {x: 0, y: 0, z: 0}
+  bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  ExternalImage: {fileID: 0}
