@@ -18,6 +18,15 @@ public class VRInteractable_Button : VR_Interactable
     [Header("Se usa el efecto por defecto de pulsar por tiempo?")]
     [SerializeField, HideInInspector] protected bool bUsesDefaultHoverEffect = true;
 
+    [Header("La direccion de rellenado que tiene")]
+    [SerializeField, HideInInspector] protected Image.FillMethod fillMethod = Image.FillMethod.Horizontal;
+
+    [Header("El objeto esta por delante o atras?")]
+    [SerializeField, HideInInspector] protected bool IsBehind = false;
+
+    [Header("La escala del objeto de Hover")]
+    [SerializeField, HideInInspector] protected float hoverScale = 1;
+
     [Header("Imagen a usar para en el efecto")]
     [SerializeField, HideInInspector] protected Image ExternalImage;
 
@@ -45,6 +54,11 @@ public class VRInteractable_Button : VR_Interactable
         if (this.bClickByHover)
         {
             SetupHover();
+        }
+        if (!IsBehind)
+        {
+            effectImage.transform.parent = this.transform;
+            effectImage.transform.SetSiblingIndex(0);
         }
     }
 
@@ -129,9 +143,11 @@ public class VRInteractable_Button : VR_Interactable
 
     protected virtual void UpdateDefaultEffect()
     {
+        effectImage.fillMethod = fillMethod;
         effectImage.fillAmount = timeHovered / fTimeToClickByHover;
 
         if(bUsesDefaultHoverEffect)effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
+        if (bUsesDefaultHoverEffect) effectImage.transform.localScale = new Vector3(hoverScale, hoverScale, hoverScale);
     }
 
     #endregion
@@ -228,6 +244,25 @@ public class VRInteractableButtonEditor: InteractableEditor
 
                 GUILayout.Label("La imagen que se va a usar para el efecto", EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(externalImage);
+            }
+            else
+            {
+                SerializedProperty fillMethod = serializedObject.FindProperty("fillMethod");
+
+                GUILayout.Label("El método de rellenado de la imagen del hover", EditorStyles.boldLabel);
+                EditorGUILayout.PropertyField(fillMethod);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("La escala de la imagen que se va a usar", EditorStyles.boldLabel);
+                SerializedProperty scale = serializedObject.FindProperty("hoverScale");
+                scale.floatValue = EditorGUILayout.FloatField(scale.floatValue, EditorStyles.miniTextField);
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("Se posiciona detras la imagen?", EditorStyles.boldLabel);
+                SerializedProperty isBehind = serializedObject.FindProperty("IsBehind");
+                isBehind.boolValue = GUILayout.Toggle(isBehind.boolValue, "Is Behind");
             }
         }
 
