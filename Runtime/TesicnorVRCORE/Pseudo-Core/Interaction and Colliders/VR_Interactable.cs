@@ -62,8 +62,12 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
     [Header("La posición hundida del objeto")]
     [HideInInspector] public Vector3 pressedPosition;
 
+    [Header("El size del collider por si da fallos")]
+    [HideInInspector] public Vector3 colliderSize;
+
     [HideInInspector] public bool bHasBeenClicked = false;
 
+    private BoxCollider boxCollider;
 
     protected GameObject hand;
 
@@ -91,6 +95,8 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         if (!this.isHovered && !this.isClicking) ChangeColor(0);
 
         if (!isAnyHandInteractingWithThis()) ChangeColor(0);
+
+        if (colliderSize != Vector3.zero) boxCollider.size = colliderSize;
     }
 
     bool isAnyHandInteractingWithThis()
@@ -112,9 +118,9 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         float width = rectTransform.rect.width;
         float height = rectTransform.rect.height;
 
-        BoxCollider collider = GetComponent<BoxCollider>();
+        boxCollider = GetComponent<BoxCollider>();
 
-        collider.size = new Vector3(width, height, 0.1f);
+        boxCollider.size = new Vector3(width, height, 0.1f);
     }
 
     Vector3 clickHandPosition;
@@ -400,6 +406,11 @@ public class InteractableEditor : Editor
 
         SerializedProperty onRelease = serializedObject.FindProperty("onRelease");
         EditorGUILayout.PropertyField(onRelease, new GUIContent("On Release"));
+
+        GUILayout.Space(10);
+
+        GUILayout.Label("El tamaño del collider, solo rellenar si da fallo y no hay mas opcion", EditorStyles.boldLabel);
+        interactable.colliderSize = EditorGUILayout.Vector3Field("Collider Size", interactable.colliderSize);
         
 
         serializedObject.ApplyModifiedProperties();

@@ -6,7 +6,6 @@ using System.IO;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
 public class BackendScene : MonoBehaviour
 {
     #region PARAMETERS
@@ -25,6 +24,8 @@ public class BackendScene : MonoBehaviour
 
     public GameObject logOutCanvas;
 
+    public GameObject SuccessObject;
+
     public TextMeshProUGUI emailText;
 
     public bool ShouldBeTraduced = true;
@@ -39,12 +40,24 @@ public class BackendScene : MonoBehaviour
     List<TextMeshProUGUI> con_texts = new List<TextMeshProUGUI>();
     List<Text> con_texts_legacy = new List<Text>();
 
+    List<Image> success_imgs = new List<Image>();
+    List<TextMeshProUGUI> sucess_texts = new List<TextMeshProUGUI>();
+
     static string inputMail_str, incorrectEmail_str, badConnection_str, yes_str, no_str, logout_str;
     public TextMeshProUGUI inputMail_text, incorrectMail_text, badConnection_text, yes_text, no_text, logout_text;
 
     [Header("Para la pantalla del menu principal")]
     [SerializeField] private GameObject lettersGrid, numbersGrid;
     [SerializeField] public TMPro.TextMeshProUGUI EmailInputFieldText;
+
+    [Header("El punto que nos da feedback visual de la conexion")]
+    [SerializeField] protected Image ConnectedDot;
+
+    [Header("El texto donde se muestra la conexion wifi")]
+    [SerializeField] protected TextMeshProUGUI WifiText;
+
+    [Header("El evento que se lanza al logearse")]
+    public UnityEngine.Events.UnityEvent OnLog;
     #endregion
 
     #region METHODS
@@ -62,6 +75,23 @@ public class BackendScene : MonoBehaviour
         yes_text.text = yes_str;
         no_text.text = no_str;
         logout_text.text = logout_str;
+    }
+
+    IEnumerator CheckWifi()
+    {
+        while (true)
+        {
+            if(Application.internetReachability == NetworkReachability.ReachableViaCarrierDataNetwork)
+            {
+                ConnectedDot.color = Color.green;
+                
+            }
+            else
+            {
+                ConnectedDot.color = Color.red;
+            }
+            yield return new WaitForSeconds(2);
+        }
     }
 
     public void Yes()
@@ -106,6 +136,9 @@ public class BackendScene : MonoBehaviour
         con_imgs.AddRange(ConnectionPopUp_go.GetComponentsInChildren<Image>());
         con_texts.AddRange(ConnectionPopUp_go.GetComponentsInChildren<TextMeshProUGUI>());
         con_texts_legacy.AddRange(ConnectionPopUp_go.GetComponentsInChildren<Text>());
+
+        success_imgs.AddRange(SuccessObject.GetComponentsInChildren<Image>());
+        sucess_texts.AddRange(SuccessObject.GetComponentsInChildren<TextMeshProUGUI>());
     }
     private void SetWarningPopUpToTransparent()
     {
@@ -162,19 +195,25 @@ public class BackendScene : MonoBehaviour
                     BackendGetter.backendData = data;
                     PlayerPrefs.SetString(BackendConstants.BackendDataKey, content);
                     PlayerPrefs.SetString("Username", user);
+                    OnLog.Invoke();
                     //SceneManager.LoadScene(nextBuildIndex);
-                    if(ShouldChangeSceneOnEnter)SceneManager.LoadScene(nextBuildIndex);
+                    if (ShouldChangeSceneOnEnter)SceneManager.LoadScene(nextBuildIndex);
                     if (emailText) emailText.text = user;
-                    if (FindObjectOfType<BackendTimeManager>()) FindObjectOfType<BackendTimeManager>().UpdateTimeInfo(); 
+                    if (FindObjectOfType<BackendTimeManager>()) FindObjectOfType<BackendTimeManager>().UpdateTimeInfo();
+
+                    StopCoroutine(nameof(ShowSuccessPopUp));
+                    StartCoroutine(nameof(ShowSuccessPopUp));
                 }
                 else
                 {
                     if(Application.internetReachability != NetworkReachability.NotReachable)
                     {
+                        StopCoroutine(nameof(ShowPopUp));
                         StartCoroutine(nameof(ShowPopUp));
                     }
                     else
                     {
+                        StopCoroutine(nameof(ShowConPopUp));
                         StartCoroutine(nameof(ShowConPopUp));
                     }
                 }
@@ -216,7 +255,7 @@ public class BackendScene : MonoBehaviour
         WarningPopUp_go.SetActive(true);
         //if (imgs[0].color.a > 0) yield break;
         float alpha = 0;
-        while(alpha < 1)
+        while(alpha < 0.9f)
         {
             alpha += 0.01f;
             foreach (var img in imgs) img.color += new Color(0, 0, 0, 0.01f);
@@ -227,7 +266,7 @@ public class BackendScene : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        while(alpha > 0)
+        while(alpha > 0.01f)
         {
             alpha -= 0.01f;
             foreach (var img in imgs) img.color -= new Color(0, 0, 0, 0.01f);
@@ -242,9 +281,9 @@ public class BackendScene : MonoBehaviour
     {
         if (!ConnectionPopUp_go) yield break;
         ConnectionPopUp_go.SetActive(true);
-        if (con_imgs[0].color.a > 0) yield break;
+        //if (con_imgs[0].color.a > 0) yield break;
         float alpha = 0;
-        while (alpha < 1)
+        while (alpha < 0.9f)
         {
             alpha += 0.01f;
             foreach (var img in con_imgs) img.color += new Color(0, 0, 0, 0.01f);
@@ -255,7 +294,7 @@ public class BackendScene : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        while (alpha > 0)
+        while (alpha > 0.01f)
         {
             alpha -= 0.01f;
             foreach (var img in con_imgs) img.color -= new Color(0, 0, 0, 0.01f);
@@ -264,6 +303,36 @@ public class BackendScene : MonoBehaviour
             yield return frame;
         }
         StopCoroutine(nameof(ShowPopUp));
+    }
+
+    private IEnumerator ShowSuccessPopUp()
+    {
+        if (!SuccessObject) yield break;
+        SuccessObject.SetActive(true);
+        if (success_imgs[0].color.a > 0)
+        {
+            foreach(var img in success_imgs) img.color = new Color(img.color.r, img.color.g, img.color.b, 0);
+            foreach (var text in sucess_texts) text.color = new Color(text.color.r, text.color.g, text.color.b, 0);
+        }
+        float alpha = 0;
+        while (alpha < 0.9f)
+        {
+            alpha += 0.01f;
+            foreach (var img in success_imgs) img.color += new Color(0, 0, 0, 0.01f);
+            foreach (var text in sucess_texts) text.color += new Color(0, 0, 0, 0.01f);
+            yield return frame;
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        while (alpha > 0.01f)
+        {
+            alpha -= 0.01f;
+            foreach (var img in success_imgs) img.color -= new Color(0, 0, 0, 0.01f);
+            foreach (var text in sucess_texts) text.color -= new Color(0, 0, 0, 0.01f);
+            yield return frame;
+        }
+        StopCoroutine(nameof(ShowSuccessPopUp));
     }
 
     public static void GoToBackendScene(int nextSceneBuildIndex, string InputEmail, string IncorrectEmail, string BadConnection, string logOut, string yes, string no)

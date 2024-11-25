@@ -27,8 +27,25 @@ public class VRInteractable_Button : VR_Interactable
     [Header("La escala del objeto de Hover")]
     [SerializeField, HideInInspector] protected float hoverScale = 1;
 
+    [Header("Sigue el anchor del padre?")]
+    [SerializeField, HideInInspector] protected bool bUsesParentAnchor = true;
+
+    [Header("El anchor min")]
+    [SerializeField, HideInInspector] protected Vector2 anchorMin;
+
+    [Header("El anchor max")]
+    [SerializeField, HideInInspector] protected Vector2 anchorMax;
+
+    [Header("La posicion del anchor")]
+    [SerializeField, HideInInspector] protected Vector2 anchorPosition;
+
+    [Header("El tamaño en pixeles")]
+    [SerializeField, HideInInspector] protected Vector2 sizeDelta;
+
     [Header("Imagen a usar para en el efecto")]
     [SerializeField, HideInInspector] protected Image ExternalImage;
+
+    public bool ShouldSetSiblingIndex = false;
 
     private GameObject effectObject;
     private Image effectImage;
@@ -55,11 +72,9 @@ public class VRInteractable_Button : VR_Interactable
         {
             SetupHover();
         }
-        if (!IsBehind)
-        {
-            effectImage.transform.parent = this.transform;
-            effectImage.transform.SetSiblingIndex(0);
-        }
+
+        if(this.ShouldSetSiblingIndex)
+            this.transform.SetSiblingIndex(0);
     }
 
     public virtual void SetupHover()
@@ -69,11 +84,15 @@ public class VRInteractable_Button : VR_Interactable
             CreateGameObjectForEffect();
         else
         {
-            effectImage = this.ExternalImage;
-            effectObject = effectImage.gameObject;
+            if(ExternalImage != null)
+                effectImage = this.ExternalImage;
+            if(effectImage)
+                effectObject = effectImage.gameObject;
         }
 
         timeElapsed = 0.03f;
+        if(effectImage != null)
+            effectImage.color = PressedColor;
 
         this.onHover.AddListener(this.CheckHoverClick);
         this.onHoverExit.AddListener(this.ResetHoverClick);
@@ -85,6 +104,8 @@ public class VRInteractable_Button : VR_Interactable
     {
         base.Update();
         if (!GetIsHovered() && this.effectImage && this.effectImage.fillAmount != 0) ResetHoverClick();
+
+        if (ShouldSetSiblingIndex) this.transform.SetSiblingIndex(0);
     }
     protected virtual void CheckHoverClick()
     {
@@ -109,25 +130,38 @@ public class VRInteractable_Button : VR_Interactable
     protected virtual void ResetHoverClick()
     {
         timeHovered = 0;
-        effectImage.fillAmount = 0;
+        if(effectImage != null)
+            effectImage.fillAmount = 0;
     }
 
     protected virtual void CreateGameObjectForEffect()
     {
         effectObject = new GameObject("HoverEffect", typeof(Image));
         effectObject.transform.parent = this.transform.parent;
-        effectImage = effectObject.GetComponent<Image>();
+        if (effectObject.GetComponent<Image>()) effectImage = effectObject.GetComponent<Image>();
+        else effectImage = effectObject.AddComponent<Image>();
+
+        effectImage.raycastTarget = false;
         RectTransform objectRect = effectObject.GetComponent<RectTransform>();
         RectTransform selfRect = this.GetComponent<RectTransform>();
+        if (bUsesParentAnchor)
+        {
+            objectRect.anchorMin = selfRect.anchorMin;
+            objectRect.anchorMax = selfRect.anchorMax;
+            objectRect.anchoredPosition = selfRect.anchoredPosition;
+        }
+        
         objectRect.sizeDelta = selfRect.sizeDelta;
 
         effectObject.transform.localPosition = this.transform.localPosition;
         effectObject.transform.localRotation = this.transform.localRotation;
-        effectObject.transform.localScale = this.transform.localScale * 1.2f;
+        effectObject.transform.localScale = this.transform.localScale * hoverScale;
 
-        this.transform.parent = effectObject.transform;
+        if (IsBehind)
+            this.transform.parent = effectObject.transform;
+        else { effectObject.transform.parent = this.transform; effectObject.transform.SetSiblingIndex(0); }
 
-        if (this.transform.GetSiblingIndex() > 0)
+        if (this.transform.GetSiblingIndex() > 0 && IsBehind)
             effectObject.transform.SetSiblingIndex(this.transform.GetSiblingIndex() - 1);
         else effectObject.transform.SetSiblingIndex(0);
         
@@ -143,11 +177,14 @@ public class VRInteractable_Button : VR_Interactable
 
     protected virtual void UpdateDefaultEffect()
     {
-        effectImage.fillMethod = fillMethod;
-        effectImage.fillAmount = timeHovered / fTimeToClickByHover;
-
+        if (effectImage)
+        {
+            effectImage.fillMethod = fillMethod;
+            effectImage.fillAmount = timeHovered / fTimeToClickByHover;
+        }
+        
         if(bUsesDefaultHoverEffect)effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
-        if (bUsesDefaultHoverEffect) effectImage.transform.localScale = new Vector3(hoverScale, hoverScale, hoverScale);
+        //if (bUsesDefaultHoverEffect) effectImage.transform.localScale = this.transform.localScale * hoverScale;
     }
 
     #endregion
@@ -263,6 +300,39 @@ public class VRInteractableButtonEditor: InteractableEditor
                 GUILayout.Label("Se posiciona detras la imagen?", EditorStyles.boldLabel);
                 SerializedProperty isBehind = serializedObject.FindProperty("IsBehind");
                 isBehind.boolValue = GUILayout.Toggle(isBehind.boolValue, "Is Behind");
+
+                GUILayout.Space(10);
+
+                GUILayout.Label("Usa el anchor del padre?", EditorStyles.boldLabel);
+                SerializedProperty parentAnchor = serializedObject.FindProperty("bUsesParentAnchor");
+                parentAnchor.boolValue = GUILayout.Toggle(parentAnchor.boolValue, "Parent Anchor");
+
+                if (!parentAnchor.boolValue)
+                {
+                    GUILayout.Space(10);
+
+                    GUILayout.Label("El anchor min", EditorStyles.boldLabel);
+                    SerializedProperty anchorMin = serializedObject.FindProperty("anchorMin");
+                    anchorMin.vector2Value = EditorGUILayout.Vector2Field("Anchor Min", anchorMin.vector2Value);
+
+                    GUILayout.Space(10);
+
+                    GUILayout.Label("El anchor max", EditorStyles.boldLabel);
+                    SerializedProperty anchorMax = serializedObject.FindProperty("anchorMax");
+                    anchorMax.vector2Value = EditorGUILayout.Vector2Field("Anchor Max", anchorMax.vector2Value);
+
+                    GUILayout.Space(10);
+
+                    GUILayout.Label("La posicion del anchor", EditorStyles.boldLabel);
+                    SerializedProperty anchorPosition = serializedObject.FindProperty("anchorPosition");
+                    anchorPosition.vector2Value = EditorGUILayout.Vector2Field("Anchor Position", anchorPosition.vector2Value);
+
+                    GUILayout.Space(10);
+
+                    GUILayout.Label("El tamaño del objeto en píxeles", EditorStyles.boldLabel);
+                    SerializedProperty sizeDelta = serializedObject.FindProperty("sizeDelta");
+                    sizeDelta.vector2Value = EditorGUILayout.Vector2Field("sizeDelta", sizeDelta.vector2Value);
+                }
             }
         }
 

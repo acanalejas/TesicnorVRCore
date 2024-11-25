@@ -28,7 +28,14 @@ public class VRInteractable_InputField : VRInteractable_Button
         base.Awake();
         sampleText.color = writeText.color * 0.75f;
         this.canBePressed = true;
-        StartCoroutine("update");
+        onTextWritten.AddListener(() =>
+        {
+            sampleText.gameObject.SetActive(string.IsNullOrEmpty(writeText.text) ? true : false);
+        });
+    }
+    private void Start()
+    {
+        //StartCoroutine(nameof(update));
     }
 
     public override void OnClick()
