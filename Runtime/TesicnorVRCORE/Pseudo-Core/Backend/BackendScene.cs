@@ -69,14 +69,24 @@ public class BackendScene : MonoBehaviour
         SetWarningPopUpToTransparent();
         httpClient = new HttpClient();
         if (!ShouldBeTraduced) return;
-        inputMail_text.text = inputMail_str;
-        incorrectMail_text.text = incorrectEmail_str;
-        badConnection_text.text = badConnection_str;
-        yes_text.text = yes_str;
-        no_text.text = no_str;
-        logout_text.text = logout_str;
+        Traduce();
     }
 
+    public void Traduce()
+    {
+        if(inputMail_text)
+        inputMail_text.text = inputMail_str;
+        if(incorrectMail_text)
+        incorrectMail_text.text = incorrectEmail_str;
+        if(badConnection_text)
+        badConnection_text.text = badConnection_str;
+        if(yes_text)
+        yes_text.text = yes_str;
+        if(no_text)
+        no_text.text = no_str;
+        if(logout_text)
+        logout_text.text = logout_str;
+    }
     IEnumerator CheckWifi()
     {
         while (true)

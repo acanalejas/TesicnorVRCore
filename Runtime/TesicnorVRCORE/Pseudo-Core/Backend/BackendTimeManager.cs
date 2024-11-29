@@ -188,9 +188,9 @@ public class BackendTimeManager : BackendGetter
         }
 
         LoadDataOnDisable();
-        if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
+        if (backendDataTime != null && backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
         yield return new WaitForSeconds(reloadTime);
-        if (backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
+        if (backendDataTime != null && backendDataTime.usageType == BackendConstants.TimeType) ValidateTimeLeft();
     }
 
     /// <summary>

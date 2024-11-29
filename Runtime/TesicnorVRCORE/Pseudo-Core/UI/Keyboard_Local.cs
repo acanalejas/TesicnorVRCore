@@ -59,8 +59,10 @@ public class Keyboard_Local : MonoBehaviour
     public void WriteChar(string s)
     {
         if (inputField == null || string.IsNullOrEmpty(s)) return;
+  
         char c = (char)s[0];
         char input = shift ? char.ToUpper(c) : char.ToLower(c);
+        if (shift) shift = false;
         inputField.writeText.text += input;
         inputField.onTextWritten.Invoke();
     }

@@ -298,11 +298,12 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (interactingObject != null)
         {
             float pressed = 0;
-            if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f)
+            if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f && !lastPressed)
             {
-                lastPressed = true;
                 interactingObject.GetComponent<VRInteractableInterface>().SetHand(this.gameObject);
+                //if(!lastPressed)
                 interactingObject.GetComponent<VRInteractableInterface>().OnClick();
+                lastPressed = true;
             }
             else if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed < 0.7f && lastPressed)
             {
@@ -310,7 +311,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                 interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
                 interactingObject.GetComponent<VRInteractableInterface>().SetHand(null);
             }
-            else { lastPressed = false; }
+            //else { lastPressed = false; }
         }
     }
 

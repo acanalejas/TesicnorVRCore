@@ -42,6 +42,15 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     public UnityEvent<int> onValueChanged;
 
     /// <summary>
+    /// La lista de otros dropdown que deberian estar bloqueados
+    /// </summary>
+    [Header("La lista de otros dropdown que deberian estar bloqueados")]
+    [SerializeField] private VRInteractable_Dropdown[] blockingDropdowns;
+
+    [Header("La lista de otros dropdown que deberian cerrarse al abrirse este")]
+    [SerializeField] private VRInteractable_Dropdown[] closingDropdowns;
+
+    /// <summary>
     /// El GameObject que contiene el layout donde aparecerán las opciones
     /// </summary>
     public GameObject vl;
@@ -52,7 +61,9 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     /// <summary>
     /// El texto del dropdown
     /// </summary>
-    public TextMeshProUGUI text;
+    public TextMeshProUGUI SelectedText;
+
+    [HideInInspector] public bool Blocked = false;
 
     /// <summary>
     /// La opción que está ahora seleccionada
@@ -84,6 +95,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
             
             image = GetComponent<Image>();
             image.maskable = false;
+            image.raycastTarget = true;
 
             GameObject text_GO = new GameObject("TMP", typeof(TextMeshProUGUI));
             text_GO.transform.parent = this.gameObject.transform;
@@ -96,8 +108,9 @@ public class VRInteractable_Dropdown : VRInteractable_Button
             text.maskable = false;
             text.raycastTarget = false;
 
-            PressedColor = Color.white * 0.5f;
-            HoverColor = Color.white * 0.75f;
+            PressedColor = new Color(0.5f,0.5f,0.5f,1);
+            HoverColor = new Color(0.75f,0.75f,0.75f,1);
+            NormalColor = Color.white;
         }
 
         public void SetValues(Sprite _image = null, string _text = "", int _position = 0)
@@ -165,7 +178,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
         dropdown.HoverColor = Color.white * 0.75f;
         dropdown.PressedColor = Color.white * 0.5f;
         dropdown.image = thisGO.GetComponent<Image>();
-        dropdown.text = textGo.GetComponent<TextMeshProUGUI>();
+        dropdown.SelectedText = textGo.GetComponent<TextMeshProUGUI>();
         dropdown.vl = vl;
     }
 
@@ -195,7 +208,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
         dropdown.PressedColor = Color.white * 0.50f;
         dropdown.HoverColor = Color.white * 0.75f;
         dropdown.image = Selection.gameObjects[0].GetComponent<Image>();
-        dropdown.text = textGo.GetComponent<TextMeshProUGUI>();
+        dropdown.SelectedText = textGo.GetComponent<TextMeshProUGUI>();
         dropdown.vl = vl;
     }
 
@@ -204,8 +217,8 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     {
         
         SetupDropdown();
-        text = GetComponentInChildren<TextMeshProUGUI>();
-        text.raycastTarget = false;
+        SelectedText = GetComponentInChildren<TextMeshProUGUI>();
+        SelectedText.raycastTarget = false;
         vl.GetComponent<VerticalLayoutGroup>().childAlignment = TextAnchor.UpperCenter;
         vl.GetComponent<VerticalLayoutGroup>().spacing = spacing;
         vl.GetComponent<RectTransform>().localPosition -= new Vector3(0, image.rectTransform.sizeDelta.y, 0);
@@ -227,10 +240,32 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     /// </summary>
     public void OpenDropdown()
     {
+        if (Blocked) return;
+
         if (vl.activeSelf) vl.SetActive(false);
         else vl.SetActive(true);
 
-        Debug.Log("OpenDropdown");
+        if (closingDropdowns.Length > 0)
+        {
+            foreach (var dropdown in closingDropdowns)
+            {
+                if (dropdown != this && dropdown.vl.activeSelf)
+                {
+                    dropdown.OpenDropdown();
+                }
+            }
+        }
+
+        if (blockingDropdowns.Length > 0)
+        {
+            foreach(var dropdown in blockingDropdowns)
+            {
+                if(dropdown != this)
+                {
+                    dropdown.Blocked = vl.activeSelf;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -261,11 +296,11 @@ public class VRInteractable_Dropdown : VRInteractable_Button
             
             item.SetValues(_sprite, _string, _position);
             item.image.color = image.color;
-            item.text.fontSize = text.fontSize;
-            item.text.font = text.font;
+            item.text.fontSize = SelectedText.fontSize;
+            item.text.font = SelectedText.font;
             item.text.autoSizeTextContainer = true;
             item.text.enableAutoSizing = true;
-            item.text.color = text.color;
+            item.text.color = SelectedText.color;
 
             item.SetupUICollider();
             //item.SetupHover();
@@ -279,9 +314,16 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     void ChangeValue(int position)
     {
         currentOption = position;
-        //text.text = options_Texts[position];
+        //SelectedText.text = options_Texts[position];
         //OpenDropdown();
         onValueChanged?.Invoke(position);
+
+        Debug.Log("Change dropdown value");
+    }
+
+    public void RechargeValue()
+    {
+        ChangeValue(currentOption);
     }
     #endregion
 }
