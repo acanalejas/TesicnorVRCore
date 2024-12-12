@@ -42,8 +42,8 @@ public class StreamingSceneManager : MonoBehaviour
 
         if(EnterText)
             EnterText.text = Enter;
-        if(InputIPText)
-            InputIPText.text = InputIP;
+        //if(InputIPText)
+        //    InputIPText.text = InputIP;
     }
 
     public void Yes()

@@ -305,7 +305,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                 interactingObject.GetComponent<VRInteractableInterface>().OnClick();
                 lastPressed = true;
             }
-            else if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed < 0.7f && lastPressed)
+            else if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed < 0.3f && lastPressed)
             {
                 lastPressed = false;
                 interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
