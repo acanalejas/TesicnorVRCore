@@ -14,20 +14,54 @@ public class Wind_Line : VRCollider
 
     #region METHODS
 
-    private void Start()
+    #endregion
+
+    #region Anclaje
+
+    public class LineAnchor : VRCollider, AnchorInterface
     {
-        onTargetReached.AddListener(CheckAnchorage);
-    }
-    private void CheckAnchorage(GameObject anchorage)
-    {
-        if(anchorage.tag == CorrectAnchorageTag)
+        #region PARAMETERS
+        public Wind_Line owner;
+        #endregion
+
+        #region METHODS
+        private void Start()
         {
-            WarningGO.SetActive(false);
+            onTargetReached.AddListener(CheckAnchorage);
+            this.SetGrabbable(false);
+
+            this.target.canBeCanceled = true;
+            this.simulateOnDrop = false;
         }
-        else
+
+        private void CheckAnchorage(GameObject anchorage)
         {
-            WarningGO.SetActive(true);
+            if (anchorage.tag == owner.CorrectAnchorageTag)
+            {
+                owner.WarningGO.SetActive(false);
+            }
+            else
+            {
+                owner.WarningGO.SetActive(true);
+            }
         }
+
+        public bool IsAnchored()
+        { 
+            return this.target.conditionCompleted && !owner.isGrabbed();
+        }
+
+        public void AnchorIt()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ReleaseIt()
+        {
+            throw new System.NotImplementedException();
+        }
+        #endregion
     }
+
     #endregion
 }

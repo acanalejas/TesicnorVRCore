@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public enum Direction { Up, Down, Stop, NoBrakes}
 
+[RequireComponent(typeof(PlayerDetector))]
 public class Wind_Elevator : MonoBehaviour
 {
     #region PARAMETERS
@@ -32,6 +33,18 @@ public class Wind_Elevator : MonoBehaviour
 
     [Header("Cuando el elevador empieza a bajar")]
     public UnityEvent OnElevatorGoesDown;
+
+    [Header("Cuando el elevador entra en emergencia")]
+    public UnityEvent OnEmergency;
+
+    [Header("Cuando el elevador sale de emergencia")]
+    public UnityEvent OnEmergencyExit;
+
+    [Header("Cuando el elevador recibe electricidad")]
+    public UnityEvent OnElectricityEnabled;
+
+    [Header("Cuando el elevador deja de recibir electricidad")]
+    public UnityEvent OnElectricityDisabled;
     #endregion
 
     #region Movement
@@ -78,6 +91,10 @@ public class Wind_Elevator : MonoBehaviour
     /// Referencia publica para acceder a la altura minima
     /// </summary>
     public float MinHeight { get { return minHeight; }}
+
+    public bool IsMoving { get { return isMoving; } }
+
+    private bool isMoving;
     #endregion
 
     #region Sounds
@@ -94,9 +111,9 @@ public class Wind_Elevator : MonoBehaviour
     #endregion
 
     #region Additional Parameters
+    public bool Emergency { get { return emergency; } }
 
-    [Header("Esta en un estado de emergencia el elevador?")]
-    public bool Emergency = false;
+    private bool emergency = false;
 
     [Header("Necesita que se pulse el boton de hombre muerto?")]
     public bool NeedsDeadManButton = true;
@@ -116,6 +133,11 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Esta el player dentro del elevador?")]
     public bool InsideElevator = false;
 
+    [Header("La electricidad está activada?")]
+    private bool IsElectricityOn = false;
+
+    private PlayerDetector InsideDetector;
+
     #endregion
 
     #region Coroutines
@@ -130,63 +152,85 @@ public class Wind_Elevator : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
+        InsideDetector = GetComponent<PlayerDetector>();
+
+        InsideDetector.OnPlayerDetected.AddListener(() => { InsideElevator = true; });
+        InsideDetector.OnPlayerExitDetection.AddListener(() => { InsideElevator = false; });
     }
 
-    public void MoveElevator(Direction direction)
+    public virtual void MoveElevator(Direction direction)
     {
+        if (Emergency ||(!IsElectricityOn && direction != Direction.NoBrakes)) return;
+
         CurrentDirection = direction;
 
         if (direction == Direction.Up && !IsAtTop()) OnElevatorGoesUp.Invoke();
-        else { return; }
-        if (direction == Direction.Down && !IsAtBottom()) OnElevatorGoesDown.Invoke();
-        else { return; }
-        if (direction == Direction.NoBrakes && !IsAtBottom()) OnElevatorBrake.Invoke();
+
+        else if (direction == Direction.Down && !IsAtBottom()) OnElevatorGoesDown.Invoke();
+        
+        else if (direction == Direction.NoBrakes && !IsAtBottom()) OnElevatorBrake.Invoke();
+        
         else { return; }
 
         StartCoroutine(nameof(MovementBroadcast));
     }
 
-    public void StopElevator()
+    public virtual void SetEmergency()
     {
-        MoveElevator(Direction.Stop);
+        emergency = !emergency;
 
+        if (emergency) OnEmergency.Invoke();
+        else OnEmergencyExit.Invoke();
+    }
+
+    public virtual void SetEmergency(bool _value)
+    {
+        emergency = _value;
+
+        if (emergency) OnEmergency.Invoke();
+        else OnEmergencyExit.Invoke();
+    }
+
+    public virtual void SetElectricity(bool _value)
+    {
+        IsElectricityOn = _value;
+
+        if (IsElectricityOn) OnElectricityEnabled.Invoke();
+        else OnElectricityDisabled.Invoke();
+    }
+
+    public virtual void SetElectricity()
+    {
+        IsElectricityOn = !IsElectricityOn;
+
+        if (IsElectricityOn) OnElectricityEnabled.Invoke();
+        else OnElectricityDisabled.Invoke();
+    }
+
+    public virtual void StopElevator()
+    {
         OnElevatorStops.Invoke();
 
         StopAllSounds();
 
         StopCoroutine(nameof(MovementBroadcast));
+
+        isMoving = false;
+
+        Debug.Log("Stopping elevator");
     }
 
-    public void TranslateElevator()
+    protected virtual void TranslateElevator()
     {
-        Vector3 direction = Vector3.zero;
-
-        float speed = 0;
-
-        switch (CurrentDirection)
-        {
-            default:
-
-                break;
-            case Direction.Up:
-                direction = Vector3.up;
-                speed = ElevatorSpeed;
-                break;
-            case Direction.Down:
-                direction = Vector3.down;
-                speed = ElevatorSpeed;
-                break;
-            case Direction.NoBrakes:
-                direction = Vector3.down;
-                speed = elevatorBrakeSpeed;
-                break;
-        }
+        var direction = CurrentDirection == Direction.Up ? Vector3.up : Vector3.down;
+        var speed = CurrentDirection == Direction.NoBrakes ? elevatorBrakeSpeed : ElevatorSpeed;
 
         this.transform.position = Vector3.Lerp(this.transform.position, this.transform.position + direction, Time.deltaTime * speed);
+        Debug.Log("Moving elevator to " + direction.ToString());
     }
 
    
-    IEnumerator MovementBroadcast()
+    protected IEnumerator MovementBroadcast()
     {
         while (true)
         {
@@ -211,8 +255,11 @@ public class Wind_Elevator : MonoBehaviour
 
             TranslateElevator();
 
+            isMoving = true;
+
             if (CurrentDirection == Direction.Up && IsAtTop()) StopElevator();
             if (CurrentDirection == Direction.Down && IsAtBottom()) StopElevator();
+            if (Emergency) StopElevator();
             yield return Frame;
         }
     }
@@ -242,13 +289,16 @@ public class Wind_Elevator : MonoBehaviour
     /// <param name="disableRest"></param>
     public void PlayElevatorSound(bool disableRest)
     {
-        ElevatorMotorSound.loop = true;
-        ElevatorMotorSound.Play();
+        if(ElevatorMotorSound != null)
+        {
+            ElevatorMotorSound.loop = true;
+            ElevatorMotorSound.Play();
+        }
 
         if (!disableRest) return;
 
-        AlarmElevatorSound.Stop();
-        BrakeElevatorSound.Stop();
+        if(AlarmElevatorSound)AlarmElevatorSound.Stop();
+        if(BrakeElevatorSound)BrakeElevatorSound.Stop();
     }
 
     /// <summary>
@@ -257,13 +307,16 @@ public class Wind_Elevator : MonoBehaviour
     /// <param name="disableRest"></param>
     public void PlayBrakeSound(bool disableRest)
     {
-        BrakeElevatorSound.loop = true;
-        BrakeElevatorSound.Play();
+        if(BrakeElevatorSound != null)
+        {
+            BrakeElevatorSound.loop = true;
+            BrakeElevatorSound.Play();
+        }
 
         if (!disableRest) return;
 
-        ElevatorMotorSound.Stop();
-        AlarmElevatorSound.Stop();
+        if(ElevatorMotorSound)ElevatorMotorSound.Stop();
+        if(AlarmElevatorSound)AlarmElevatorSound.Stop();
     }
 
     /// <summary>
@@ -272,20 +325,23 @@ public class Wind_Elevator : MonoBehaviour
     /// <param name="disableRest"></param>
     public void PlayAlarmSound(bool disableRest)
     {
-        AlarmElevatorSound.loop = true;
-        AlarmElevatorSound.Play();
+        if (AlarmElevatorSound)
+        {
+            AlarmElevatorSound.loop = true;
+            AlarmElevatorSound.Play();
+        }
 
         if (!disableRest) return;
-
-        ElevatorMotorSound.Stop();
-        BrakeElevatorSound.Stop();
+        
+        if(ElevatorMotorSound)ElevatorMotorSound.Stop();
+        if(BrakeElevatorSound)BrakeElevatorSound.Stop();
     }
 
     public void StopAllSounds()
     {
-        AlarmElevatorSound.Stop();
-        ElevatorMotorSound.Stop();
-        BrakeElevatorSound.Stop();
+        if(AlarmElevatorSound) AlarmElevatorSound.Stop();
+        if(ElevatorMotorSound) ElevatorMotorSound.Stop();
+        if(BrakeElevatorSound) BrakeElevatorSound.Stop();
     }
     #endregion
     #endregion

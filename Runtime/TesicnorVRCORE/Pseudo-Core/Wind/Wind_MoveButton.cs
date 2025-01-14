@@ -7,6 +7,12 @@ public class Wind_MoveButton : VRInteractable_Button
     #region PARAMETERS
     [Header("La direccion en la que se movera el elevador")]
     public Direction direction = Direction.Up;
+
+    [Header("Afecta el hecho de estar dentro o fuera?")]
+    [SerializeField] private bool bAfecta = true;
+
+    [Header("Esta dentro del elevador?")]
+    [SerializeField] private bool bInsideElevator;
     #endregion
 
     #region METHODS
@@ -20,15 +26,26 @@ public class Wind_MoveButton : VRInteractable_Button
     public override void OnClick()
     {
         base.OnClick();
+        if (!CanBeClicked()) return;
         Wind_Elevator.Instance.DeadManButtonPressed = true;
         Wind_Elevator.Instance.MoveElevator(direction);
+
+        Debug.Log("Elevator move button pressed");
     }
 
     public override void OnRelease()
     {
         base.OnRelease();
         Wind_Elevator.Instance.DeadManButtonPressed = false;
-        Wind_Elevator.Instance.StopElevator();
+        if(Wind_Elevator.Instance.IsMoving) Wind_Elevator.Instance.StopElevator();
+
+        Debug.Log("Elevator move button released");
+    }
+
+    protected bool CanBeClicked()
+    {
+        return (bAfecta && bInsideElevator && Wind_Elevator.Instance.InsideElevator) || (bAfecta && !bInsideElevator && !Wind_Elevator.Instance.InsideElevator)
+            || !bAfecta;
     }
     #endregion
 }

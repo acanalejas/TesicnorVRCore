@@ -322,7 +322,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         SetParamsOnGrab(hand);
         SetPhysicsOnGrab();
         SetSoundOnGrab();
-        if (gameObject.activeSelf) StartCoroutine("Attach");
+        if (gameObject.activeSelf) StartCoroutine(nameof(Attach));
     }
 
     /// <summary>

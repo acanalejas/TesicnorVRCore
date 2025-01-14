@@ -26,6 +26,9 @@ public class VRColliderPath : VRCollider
     [Header("Evento que se lanza al llegar al final del camino")]
     public UnityEvent OnPathEndReached;
 
+    [Header("Evento que se lanza al volver al principio del camino")]
+    public UnityEvent OnPathBeginingReached;
+
     [Header("Se deberia desactivar al llegar al final?")]
     public bool bShouldDisableOnEnd;
 
@@ -134,11 +137,9 @@ public class VRColliderPath : VRCollider
     [Header("Eje sobre el que se gira para hacer el camino")]
     public Axis axis = Axis.y;
 
-    private float initialZAngle = 0;
-
     private float anglePerSection = 0;
 
-    private Vector2 initialDirection;
+    private Vector3 InitialRotation;
 
     #endregion
 
@@ -151,7 +152,9 @@ public class VRColliderPath : VRCollider
 
         if (bShouldDisableOnEnd) OnPathEndReached.AddListener(DisableOnEnd);
 
-        currentAngles = this.transform.localRotation.y;
+        currentAngles = axis == Axis.x ? transform.localRotation.x : axis == Axis.y ? transform.localRotation.y : transform.localRotation.z;
+
+        InitialRotation = this.transform.localRotation.eulerAngles;
     }
 
     private void DisableOnEnd()
@@ -191,34 +194,35 @@ public class VRColliderPath : VRCollider
 
     void SetRotationPath()
     {
-        if (axis != Axis.z) return;
+        //if (axis != Axis.z || axis != Axis.x) return;
 
-        float xExtent = this.GetComponent<MeshRenderer>().bounds.extents.x;
-        float yExtent = this.GetComponent<MeshRenderer>().bounds.extents.y;
+        float xExtent = this.GetComponent<MeshRenderer>() ? this.GetComponent<MeshRenderer>().bounds.extents.x : this.GetComponent<BoxCollider>().bounds.extents.x;
+        float yExtent = this.GetComponent<MeshRenderer>() ? this.GetComponent<MeshRenderer>().bounds.extents.y : this.GetComponent<BoxCollider>().bounds.extents.y;
+        float zExtent = this.GetComponent<MeshRenderer>() ? this.GetComponent<MeshRenderer>().bounds.extents.z : this.GetComponent<BoxCollider>().bounds.extents.z;
 
-        float extent = xExtent > yExtent ? xExtent : yExtent;
+        float extent = axis == Axis.z ? yExtent : axis == Axis.y ? xExtent : zExtent;
 
-        Vector3 _up = this.transform.up * extent;
+        Vector3 _direction = axis == Axis.z ? this.transform.up * extent : axis == Axis.x ? this.transform.forward * extent : this.transform.right * extent;
         float angleDiff = finalRotation - initialRotation;
         anglePerSection = angleDiff / pointNumber;
 
         for(int i = 0; i < pointNumber - 1; i++)
         {
-            Vector3 point = Quaternion.AngleAxis(initialRotation + i * anglePerSection, Vector3.forward) * _up;
+            Vector3 point = Quaternion.AngleAxis(initialRotation + i * anglePerSection, axis == Axis.z ? transform.forward : axis == Axis.x ? transform.right : transform.up) * _direction;
             pathPoints.Add(point);
+            Debug.DrawLine(rotationPivot ? rotationPivot.position : this.transform.position, point, Color.red, Mathf.Infinity);
+            
         }
+        
     }
     public override void Grab(GrippingHand hand)
     {
         base.Grab(hand);
-        //initialRotation = currentAngles;
+
         if(this.transform.parent != null)
         initialHandPosition = this.transform.parent.InverseTransformPoint(hand.transform.position);
         else initialHandPosition = hand.transform.position;
 
-        initialDirection = ((Vector2)(grippingHand.transform.position - this.transform.position)).normalized;
-
-        if (axis == Axis.z) initialZAngle = GetAngleBetweenHandAndUp();
         SelectCoroutine();
     }
     public override void Release()
@@ -261,51 +265,30 @@ public class VRColliderPath : VRCollider
         {
             Vector3 direction = (grippingHand.transform.position - rotationPivot.transform.position).normalized;
 
-            float handDistance = Vector3.Distance(grippingHand.transform.position, this.transform.position);
-
             float distance = Vector3.Distance(this.transform.position, this.rotationPivot.transform.position);
 
             this.transform.position = distance * direction + rotationPivot.position;
 
-            if (isPositive)
-            {
-                if(axis == Axis.y)
-                this.transform.forward = new Vector3(-direction.z, 0, direction.x);
+            float angles = pointToRotate() * anglePerSection + initialRotation;
 
-                if(axis == Axis.z)
-                {
-                    //this.transform.up = new Vector3(direction.x, direction.y, 0);
-                    float angles = pointToRotate() * anglePerSection + initialRotation;//this.transform.localRotation.eulerAngles.z; 
-                    //float angles = 0;
-                    //if (initialDirection.x < direction.x) angles = Vector2.Angle(initialDirection, (Vector2)direction);
+            //Make a snap
+            if (currentPoint == 0) angles = initialRotation;
+            else if (currentPoint == pathPoints.Count - 1) angles = finalRotation;
 
-                    if (angles > finalRotation && angles < finalRotation + finalRotation / 2) angles = finalRotation;
-                    else if (angles > finalRotation + finalRotation / 2 || angles < initialRotation) angles = initialRotation;
-                    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Clamp(angles, initialRotation, finalRotation)));
-                    
-                }
+            //Adjust the local rotation of the object
+            this.transform.localRotation = Quaternion.Euler(new Vector3(
+                axis == Axis.x ? Mathf.Clamp(angles, isPositive ? initialRotation : finalRotation, (isPositive ? finalRotation : initialRotation) + Threshold) : InitialRotation.x,
+                axis == Axis.y ? Mathf.Clamp(angles, isPositive ? initialRotation : finalRotation, (isPositive ? finalRotation : initialRotation) + Threshold) : InitialRotation.y,
+                axis == Axis.z ? Mathf.Clamp(angles, isPositive ? initialRotation : finalRotation, (isPositive ? finalRotation : initialRotation) + Threshold) : InitialRotation.z));
 
-                //if (axis == Axis.z)
-                //{
-                //    //this.transform.up = new Vector3(-direction.x, direction.y, this.transform.parent.up.z);
-                //
-                //    float anglesDiff = GetAngleBetweenHandAndUp() - initialZAngle;
-                //    Quaternion rotation = Quaternion.FromToRotation(this.transform.position, grippingHand.transform.position);
-                //    this.transform.up = rotation * Vector3.forward;
-                //    this.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, this.transform.localRotation.eulerAngles.z));
-                //
-                //}
-                   
-            }
-            
-            else this.transform.right = -new Vector3(-direction.z, 0, direction.x);
 
             if (axis == Axis.y) currentAngles = this.transform.localRotation.y;
             else if (axis == Axis.x) currentAngles = this.transform.localRotation.x;
             else if (axis == Axis.z) currentAngles = this.transform.localRotation.z;
-            //this.transform.localRotation = Quaternion.Euler(GetAxis() * anglesToMove());
+
             if (isPathCompleted()) OnPathEndReached.Invoke();
-            Debug.Log("Rotating");
+            if (IsPathBegining()) OnPathBeginingReached.Invoke();
+
             yield return new WaitForEndOfFrame();
         }
     }
@@ -339,7 +322,6 @@ public class VRColliderPath : VRCollider
 
         return currentPoint;
     }
-
     protected virtual int pointToRotate()
     {
         int previousIndex = currentPoint - 1;
@@ -395,46 +377,6 @@ public class VRColliderPath : VRCollider
 
         return currentPoint;
     }
-    /// <summary>
-    /// Detecta el ángulo al que debe girar el objeto en base a la distancia inicial del pivote con la mano y la actual
-    /// </summary>
-    /// <returns></returns>
-    protected virtual float anglesToMove()
-    {
-        Vector3 currentDistance = grippingHand.transform.position - rotationPivot.position;
-
-        float angle = Mathf.Acos((currentDistance.x * initialDistance.x + currentDistance.y * initialDistance.y + currentDistance.z * initialDistance.z) / (initialDistance.magnitude * currentDistance.magnitude)) * 57.2958f;
-        angle += initialRotation;
-        if (finalRotation < 0) angle *= -1;
-        //currentAngles = angle;
-
-        if (angle > finalRotation - 10 && angle < finalRotation + 10) angle = finalRotation;
-
-        return angle;
-    }
-
-    /// <summary>
-    /// Devuelve el eje que se ha escogido en forma de vector
-    /// </summary>
-    /// <returns></returns>
-    Vector3 GetAxis()
-    {
-        Vector3 _axis = Vector3.zero;
-        switch (axis)
-        {
-            case Axis.x:
-                _axis = new Vector3(1, 0, 0);
-                break;
-            case Axis.y:
-                _axis = new Vector3(0, 1, 0);
-                break;
-            case Axis.z:
-                _axis = new Vector3(0, 0, 1);
-                break;
-        }
-
-        return _axis;
-    }
 
     float GetAngleBetweenHandAndUp()
     {
@@ -448,30 +390,17 @@ public class VRColliderPath : VRCollider
 
     public bool isPathCompleted()
     {
-        bool result = false;
-
         if(target != null)
         {
             if (target.conditionCompleted) return true;
         }
-        switch (pathType)
-        {
-            case PathType.Position:
-                if (currentPoint == pathPoints.Count - 1) result = true;
-                break;
-            case PathType.Rotation:
-                if(finalRotation > initialRotation)
-                {
-                    if (currentAngles >= finalRotation - Threshold) result = true;
-                }
-                else
-                {
-                    if(currentAngles < finalRotation + Threshold) result = true;
-                }
-                break;
-        }
 
-        return result;
+        return currentPoint == pathPoints.Count - 1;
+    }
+
+    public bool IsPathBegining()
+    {
+        return currentPoint == 0;
     }
     #endregion
 }

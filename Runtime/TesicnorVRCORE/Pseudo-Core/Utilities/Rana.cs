@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class Rana : VRCollider
+public class Rana : VRCollider, AnchorInterface
 { 
     #region PARAMETERS
     [Header("El mosqueton de la rana")]
@@ -63,6 +63,21 @@ public class Rana : VRCollider
         lineRenderer.positionCount = 2;
         lineRenderer.SetPosition(0, cable_origen.position);
         lineRenderer.SetPosition(1, cable_target.position);
+    }
+
+    public bool IsAnchored()
+    {
+        return !this.isGrabbed() && target && target.conditionCompleted;
+    }
+
+    public void AnchorIt()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void ReleaseIt()
+    {
+        throw new System.NotImplementedException();
     }
     #endregion
 }
