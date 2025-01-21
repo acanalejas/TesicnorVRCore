@@ -195,10 +195,9 @@ public class ObjectPainter : MonoBehaviour
     public void Paint(Vector3 uvCoordinates, GameObject GO)
     {
         if (!GO || uvCoordinates == Vector3.zero) return;
-        if (lastPainted == null || (lastPainted && lastPainted.name != GO.name))
+        if (lastPainted == null || (lastPainted && lastPainted.name != GO.name)) 
         {
-            if(!_textures.ContainsKey(GO))
-            _textures.Add(GO, new Texture2D(1024, 1024, TextureFormat.RGB565, false));
+            
             Debug.Log(_textures.Count);
             Debug.Log(lastPainted);
 
@@ -210,7 +209,10 @@ public class ObjectPainter : MonoBehaviour
             {
                 proyectionRenderer.materials[0].mainTexture = GO.GetComponent<SkinnedMeshRenderer>().materials[0].mainTexture;
             }
-            lastPainted = GO;
+            lastPainted = GO; 
+
+            if (!_textures.ContainsKey(GO))
+                _textures.Add(GO, new Texture2D(1024, 1024, TextureFormat.RGB565, false));
 
             DestroyBrushes();
             Debug.Log(_textures.Count);
