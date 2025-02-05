@@ -23,6 +23,8 @@ public class VRColliderPath : VRCollider
     [Header("Define el tipo de camino de este objeto")]
     public PathType pathType = PathType.Position;
 
+    public bool shouldUseForward = false;
+
     [Header("Evento que se lanza al llegar al final del camino")]
     public UnityEvent OnPathEndReached;
 
@@ -200,15 +202,18 @@ public class VRColliderPath : VRCollider
         float yExtent = this.GetComponent<MeshRenderer>() ? this.GetComponent<MeshRenderer>().bounds.extents.y : this.GetComponent<BoxCollider>().bounds.extents.y;
         float zExtent = this.GetComponent<MeshRenderer>() ? this.GetComponent<MeshRenderer>().bounds.extents.z : this.GetComponent<BoxCollider>().bounds.extents.z;
 
-        float extent = axis == Axis.z ? yExtent : axis == Axis.y ? xExtent : zExtent;
+        float extent = axis == Axis.z ? yExtent/2 : axis == Axis.y ? xExtent/2 : zExtent/2;
 
         Vector3 _direction = axis == Axis.z ? this.transform.up * extent : axis == Axis.x ? this.transform.forward * extent : this.transform.right * extent;
         float angleDiff = finalRotation - initialRotation;
         anglePerSection = angleDiff / pointNumber;
 
+        if (rotationPivot == null) rotationPivot = this.transform;
+
+        if (shouldUseForward) { extent = zExtent; _direction = -this.transform.forward * (extent / 2); }
         for(int i = 0; i < pointNumber - 1; i++)
         {
-            Vector3 point = Quaternion.AngleAxis(initialRotation + i * anglePerSection, axis == Axis.z ? transform.forward : axis == Axis.x ? transform.right : transform.up) * _direction;
+            Vector3 point = Quaternion.AngleAxis(initialRotation + (i * anglePerSection), axis == Axis.z ? rotationPivot.transform.forward : axis == Axis.x ? rotationPivot.transform.right : rotationPivot.transform.up) * _direction;
             pathPoints.Add(point);
             Debug.DrawLine(rotationPivot ? rotationPivot.position : this.transform.position, point, Color.red, Mathf.Infinity);
             
@@ -333,7 +338,7 @@ public class VRColliderPath : VRCollider
         Vector3 _previousPoint = pathPoints[previousIndex];
         Vector3 _nextPoint = pathPoints[nextIndex];
 
-        Vector3 currentLocalPosition = this.transform.InverseTransformPoint(grippingHand.transform.position);
+        Vector3 currentLocalPosition = grippingHand.transform.position - rotationPivot.transform.position;
         float _currentDistance = Vector3.Distance(currentLocalPosition, _currentPoint);
         float _previousDistance = Vector3.Distance(currentLocalPosition, _previousPoint);
         float _nextDistance = Vector3.Distance(currentLocalPosition, _nextPoint);
