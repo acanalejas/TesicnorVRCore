@@ -243,7 +243,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             if (interactionHit.collider)
             {
                 VRInteractableInterface interactable = interactionHit.collider.gameObject.GetComponent<VRInteractableInterface>();
-                if (interactable != null)
+                if (interactable != null && interactionHit.collider.gameObject.activeSelf)
                 {
                     addedDistance = direction.normalized * interactionHit.distance;
 
@@ -287,6 +287,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
     #region Controllers
     bool lastPressed = false;
+    float pressed;
+    GameObject pressedObject;
     /// <summary>
     /// Detecta la interaccion (incluido input) cuando se usan los mandos
     /// </summary>
@@ -297,21 +299,24 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
         if (interactingObject != null)
         {
-            float pressed = 0;
             if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f && !lastPressed)
             {
                 interactingObject.GetComponent<VRInteractableInterface>().SetHand(this.gameObject);
                 //if(!lastPressed)
                 interactingObject.GetComponent<VRInteractableInterface>().OnClick();
+                pressedObject = interactingObject;
                 lastPressed = true;
             }
             else if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed < 0.3f && lastPressed)
             {
                 lastPressed = false;
-                interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
-                interactingObject.GetComponent<VRInteractableInterface>().SetHand(null);
+                if(interactingObject == pressedObject)
+                {
+                    interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
+                    interactingObject.GetComponent<VRInteractableInterface>().SetHand(null);
+                }
+                else pressedObject.GetComponent<VRInteractableInterface>().SetHand(null);
             }
-            //else { lastPressed = false; }
         }
     }
 

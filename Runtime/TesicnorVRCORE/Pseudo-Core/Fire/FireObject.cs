@@ -356,6 +356,11 @@ namespace TesicFire
             return extinguished;
         }
 
+        public void FullExtinguishFire()
+        {
+            ExtinguishFire(TimeToExtinguish);
+        }
+
         int _try = 0;
         public void ExtinguishFire(float damage)
         {

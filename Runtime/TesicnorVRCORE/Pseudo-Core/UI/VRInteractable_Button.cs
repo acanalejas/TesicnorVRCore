@@ -91,7 +91,7 @@ public class VRInteractable_Button : VR_Interactable
         }
 
         timeElapsed = 0.03f;
-        if(effectImage != null)
+        if(effectImage != null && effectImage != ExternalImage)
             effectImage.color = PressedColor;
 
         this.onHover.AddListener(this.CheckHoverClick);
