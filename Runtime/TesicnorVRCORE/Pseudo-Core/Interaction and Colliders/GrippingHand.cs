@@ -311,6 +311,8 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
         foreach (GameObject Object in overlappingObjects)
         {
+            if (!Object) continue;
+
             Vector3 handCenter = transform.TransformVector(GetComponent<SphereCollider>().center);
             Vector3 otherCenter = transform.TransformVector(Object.GetComponent<Collider>().bounds.center);
 
