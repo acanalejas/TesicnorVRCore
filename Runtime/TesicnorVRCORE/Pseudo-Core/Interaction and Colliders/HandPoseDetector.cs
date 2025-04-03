@@ -20,8 +20,8 @@ public class HandPoseDetector : MonoBehaviour
     #region PARAMETERS
     [Header("Margen de error entre posicion de cada hueso")]
     [SerializeField] float Threshold = 0.1f;
-    [Header("El esqueleto de la mano")]
-    public OVRCustomSkeleton skeleton;
+    //[Header("El esqueleto de la mano")]
+    //public OVRCustomSkeleton skeleton;
     [Header("Lista de gestos disponibles")]
     [SerializeField] List<Gesture> gestures;
     private Gesture previousGesture;
@@ -73,10 +73,10 @@ public class HandPoseDetector : MonoBehaviour
         Gesture gesture = new Gesture();
         gesture.GestureName = "new Gesture";
         List<Vector3> fingersPositions = new List<Vector3>();
-        foreach(var bone in skeleton.Bones)
-        {
-            fingersPositions.Add(skeleton.transform.InverseTransformPoint(bone.Transform.position));
-        }
+        //foreach(var bone in skeleton.Bones)
+        //{
+        //    fingersPositions.Add(skeleton.transform.InverseTransformPoint(bone.Transform.position));
+        //}
 
         gesture.fingersPositions = fingersPositions;
         gestures.Add(gesture);
@@ -91,7 +91,7 @@ public class HandPoseDetector : MonoBehaviour
         Gesture currentGesture = new Gesture();
         float currentMin = Mathf.Infinity;
 
-        foreach(var gesture in gestures)
+        /*foreach(var gesture in gestures)
         {
             float sumDistance = 0;
             bool isDiscarded = false;
@@ -113,7 +113,7 @@ public class HandPoseDetector : MonoBehaviour
                 currentMin = sumDistance;
                 currentGesture = gesture;
             }
-        }
+        }*/
 
         return currentGesture;
     }
@@ -138,13 +138,13 @@ public class HandPoseDetector : MonoBehaviour
         if (gesture.fingersPositions.Count == 0) { return; }
         Debug.Log("After Return");
         int i = 0;
-        foreach (OVRBone bone in skeleton.Bones) 
-        {
-            Vector3 position = skeleton.transform.TransformPoint(gesture.fingersPositions[i]);
-            bone.Transform.position = position;
-            Debug.Log("Se intenta posicionar la mano");
-            i++;
-        }
+        //foreach (OVRBone bone in skeleton.Bones) 
+        //{
+        //    Vector3 position = skeleton.transform.TransformPoint(gesture.fingersPositions[i]);
+        //    bone.Transform.position = position;
+        //    Debug.Log("Se intenta posicionar la mano");
+        //    i++;
+        //}
     }
     #endregion
 }

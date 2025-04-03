@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using TesicnorVR;
+using System.Text.RegularExpressions;
 
 public class StreamingSceneManager : MonoBehaviour
 {
@@ -129,8 +130,11 @@ public class StreamingSceneManager : MonoBehaviour
     }
     public void KeyboardEnter()
     {
+        ip = IPText.text;
         Debug.Log(ip);
         string url = "http://" + ip + ":8080/";
+        Regex sWhitespace = new Regex(@"\s+");
+        url = sWhitespace.Replace(url, "");
         Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
         StreamingCSharp.HttpClient_Custom.IntializeClient();

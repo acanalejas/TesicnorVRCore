@@ -34,6 +34,8 @@ public class TesicnorPlayer : MonoBehaviour
     public UnityEvent OnResume;
 
     public bool bShouldSearch = true;
+
+    UnityEngine.XR.Interaction.Toolkit.XRController controller;
     
     #endregion
 
@@ -66,6 +68,12 @@ public class TesicnorPlayer : MonoBehaviour
                 interactor.ToggleRay(false);
             }
         });
+
+        var controllers = FindObjectsByType<UnityEngine.XR.Interaction.Toolkit.XRController>(FindObjectsSortMode.None);
+        foreach(var _c in controllers)
+        {
+            if (_c.controllerNode == UnityEngine.XR.XRNode.LeftHand) controller = _c;
+        }
     }
 
     private void Update()
@@ -78,7 +86,8 @@ public class TesicnorPlayer : MonoBehaviour
         #region For Pause
         if (bUsePause)
         {
-            if (OVRInput.GetDown(OVRInput.Button.Start))
+            bool pause = false;
+            if (controller && controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out pause) && pause)
             {
                 CheckPauseScreen();
 

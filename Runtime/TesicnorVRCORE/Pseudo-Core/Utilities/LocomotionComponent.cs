@@ -31,6 +31,7 @@ public class LocomotionComponent : MonoBehaviour
     {
         controller = GetComponent<XRController>();
         if (!controller) controller = gameObject.AddComponent<XRController>();
+        
     }
 
     /// <summary>
@@ -60,8 +61,10 @@ public class LocomotionComponent : MonoBehaviour
     private void Update()
     {
         Vector2 joystick = Vector2.zero;
+        bool joystickButton = false;
 
-        if(controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out joystick) && joystick != Vector2.zero)
+        if(controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out joystick)  && joystick != Vector2.zero && 
+            controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out joystickButton) && joystickButton)
         {
             if(controllerType == ControllerTypes.Movement)
             {

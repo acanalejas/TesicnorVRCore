@@ -397,7 +397,7 @@ public class MultiplayerCreation : MonoBehaviour
         // =============================================================================================================
     }
 
-    [MenuItem("Tesicnor/Multiplayer/Multiplayer Player Hand Controlled")]
+    /*[MenuItem("Tesicnor/Multiplayer/Multiplayer Player Hand Controlled")]
     public static void CreateMultiplayerPlayer_Hands()
     {
         GameObject playerHands = new GameObject("Player Hands", typeof(CharacterController), typeof(OVRPlayerController), typeof(OVRSceneSampleController), typeof(OVRDebugInfo), typeof(ReplicatedObject));
@@ -583,6 +583,6 @@ public class MultiplayerCreation : MonoBehaviour
 
         UniqueIDManager uim = manager.GetComponent<UniqueIDManager>();
         uim.SetIDs();
-    }
+    }*/
 #endif
 }

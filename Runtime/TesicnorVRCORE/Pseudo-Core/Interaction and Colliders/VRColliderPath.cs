@@ -25,6 +25,8 @@ public class VRColliderPath : VRCollider
 
     public bool shouldUseForward = false;
 
+    public bool positiveForward = false;
+
     [Header("Evento que se lanza al llegar al final del camino")]
     public UnityEvent OnPathEndReached;
 
@@ -210,7 +212,7 @@ public class VRColliderPath : VRCollider
 
         if (rotationPivot == null) rotationPivot = this.transform;
 
-        if (shouldUseForward) { extent = zExtent; _direction = -this.transform.forward * (extent / 2); }
+        if (shouldUseForward) { extent = zExtent; _direction = -this.transform.forward * (extent / 2); if (positiveForward) _direction *= -1; }
         for(int i = 0; i < pointNumber - 1; i++)
         {
             Vector3 point = Quaternion.AngleAxis(initialRotation + (i * anglePerSection), axis == Axis.z ? rotationPivot.transform.forward : axis == Axis.x ? rotationPivot.transform.right : rotationPivot.transform.up) * _direction;

@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR;
 using UnityEditor.XR.LegacyInputHelpers;
 using UnityEngine.SpatialTracking;
-using Oculus;
+//using Oculus;
 
 public static class PlayerCreator
 {
@@ -387,7 +387,7 @@ public static class PlayerCreator
     [MenuItem("Tesicnor/Players/PlayerHands")]
     public static void CreatePlayerHands()
     {
-        GameObject playerHands = new GameObject("Player Hands", typeof(CharacterController), typeof(OVRPlayerController), typeof(OVRSceneSampleController), typeof(OVRDebugInfo), typeof(TesicnorPlayer));
+        GameObject playerHands = new GameObject("Player Hands", typeof(CharacterController), /*typeof(OVRPlayerController), typeof(OVRSceneSampleController), typeof(OVRDebugInfo),*/ typeof(TesicnorPlayer));
         if (Selection.gameObjects.Length > 0) playerHands.transform.parent = Selection.gameObjects[0].transform;
         playerHands.transform.localPosition = Vector3.zero;
         playerHands.transform.localRotation = Quaternion.Euler(Vector3.zero);
@@ -398,15 +398,15 @@ public static class PlayerCreator
 
         //CREANDO EL PRIMER HIJO
 
-        GameObject ovrCameraRig = new GameObject("OVR Camera Rig", typeof(OVRCameraRig), typeof(OVRManager), typeof(OVRHeadsetEmulator));
+        GameObject ovrCameraRig = new GameObject("OVR Camera Rig"/*, typeof(OVRCameraRig), typeof(OVRManager), typeof(OVRHeadsetEmulator)*/);
         ovrCameraRig.transform.parent = playerHands.transform;
         ovrCameraRig.transform.localPosition = Vector3.zero;
         ovrCameraRig.transform.localRotation = Quaternion.Euler(Vector3.zero);
         ovrCameraRig.transform.localScale = Vector3.one;
 
-        OVRManager manager = ovrCameraRig.GetComponent<OVRManager>();
+        /*OVRManager manager = ovrCameraRig.GetComponent<OVRManager>();
         manager.AllowRecenter = true;
-        manager.trackingOriginType = OVRManager.TrackingOrigin.FloorLevel;
+        manager.trackingOriginType = OVRManager.TrackingOrigin.FloorLevel;*/
 
         Transform[] allChilds = ovrCameraRig.GetComponentsInChildren<Transform>();
 
@@ -430,7 +430,7 @@ public static class PlayerCreator
                 handPoseDetector_right.transform.parent = child;
 
                 poseDetector_right = handPoseDetector_right.GetComponent<HandPoseDetector>();
-                poseDetector_right.skeleton = rightHand_GO.GetComponent<OVRCustomSkeleton>();
+                //poseDetector_right.skeleton = rightHand_GO.GetComponent<OVRCustomSkeleton>();
                 //poseDetector_right.skeleton.TryAutoMapBonesByName();
                 
             }
@@ -447,7 +447,7 @@ public static class PlayerCreator
                 handPoseDetector_left.transform.parent = child;
 
                 poseDetector_left = handPoseDetector_left.GetComponent<HandPoseDetector>();
-                poseDetector_left.skeleton = leftHand_GO.GetComponent<OVRCustomSkeleton>();
+                //poseDetector_left.skeleton = leftHand_GO.GetComponent<OVRCustomSkeleton>();
                 //poseDetector_left.skeleton.TryAutoMapBonesByName();
             }
         }

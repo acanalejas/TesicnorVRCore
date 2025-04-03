@@ -285,6 +285,11 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         else return interactionOrigin;
     }
 
+    public void SetOrigin(Transform transform)
+    {
+        interactionOrigin = transform;
+    }
+
     #region Controllers
     bool lastPressed = false;
     float pressed;
