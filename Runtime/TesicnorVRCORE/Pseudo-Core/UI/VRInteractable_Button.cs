@@ -159,7 +159,7 @@ public class VRInteractable_Button : VR_Interactable
 
         if (IsBehind)
             this.transform.parent = effectObject.transform;
-        else { effectObject.transform.parent = this.transform; effectObject.transform.SetSiblingIndex(0); }
+        else { effectObject.transform.SetParent(this.transform); effectObject.transform.SetSiblingIndex(0); }
 
         if (this.transform.GetSiblingIndex() > 0 && IsBehind)
             effectObject.transform.SetSiblingIndex(this.transform.GetSiblingIndex() - 1);

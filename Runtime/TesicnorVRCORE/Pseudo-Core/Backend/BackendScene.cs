@@ -209,7 +209,7 @@ public class BackendScene : MonoBehaviour
                     //SceneManager.LoadScene(nextBuildIndex);
                     if (ShouldChangeSceneOnEnter)SceneManager.LoadScene(nextBuildIndex);
                     if (emailText) emailText.text = user;
-                    if (FindObjectOfType<BackendTimeManager>()) FindObjectOfType<BackendTimeManager>().UpdateTimeInfo();
+                    if (FindFirstObjectByType<BackendTimeManager>()) FindFirstObjectByType<BackendTimeManager>().UpdateTimeInfo();
 
                     StopCoroutine(nameof(ShowSuccessPopUp));
                     StartCoroutine(nameof(ShowSuccessPopUp));

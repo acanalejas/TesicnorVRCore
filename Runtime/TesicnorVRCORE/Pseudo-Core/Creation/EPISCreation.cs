@@ -283,7 +283,7 @@ public static class EPISCreation
         rana_rana.attachmentMode = VRCollider.AttachmentMode.Normal;
 
         GameObject _TaskManager = null;
-        if(GameObject.FindObjectOfType<TaskManager>()) _TaskManager = GameObject.FindObjectOfType<TaskManager>().gameObject;
+        if(GameObject.FindFirstObjectByType<TaskManager>()) _TaskManager = GameObject.FindFirstObjectByType<TaskManager>().gameObject;
         if (!_TaskManager)
         {
             _TaskManager = new GameObject("Task Manager", typeof(TaskManager));
@@ -481,12 +481,12 @@ public static class EPISCreation
         if (rana_GO) rana_rana = rana_GO.GetComponent<Rana>();
 
         GameObject _TaskManager = null;
-        if (GameObject.FindObjectOfType<TaskManager>()) _TaskManager = GameObject.FindObjectOfType<TaskManager>().gameObject;
+        if (GameObject.FindFirstObjectByType<TaskManager>()) _TaskManager = GameObject.FindFirstObjectByType<TaskManager>().gameObject;
         if (!_TaskManager)
         {
             _TaskManager = new GameObject("Task Manager", typeof(TaskManager));
 
-            if (Selection.gameObjects.Length > 0) _TaskManager.transform.parent = Selection.gameObjects[0].transform;
+            if (Selection.gameObjects.Length > 0) _TaskManager.transform.SetParent(Selection.gameObjects[0].transform);
             _TaskManager.transform.localPosition = Vector3.zero;
             _TaskManager.transform.localRotation = Quaternion.Euler(Vector3.zero);
             _TaskManager.transform.localScale = Vector3.one;
@@ -494,7 +494,7 @@ public static class EPISCreation
 
         //PARA AGARRAR EL CASCO
         GameObject grabHelmet = new GameObject("Grab Helmet", typeof(GrabHelmet));
-        grabHelmet.transform.parent = _TaskManager.transform;
+        grabHelmet.transform.SetParent(_TaskManager.transform);
         grabHelmet.transform.localPosition = Vector3.zero;
         grabHelmet.transform.localRotation = Quaternion.Euler(Vector3.zero);
         grabHelmet.transform.localScale = Vector3.one;
