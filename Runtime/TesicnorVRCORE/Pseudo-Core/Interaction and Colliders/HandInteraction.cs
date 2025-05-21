@@ -52,6 +52,17 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     private Action<int> onInteractionDetected;
     #endregion
 
+    #region AR
+
+    [Header("El evento que se lanza al spawnear un objeto")]
+    [SerializeField]
+    [HideInInspector] public UnityEngine.Events.UnityEvent OnARObjectSpawned;
+
+    //El gestor de raycast en AR
+    protected AR_PointRay ARPR;
+
+    #endregion
+
     #region Controllers
     [Header("============ CUANDO SE USAN MANDOS =================")][Space(10)]
     [Header("El punto desde el que se lanza el rayo")]
@@ -172,7 +183,56 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         else SetupControllerCollider();
         if (!lineRenderer) lineRenderer = GetComponent<LineRenderer>();
         if (!usesRay) lineRenderer.enabled = false;
+
+        SetupARInput();
     }
+
+    #region AR
+
+    private void SetupARInput()
+    {
+        if (ARPR) return;
+
+        ARPR = FindFirstObjectByType<AR_PointRay>();
+
+        if (!ARPR)
+        {
+            GameObject GO_ARPR = new GameObject("AR Point Ray", typeof(AR_PointRay));
+            ARPR = GO_ARPR.GetComponent<AR_PointRay>();
+        }
+
+        if (!ARPR) ARPR = FindFirstObjectByType<AR_PointRay>();
+    }
+
+    public void ARSpawnObject()
+    {
+        XRRayInteractor interactor = GetComponent<XRRayInteractor>();
+
+        if(!interactor)
+        ARPR.ARSpawnObject(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
+
+        else
+        {
+            RaycastHit hit;
+            if (interactor.TryGetCurrent3DRaycastHit(out hit))
+            {
+                Vector3 position = hit.point;
+                Quaternion rotation = Quaternion.LookRotation(hit.normal, Vector3.up);
+                ARPR.ARSpawnObject(position, rotation);
+            }
+        }
+           
+
+        OnARObjectSpawned.Invoke();
+    }
+
+    private Vector3 GetARRaycastPoint()
+    {
+        return ARPR.ARRaycast(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
+    }
+
+    #endregion
+
     private void Update()
     {
         DetectInteraction();
@@ -261,6 +321,9 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                         //if(interactingObject.GetComponent<VRInteractableInterface>().GetIsClicking()) interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
                         interactingObject = null;
                     }
+
+                    RaycastHit hit;
+                    if (ARPR && this.GetComponent<XRRayInteractor>() && this.GetComponent<XRRayInteractor>().TryGetCurrent3DRaycastHit(out hit)) addedDistance = hit.point - origin;
                 }
             }
             /*else
@@ -503,6 +566,17 @@ public class InteractionEditor : Editor
         GUILayout.Space(10);
         GUILayout.Label("El tamaño del collider de interacción", EditorStyles.boldLabel);
         handInteraction.fingerCube = EditorGUILayout.Vector3Field("Collider Size", handInteraction.fingerCube);
+
+
+        GUILayout.Space(10);
+
+        GUILayout.Label("PARA AR", EditorStyles.boldLabel);
+
+        GUILayout.Space(10);
+
+        SerializedProperty OnARObjectSpawned = serializedObject.FindProperty("OnARObjectSpawned");
+        EditorGUILayout.PropertyField(OnARObjectSpawned);
+
 
         GUILayout.Space(10);
 

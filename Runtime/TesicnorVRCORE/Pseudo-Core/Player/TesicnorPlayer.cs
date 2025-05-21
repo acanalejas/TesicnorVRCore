@@ -69,7 +69,12 @@ public class TesicnorPlayer : MonoBehaviour
             }
         });
 
+#if UNITY_2023
         var controllers = FindObjectsByType<UnityEngine.XR.Interaction.Toolkit.XRController>(FindObjectsSortMode.None);
+#endif
+#if UNITY_2021
+        var controllers = FindObjectsOfType<UnityEngine.XR.Interaction.Toolkit.XRController>();
+#endif
         foreach(var _c in controllers)
         {
             if (_c.controllerNode == UnityEngine.XR.XRNode.LeftHand) controller = _c;
@@ -83,7 +88,7 @@ public class TesicnorPlayer : MonoBehaviour
 
     private void CheckInput()
     {
-        #region For Pause
+#region For Pause
         if (bUsePause)
         {
             bool pause = false;
@@ -94,10 +99,10 @@ public class TesicnorPlayer : MonoBehaviour
                 TogglePause(!PauseScreen.activeSelf);
             }
         }
-        #endregion
+#endregion
     }
 
-    #region For Pause
+#region For Pause
     private void CheckPauseScreen()
     {
         if (PauseScreen != null) return;
@@ -116,10 +121,10 @@ public class TesicnorPlayer : MonoBehaviour
 
         bIsInPause = Value;
     }
-    #endregion
-    #endregion
+#endregion
+#endregion
 
-    #region SINGLETON
+#region SINGLETON
     private static TesicnorPlayer instance;
     public static TesicnorPlayer Instance { get { return instance; } }
 
@@ -128,5 +133,5 @@ public class TesicnorPlayer : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(this);
     }
-    #endregion
+#endregion
 }

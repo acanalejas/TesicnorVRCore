@@ -209,7 +209,12 @@ public class BackendScene : MonoBehaviour
                     //SceneManager.LoadScene(nextBuildIndex);
                     if (ShouldChangeSceneOnEnter)SceneManager.LoadScene(nextBuildIndex);
                     if (emailText) emailText.text = user;
+#if UNITY_2021
+                    if (FindObjectOfType<BackendTimeManager>()) FindObjectOfType<BackendTimeManager>().UpdateTimeInfo();
+#endif
+#if UNITY_2023_OR_NEWER
                     if (FindFirstObjectByType<BackendTimeManager>()) FindFirstObjectByType<BackendTimeManager>().UpdateTimeInfo();
+#endif
 
                     StopCoroutine(nameof(ShowSuccessPopUp));
                     StartCoroutine(nameof(ShowSuccessPopUp));
@@ -362,5 +367,5 @@ public class BackendScene : MonoBehaviour
         numbersGrid.SetActive(lettersGrid.activeSelf);
         lettersGrid.SetActive(!lettersGrid.activeSelf);
     }
-    #endregion
+#endregion
 }

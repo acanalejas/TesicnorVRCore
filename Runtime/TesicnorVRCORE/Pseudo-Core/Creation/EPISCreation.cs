@@ -283,7 +283,12 @@ public static class EPISCreation
         rana_rana.attachmentMode = VRCollider.AttachmentMode.Normal;
 
         GameObject _TaskManager = null;
+#if UNITY_2023_OR_NEWER
         if(GameObject.FindFirstObjectByType<TaskManager>()) _TaskManager = GameObject.FindFirstObjectByType<TaskManager>().gameObject;
+#endif
+#if UNITY_2021
+        if (GameObject.FindObjectOfType<TaskManager>()) _TaskManager = GameObject.FindObjectOfType<TaskManager>().gameObject;
+#endif
         if (!_TaskManager)
         {
             _TaskManager = new GameObject("Task Manager", typeof(TaskManager));
@@ -481,7 +486,13 @@ public static class EPISCreation
         if (rana_GO) rana_rana = rana_GO.GetComponent<Rana>();
 
         GameObject _TaskManager = null;
+#if UNITY_2023_OR_NEWER
         if (GameObject.FindFirstObjectByType<TaskManager>()) _TaskManager = GameObject.FindFirstObjectByType<TaskManager>().gameObject;
+#endif
+
+#if UNITY_2021
+        if (GameObject.FindObjectOfType<TaskManager>()) _TaskManager = GameObject.FindObjectOfType<TaskManager>().gameObject;
+#endif
         if (!_TaskManager)
         {
             _TaskManager = new GameObject("Task Manager", typeof(TaskManager));
@@ -661,6 +672,6 @@ public static class EPISCreation
 
         taskManager.totalTasks = newTasks.ToArray();
     }
-    #endregion
+#endregion
 #endif
-}
+    }
