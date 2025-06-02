@@ -61,6 +61,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     //El gestor de raycast en AR
     protected AR_PointRay ARPR;
 
+    private bool ARInput = false;
+
     #endregion
 
     #region Controllers
@@ -204,12 +206,31 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (!ARPR) ARPR = FindFirstObjectByType<AR_PointRay>();
     }
 
+    public void ToggleARInput(bool _value)
+    {
+        ARInput = _value;
+    }
+
+    public void DetectARInput()
+    {
+        if (!ARInput) return;
+        if(handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f)
+        {
+            ARSpawnObject();
+            ToggleARInput(false);
+        }
+    }
+
+    public static bool canSpawn = true;
     public void ARSpawnObject()
     {
         XRRayInteractor interactor = GetComponent<XRRayInteractor>();
+        XRInteractorLineVisual visual = GetComponent<XRInteractorLineVisual>();
+
+        GameObject result = null;
 
         if(!interactor)
-        ARPR.ARSpawnObject(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
+        result = ARPR.ARSpawnObject(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
 
         else
         {
@@ -217,13 +238,18 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             if (interactor.TryGetCurrent3DRaycastHit(out hit))
             {
                 Vector3 position = hit.point;
-                Quaternion rotation = Quaternion.LookRotation(hit.normal, Vector3.up);
-                ARPR.ARSpawnObject(position, rotation);
+                Quaternion rotation = Quaternion.LookRotation(Vector3.forward, hit.normal);
+                result = ARPR.ARSpawnObject(position, Quaternion.identity);
+            }
+            else if (visual)
+            {
+                Vector3 position = visual.lineLength * this.interactionOrigin.transform.forward + this.interactionOrigin.transform.position;
+                result = ARPR.ARSpawnObject(position, Quaternion.identity);
             }
         }
            
-
-        OnARObjectSpawned.Invoke();
+        if(result != null)
+         OnARObjectSpawned.Invoke();
     }
 
     private Vector3 GetARRaycastPoint()
@@ -236,6 +262,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     private void Update()
     {
         DetectInteraction();
+        DetectARInput();
     }
 
     /// <summary>
@@ -312,6 +339,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                     interactable.SetHand(this.gameObject);
                     interactable.OnHovered();
                 }
+                
                 else
                 {
                     if (interactingObject != null)

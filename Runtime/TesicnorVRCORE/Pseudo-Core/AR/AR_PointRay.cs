@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
 
-[RequireComponent(typeof(ARRaycastManager))]
-[RequireComponent(typeof(ARPlaneManager))]
 public class AR_PointRay : MonoBehaviour
 {
     #region PARAMETERS
@@ -27,8 +25,8 @@ public class AR_PointRay : MonoBehaviour
     #region UNITY METHODS
     private void Awake()
     {
-        if (ARRM == null) ARRM = this.GetComponent<ARRaycastManager>();
-        if (ARPM == null) ARPM = this.GetComponent<ARPlaneManager>();
+        if (ARRM == null) ARRM = FindFirstObjectByType<ARRaycastManager>();
+        if (ARPM == null) ARPM = FindFirstObjectByType<ARPlaneManager>();
     }
 
     public void SetRaycastOrigin(GameObject _origin)
@@ -85,8 +83,11 @@ public class AR_PointRay : MonoBehaviour
         return GameObject.Instantiate(spawnObject, _position, Quaternion.identity);
     }
 
+    public bool alreadySpawned = false;
+
     public GameObject ARSpawnObject(Vector3 _position, Quaternion _rotation)
     {
+        alreadySpawned = true;
         return GameObject.Instantiate(spawnObject, _position, _rotation);
     }
 

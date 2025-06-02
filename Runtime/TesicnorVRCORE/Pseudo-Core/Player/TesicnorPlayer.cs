@@ -86,16 +86,16 @@ public class TesicnorPlayer : MonoBehaviour
         CheckInput();
     }
 
+    bool pausePressed = false;
+    bool pause = false;
     private void CheckInput()
     {
 #region For Pause
         if (bUsePause)
         {
-            bool pause = false;
             if (controller && controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out pause) && pause)
             {
                 CheckPauseScreen();
-
                 TogglePause(!PauseScreen.activeSelf);
             }
         }
@@ -110,8 +110,19 @@ public class TesicnorPlayer : MonoBehaviour
         PauseScreen = GameObject.Instantiate(PauseScreenPrefab, PauseParent);
     }
 
+    IEnumerator PauseCountdown()
+    {
+        yield return new WaitForSeconds(1);
+        pausePressed = false;
+    }
+
     public void TogglePause(bool Value)
     {
+        if (pausePressed) return;
+        pausePressed = true;
+
+        StartCoroutine(PauseCountdown());
+
         this.PauseScreen.SetActive(Value);
         if (Value) OnPause.Invoke();
         else OnResume.Invoke();

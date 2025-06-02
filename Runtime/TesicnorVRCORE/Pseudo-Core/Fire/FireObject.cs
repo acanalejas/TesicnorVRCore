@@ -110,6 +110,31 @@ namespace TesicFire
         #region Interface
         private void Awake()
         {
+            //fire_GO.GetComponent<ParticleSystem>().Stop();
+            //if (smoke_GO && !smoke_System) smoke_System = smoke_GO.GetComponent<ParticleSystem>();
+            //if (smoke_System) smoke_System.Stop();
+            //if (sparks_System) sparks_System.Stop();
+            //
+            //fire_MR = fire_GO.GetComponent<MeshRenderer>();
+            //
+            //BoxCollider[] bcs = GetComponents<BoxCollider>();
+            //BoxCollider bc = new BoxCollider();
+            //bool isTrigger = false;
+            //foreach (BoxCollider col in bcs) { if (col.isTrigger) { isTrigger = true; bc = col; trigger = col; } else { col.enabled = false; } }
+            //if (!isTrigger) bc = bcs[0];
+            ////bc.size = fire_MR.localBounds.size;
+            //bc.isTrigger = true;
+            ////bc.center = Vector3.zero;
+            ////bc.enabled = false;
+            //
+            //GetComponent<Rigidbody>().isKinematic = true;
+            //
+            ////Just for security in sound
+            //fire_Source.playOnAwake = false;
+            //fire_Source.Stop();
+        }
+        private void OnEnable()
+        {
             fire_GO.GetComponent<ParticleSystem>().Stop();
             if (smoke_GO && !smoke_System) smoke_System = smoke_GO.GetComponent<ParticleSystem>();
             if (smoke_System) smoke_System.Stop();
@@ -132,9 +157,7 @@ namespace TesicFire
             //Just for security in sound
             fire_Source.playOnAwake = false;
             fire_Source.Stop();
-        }
-        private void Start()
-        {
+
             //id = UniqueIDManager.Instance.GetIDFromGameObject(this.gameObject).ToString();
             mesh_original = GetComponent<MeshFilter>().mesh;
             if (InitialFire) BeginFire(/*GetComponent<MeshRenderer>().localBounds.center*/ mesh_original.bounds.center);
