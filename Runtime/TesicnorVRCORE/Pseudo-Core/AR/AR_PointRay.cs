@@ -18,7 +18,7 @@ public class AR_PointRay : MonoBehaviour
     List<ARRaycastHit> Hits = new List<ARRaycastHit>();
 
     //Objeto a spawnear, cuidado con las referencias que no se limpian hasta cerrar la app
-    public static GameObject spawnObject;
+    public static SO_ARItem spawnObject;
     #endregion
 
     #region METHODS
@@ -80,7 +80,7 @@ public class AR_PointRay : MonoBehaviour
 
     public GameObject ARSpawnObject(Vector3 _position)
     {
-        return GameObject.Instantiate(spawnObject, _position, Quaternion.identity);
+        return GameObject.Instantiate(spawnObject.prefab, _position, Quaternion.identity);
     }
 
     public bool alreadySpawned = false;
@@ -88,7 +88,7 @@ public class AR_PointRay : MonoBehaviour
     public GameObject ARSpawnObject(Vector3 _position, Quaternion _rotation)
     {
         alreadySpawned = true;
-        return GameObject.Instantiate(spawnObject, _position, _rotation);
+        return GameObject.Instantiate(spawnObject.prefab, _position, _rotation);
     }
 
     public GameObject ARSpawnObject(GameObject _prefab, Vector3 _direction, Quaternion _rotation, GameObject _origin = null)
@@ -115,14 +115,14 @@ public class AR_PointRay : MonoBehaviour
     {
         Vector3 _position = ARRaycast(_direction, _origin);
 
-        return GameObject.Instantiate(spawnObject, _position, Quaternion.identity);
+        return GameObject.Instantiate(spawnObject.prefab, _position, Quaternion.identity);
     }
 
     public GameObject ARSpawnObject(Vector3 _direction, Quaternion _rotation, GameObject _origin = null)
     {
         Vector3 _position = ARRaycast(_direction, _origin);
 
-        return GameObject.Instantiate(spawnObject, _position, _rotation);
+        return GameObject.Instantiate(spawnObject.prefab, _position, _rotation);
     }
     #endregion
     #endregion

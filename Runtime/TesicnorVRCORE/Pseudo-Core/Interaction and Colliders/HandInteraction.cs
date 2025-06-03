@@ -63,6 +63,14 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
     private bool ARInput = false;
 
+    private bool ARPreview = false;
+
+    private GameObject ARPreviewObject = null;
+
+    private MeshFilter ARPreviewMF;
+
+    private Mesh ARPreviewMesh = null;
+
     #endregion
 
     #region Controllers
@@ -185,6 +193,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         else SetupControllerCollider();
         if (!lineRenderer) lineRenderer = GetComponent<LineRenderer>();
         if (!usesRay) lineRenderer.enabled = false;
+        if (!ARPreviewObject) ARPreviewObject = GameObject.FindGameObjectWithTag("MeshPreview");
+        if (!ARPreviewMF && ARPreviewObject) ARPreviewObject.GetComponent<MeshFilter>();
 
         SetupARInput();
     }
@@ -206,6 +216,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (!ARPR) ARPR = FindFirstObjectByType<AR_PointRay>();
     }
 
+
     public void ToggleARInput(bool _value)
     {
         ARInput = _value;
@@ -221,33 +232,70 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         }
     }
 
+    public void ToggleARPreview(bool _value) { ARPreview = _value; }
+
+    public void ShowARPreview()
+    {
+        if (ARPreviewObject) ARPreviewObject.SetActive(ARPreview);
+        if (!ARPreview || !ARPreviewMF) return;
+
+        ARPreviewMF.mesh = AR_PointRay.spawnObject.previewMesh;
+        ARPreviewObject.transform.position = GetARRaycastPosition();
+    }
+
+    public void SetARPreviewMesh(Mesh _mesh) { ARPreviewMesh = _mesh; }
+
     public static bool canSpawn = true;
-    public void ARSpawnObject()
+    public Vector3 GetARRaycastPosition()
     {
         XRRayInteractor interactor = GetComponent<XRRayInteractor>();
         XRInteractorLineVisual visual = GetComponent<XRInteractorLineVisual>();
 
-        GameObject result = null;
-
-        if(!interactor)
-        result = ARPR.ARSpawnObject(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
+        if (!interactor)
+            return ARPR.ARRaycast(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
 
         else
         {
             RaycastHit hit;
             if (interactor.TryGetCurrent3DRaycastHit(out hit))
             {
-                Vector3 position = hit.point;
-                Quaternion rotation = Quaternion.LookRotation(Vector3.forward, hit.normal);
-                result = ARPR.ARSpawnObject(position, Quaternion.identity);
+                return hit.point;
             }
             else if (visual)
             {
-                Vector3 position = visual.lineLength * this.interactionOrigin.transform.forward + this.interactionOrigin.transform.position;
-                result = ARPR.ARSpawnObject(position, Quaternion.identity);
+                return visual.lineLength * this.interactionOrigin.transform.forward + this.interactionOrigin.transform.position;
             }
         }
-           
+
+        return this.interactionOrigin.position;
+    }
+    public void ARSpawnObject()
+    {
+        // XRRayInteractor interactor = GetComponent<XRRayInteractor>();
+        // XRInteractorLineVisual visual = GetComponent<XRInteractorLineVisual>();
+        //
+        // GameObject result = null;
+        //
+        // if(!interactor)
+        // result = ARPR.ARSpawnObject(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
+        //
+        // else
+        // {
+        //     RaycastHit hit;
+        //     if (interactor.TryGetCurrent3DRaycastHit(out hit))
+        //     {
+        //         Vector3 position = hit.point;
+        //         Quaternion rotation = Quaternion.LookRotation(Vector3.forward, hit.normal);
+        //         result = ARPR.ARSpawnObject(position, Quaternion.identity);
+        //     }
+        //     else if (visual)
+        //     {
+        //         Vector3 position = visual.lineLength * this.interactionOrigin.transform.forward + this.interactionOrigin.transform.position;
+        //         result = ARPR.ARSpawnObject(position, Quaternion.identity);
+        //     }
+        // }
+        GameObject result = null;
+        ARPR.ARSpawnObject(this.GetARRaycastPosition());
         if(result != null)
          OnARObjectSpawned.Invoke();
     }
@@ -263,6 +311,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     {
         DetectInteraction();
         DetectARInput();
+        ShowARPreview();
     }
 
     /// <summary>
