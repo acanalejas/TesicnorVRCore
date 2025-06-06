@@ -194,7 +194,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (!lineRenderer) lineRenderer = GetComponent<LineRenderer>();
         if (!usesRay) lineRenderer.enabled = false;
         if (!ARPreviewObject) ARPreviewObject = GameObject.FindGameObjectWithTag("MeshPreview");
-        if (!ARPreviewMF && ARPreviewObject) ARPreviewObject.GetComponent<MeshFilter>();
+        if (!ARPreviewMF && ARPreviewObject) ARPreviewMF = ARPreviewObject.GetComponent<MeshFilter>();
 
         SetupARInput();
     }
@@ -232,15 +232,15 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         }
     }
 
-    public void ToggleARPreview(bool _value) { ARPreview = _value; }
+    public void ToggleARPreview(bool _value) { ARPreview = _value; if(ARPreviewObject) ARPreviewObject.SetActive(_value); }
 
     public void ShowARPreview()
     {
-        if (ARPreviewObject) ARPreviewObject.SetActive(ARPreview);
         if (!ARPreview || !ARPreviewMF) return;
 
         ARPreviewMF.mesh = AR_PointRay.spawnObject.previewMesh;
         ARPreviewObject.transform.position = GetARRaycastPosition();
+        ARPreviewObject.transform.forward = (this.transform.position - ARPreviewObject.transform.position).normalized;
     }
 
     public void SetARPreviewMesh(Mesh _mesh) { ARPreviewMesh = _mesh; }
@@ -295,7 +295,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         //     }
         // }
         GameObject result = null;
-        ARPR.ARSpawnObject(this.GetARRaycastPosition());
+        result = ARPR.ARSpawnObject(this.GetARRaycastPosition());
+        result.transform.forward = (this.transform.position - result.transform.position).normalized;
         if(result != null)
          OnARObjectSpawned.Invoke();
     }
