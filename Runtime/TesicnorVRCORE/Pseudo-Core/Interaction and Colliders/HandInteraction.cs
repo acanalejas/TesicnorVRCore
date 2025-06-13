@@ -58,6 +58,10 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     [SerializeField]
     [HideInInspector] public UnityEngine.Events.UnityEvent OnARObjectSpawned;
 
+    [Header("El evento que se lanza al spawnear un objeto")]
+    [SerializeField]
+    [HideInInspector] public UnityEngine.Events.UnityEvent<GameObject, string> OnSaveObjectData;
+
     //El gestor de raycast en AR
     protected AR_PointRay ARPR;
 
@@ -222,6 +226,19 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         ARInput = _value;
     }
 
+    bool _arinput = false;
+    public void DelayedToggleARInput(bool _value)
+    {
+        _arinput = _value;
+        StartCoroutine(nameof(DelayAndToggle));
+    }
+
+    IEnumerator DelayAndToggle()
+    {
+        yield return new WaitForSeconds(1.2f);
+        ToggleARInput(_arinput);
+    }
+
     public void DetectARInput()
     {
         if (!ARInput) return;
@@ -240,7 +257,10 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
         ARPreviewMF.mesh = AR_PointRay.spawnObject.previewMesh;
         ARPreviewObject.transform.position = GetARRaycastPosition();
-        ARPreviewObject.transform.forward = (this.transform.position - ARPreviewObject.transform.position).normalized;
+        ARPreviewObject.transform.localScale = AR_PointRay.spawnObject.prefab.transform.localScale;
+        Vector3 _forward = (this.transform.position - ARPreviewObject.transform.position).normalized;
+        _forward.y = 0;
+        ARPreviewObject.transform.forward = _forward;              
     }
 
     public void SetARPreviewMesh(Mesh _mesh) { ARPreviewMesh = _mesh; }
@@ -296,9 +316,15 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         // }
         GameObject result = null;
         result = ARPR.ARSpawnObject(this.GetARRaycastPosition());
-        result.transform.forward = (this.transform.position - result.transform.position).normalized;
+        Vector3 _forward = (this.transform.position - result.transform.position).normalized;
+        _forward.y = 0;
+        result.transform.forward = _forward;
         if(result != null)
-         OnARObjectSpawned.Invoke();
+        {
+            OnARObjectSpawned.Invoke();
+
+            SpawnedObjectsDataSave.Instance.AddObject(AR_PointRay.spawnObject.type, result);
+        }
     }
 
     private Vector3 GetARRaycastPoint()

@@ -19,4 +19,7 @@ public class SO_ARItem : ScriptableObject
 
     [Header("La mesh que se usa de preview")]
     public Mesh previewMesh;
+
+    [Header("El nombre del tipo de objeto para guardar los datos")]
+    public string type = "";
 }
