@@ -99,12 +99,12 @@ public class ClimbableCollider : VRCollider
     public override void Grab(GrippingHand hand)
     {
         lastFrameHeight = 0;
-        StopCoroutine("attach");
+        StopCoroutine(nameof(attach));
         base.Grab(hand);
 
         player = hand.player;
 
-        StartCoroutine("attach");
+        StartCoroutine(nameof(attach));
     }
 
     float lastFrameHeight = 0;

@@ -86,6 +86,8 @@ namespace TesicFire
 
         private bool completeFire = false;
 
+        private bool canBeExtinguished = true;
+
         private Mesh mesh_original;
         MeshData meshData_current = new MeshData();
 
@@ -374,6 +376,11 @@ namespace TesicFire
             }
         }
 
+        public void SetExtinguishable(bool _value)
+        {
+            this.canBeExtinguished = _value;
+        }
+
         public bool Extinguished()
         {
             return extinguished;
@@ -387,7 +394,7 @@ namespace TesicFire
         int _try = 0;
         public void ExtinguishFire(float damage)
         {
-            if (this.Extinguished() || !this.OnFire()) return;
+            if (this.Extinguished() || !this.OnFire() || !this.canBeExtinguished) return;
 
             extinguishing = true;
             reconstructing = false;

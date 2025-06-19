@@ -245,7 +245,6 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if(handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f)
         {
             ARSpawnObject();
-            ToggleARInput(false);
         }
     }
 
@@ -316,13 +315,14 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         // }
         GameObject result = null;
         result = ARPR.ARSpawnObject(this.GetARRaycastPosition());
-        Vector3 _forward = (this.transform.position - result.transform.position).normalized;
-        _forward.y = 0;
-        result.transform.forward = _forward;
+        
         if(result != null)
         {
+            Vector3 _forward = (this.transform.position - result.transform.position).normalized;
+            _forward.y = 0;
+            result.transform.forward = _forward;
             OnARObjectSpawned.Invoke();
-
+            ToggleARInput(false);
             SpawnedObjectsDataSave.Instance.AddObject(AR_PointRay.spawnObject.type, result);
         }
     }
