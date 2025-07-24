@@ -54,7 +54,7 @@ public class Manguera : MonoBehaviour
             else Joints.Add(bone.GetComponent<ConfigurableJoint>());
         }
 
-        foreach (Rigidbody rb in Rigidbodies) { rb.mass = 0.1f; rb.drag = 1.5f; rb.angularDrag = 10; }
+        //foreach (Rigidbody rb in Rigidbodies) { rb.mass = 0.1f; rb.linearDamping = 1.5f; rb.angularDamping = 10; }
 
         Rigidbody StartRB = Rigidbodies[0]; Rigidbody LastRB = Rigidbodies[Rigidbodies.Count - 1];
 

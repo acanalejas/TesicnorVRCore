@@ -27,11 +27,12 @@ public class SpawnedObjectsDataSave : MonoBehaviour
 
     #region PARAMETERS
     [Header("La lista de key y objeto a colocar")]
-    public Dictionary<string, GameObject> objects = new Dictionary<string, GameObject>();
+    public Dictionary<string, SO_ARItem> objects = new Dictionary<string, SO_ARItem>();
 
-    public string[] Keys; public GameObject[] Values;
+    public string[] Keys; public SO_ARItem[] Values;
 
-    public UnityEngine.Events.UnityEvent OnDataLoadAndSpawned, OnDataLoadAndEmpty;
+    public UnityEngine.Events.UnityEvent<SO_ARItem> OnDataLoadAndSpawned;
+     public UnityEngine.Events.UnityEvent OnDataLoadAndEmpty;
 
     public string SceneKey = "ARScene";
 
@@ -78,6 +79,7 @@ public class SpawnedObjectsDataSave : MonoBehaviour
         Debug.Log("Objeto creado guardado " + totalData);
     }
 
+    SO_ARItem typeObj = null;
     public void LoadObjects()
     {
         string savedData = PlayerPrefs.HasKey(SceneKey) ? PlayerPrefs.GetString(SceneKey) : "";
@@ -95,30 +97,26 @@ public class SpawnedObjectsDataSave : MonoBehaviour
                 {
                     SpawnedObjectData data = JsonUtility.FromJson<SpawnedObjectData>(json);
 
-                    GameObject typeObj = null;
-
                     if (objects.TryGetValue(data.type, out typeObj))
                     {
-                        GameObject result = GameObject.Instantiate(typeObj, data.position, data.rotation);
+                        GameObject result = GameObject.Instantiate(typeObj.prefab, data.position, data.rotation);
                         result.transform.localScale = data.scale;
                     }
                 }
-                OnDataLoadAndSpawned.Invoke();
+                OnDataLoadAndSpawned.Invoke(typeObj);
             }
         }
         else if(savedData != "")
         {
             SpawnedObjectData data = JsonUtility.FromJson<SpawnedObjectData>(savedData);
 
-            GameObject typeObj = null;
-
             if (objects.TryGetValue(data.type, out typeObj))
             {
-                GameObject result = GameObject.Instantiate(typeObj, data.position, data.rotation);
+                GameObject result = GameObject.Instantiate(typeObj.prefab, data.position, data.rotation);
                 result.transform.localScale = data.scale;
             }
 
-            OnDataLoadAndSpawned.Invoke();
+            OnDataLoadAndSpawned.Invoke(typeObj);
         }
             
         else OnDataLoadAndEmpty.Invoke();

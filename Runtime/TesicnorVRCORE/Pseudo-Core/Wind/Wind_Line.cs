@@ -2,66 +2,53 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wind_Line : VRCollider
+public class Wind_Line : Anchor
 {
     #region PARAMETERS
-    [Header("La tag correcta del punto de anclaje")]
-    [SerializeField] string CorrectAnchorageTag = "AnchorageBlue";
+    [Header("El line renderer que hace de cable")]
+    [SerializeField] protected LineRenderer lineRenderer;
 
-    [Header("El GameObject de warning")]
-    [SerializeField] GameObject WarningGO;
+    [Header("Opcional solo por seguridad, el material del line renderer")]
+    [SerializeField] protected Material lineMaterial;
+
+    [Header("El punto de anclaje en el anclaje de la linea")]
+    [SerializeField] protected Transform anchorageLineAnchor;
+
+    [Header("El punto de anclaje en el arnés de la linea")]
+    [SerializeField] protected Transform harnessLineAnchor;
     #endregion
 
     #region METHODS
-
-    #endregion
-
-    #region Anclaje
-
-    public class LineAnchor : VRCollider, AnchorInterface
+    public override void Awake()
     {
-        #region PARAMETERS
-        public Wind_Line owner;
-        #endregion
+        base.Awake();
 
-        #region METHODS
-        private void Start()
-        {
-            onTargetReached.AddListener(CheckAnchorage);
-            this.SetGrabbable(false);
-
-            this.target.canBeCanceled = true;
-            this.simulateOnDrop = false;
-        }
-
-        private void CheckAnchorage(GameObject anchorage)
-        {
-            if (anchorage.tag == owner.CorrectAnchorageTag)
-            {
-                owner.WarningGO.SetActive(false);
-            }
-            else
-            {
-                owner.WarningGO.SetActive(true);
-            }
-        }
-
-        public bool IsAnchored()
-        { 
-            return this.target.conditionCompleted && !owner.isGrabbed();
-        }
-
-        public void AnchorIt()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void ReleaseIt()
-        {
-            throw new System.NotImplementedException();
-        }
-        #endregion
+        if (!lineRenderer) lineRenderer = this.gameObject.AddComponent<LineRenderer>();
+        if (lineMaterial) lineRenderer.material = lineMaterial;
     }
 
+    protected override void Start()
+    {
+        base.Start();
+        StartCoroutine(nameof(CustomUpdate));
+    }
+
+
+    WaitForEndOfFrame frame = new WaitForEndOfFrame();
+    protected virtual IEnumerator CustomUpdate()
+    {
+        while (true)
+        {
+            SetLineVisuals();
+            yield return frame;
+        }
+    }
+
+    protected virtual void SetLineVisuals()
+    {
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, anchorageLineAnchor.position);
+        lineRenderer.SetPosition(1, harnessLineAnchor.position);
+    }
     #endregion
 }

@@ -79,7 +79,7 @@ public static class PlayerCreator
         rightGripping.colliderBone = rightController.transform;
         rightGripping.player = playerControllers.transform;
         rightGripping.hideOnGrab = false;
-        rightGripping.handController = rightController.GetComponent<XRController>();
+        //rightGripping.handController = rightController.GetComponent<XRController>();
 
         //Seteando la clase HandInteraction
         HandInteraction rightInteraction = rightController.GetComponent<HandInteraction>();
@@ -90,7 +90,7 @@ public static class PlayerCreator
         rightInteraction.interactionOrigin = rightController.transform;
         rightInteraction.nonDetectedColor = new Color(255, 35, 35, 255);
         rightInteraction.detectedColor = new Color(255, 149, 25, 255);
-        rightInteraction.handController = rightController.GetComponent<XRController>();
+        //rightInteraction.handController = rightController.GetComponent<XRController>();
 
         LineRenderer lineRenderer_right = rightController.GetComponent<LineRenderer>();
         lineRenderer_right.startWidth = 0.010f;
@@ -113,8 +113,8 @@ public static class PlayerCreator
         leftGripping.colliderBone = leftController.transform;
         leftGripping.player = playerControllers.transform;
         leftGripping.hideOnGrab = false;
-        leftGripping.handController = leftController.GetComponent<XRController>();
-        leftGripping.handController.controllerNode = XRNode.LeftHand;
+        //leftGripping.handController = leftController.GetComponent<XRController>();
+        //leftGripping.handController.controllerNode = XRNode.LeftHand;
 
         //Seteando el componente HandInteraction
         HandInteraction leftInteraction = leftController.GetComponent<HandInteraction>();
@@ -125,7 +125,7 @@ public static class PlayerCreator
         leftInteraction.interactionOrigin = leftController.transform;
         leftInteraction.nonDetectedColor = new Color(255, 35, 35, 255);
         leftInteraction.detectedColor = new Color(255, 149, 25, 255);
-        leftInteraction.handController = leftController.GetComponent<XRController>();
+        //leftInteraction.handController = leftController.GetComponent<XRController>();
 
         LineRenderer lineRenderer_left = leftController.GetComponent<LineRenderer>();
         lineRenderer_left.startWidth = 0.010f;
@@ -276,7 +276,7 @@ public static class PlayerCreator
         rightGripping.colliderBone = rightController.transform;
         rightGripping.player = playerControllers.transform;
         rightGripping.hideOnGrab = false;
-        rightGripping.handController = rightController.GetComponent<XRController>();
+        //rightGripping.handController = rightController.GetComponent<XRController>();
 
         //Seteando la clase HandInteraction
         HandInteraction rightInteraction = rightController.GetComponent<HandInteraction>();
@@ -287,7 +287,7 @@ public static class PlayerCreator
         rightInteraction.interactionOrigin = rightController.transform;
         rightInteraction.nonDetectedColor = new Color(255, 35, 35, 255);
         rightInteraction.detectedColor = new Color(255, 149, 25, 255);
-        rightInteraction.handController = rightController.GetComponent<XRController>();
+        //rightInteraction.handController = rightController.GetComponent<XRController>();
 
         LineRenderer lineRenderer_right = rightController.GetComponent<LineRenderer>();
         lineRenderer_right.startWidth = 0.010f;
@@ -310,8 +310,8 @@ public static class PlayerCreator
         leftGripping.colliderBone = leftController.transform;
         leftGripping.player = playerControllers.transform;
         leftGripping.hideOnGrab = false;
-        leftGripping.handController = leftController.GetComponent<XRController>();
-        leftGripping.handController.controllerNode = XRNode.LeftHand;
+        //leftGripping.handController = leftController.GetComponent<XRController>();
+        //leftGripping.handController.controllerNode = XRNode.LeftHand;
 
         //Seteando el componente HandInteraction
         HandInteraction leftInteraction = leftController.GetComponent<HandInteraction>();
@@ -322,7 +322,7 @@ public static class PlayerCreator
         leftInteraction.interactionOrigin = leftController.transform;
         leftInteraction.nonDetectedColor = new Color(255, 35, 35, 255);
         leftInteraction.detectedColor = new Color(255, 149, 25, 255);
-        leftInteraction.handController = leftController.GetComponent<XRController>();
+        //leftInteraction.handController = leftController.GetComponent<XRController>();
 
         LineRenderer lineRenderer_left = leftController.GetComponent<LineRenderer>();
         lineRenderer_left.startWidth = 0.010f;

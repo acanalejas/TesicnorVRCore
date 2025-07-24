@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
 using System;
 using UnityEditor;
 
@@ -75,14 +76,16 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
     private Mesh ARPreviewMesh = null;
 
+    protected CoreInteraction coreInteraction;
+
     #endregion
 
     #region Controllers
     [Header("============ CUANDO SE USAN MANDOS =================")][Space(10)]
     [Header("El punto desde el que se lanza el rayo")]
     [SerializeField][HideInInspector] public Transform interactionOrigin;
-    [Header("El componente XRController de la mano")]
-    [SerializeField][HideInInspector] public XRController handController;
+    //[Header("El componente XRController de la mano")]
+    //[SerializeField][HideInInspector] public XRController handController;
     #endregion
 
     #region Hands
@@ -191,6 +194,34 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     #endregion
 
     #region FUNCTIONS
+
+    void SetupInput()
+    {
+        if (coreInteraction != null || TesicnorPlayer.Instance == null) return;
+        coreInteraction = TesicnorPlayer.Instance.coreInteraction;
+
+        if (coreInteraction == null)
+        {
+            coreInteraction = new CoreInteraction();
+            coreInteraction.Enable();
+        }
+
+        coreInteraction.Interaction.Click.started += (InputAction.CallbackContext context) =>
+        {
+            DetectARInput();
+            OnClick_Controllers();
+        };
+
+        coreInteraction.Interaction.Click.canceled += (InputAction.CallbackContext context) =>
+        {
+            OnRelease_Controllers();
+        };
+    }
+    private void Awake()
+    {
+        
+    }
+
     private void Start()
     {
         if (isHandControlled) SetupFingers();
@@ -242,10 +273,10 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     public void DetectARInput()
     {
         if (!ARInput) return;
-        if(handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f)
-        {
+        //if(handController.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out pressed) && pressed > 0.7f)
+        //{
             ARSpawnObject();
-        }
+        //}
     }
 
     public void ToggleARPreview(bool _value) { ARPreview = _value; if(ARPreviewObject) ARPreviewObject.SetActive(_value); }
@@ -267,8 +298,14 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     public static bool canSpawn = true;
     public Vector3 GetARRaycastPosition()
     {
-        XRRayInteractor interactor = GetComponent<XRRayInteractor>();
-        XRInteractorLineVisual visual = GetComponent<XRInteractorLineVisual>();
+#if UNITY_6000
+        UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor interactor = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor>();
+        UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals.XRInteractorLineVisual visual = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.Visuals.XRInteractorLineVisual>();
+#endif
+#if UNITY_2023
+        UnityEngine.XR.Interaction.Toolkit.XRRayInteractor interactor = GetComponent<UnityEngine.XR.Interaction.Toolkit.XRRayInteractor>();
+        UnityEngine.XR.Interaction.Toolkit.XRInteractorLineVisual visual = GetComponent<UnityEngine.XR.Interaction.Toolkit.XRInteractorLineVisual>();
+#endif
 
         if (!interactor)
             return ARPR.ARRaycast(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
@@ -332,13 +369,14 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         return ARPR.ARRaycast(this.interactionOrigin.transform.forward, this.interactionOrigin.gameObject);
     }
 
-    #endregion
+#endregion
 
     private void Update()
     {
         DetectInteraction();
-        DetectARInput();
+        //DetectARInput();
         ShowARPreview();
+        SetupInput();
     }
 
     /// <summary>
@@ -427,7 +465,12 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                     }
 
                     RaycastHit hit;
-                    if (ARPR && this.GetComponent<XRRayInteractor>() && this.GetComponent<XRRayInteractor>().TryGetCurrent3DRaycastHit(out hit)) addedDistance = hit.point - origin;
+#if UNITY_6000
+                    if (ARPR && this.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor>() && this.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor>().TryGetCurrent3DRaycastHit(out hit)) addedDistance = hit.point - origin;
+#endif
+#if UNITY_2023
+                    if (ARPR && this.GetComponent<UnityEngine.XR.Interaction.Toolkit.XRRayInteractor>() && this.GetComponent<UnityEngine.XR.Interaction.Toolkit.XRRayInteractor>().TryGetCurrent3DRaycastHit(out hit)) addedDistance = hit.point - origin;
+#endif
                 }
             }
             /*else
@@ -457,7 +500,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         interactionOrigin = transform;
     }
 
-    #region Controllers
+#region Controllers
     bool lastPressed = false;
     float pressed;
     GameObject pressedObject;
@@ -469,9 +512,9 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         if (usesRay) lineRenderer.enabled = true;
         if(usesRay) getRaycastHit(interactionOrigin);
 
-        if (interactingObject != null)
+        /*if (interactingObject != null)
         {
-            if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed > 0.7f && !lastPressed)
+            if (handController.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out pressed) && pressed > 0.7f && !lastPressed)
             {
                 interactingObject.GetComponent<VRInteractableInterface>().SetHand(this.gameObject);
                 //if(!lastPressed)
@@ -479,7 +522,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                 pressedObject = interactingObject;
                 lastPressed = true;
             }
-            else if (handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out pressed) && pressed < 0.3f && lastPressed)
+            else if (handController.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.trigger, out pressed) && pressed < 0.3f && lastPressed)
             {
                 lastPressed = false;
                 if(interactingObject == pressedObject)
@@ -489,7 +532,31 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
                 }
                 else pressedObject.GetComponent<VRInteractableInterface>().SetHand(null);
             }
+        }*/
+    }
+
+    protected void OnClick_Controllers()
+    {
+        if (interactingObject == null) return;
+
+        interactingObject.GetComponent<VRInteractableInterface>().SetHand(this.gameObject);
+        //if(!lastPressed)
+        interactingObject.GetComponent<VRInteractableInterface>().OnClick();
+        pressedObject = interactingObject;
+        lastPressed = true;
+    }
+
+    protected void OnRelease_Controllers()
+    {
+        if (interactingObject == null) return;
+
+        lastPressed = false;
+        if (interactingObject == pressedObject)
+        {
+            interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
+            interactingObject.GetComponent<VRInteractableInterface>().SetHand(null);
         }
+        else pressedObject.GetComponent<VRInteractableInterface>().SetHand(null);
     }
 
     void SetupControllerCollider()
@@ -501,9 +568,9 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
         interactionOrigin.GetComponent<dedo>().setVariables(interactionOrigin.GetComponent<BoxCollider>(), interactionOrigin.GetComponent<Rigidbody>(), this);
     }
-    #endregion
+#endregion
 
-    #region Hands
+#region Hands
 
     bool handPressed = false;
     /// <summary>
@@ -634,8 +701,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     {
         return getRaycastHit(_origin);
     }
-    #endregion
-    #endregion
+#endregion
+#endregion
 }
 
 #if UNITY_EDITOR
@@ -714,10 +781,10 @@ public class InteractionEditor : Editor
 
             GUILayout.Space(10);
 
-            SerializedProperty handController = serializedObject.FindProperty("handController");
-            EditorGUILayout.PropertyField(handController, new GUIContent("XRController Component"));
-
-            GUILayout.Space(10);
+            //SerializedProperty handController = serializedObject.FindProperty("handController");
+            //EditorGUILayout.PropertyField(handController, new GUIContent("XRController Component"));
+            //
+            //GUILayout.Space(10);
         }
 
         else

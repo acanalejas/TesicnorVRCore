@@ -45,8 +45,8 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     /// Controlador de la mano 
     /// </summary>
     [Header("============ CONTROLLER ATRIBUTES =============")][Space(10)]
-    [Header("Controlador de la mano")]
-    [HideInInspector]public XRController handController;
+    //[Header("Controlador de la mano")]
+    //[HideInInspector]public XRController handController;
 
    
     /// <summary>
@@ -91,6 +91,8 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
     private Vector3 lastPosition;
 
+    private CoreInteraction coreInteraction;
+
     #endregion
 
     #region FUNCTIONS
@@ -110,6 +112,29 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
         if (colliderBone) gripCollider.center = -this.transform.InverseTransformPoint(colliderBone.position);
     }
+
+    protected virtual void SetupInput()
+    {
+        if (coreInteraction != null || TesicnorPlayer.Instance == null) return;
+        coreInteraction = TesicnorPlayer.Instance.coreInteraction;
+
+        if (coreInteraction == null)
+        {
+            coreInteraction = new CoreInteraction();
+            coreInteraction.Enable();
+        }
+
+        if(handType == HandType.left)
+        {
+            coreInteraction.Interaction.Grab_Left.started += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { GrabBind(); };
+            coreInteraction.Interaction.Grab_Left.canceled += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { ReleaseBind(); };
+        }
+        else
+        {
+            coreInteraction.Interaction.Grab_Right.started += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { GrabBind(); };
+            coreInteraction.Interaction.Grab_Right.canceled += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { ReleaseBind(); };
+        }
+    }
     private void Awake()
     {
         SetTrigger();
@@ -118,6 +143,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
     private void FixedUpdate()
     {
+        SetupInput();
         DetectTheInput();
         CalculateVelocity();
         SetHandsTracking();
@@ -186,14 +212,32 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         bool released = false;
 
         //Cuando se pulsa el gatillo
-        if (handController.inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out pressed) && pressed && canGrabSomething() && !isGripping)
+        //if (handController.inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out pressed) && pressed && canGrabSomething() && !isGripping)
+        //{
+        //    Grab();
+        //    alreadyGrabbed = true;
+        //}
+        //
+        ////Cuando se suelta el gatillo
+        //if (handController.inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out released) && !released && alreadyGrabbed)
+        //{
+        //    Release();
+        //    alreadyGrabbed = false;
+        //}
+    }
+
+    private void GrabBind()
+    {
+        if (canGrabSomething() && !alreadyGrabbed)
         {
             Grab();
             alreadyGrabbed = true;
         }
+    }
 
-        //Cuando se suelta el gatillo
-        if (handController.inputDevice.TryGetFeatureValue(CommonUsages.gripButton, out released) && !released && alreadyGrabbed)
+    private void ReleaseBind()
+    {
+        if (alreadyGrabbed)
         {
             Release();
             alreadyGrabbed = false;
@@ -206,19 +250,19 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         float tpressed = 0;
         float treleased = 0;
         
-        handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out tpressed);
-        if (tpressed > 0.4f)
-        {
-            Grab();
-            lastPressed = true;
-        }
-        //Cuando se suelta el gatillo
-        handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out treleased);
-        if (treleased < 0.4f && lastPressed)
-        {
-            Release();
-            lastPressed = false;
-        }
+        //handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out tpressed);
+        //if (tpressed > 0.4f)
+        //{
+        //    Grab();
+        //    lastPressed = true;
+        //}
+        ////Cuando se suelta el gatillo
+        //handController.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out treleased);
+        //if (treleased < 0.4f && lastPressed)
+        //{
+        //    Release();
+        //    lastPressed = false;
+        //}
     }
     #region VRHandInterface
     /// <summary>
@@ -268,20 +312,20 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         {
             CheckIfControllerGrabs();
             CheckIfControllerGrabs_Trigger();
-            if(this.handController.controllerNode == XRNode.LeftHand)
-            {
-                bool pressed = false;
-               
-                if (handController.inputDevice.TryGetFeatureValue(CommonUsages.menuButton, out pressed) && pressed && !doOnce)
-                {
-                    TesicnorPlayer player = TesicnorPlayer.Instance;
-
-                    if(player != null)
-                    player.TogglePause(!player.bIsInPause);
-                    doOnce = true;
-                }
-                else if(!pressed && doOnce) doOnce = false;
-            }
+            //if(this.handController.controllerNode == XRNode.LeftHand)
+            //{
+            //    bool pressed = false;
+            //   
+            //    if (handController.inputDevice.TryGetFeatureValue(CommonUsages.menuButton, out pressed) && pressed && !doOnce)
+            //    {
+            //        TesicnorPlayer player = TesicnorPlayer.Instance;
+            //
+            //        if(player != null)
+            //        player.TogglePause(!player.bIsInPause);
+            //        doOnce = true;
+            //    }
+            //    else if(!pressed && doOnce) doOnce = false;
+            //}
         }
         else
         {
@@ -450,8 +494,8 @@ public class GrippingEditor : Editor
             GUILayout.Label("Se oculta el mando al agarrar?", EditorStyles.boldLabel);
             grippingHand.hideOnGrab = GUILayout.Toggle(grippingHand.hideOnGrab, "The controller hides on grab?");
 
-            SerializedProperty xrController = serializedObject.FindProperty("handController");
-            EditorGUILayout.PropertyField(xrController, new GUIContent("XRController Component"));
+            //SerializedProperty xrController = serializedObject.FindProperty("handController");
+            //EditorGUILayout.PropertyField(xrController, new GUIContent("XRController Component"));
         }
         else
         {

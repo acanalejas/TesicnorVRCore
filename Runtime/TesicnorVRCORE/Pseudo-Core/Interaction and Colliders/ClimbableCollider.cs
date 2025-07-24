@@ -109,21 +109,34 @@ public class ClimbableCollider : VRCollider
 
     float lastFrameHeight = 0;
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
+
+    private float currentLocalHandHeight()
+    {
+        Vector3 localPosition = this.transform.InverseTransformPoint(grippingHand.transform.position);
+        return localPosition.y;
+    } 
+
+    private float currentLocalPlayerHeight()
+    {
+        Vector3 localPosition = this.transform.InverseTransformPoint(player.transform.position);
+        return localPosition.y;
+    }
+
     private IEnumerator attach()
     {
         while (true)
         {
             if(lastFrameHeight != 0)
             {
-                float difference = grippingHand.transform.position.y - lastFrameHeight;
-                if (!IsPlayerReallyAtTop() && difference < 0 && canBeClimbed) player.position += new Vector3(0, -difference, 0);
-                else if (!IsPlayerReallyAtBotton() && difference > 0) player.position += new Vector3(0, -difference, 0);
+                float difference = currentLocalHandHeight() - lastFrameHeight;
+                if (!IsPlayerReallyAtTop() && difference < 0 && canBeClimbed) player.position += this.transform.up * -difference;
+                else if (!IsPlayerReallyAtBotton() && difference > 0) player.position += this.transform.up * -difference;
                 //player.position = new Vector3(player.position.x, Mathf.Clamp(player.position.y, minHeight, maxHeight), player.position.z);
 
                 IsPlayerAtBottom();
                 IsPlayerAtTop();
             }
-            lastFrameHeight = grippingHand.transform.position.y;
+            lastFrameHeight = currentLocalHandHeight();
             yield return frame;
         }
     }
@@ -141,7 +154,7 @@ public class ClimbableCollider : VRCollider
     /// <returns></returns>
     public bool IsPlayerAtTop()
     {
-        if(player) isPlayerAtTop = player.position.y >= ((maxHeight + heightOffset) - threshold_top) && (player.position.y <= (maxHeight + heightOffset) + threshold_top);
+        if(player) isPlayerAtTop = currentLocalPlayerHeight() >= ((maxHeight + heightOffset) - threshold_top) && (currentLocalPlayerHeight() <= (maxHeight + heightOffset) + threshold_top);
         return isPlayerAtTop;
     }
     /// <summary>
@@ -150,7 +163,7 @@ public class ClimbableCollider : VRCollider
     /// <returns></returns>
     public bool IsPlayerAtBottom()
     {
-        if(player) isPlayerAtBottom = player.position.y >= ((minHeight + heightOffset) - threshold_bottom) && player.position.y <= ((minHeight + heightOffset) + threshold_bottom);
+        if(player) isPlayerAtBottom = currentLocalPlayerHeight() >= ((minHeight + heightOffset) - threshold_bottom) && currentLocalPlayerHeight() <= ((minHeight + heightOffset) + threshold_bottom);
         return isPlayerAtBottom;
     }
 
@@ -160,7 +173,7 @@ public class ClimbableCollider : VRCollider
     /// <returns></returns>
     private bool IsPlayerReallyAtBotton()
     {
-        if (player) return player.position.y >= ((minHeight + heightOffset) - 0.05f) && player.position.y <= ((minHeight + heightOffset) + 0.05f);
+        if (player) return currentLocalPlayerHeight() >= ((minHeight + heightOffset) - 0.05f) && currentLocalPlayerHeight() <= ((minHeight + heightOffset) + 0.05f);
 
         return false;
     }
@@ -171,7 +184,7 @@ public class ClimbableCollider : VRCollider
     /// <returns></returns>
     private bool IsPlayerReallyAtTop()
     {
-        if (player) return player.position.y >= ((maxHeight + heightOffset) - 0.05f) && player.position.y <= ((maxHeight + heightOffset) + 0.05f);
+        if (player) return currentLocalPlayerHeight() >= ((maxHeight + heightOffset) - 0.05f) && currentLocalPlayerHeight() <= ((maxHeight + heightOffset) + 0.05f);
 
         return false;
     }
@@ -200,7 +213,7 @@ public class ClimbableCollider : VRCollider
     /// <returns></returns>
     public float GetCurrentHeight()
     {
-        return player.position.y - heightOffset;
+        return currentLocalPlayerHeight() - heightOffset;
     }
     #endregion
 }

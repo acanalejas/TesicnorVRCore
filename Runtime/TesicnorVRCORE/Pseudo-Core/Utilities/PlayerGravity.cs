@@ -12,7 +12,7 @@ public class PlayerGravity : MonoBehaviour
     public bool IsGravtyActive = true;
 
     [Header("Los enganches que pueden afectar a la gravedad")]
-    [SerializeField] private AnchorInterface[] Anchors;
+    [SerializeField] private Anchor[] Anchors;
 
     private Rigidbody BodyRB;
     private CapsuleCollider BodyColl;
@@ -50,7 +50,12 @@ public class PlayerGravity : MonoBehaviour
         while (true)
         {
             if(!IsPlayerAnchored())
-                BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
+#if UNITY_2021_1_OR_NEWER
+                BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
+#endif
+#if UNITY_6000
+                BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
+#endif
 
             yield return Frame;
         }
@@ -60,9 +65,9 @@ public class PlayerGravity : MonoBehaviour
     {
         foreach(var a in Anchors)
         {
-            if (a.IsAnchored()) return true;
+            if (a != null && a.IsAnchored()) return true;
         }
         return false;
     }
-    #endregion
+#endregion
 }

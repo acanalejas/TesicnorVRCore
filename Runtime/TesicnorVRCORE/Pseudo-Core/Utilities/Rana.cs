@@ -29,6 +29,9 @@ public class Rana : VRCollider, AnchorInterface
 
     [Header("El arnes")]
     public Transform arnes;
+
+    [Header("El eje sobre el que se mueve la rana")]
+    public axis Axis;
     #endregion
 
     #region FUNCTIONS
@@ -48,10 +51,26 @@ public class Rana : VRCollider, AnchorInterface
             mosqueton.rotation = mosqueton_holder.rotation;
             cableOrigen.rotation = cableOrigen_holder.rotation;
 
-            //this.transform.localPosition = new Vector3(this.transform.localPosition.x, 0, this.transform.localPosition.z);
+        //this.transform.localPosition = new Vector3(this.transform.localPosition.x, 0, this.transform.localPosition.z);
 
-            if(!this.isGrabbed() && target && target.conditionCompleted) this.transform.position = new Vector3(this.transform.position.x, rana_holder.position.y, this.transform.position.z);
-            else { this.transform.position = rana_holder.position; this.transform.rotation = rana_holder.rotation; }
+        if (!this.isGrabbed() && target && target.conditionCompleted) 
+        {
+            switch (Axis)
+            {
+                case axis.x:
+                    this.transform.position = new Vector3(this.rana_holder.position.x, this.transform.position.y, this.transform.position.z);
+                    break;
+                case axis.y:
+                    this.transform.position = new Vector3(this.transform.position.x, rana_holder.position.y, this.transform.position.z);
+                    break;
+                case axis.z:
+                    this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.rana_holder.position.z);
+                    break;
+            }
+             
+        
+        }
+        else { this.transform.position = rana_holder.position; this.transform.rotation = rana_holder.rotation; }
 
             SetLineRenderer();
     }
@@ -70,12 +89,27 @@ public class Rana : VRCollider, AnchorInterface
         return !this.isGrabbed() && target && target.conditionCompleted;
     }
 
-    public void AnchorIt()
+    public void CheckDistance()
     {
         throw new System.NotImplementedException();
     }
 
-    public void ReleaseIt()
+    public void EnableWarning()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void DisableWarning()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void AnchorIt(GameObject _anchor)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void ReleaseIt(GameObject _anchor)
     {
         throw new System.NotImplementedException();
     }

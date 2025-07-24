@@ -35,14 +35,30 @@ public class TesicnorPlayer : MonoBehaviour
 
     public bool bShouldSearch = true;
 
-    UnityEngine.XR.Interaction.Toolkit.XRController controller;
+    public CoreInteraction coreInteraction;
     
     #endregion
 
     #region METHODS
+
+    private void SetupInput()
+    {
+        coreInteraction = new CoreInteraction();
+        coreInteraction.Enable();
+
+        coreInteraction.Interaction.Pause.started += (UnityEngine.InputSystem.InputAction.CallbackContext context) => {
+            if (bUsePause)
+            {
+                CheckPauseScreen();
+                TogglePause(!PauseScreen.activeSelf);
+            }
+        };
+    }
     private void Awake()
     {
         CheckSingleton();
+
+        SetupInput();
 
         if (!bShouldSearch) return;
         //Activate Ray
@@ -69,36 +85,33 @@ public class TesicnorPlayer : MonoBehaviour
             }
         });
 
-#if UNITY_2023
-        var controllers = FindObjectsByType<UnityEngine.XR.Interaction.Toolkit.XRController>(FindObjectsSortMode.None);
-#endif
-#if UNITY_2021
-        var controllers = FindObjectsOfType<UnityEngine.XR.Interaction.Toolkit.XRController>();
-#endif
-        foreach(var _c in controllers)
-        {
-            if (_c.controllerNode == UnityEngine.XR.XRNode.LeftHand) controller = _c;
-        }
-    }
 
-    private void Update()
-    {
-        CheckInput();
-    }
+        //UnityEngine.XR.Interaction.Toolkit.XRController[] controllers = null;
+
+//if UNITY_2023_1_OR_NEWER
+//       controllers = FindObjectsByType<UnityEngine.XR.Interaction.Toolkit.XRController>(FindObjectsSortMode.None);
+//endif
+//if UNITY_2021
+//       controllers = FindObjectsOfType<UnityEngine.XR.Interaction.Toolkit.XRController>();
+//endif
+//       foreach(var _c in controllers)
+//       {
+//           if (_c.controllerNode == UnityEngine.XR.XRNode.LeftHand) controller = _c;
+//       }
+   }
 
     bool pausePressed = false;
-    bool pause = false;
     private void CheckInput()
     {
 #region For Pause
-        if (bUsePause)
-        {
-            if (controller && controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out pause) && pause)
-            {
-                CheckPauseScreen();
-                TogglePause(!PauseScreen.activeSelf);
-            }
-        }
+        //if (bUsePause)
+        //{
+        //    if (controller && controller.inputDevice.TryGetFeatureValue(UnityEngine.XR.CommonUsages.menuButton, out pause) && pause)
+        //    {
+        //        CheckPauseScreen();
+        //        TogglePause(!PauseScreen.activeSelf);
+        //    }
+        //}
 #endregion
     }
 

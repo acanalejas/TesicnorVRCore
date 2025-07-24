@@ -148,12 +148,12 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
 
         leftController_GrippingHand.isController = true;
         leftController_GrippingHand.handType = GrippingHand.HandType.left;
-        leftController_GrippingHand.handController = leftController_Anchor.AddComponent<XRController>();
+        //leftController_GrippingHand.handController = leftController_Anchor.AddComponent<XRController>();
         leftController_GrippingHand.player = leftController_Anchor.transform.parent;
 
         rightController_GrippingHand.isController = true;
         rightController_GrippingHand.handType = GrippingHand.HandType.right;
-        rightController_GrippingHand.handController = rightController_Anchor.AddComponent<XRController>();
+        //rightController_GrippingHand.handController = rightController_Anchor.AddComponent<XRController>();
         rightController_GrippingHand.player = rightController_Anchor.transform.parent;
 
         // =============== SETTING UP THE HAND INTERACTION ============================
@@ -163,14 +163,14 @@ public class PC_DEBUG_PLAYER : MonoBehaviour
         leftController_HandInteraction.nonDetectedColor = Color.red;
         leftController_HandInteraction.detectedColor = Color.green;
         leftController_HandInteraction.usesRay = true;
-        leftController_HandInteraction.handController = leftController_GrippingHand.handController;
+        //leftController_HandInteraction.handController = leftController_GrippingHand.handController;
         leftController_HandInteraction.interactionOrigin = leftController_Anchor.transform;
         rightController_HandInteraction.isHandControlled = false;
         rightController_HandInteraction.isLeftHand = false;
         rightController_HandInteraction.nonDetectedColor = Color.red;
         rightController_HandInteraction.detectedColor = Color.green;
         rightController_HandInteraction.usesRay = true;
-        rightController_HandInteraction.handController = rightController_GrippingHand.handController;
+        //rightController_HandInteraction.handController = rightController_GrippingHand.handController;
         rightController_HandInteraction.interactionOrigin = rightController_Anchor.transform;
     }
 

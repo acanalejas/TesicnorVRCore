@@ -11,6 +11,9 @@ public class LocomotionComponent : MonoBehaviour
     [Header("Este mando se usa para moverse o girar")]
     [SerializeField] private ControllerTypes controllerType = ControllerTypes.Movement;
 
+    [Header("El mando del que se trata")]
+    [SerializeField] private GrippingHand.HandType handType = GrippingHand.HandType.right;
+
     [Header("La velocidad a la que se mueve el personaje")]
     [SerializeField] private float playerSpeed = 2;
 
@@ -23,15 +26,65 @@ public class LocomotionComponent : MonoBehaviour
     [Header("El player al que queremos mover")]
     [SerializeField] private Transform player;
 
-    private XRController controller;
+    private CoreInteraction coreInteraction;
+
+    bool joystickButton = false;
+
+    //private XRController controller;
     #endregion
 
     #region FUNCTIONS
     private void Awake()
     {
-        controller = GetComponent<XRController>();
-        if (!controller) controller = gameObject.AddComponent<XRController>();
-        
+        //controller = GetComponent<XRController>();
+        //if (!controller) controller = gameObject.AddComponent<XRController>();
+    }
+
+    private void SetupInput()
+    {
+        if (TesicnorPlayer.Instance == null || coreInteraction != null || TesicnorPlayer.Instance.coreInteraction == null) return;
+
+        coreInteraction = TesicnorPlayer.Instance.coreInteraction;
+
+
+        if (handType == GrippingHand.HandType.right)
+        {
+            coreInteraction.Interaction.RightJoystickButton.started += (UnityEngine.InputSystem.InputAction.CallbackContext context)=>{ joystickButton = true; };
+            coreInteraction.Interaction.RightJoystickButton.canceled += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { joystickButton = false; };
+            coreInteraction.Interaction.RightJoystick.performed += (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
+            {
+                if (joystickButton)
+                {
+                    if (controllerType == ControllerTypes.Movement)
+                    {
+                        MovePlayer(coreInteraction.Interaction.RightJoystick.ReadValue<Vector2>());
+                    }
+                    else
+                    {
+                        RotatePlayer(coreInteraction.Interaction.RightJoystick.ReadValue<Vector2>());
+                    }
+                }
+            };
+        }
+        else
+        {
+            coreInteraction.Interaction.LeftJoystickButton.started += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { joystickButton = true; };
+            coreInteraction.Interaction.LeftJoystickButton.canceled += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { joystickButton = false; };
+            coreInteraction.Interaction.LeftJoystick.performed += (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
+            {
+                if (joystickButton)
+                {
+                    if (controllerType == ControllerTypes.Movement)
+                    {
+                        MovePlayer(coreInteraction.Interaction.LeftJoystick.ReadValue<Vector2>());
+                    }
+                    else
+                    {
+                        RotatePlayer(coreInteraction.Interaction.LeftJoystick.ReadValue<Vector2>());
+                    }
+                }
+            };
+        }
     }
 
     /// <summary>
@@ -60,21 +113,20 @@ public class LocomotionComponent : MonoBehaviour
 
     private void Update()
     {
-        Vector2 joystick = Vector2.zero;
-        bool joystickButton = false;
 
-        if(controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out joystick)  && joystick != Vector2.zero && 
-            controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out joystickButton) && joystickButton)
-        {
-            if(controllerType == ControllerTypes.Movement)
-            {
-                MovePlayer(GetDirection(joystick));
-            }
-            else
-            {
-                RotatePlayer(joystick);
-            }
-        }
+        SetupInput();
+        //if(controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxis, out joystick)  && joystick != Vector2.zero && 
+        //    controller.inputDevice.TryGetFeatureValue(CommonUsages.primary2DAxisClick, out joystickButton) && joystickButton)
+        //{
+        //    if(controllerType == ControllerTypes.Movement)
+        //    {
+        //        MovePlayer(GetDirection(joystick));
+        //    }
+        //    else
+        //    {
+        //        RotatePlayer(joystick);
+        //    }
+        //}
     }
 
     /// <summary>
