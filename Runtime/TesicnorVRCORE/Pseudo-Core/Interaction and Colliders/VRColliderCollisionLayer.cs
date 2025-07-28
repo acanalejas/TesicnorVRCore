@@ -49,8 +49,8 @@ namespace TesicnorVR
         {
             if(GetGrippingHand() != null && GetComponent<Rigidbody>())
             {
-#if UNITY_2021_1_OR_NEWER
-                GetComponent<Rigidbody>().linearVelocity = GetGrippingHand().velocity;
+#if UNITY_2023
+                GetComponent<Rigidbody>().velocity = GetGrippingHand().velocity;
 #endif
 #if UNITY_6000
                 GetComponent<Rigidbody>().linearVelocity = GetGrippingHand().velocity;

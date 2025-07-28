@@ -50,11 +50,10 @@ public class PlayerGravity : MonoBehaviour
         while (true)
         {
             if(!IsPlayerAnchored())
-#if UNITY_2021_1_OR_NEWER
-                BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
-#endif
 #if UNITY_6000
                 BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
+#else
+                BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
 #endif
 
             yield return Frame;
