@@ -23,6 +23,11 @@ public class AR_PointRay : MonoBehaviour
 
     #region METHODS
     #region UNITY METHODS
+
+    private void OnDestroy()
+    {
+        spawnObject = null;
+    }
     private void Awake()
     {
         if (ARRM == null) ARRM = FindFirstObjectByType<ARRaycastManager>();

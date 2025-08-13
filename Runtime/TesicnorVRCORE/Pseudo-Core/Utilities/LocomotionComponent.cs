@@ -51,6 +51,7 @@ public class LocomotionComponent : MonoBehaviour
         {
             coreInteraction.Interaction.RightJoystickButton.started += (UnityEngine.InputSystem.InputAction.CallbackContext context)=>{ joystickButton = true; };
             coreInteraction.Interaction.RightJoystickButton.canceled += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { joystickButton = false; };
+            //joystickButton = coreInteraction.Interaction.RightJoystickButton.ReadValue<bool>();
             coreInteraction.Interaction.RightJoystick.performed += (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
             {
                 if (joystickButton)
@@ -70,6 +71,7 @@ public class LocomotionComponent : MonoBehaviour
         {
             coreInteraction.Interaction.LeftJoystickButton.started += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { joystickButton = true; };
             coreInteraction.Interaction.LeftJoystickButton.canceled += (UnityEngine.InputSystem.InputAction.CallbackContext context) => { joystickButton = false; };
+            //joystickButton = coreInteraction.Interaction.LeftJoystickButton.va
             coreInteraction.Interaction.LeftJoystick.performed += (UnityEngine.InputSystem.InputAction.CallbackContext context) =>
             {
                 if (joystickButton)
@@ -93,9 +95,12 @@ public class LocomotionComponent : MonoBehaviour
     /// <param name="_direction"></param>
     private void MovePlayer(Vector3 _direction)
     {
-        Vector3 newDirection = _direction;
-        //newDirection = camera.transform.InverseTransformVector(newDirection);
-        player.transform.localPosition = Vector3.Lerp(player.transform.localPosition, player.transform.localPosition + newDirection.normalized, Time.deltaTime * playerSpeed);
+        Vector3 newDirection = new Vector3(_direction.x, 0, _direction.y);
+        newDirection = camera.transform.InverseTransformVector(newDirection);
+        newDirection.y = 0;
+        player.transform.localPosition = Vector3.Lerp(player.transform.localPosition, player.transform.localPosition 
+            + new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z) * _direction.y 
+            + new Vector3(camera.transform.right.x, 0, camera.transform.right.z) * _direction.x, Time.deltaTime * playerSpeed);
     }
 
     /// <summary>

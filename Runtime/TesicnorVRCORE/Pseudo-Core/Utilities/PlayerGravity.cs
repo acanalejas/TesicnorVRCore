@@ -8,14 +8,64 @@ public class PlayerGravity : MonoBehaviour
     [Header("El GameObject del cuerpo")]
     [SerializeField] public GameObject BodyGO;
 
+    [Header("OPCIONAL El gameobject de la camara para calcular la altura")]
+    [SerializeField] protected Transform Camera_T;
+
     [Header("Esta activa la gravedad?")]
     public bool IsGravtyActive = true;
 
     [Header("Los enganches que pueden afectar a la gravedad")]
     [SerializeField] private Anchor[] Anchors;
 
+    [Header("La tag que se usa para detectar el suelo")]
+    [SerializeField] private string FloorTag = "Floor";
+
+    public UnityEngine.InputSystem.XR.TrackedPoseDriver HMD_pd;
+
+
     private Rigidbody BodyRB;
     private CapsuleCollider BodyColl;
+
+    private CollisionDetector cd;
+    #endregion
+
+    #region CollisionDetector
+
+    public class CollisionDetector : MonoBehaviour
+    {
+        public GameObject lastCollided;
+
+        private Collider col;
+
+        public float Threshold = 1f;
+
+        public string FloorTag = "Floor";
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.tag == FloorTag)
+                lastCollided = other.gameObject;
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if(other.gameObject.tag == FloorTag)
+                lastCollided = other.gameObject;
+        }
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.gameObject == lastCollided) lastCollided = null;
+        }
+
+        public float ColliderDistance()
+        {
+            Vector3 point1 = col.ClosestPoint(this.transform.position);
+            Vector3 point2 = this.GetComponent<Collider>().ClosestPoint(point1);
+
+            return Vector3.Distance(point2, point1);
+        }
+    }
+
     #endregion
 
     #region METHODS
@@ -23,13 +73,14 @@ public class PlayerGravity : MonoBehaviour
     {
         if(!BodyGO.GetComponent<CapsuleCollider>()) BodyColl = BodyGO.AddComponent<CapsuleCollider>();
         else BodyColl = BodyGO.GetComponent<CapsuleCollider>();
-        if (!BodyGO.GetComponent<Rigidbody>()) BodyRB = BodyGO.AddComponent<Rigidbody>();
-        else BodyRB = BodyGO.GetComponent<Rigidbody>();
 
-        BodyColl.height = 1.75f;
+        cd = BodyGO.AddComponent<CollisionDetector>();
+        cd.FloorTag = FloorTag;
+
+        BodyColl.height = 1.50f;
         BodyColl.radius = 0.3f;
 
-        BodyRB.isKinematic = true;
+        BodyColl.isTrigger = true;
     }
 
     void TransferVelocity()
@@ -47,14 +98,29 @@ public class PlayerGravity : MonoBehaviour
     WaitForEndOfFrame Frame = new WaitForEndOfFrame();
     IEnumerator CustomUpdate()
     {
+        float timer = 0;
         while (true)
         {
-            if(!IsPlayerAnchored())
+            if (!IsPlayerAnchored())
+            {
 #if UNITY_6000
-                BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
+                //BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
 #else
-                BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
+                //BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
 #endif
+                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag))
+                {
+                    Vector3 velocity = Physics.gravity * timer;
+                    this.transform.position += (velocity * Time.deltaTime);
+                    timer += Time.deltaTime;
+                }
+                else 
+                { 
+                    timer = 0;
+                }
+                if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
+            }
+            else timer = 0;
 
             yield return Frame;
         }
@@ -64,6 +130,7 @@ public class PlayerGravity : MonoBehaviour
     {
         foreach(var a in Anchors)
         {
+            Debug.Log(a.gameObject.name + " " + a.IsAnchored());
             if (a != null && a.IsAnchored()) return true;
         }
         return false;

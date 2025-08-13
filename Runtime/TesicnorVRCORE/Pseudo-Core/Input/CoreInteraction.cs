@@ -28,15 +28,6 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
             ""id"": ""24ff6d40-a346-4b75-9ff3-df082840cdac"",
             ""actions"": [
                 {
-                    ""name"": ""Click"",
-                    ""type"": ""Button"",
-                    ""id"": ""c0a252ca-3133-42ec-a326-274cc1ac207f"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Grab_Left"",
                     ""type"": ""Button"",
                     ""id"": ""f246f46c-cb80-4ef2-a396-35795815145c"",
@@ -85,66 +76,40 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
                     ""name"": ""RightJoystickButton"",
                     ""type"": ""Button"",
                     ""id"": ""e545c850-55d6-4a0d-b290-2d843e0e1cc9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LeftJoystickButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""d743c5d2-0d57-4c67-a0c6-594102588fd5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Click_right"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0a252ca-3133-42ec-a326-274cc1ac207f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""LeftJoystickButton"",
+                    ""name"": ""Click_Left"",
                     ""type"": ""Button"",
-                    ""id"": ""d743c5d2-0d57-4c67-a0c6-594102588fd5"",
-                    ""expectedControlType"": """",
+                    ""id"": ""fa93b8e7-4ddf-4c9b-bc8f-b54b9355943c"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""074336ce-e510-4cda-a8f0-e1668e2bde93"",
-                    ""path"": ""<XRController>{LeftHand}/{TriggerButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""13c95334-5b07-4aed-aa98-748b0664dc1a"",
-                    ""path"": ""<XRController>{RightHand}/{TriggerButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e12d97a9-35e1-448e-8af9-9c628eb5cf97"",
-                    ""path"": ""<XRController>{LeftHand}/{GripButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""2cbe2666-3e28-43c6-91fc-f2b005ae0410"",
-                    ""path"": ""<XRController>{RightHand}/{GripButton}"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Click"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""3e377fab-815d-4e00-9849-dd7609b53f4f"",
@@ -243,6 +208,28 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
                     ""action"": ""LeftJoystickButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""afbbb403-c72e-4bcf-aee2-a9f12b899be0"",
+                    ""path"": ""<XRController>{LeftHand}/{TriggerButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""13c95334-5b07-4aed-aa98-748b0664dc1a"",
+                    ""path"": ""<XRController>{RightHand}/{TriggerButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click_right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -251,7 +238,6 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
 }");
         // Interaction
         m_Interaction = asset.FindActionMap("Interaction", throwIfNotFound: true);
-        m_Interaction_Click = m_Interaction.FindAction("Click", throwIfNotFound: true);
         m_Interaction_Grab_Left = m_Interaction.FindAction("Grab_Left", throwIfNotFound: true);
         m_Interaction_Grab_Right = m_Interaction.FindAction("Grab_Right", throwIfNotFound: true);
         m_Interaction_Pause = m_Interaction.FindAction("Pause", throwIfNotFound: true);
@@ -259,6 +245,8 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         m_Interaction_LeftJoystick = m_Interaction.FindAction("LeftJoystick", throwIfNotFound: true);
         m_Interaction_RightJoystickButton = m_Interaction.FindAction("RightJoystickButton", throwIfNotFound: true);
         m_Interaction_LeftJoystickButton = m_Interaction.FindAction("LeftJoystickButton", throwIfNotFound: true);
+        m_Interaction_Click_right = m_Interaction.FindAction("Click_right", throwIfNotFound: true);
+        m_Interaction_Click_Left = m_Interaction.FindAction("Click_Left", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -320,7 +308,6 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
     // Interaction
     private readonly InputActionMap m_Interaction;
     private List<IInteractionActions> m_InteractionActionsCallbackInterfaces = new List<IInteractionActions>();
-    private readonly InputAction m_Interaction_Click;
     private readonly InputAction m_Interaction_Grab_Left;
     private readonly InputAction m_Interaction_Grab_Right;
     private readonly InputAction m_Interaction_Pause;
@@ -328,11 +315,12 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Interaction_LeftJoystick;
     private readonly InputAction m_Interaction_RightJoystickButton;
     private readonly InputAction m_Interaction_LeftJoystickButton;
+    private readonly InputAction m_Interaction_Click_right;
+    private readonly InputAction m_Interaction_Click_Left;
     public struct InteractionActions
     {
         private @CoreInteraction m_Wrapper;
         public InteractionActions(@CoreInteraction wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Click => m_Wrapper.m_Interaction_Click;
         public InputAction @Grab_Left => m_Wrapper.m_Interaction_Grab_Left;
         public InputAction @Grab_Right => m_Wrapper.m_Interaction_Grab_Right;
         public InputAction @Pause => m_Wrapper.m_Interaction_Pause;
@@ -340,6 +328,8 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         public InputAction @LeftJoystick => m_Wrapper.m_Interaction_LeftJoystick;
         public InputAction @RightJoystickButton => m_Wrapper.m_Interaction_RightJoystickButton;
         public InputAction @LeftJoystickButton => m_Wrapper.m_Interaction_LeftJoystickButton;
+        public InputAction @Click_right => m_Wrapper.m_Interaction_Click_right;
+        public InputAction @Click_Left => m_Wrapper.m_Interaction_Click_Left;
         public InputActionMap Get() { return m_Wrapper.m_Interaction; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -349,9 +339,6 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_InteractionActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_InteractionActionsCallbackInterfaces.Add(instance);
-            @Click.started += instance.OnClick;
-            @Click.performed += instance.OnClick;
-            @Click.canceled += instance.OnClick;
             @Grab_Left.started += instance.OnGrab_Left;
             @Grab_Left.performed += instance.OnGrab_Left;
             @Grab_Left.canceled += instance.OnGrab_Left;
@@ -373,13 +360,16 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
             @LeftJoystickButton.started += instance.OnLeftJoystickButton;
             @LeftJoystickButton.performed += instance.OnLeftJoystickButton;
             @LeftJoystickButton.canceled += instance.OnLeftJoystickButton;
+            @Click_right.started += instance.OnClick_right;
+            @Click_right.performed += instance.OnClick_right;
+            @Click_right.canceled += instance.OnClick_right;
+            @Click_Left.started += instance.OnClick_Left;
+            @Click_Left.performed += instance.OnClick_Left;
+            @Click_Left.canceled += instance.OnClick_Left;
         }
 
         private void UnregisterCallbacks(IInteractionActions instance)
         {
-            @Click.started -= instance.OnClick;
-            @Click.performed -= instance.OnClick;
-            @Click.canceled -= instance.OnClick;
             @Grab_Left.started -= instance.OnGrab_Left;
             @Grab_Left.performed -= instance.OnGrab_Left;
             @Grab_Left.canceled -= instance.OnGrab_Left;
@@ -401,6 +391,12 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
             @LeftJoystickButton.started -= instance.OnLeftJoystickButton;
             @LeftJoystickButton.performed -= instance.OnLeftJoystickButton;
             @LeftJoystickButton.canceled -= instance.OnLeftJoystickButton;
+            @Click_right.started -= instance.OnClick_right;
+            @Click_right.performed -= instance.OnClick_right;
+            @Click_right.canceled -= instance.OnClick_right;
+            @Click_Left.started -= instance.OnClick_Left;
+            @Click_Left.performed -= instance.OnClick_Left;
+            @Click_Left.canceled -= instance.OnClick_Left;
         }
 
         public void RemoveCallbacks(IInteractionActions instance)
@@ -420,7 +416,6 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
     public InteractionActions @Interaction => new InteractionActions(this);
     public interface IInteractionActions
     {
-        void OnClick(InputAction.CallbackContext context);
         void OnGrab_Left(InputAction.CallbackContext context);
         void OnGrab_Right(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
@@ -428,5 +423,7 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         void OnLeftJoystick(InputAction.CallbackContext context);
         void OnRightJoystickButton(InputAction.CallbackContext context);
         void OnLeftJoystickButton(InputAction.CallbackContext context);
+        void OnClick_right(InputAction.CallbackContext context);
+        void OnClick_Left(InputAction.CallbackContext context);
     }
 }

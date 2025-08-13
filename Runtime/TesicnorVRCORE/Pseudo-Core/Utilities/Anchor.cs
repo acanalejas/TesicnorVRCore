@@ -26,9 +26,8 @@ public abstract class Anchor : VRCollider, AnchorInterface
     {
         onTargetReached.AddListener(CheckAnchorage);
         onTargetReached.AddListener(AnchorIt);
-
         
-        this.SetGrabbable(false);
+        //this.SetGrabbable(false);
 
         if(this.target)
             this.target.canBeCanceled = true;
@@ -52,23 +51,22 @@ public abstract class Anchor : VRCollider, AnchorInterface
 
     public bool IsAnchored()
     {
+        bool result = false;
         if(this.target != null)
-            return this.target.conditionCompleted && !isGrabbed();
-        else if(this.targets.Length > 0)
+            result = this.target.conditionCompleted;
+        if(this.targets.Length > 0)
         {
-            foreach (var tar in targets) if (tar != null && tar.conditionCompleted && !isGrabbed()) return true;
+            foreach (var tar in targets) if (tar != null && tar.conditionCompleted) return true;
         }
-        return false;
+        return result;
     }
 
     public void AnchorIt(GameObject _anchor)
     {
-        throw new System.NotImplementedException();
     }
 
     public void ReleaseIt(GameObject _anchor)
     {
-        throw new System.NotImplementedException();
     }
 
     public void CheckDistance()
@@ -86,12 +84,12 @@ public abstract class Anchor : VRCollider, AnchorInterface
 
     public void EnableWarning()
     {
-        throw new System.NotImplementedException();
+        Warning.EnableWarning();
     }
 
     public void DisableWarning()
     {
-        throw new System.NotImplementedException();
+        Warning.DisableWarning();
     }
     #endregion
 }

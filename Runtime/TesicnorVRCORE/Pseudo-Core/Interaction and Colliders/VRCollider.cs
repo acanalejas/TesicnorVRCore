@@ -82,6 +82,9 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Evento que se ejecuta cuando el objeto llega al objetivo")]
     [HideInInspector] public UnityEvent OnTargetReached;
 
+    [Header("Evento que se ejecuta cuando el objeto se retira del objetivo")]
+    [HideInInspector] public UnityEvent OnTargetReleased;
+
     /// <summary>
     /// Evento que se ejecuta cuando el objeto se suelta en el objetivo
     /// </summary>
@@ -273,6 +276,32 @@ public class VRCollider : MonoBehaviour, VRGripInterface
 
         grippingHand = null;
     }
+
+    protected bool AnyTargetCompleted()
+    {
+        if ((!target && targets.Length <= 0) || !hasTarget) return false;
+
+        bool result = false;
+        if (target)
+        {
+            result = target.conditionCompleted;
+        }
+        
+        if(targets.Length > 0)
+        {
+            foreach(var tar in targets)
+            {
+                if (tar.conditionCompleted && tar.isAttachedObject(this))
+                {
+                    target = tar;
+                    result = true;
+                    return result;
+                }
+            }
+        }
+
+        return result;
+    }
     /// <summary>
     /// Funcion que se usa para soltar el objeto en caso de que no se pueda soltar normal y se requieran condiciones
     /// </summary>
@@ -280,10 +309,10 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     {
         NormalRelease();
 
-        if (target && target.conditionCompleted && hasTarget)
+        if (AnyTargetCompleted())
         {
-            this.transform.position = target.gameObject.transform.position;
-            this.transform.rotation = target.gameObject.transform.rotation;
+            this.transform.position = this.target.attachHolder != null ? this.target.attachHolder.transform.position : this.target.transform.position;
+            this.transform.rotation = this.target.attachHolder != null ? this.target.attachHolder.transform.rotation : this.target.transform.rotation;
             if (target.DisableWhenRelease) this.gameObject.SetActive(false);
             OnTargetReached.Invoke();
             onTargetReached.Invoke(target.gameObject);
@@ -675,6 +704,9 @@ public class VRColliderEditor : Editor
 
         SerializedProperty onTargetReached = serializedObject.FindProperty("OnTargetReached");
         EditorGUILayout.PropertyField(onTargetReached, new GUIContent("On Target Reached"));
+
+        SerializedProperty onTargetReleased = serializedObject.FindProperty("OnTargetReleased");
+        EditorGUILayout.PropertyField(onTargetReleased, new GUIContent("On Target Released"));
 
         serializedObject.ApplyModifiedProperties();
     }

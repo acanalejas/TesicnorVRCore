@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
-public class Rana : VRCollider, AnchorInterface
+public class Rana : Anchor
 { 
     #region PARAMETERS
     [Header("El mosqueton de la rana")]

@@ -30,9 +30,40 @@ public class PlayerPauseManager : MonoBehaviour
 
     [Header("El evento que se usa al volver al menu")]
     public UnityEvent OnReturnToMenu;
+
+    [Header("Los textos para traducir")]
+    [SerializeField] protected TMPro.TextMeshProUGUI continuar, reiniciar, menu, titulo;
+
+    [Header("Los string para traducir el continuar")]
+    [SerializeField] protected string[] continuarTraducciones;
+
+    [Header("Los string para traducir reiniciar")]
+    [SerializeField] protected string[] reiniciarTraducciones;
+
+    [Header("Los string para traducir menu")]
+    [SerializeField] protected string[] menuTraducciones;
+
+    [Header("Los string para traducir el titulo")]
+    [SerializeField] protected string[] tituloTraducciones;
     #endregion
 
     #region METHODS
+
+    public void TranslatePauseScreen()
+    {
+        if (!PlayerPrefs.HasKey("Language")) return;
+
+        continuar.text = continuarTraducciones[PlayerPrefs.GetInt("Language")];
+        reiniciar.text = reiniciarTraducciones[PlayerPrefs.GetInt("Language")];
+        menu.text = menuTraducciones[PlayerPrefs.GetInt("Language")];
+        titulo.text = tituloTraducciones[PlayerPrefs.GetInt("Language")];
+    }
+
+    private void Start()
+    {
+        TranslatePauseScreen();
+    }
+
     public void TogglePause(bool Value)
     {
         bIsPaused = Value;

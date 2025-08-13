@@ -24,6 +24,9 @@ public class TesicnorPlayer : MonoBehaviour
     [Header("El objeto al que se une la pantalla de pausa")]
     [SerializeField] private Transform PauseParent;
 
+    [Header("El objeto de la camara")]
+    [SerializeField] public Transform Camera_GO;
+
     [Header("Se activa solo el rayo de la mano izquierda al pausar?")]
     [SerializeField] private bool OnlyLeftRay = true;
 
@@ -36,6 +39,8 @@ public class TesicnorPlayer : MonoBehaviour
     public bool bShouldSearch = true;
 
     public CoreInteraction coreInteraction;
+
+    List<bool> raysbeforepause = new List<bool>(); 
     
     #endregion
 
@@ -50,6 +55,7 @@ public class TesicnorPlayer : MonoBehaviour
             if (bUsePause)
             {
                 CheckPauseScreen();
+                if(PauseScreen)
                 TogglePause(!PauseScreen.activeSelf);
             }
         };
@@ -68,6 +74,8 @@ public class TesicnorPlayer : MonoBehaviour
 
             foreach (var interactor in interactors)
             {
+                raysbeforepause.Add(interactor.usesRay);
+
                 if (!interactor.isLeftHand && OnlyLeftRay) continue;
 
                 interactor.ToggleRay(true);
@@ -79,10 +87,12 @@ public class TesicnorPlayer : MonoBehaviour
         {
             HandInteraction[] interactors = FindObjectsOfType<HandInteraction>();
 
-            foreach (var interactor in interactors)
+            for(int i = 0; i < interactors.Length; i++)
             {
-                interactor.ToggleRay(false);
+                interactors[i].ToggleRay(raysbeforepause[i]);
             }
+
+            raysbeforepause.Clear();
         });
 
 
@@ -118,7 +128,7 @@ public class TesicnorPlayer : MonoBehaviour
 #region For Pause
     private void CheckPauseScreen()
     {
-        if (PauseScreen != null) return;
+        if (PauseScreen != null || PauseScreenPrefab == null || PauseParent == null) return;
 
         PauseScreen = GameObject.Instantiate(PauseScreenPrefab, PauseParent);
     }
@@ -131,10 +141,10 @@ public class TesicnorPlayer : MonoBehaviour
 
     public void TogglePause(bool Value)
     {
-        if (pausePressed) return;
-        pausePressed = true;
-
-        StartCoroutine(PauseCountdown());
+        //if (pausePressed) return;
+        //pausePressed = true;
+        //
+        //StartCoroutine(PauseCountdown());
 
         this.PauseScreen.SetActive(Value);
         if (Value) OnPause.Invoke();

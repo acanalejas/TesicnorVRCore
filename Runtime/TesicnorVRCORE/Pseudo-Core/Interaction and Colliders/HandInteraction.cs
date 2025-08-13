@@ -202,20 +202,37 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
         if (coreInteraction == null)
         {
-            coreInteraction = new CoreInteraction();
-            coreInteraction.Enable();
+            TesicnorPlayer.Instance.coreInteraction = new CoreInteraction();
+            coreInteraction = TesicnorPlayer.Instance.coreInteraction;
+            TesicnorPlayer.Instance.coreInteraction.Enable();
         }
-
-        coreInteraction.Interaction.Click.started += (InputAction.CallbackContext context) =>
+        if (this.isLeftHand)
         {
-            DetectARInput();
-            OnClick_Controllers();
-        };
+            coreInteraction.Interaction.Click_Left.started += (InputAction.CallbackContext context) =>
+            {
+                DetectARInput();
+                OnClick_Controllers();
+            };
 
-        coreInteraction.Interaction.Click.canceled += (InputAction.CallbackContext context) =>
+            coreInteraction.Interaction.Click_Left.canceled += (InputAction.CallbackContext context) =>
+            {
+                OnRelease_Controllers();
+            };
+        }
+        else
         {
-            OnRelease_Controllers();
-        };
+            coreInteraction.Interaction.Click_right.started += (InputAction.CallbackContext context) =>
+            {
+                DetectARInput();
+                OnClick_Controllers();
+            };
+
+            coreInteraction.Interaction.Click_right.canceled += (InputAction.CallbackContext context) =>
+            {
+                OnRelease_Controllers();
+            };
+        }
+        
     }
     private void Awake()
     {
@@ -351,8 +368,13 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         //     }
         // }
         GameObject result = null;
+
         result = ARPR.ARSpawnObject(this.GetARRaycastPosition());
-        
+
+        if (!result)
+        {
+            result = GameObject.Instantiate(AR_PointRay.spawnObject.prefab, GetARRaycastPosition(), Quaternion.identity);
+        }
         if(result != null)
         {
             Vector3 _forward = (this.transform.position - result.transform.position).normalized;

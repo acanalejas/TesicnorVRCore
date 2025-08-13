@@ -9,7 +9,7 @@ using UnityEngine.Events;
 public class VRColliderReleaseTarget : MonoBehaviour
 {
     #region PARAMETERS
-    [HideInInspector] public bool conditionCompleted;
+     public bool conditionCompleted;
 
     /// <summary>
     /// Indica si queremos que se desactive el objeto al llegar al target
@@ -32,6 +32,9 @@ public class VRColliderReleaseTarget : MonoBehaviour
     [Header("Necesita estar agarrado?")]
     public bool needsGrabbing = false;
 
+    [Header("OPCIONAL: El Gameobject al que se adhiere")]
+    public Transform attachHolder;
+
     [Header("Evento para cuando se el objeto llega al target")]
     public UnityEvent OnTargetReached;
 
@@ -40,6 +43,8 @@ public class VRColliderReleaseTarget : MonoBehaviour
 
     private bool wasUsingGravity;
     private bool wasKinematic;
+
+    protected VRCollider attachedCollider;
     #endregion
     #region FUNCTIONS
     private void Awake()
@@ -62,7 +67,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
     /// soltarse aqui
     /// </summary>
     /// <param name="go">gameobject que colisiona con este objeto</param>
-    public void CheckVRCollider(GameObject go)
+    public virtual void CheckVRCollider(GameObject go)
     {
         if (go.GetComponent<VRCollider>())
         {
@@ -74,9 +79,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
                 if (collider.targetSound != null) {collider.targetSound.loop = false; collider.targetSound.Play();}
                 if (collider.DropTeleport)
                 {
-                    if(collider.GetGrippingHand())collider.GetGrippingHand().Release();
                     //collider.Release();
-                    collider.onTargetReached.Invoke(this.gameObject);
                     if (DisableWhenRelease)
                     {
                         collider.gameObject.SetActive(false);
@@ -89,25 +92,34 @@ public class VRColliderReleaseTarget : MonoBehaviour
                     }
                     if (seeksTarget)
                     {
-                        collider.transform.parent = this.transform;
-
-                        if (collider.GetComponent<Rigidbody>())
-                        {
-                            Rigidbody rb = collider.GetComponent<Rigidbody>();
-
-                            wasKinematic = rb.isKinematic;
-                            wasUsingGravity = rb.useGravity;
-
-                            rb.useGravity = false;
-                            rb.isKinematic = true;
-                        }
+                        AttachObject(collider);
                     }
+                    if (collider.GetGrippingHand()) collider.GetGrippingHand().Release();
+                    collider.onTargetReached.Invoke(this.gameObject);
                 }
             }
         }
     }
 
-    bool isGoodTarget(GameObject go)
+    public virtual void AttachObject(VRCollider collider)
+    {
+        collider.transform.parent = attachHolder == null ? this.transform : attachHolder;
+        attachedCollider = collider;
+        collider.target = this;
+
+        if (collider.GetComponent<Rigidbody>())
+        {
+            Rigidbody rb = collider.GetComponent<Rigidbody>();
+
+            wasKinematic = rb.isKinematic;
+            wasUsingGravity = rb.useGravity;
+
+            rb.useGravity = false;
+            rb.isKinematic = true;
+        }
+    }
+
+    protected virtual bool isGoodTarget(GameObject go)
     {
         if (go.GetComponent<VRCollider>() == null) return false;
 
@@ -115,33 +127,54 @@ public class VRColliderReleaseTarget : MonoBehaviour
         return (coll.hasMultipleTargets && coll.targets.Contains(this)) || (!coll.hasMultipleTargets && coll.target == this); 
     }
 
-    public void CheckVRColliderExit(GameObject go)
+    public virtual void CheckVRColliderExit(GameObject go)
     {
-        if (go.GetComponent<VRCollider>())
+        if(go == attachedCollider.gameObject) DeattachObject(attachedCollider);
+    }
+
+    public bool isAttachedObject(VRCollider _col)
+    {
+        return attachedCollider == _col;
+    }
+
+    public bool GoodDistanceToDettach()
+    {
+        Vector3 point1 = this.GetComponent<Collider>().ClosestPointOnBounds(attachedCollider.transform.position);
+        Vector3 point2 = attachedCollider.GetComponent<Collider>().ClosestPointOnBounds(this.transform.position);
+
+        return Vector3.Distance(point1, point2) > 0.15f;
+    }
+
+    public virtual void DeattachObject(VRCollider collider)
+    {
+        if (attachedCollider && isGoodTarget(attachedCollider.gameObject))
         {
-            if(isGoodTarget(go))
+            if (canBeCanceled) conditionCompleted = false;
+
+            OnTargetRelease.Invoke();
+            attachedCollider.OnTargetReleased.Invoke();
+
+            if (attachedCollider.gameObject.GetComponent<Rigidbody>())
             {
-                if(canBeCanceled) conditionCompleted = false;
-
-                OnTargetRelease.Invoke();
-
-                if (go.GetComponent<Rigidbody>())
-                {
-                    go.GetComponent<Rigidbody>().useGravity = wasUsingGravity;
-                    go.GetComponent<Rigidbody>().isKinematic = wasKinematic;
-                }
+                attachedCollider.gameObject.GetComponent<Rigidbody>().useGravity = wasUsingGravity;
+                attachedCollider.gameObject.GetComponent<Rigidbody>().isKinematic = wasKinematic;
             }
         }
     }
 
     #region Trigger
-    private void OnTriggerEnter(Collider other)
+    //protected virtual void OnTriggerEnter(Collider other)
+    //{
+    //    if(!conditionCompleted) CheckVRCollider(other.gameObject);
+    //}
+
+    private void OnTriggerStay(Collider other)
     {
-        if(!conditionCompleted) CheckVRCollider(other.gameObject);
+        if (!conditionCompleted) CheckVRCollider(other.gameObject);
     }
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
-        CheckVRColliderExit(other.gameObject);
+        if(conditionCompleted) CheckVRColliderExit(other.gameObject);
     }
     #endregion
     #endregion
