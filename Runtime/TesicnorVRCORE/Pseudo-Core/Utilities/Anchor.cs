@@ -19,6 +19,12 @@ public abstract class Anchor : VRCollider, AnchorInterface
 
     [Header("El margen de error a la hora de medir la distancia")]
     [SerializeField] protected float DistanceThreshold = 0.1f;
+
+    [Header("El evento que se lanza cuando el anclaje se ancla a un sitio correcto")]
+    [SerializeField] protected UnityEngine.Events.UnityEvent OnGoodAnchorage;
+
+    [Header("El evento que se lanza cuando el anclaje se ancla a un sitio incorrecto")]
+    [SerializeField] protected UnityEngine.Events.UnityEvent OnBadAnchorage;
     #endregion
 
     #region METHODS
@@ -42,10 +48,12 @@ public abstract class Anchor : VRCollider, AnchorInterface
         if (anchorage.tag == CorrectAnchorageTag)
         {
             Warning.DisableWarning();
+            OnGoodAnchorage.Invoke();
         }
         else
         {
             Warning.EnableWarning();
+            OnBadAnchorage.Invoke();
         }
     }
 

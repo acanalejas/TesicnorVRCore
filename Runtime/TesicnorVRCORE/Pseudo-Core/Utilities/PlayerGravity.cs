@@ -27,6 +27,8 @@ public class PlayerGravity : MonoBehaviour
     private CapsuleCollider BodyColl;
 
     private CollisionDetector cd;
+
+    public bool bIsAnchored { get { return IsPlayerAnchored(); } }
     #endregion
 
     #region CollisionDetector
