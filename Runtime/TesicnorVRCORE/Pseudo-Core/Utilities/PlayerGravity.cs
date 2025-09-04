@@ -115,7 +115,7 @@ public class PlayerGravity : MonoBehaviour
 #else
                 //BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
 #endif
-                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag) || (!cd.lastCollided && ShouldContinueFalling()))
+                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag) /*|| (!cd.lastCollided && ShouldContinueFalling())*/)
                 {
                     Vector3 velocity = Physics.gravity * timer;
                     this.transform.position += (velocity * Time.deltaTime);
@@ -152,6 +152,7 @@ public class PlayerGravity : MonoBehaviour
         {
             if (a.IsAnchored() && !a.bCanFallAnchored) return false;
         }
+        if(ShouldContinueFalling()) return true; 
         return true;
     }
 
@@ -161,9 +162,9 @@ public class PlayerGravity : MonoBehaviour
         {
             if(a.IsAnchored() && a.bCanFallAnchored)
             {
-                if(Vector3.Distance(this.transform.position, a.transform.position) >= a.GetMaxDistance) return false;
+                Debug.Log("La distancia entre el player y el anclaje" + Vector3.Distance(this.transform.position, a.transform.position));
 
-                Debug.Log(Vector3.Distance(this.transform.position, a.transform.position));
+                if (Vector3.Distance(this.transform.position, a.transform.position) >= a.GetMaxDistance) return false;
             }
         }
         return true;
