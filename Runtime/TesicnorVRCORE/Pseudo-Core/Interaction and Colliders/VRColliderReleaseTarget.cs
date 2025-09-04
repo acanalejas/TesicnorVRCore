@@ -77,6 +77,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
                 conditionCompleted = true;
                 OnTargetReached.Invoke();
                 if (collider.targetSound != null) {collider.targetSound.loop = false; collider.targetSound.Play();}
+                if (collider.GetGrippingHand()) collider.GetGrippingHand().Release();
                 if (collider.DropTeleport)
                 {
                     //collider.Release();
@@ -94,7 +95,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
                     {
                         AttachObject(collider);
                     }
-                    if (collider.GetGrippingHand()) collider.GetGrippingHand().Release();
+                    
                     collider.onTargetReached.Invoke(this.gameObject);
                 }
             }
