@@ -21,7 +21,7 @@ public class PlayerGravity : MonoBehaviour
     [SerializeField] private string FloorTag = "Floor";
 
     [Header("El evento que se lanza al terminar una caida")]
-    public UnityEngine.Events.UnityEvent OnFallEnd;
+    public UnityEngine.Events.UnityEvent<bool> OnFallEnd;
 
     public UnityEngine.InputSystem.XR.TrackedPoseDriver HMD_pd;
 
@@ -123,7 +123,7 @@ public class PlayerGravity : MonoBehaviour
                 }
                 else if(timer != 0)
                 {
-                    OnFallEnd.Invoke();
+                    OnFallEnd.Invoke(IsPlayerAnchored());
                     timer = 0;
                 }
                 if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
