@@ -69,7 +69,7 @@ public abstract class Anchor : VRCollider, AnchorInterface
             result = this.target.conditionCompleted;
         if(this.targets.Length > 0)
         {
-            foreach (var tar in targets) if (tar != null && tar.conditionCompleted) return true;
+            foreach (var tar in targets) if (tar != null && tar.conditionCompleted && tar.isAttachedObject(this)) return true;
         }
         return result;
     }
