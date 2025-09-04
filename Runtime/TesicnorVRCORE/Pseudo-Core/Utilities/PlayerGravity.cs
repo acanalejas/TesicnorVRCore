@@ -152,8 +152,7 @@ public class PlayerGravity : MonoBehaviour
         {
             if (a.IsAnchored() && !a.bCanFallAnchored) return false;
         }
-        if(ShouldContinueFalling()) return true; 
-        return true;
+        return ShouldContinueFalling();
     }
 
     private bool ShouldContinueFalling()
