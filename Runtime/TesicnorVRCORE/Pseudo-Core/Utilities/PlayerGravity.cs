@@ -20,6 +20,9 @@ public class PlayerGravity : MonoBehaviour
     [Header("La tag que se usa para detectar el suelo")]
     [SerializeField] private string FloorTag = "Floor";
 
+    [Header("El evento que se lanza al terminar una caida")]
+    public UnityEngine.Events.UnityEvent OnFallEnd;
+
     public UnityEngine.InputSystem.XR.TrackedPoseDriver HMD_pd;
 
 
@@ -103,21 +106,22 @@ public class PlayerGravity : MonoBehaviour
         float timer = 0;
         while (true)
         {
-            if (!IsPlayerAnchored())
+            if (CanPlayerFall())
             {
 #if UNITY_6000
                 //BodyGO.transform.parent.position += BodyRB.linearVelocity * Time.deltaTime;
 #else
                 //BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
 #endif
-                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag))
+                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag) || ShouldContinueFalling())
                 {
                     Vector3 velocity = Physics.gravity * timer;
                     this.transform.position += (velocity * Time.deltaTime);
                     timer += Time.deltaTime;
                 }
-                else 
-                { 
+                else if(timer != 0)
+                {
+                    OnFallEnd.Invoke();
                     timer = 0;
                 }
                 if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
@@ -136,6 +140,29 @@ public class PlayerGravity : MonoBehaviour
             if (a != null && a.IsAnchored()) return true;
         }
         return false;
+    }
+
+    private bool CanPlayerFall()
+    {
+        if (!IsPlayerAnchored()) return true;
+
+        foreach(var a in Anchors)
+        {
+            if (a.IsAnchored() && !a.bCanFallAnchored) return false;
+        }
+        return true;
+    }
+
+    private bool ShouldContinueFalling()
+    {
+        foreach(var a in Anchors)
+        {
+            if(a.IsAnchored() && a.bCanFallAnchored)
+            {
+                if(Vector3.Distance(Camera_T.position, a.transform.position) >= a.GetMaxDistance) return false;
+            }
+        }
+        return true;
     }
 #endregion
 }

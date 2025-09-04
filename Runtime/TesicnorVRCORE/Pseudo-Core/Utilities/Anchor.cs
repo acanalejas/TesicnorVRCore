@@ -17,6 +17,8 @@ public abstract class Anchor : VRCollider, AnchorInterface
     [Header("La distancia que permite alejarse el anclaje antes del warning")]
     [SerializeField] protected float MaxDistance = 1.5f;
 
+    public float GetMaxDistance { get { return MaxDistance; } }
+
     [Header("El margen de error a la hora de medir la distancia")]
     [SerializeField] protected float DistanceThreshold = 0.1f;
 
@@ -25,6 +27,9 @@ public abstract class Anchor : VRCollider, AnchorInterface
 
     [Header("El evento que se lanza cuando el anclaje se ancla a un sitio incorrecto")]
     [SerializeField] protected UnityEngine.Events.UnityEvent OnBadAnchorage;
+
+    [Header("Se puede caer incluso anclado?")]
+    public bool bCanFallAnchored = false;
     #endregion
 
     #region METHODS
