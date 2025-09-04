@@ -161,7 +161,7 @@ public class PlayerGravity : MonoBehaviour
         {
             if(a.IsAnchored() && a.bCanFallAnchored)
             {
-                if(Vector3.Distance(Camera_T.position, a.transform.position) >= a.GetMaxDistance) return false;
+                if(Vector3.Distance(this.transform.position, a.transform.position) >= a.GetMaxDistance) return false;
             }
         }
         return true;
