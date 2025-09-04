@@ -115,7 +115,7 @@ public class PlayerGravity : MonoBehaviour
 #else
                 //BodyGO.transform.parent.position += BodyRB.velocity * Time.deltaTime;
 #endif
-                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag && ShouldContinueFalling()))
+                if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag) || (!cd.lastCollided && ShouldContinueFalling()))
                 {
                     Vector3 velocity = Physics.gravity * timer;
                     this.transform.position += (velocity * Time.deltaTime);
