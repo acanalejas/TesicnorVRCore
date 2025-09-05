@@ -105,6 +105,8 @@ public class VRColliderReleaseTarget : MonoBehaviour
     public virtual void AttachObject(VRCollider collider)
     {
         collider.transform.parent = attachHolder == null ? this.transform : attachHolder;
+        collider.transform.localPosition = Vector3.zero;
+        collider.transform.rotation = Quaternion.identity;
         attachedCollider = collider;
         collider.target = this;
 
