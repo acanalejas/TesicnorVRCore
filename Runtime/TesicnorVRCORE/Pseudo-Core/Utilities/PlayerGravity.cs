@@ -128,7 +128,7 @@ public class PlayerGravity : MonoBehaviour
                 }
                 if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
             }
-            else timer = 0;
+            else if(timer != 0) { timer = 0; OnFallEnd.Invoke(IsPlayerAnchored()); }
 
             yield return Frame;
         }
