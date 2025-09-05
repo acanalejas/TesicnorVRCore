@@ -47,7 +47,7 @@ public class Rana : Anchor
 
         targetExtent = Axis == axis.x ? target.GetComponent<Collider>().bounds.extents.x : Axis == axis.y ? target.GetComponent<Collider>().bounds.extents.y : target.GetComponent<Collider>().bounds.extents.z;
 
-        globalCenter = target.transform.InverseTransformPoint(target.GetComponent<Collider>().bounds.center);
+        globalCenter = target.transform.TransformPoint(target.GetComponent<Collider>().bounds.center);
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
