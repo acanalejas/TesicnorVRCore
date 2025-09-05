@@ -32,6 +32,8 @@ public class Rana : Anchor
 
     [Header("El eje sobre el que se mueve la rana")]
     public axis Axis;
+
+    float targetExtent;
     #endregion
 
     #region FUNCTIONS
@@ -40,6 +42,8 @@ public class Rana : Anchor
     {
         release = releaseType.holder;
         holder = rana_holder;
+
+        targetExtent = Axis == axis.x ? target.GetComponent<Collider>().bounds.extents.x : Axis == axis.y ? target.GetComponent<Collider>().bounds.extents.y : target.GetComponent<Collider>().bounds.extents.z;
     }
 
     WaitForEndOfFrame frame = new WaitForEndOfFrame();
@@ -58,13 +62,19 @@ public class Rana : Anchor
             switch (Axis)
             {
                 case axis.x:
-                    this.transform.position = new Vector3(this.rana_holder.position.x, this.transform.position.y, this.transform.position.z);
+                    this.transform.position = new Vector3(Mathf.Clamp(this.rana_holder.position.x, target.transform.position.x - targetExtent, target.transform.position.x + targetExtent)
+                        , this.transform.position.y
+                        , this.transform.position.z);
                     break;
                 case axis.y:
-                    this.transform.position = new Vector3(this.transform.position.x, rana_holder.position.y, this.transform.position.z);
+                    this.transform.position = new Vector3(this.transform.position.x
+                        , Mathf.Clamp(this.rana_holder.position.y, target.transform.position.y - targetExtent, target.transform.position.y + targetExtent)
+                        , this.transform.position.z);
                     break;
                 case axis.z:
-                    this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, this.rana_holder.position.z);
+                    this.transform.position = new Vector3(this.transform.position.x
+                        , this.transform.position.y
+                        , Mathf.Clamp(this.rana_holder.position.z, target.transform.position.z - targetExtent, target.transform.position.z + targetExtent));
                     break;
             }
              
