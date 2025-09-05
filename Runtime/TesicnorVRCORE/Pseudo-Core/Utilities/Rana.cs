@@ -45,8 +45,11 @@ public class Rana : Anchor
 
         targetExtent = Axis == axis.x ? target.GetComponent<Collider>().bounds.extents.x : Axis == axis.y ? target.GetComponent<Collider>().bounds.extents.y : target.GetComponent<Collider>().bounds.extents.z;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         globalCenter = target.transform.TransformPoint(target.GetComponent<Collider>().bounds.center);
+=======
+>>>>>>> parent of a7f87c9 (Update Rana.cs)
 =======
 >>>>>>> parent of a7f87c9 (Update Rana.cs)
     }
