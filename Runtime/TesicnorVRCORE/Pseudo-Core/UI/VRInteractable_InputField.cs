@@ -14,7 +14,7 @@ public class VRInteractable_InputField : VRInteractable_Button
     [Header("El texto sobre el que se va a escribir")]
     public TextMeshProUGUI writeText;
 
-    [Header("El texto que se usará como preview")]
+    [Header("El texto que se usarï¿½ como preview")]
     public TextMeshProUGUI sampleText;
 
     [Header("El evento que se lanza cuando se escribe en este input field")]
@@ -35,7 +35,7 @@ public class VRInteractable_InputField : VRInteractable_Button
     }
     private void Start()
     {
-        //StartCoroutine(nameof(update));
+        StartCoroutine(nameof(update));
     }
 
     public override void OnClick()

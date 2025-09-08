@@ -193,6 +193,8 @@ public class BackendScene : MonoBehaviour
         if (EmailInputFieldText) user = EmailInputFieldText.text;
         string appCode = BackendGetter.appCode.ToString();
 
+        if (httpClient == null) httpClient = new HttpClient();
+
         var cts = new System.Threading.CancellationTokenSource();
         using (var request = new HttpRequestMessage(HttpMethod.Get, BackendConstants.urlNoParams + "applicationId=" + appCode + "&" + "userName=" + user))
         {
