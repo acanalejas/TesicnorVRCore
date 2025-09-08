@@ -133,8 +133,26 @@ public class PlayerGravity : MonoBehaviour
                 if (timer >= 0.05f) OnFallEnd.Invoke(IsPlayerAnchored());
                 timer = 0;
             }
-
+            AdjustHeight();
             yield return Frame;
+        }
+    }
+
+    public void AdjustHeight()
+    {
+        if (!cd.lastCollided || (cd.lastCollided && !cd.lastCollided.CompareTag(FloorTag))) return;
+        
+        RaycastHit hit;
+        Ray ray = new Ray(Camera_T.position, Vector3.down);
+        
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.distance < HMD_pd.positionInput.action.ReadValue<Vector3>().y)
+            {
+                float difference = HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance;
+
+                this.transform.position += difference * Vector3.up;
+            }
         }
     }
 
