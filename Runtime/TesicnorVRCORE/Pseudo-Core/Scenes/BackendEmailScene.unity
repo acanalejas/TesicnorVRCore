@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 9
+  serializedVersion: 10
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -38,13 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414727, b: 0.121078536, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 12
-  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -67,9 +66,6 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
-    m_FinalGather: 0
-    m_FinalGatherFiltering: 1
-    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
     m_BakeBackend: 1
@@ -223,15 +219,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -325,6 +323,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -344,7 +345,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1271932
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -499,6 +514,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -518,7 +536,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &8478073
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -736,6 +768,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -755,7 +790,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &50083260
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -942,15 +991,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1036,7 +1087,8 @@ MonoBehaviour:
   m_text: Do you want to log out?
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1076,15 +1128,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1210,15 +1264,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1344,15 +1400,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1478,15 +1536,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -1563,6 +1623,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1793,6 +1855,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -1910,7 +1974,8 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1950,15 +2015,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -2035,6 +2102,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -2190,15 +2259,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -2292,6 +2363,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -2311,7 +2385,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &335493404
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2458,7 +2546,8 @@ MonoBehaviour:
   m_text: DEMO
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
-  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e, type: 2}
+  m_sharedMaterial: {fileID: -9221056233183343877, guid: a6446991ef31ced4190c53c206cf4b3e,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2498,15 +2587,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -2632,15 +2723,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -2676,6 +2769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 379992031}
   - component: {fileID: 379992030}
+  - component: {fileID: 379992032}
   m_Layer: 0
   m_Name: PlayerControllers
   m_TagString: Untagged
@@ -2719,6 +2813,32 @@ Transform:
   - {fileID: 1250397948}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &379992032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379992029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512b5490f36c4a64abde4fc43b5e3524, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bUsePause: 1
+  bIsInPause: 0
+  PauseScreenPrefab: {fileID: 0}
+  PauseScreen: {fileID: 0}
+  PauseParent: {fileID: 0}
+  Camera_GO: {fileID: 1282932513}
+  OnlyLeftRay: 1
+  OnPause:
+    m_PersistentCalls:
+      m_Calls: []
+  OnResume:
+    m_PersistentCalls:
+      m_Calls: []
+  bShouldSearch: 1
 --- !u!1 &423087694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2819,15 +2939,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -3020,7 +3142,6 @@ MonoBehaviour:
   handRenderer: {fileID: 0}
   positionOffset: {x: 0, y: 0, z: 0}
   colliderRadius: 0.05
-  handController: {fileID: 426168998}
   colliderBone: {fileID: 426168992}
   player: {fileID: 379992031}
   velocity: {x: 0, y: 0, z: 0}
@@ -3095,8 +3216,13 @@ MonoBehaviour:
   nonDetectedColor: {r: 0.9339623, g: 0.18943575, b: 0.18943575, a: 255}
   detectedColor: {r: 255, g: 149, b: 25, a: 255}
   interactingObject: {fileID: 0}
+  OnARObjectSpawned:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSaveObjectData:
+    m_PersistentCalls:
+      m_Calls: []
   interactionOrigin: {fileID: 426168992}
-  handController: {fileID: 426168998}
   dedoGordo: {fileID: 0}
   indice: {fileID: 0}
   dedoCorazon: {fileID: 0}
@@ -3122,6 +3248,8 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3335,6 +3463,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -3354,7 +3485,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &435311453
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3497,7 +3642,6 @@ MonoBehaviour:
   handRenderer: {fileID: 0}
   positionOffset: {x: 0, y: 0, z: 0}
   colliderRadius: 0.05
-  handController: {fileID: 471665476}
   colliderBone: {fileID: 471665470}
   player: {fileID: 379992031}
   velocity: {x: 0, y: 0, z: 0}
@@ -3572,8 +3716,13 @@ MonoBehaviour:
   nonDetectedColor: {r: 0.9339623, g: 0.18943575, b: 0.18943575, a: 255}
   detectedColor: {r: 255, g: 149, b: 25, a: 255}
   interactingObject: {fileID: 0}
+  OnARObjectSpawned:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSaveObjectData:
+    m_PersistentCalls:
+      m_Calls: []
   interactionOrigin: {fileID: 471665470}
-  handController: {fileID: 471665476}
   dedoGordo: {fileID: 0}
   indice: {fileID: 0}
   dedoCorazon: {fileID: 0}
@@ -3599,6 +3748,8 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -3770,9 +3921,8 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 484934844}
   m_Enabled: 1
-  serializedVersion: 10
+  serializedVersion: 11
   m_Type: 1
-  m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
   m_Range: 10
@@ -3928,6 +4078,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -3935,7 +4088,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &518720936
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4082,7 +4249,8 @@ MonoBehaviour:
   m_text: Input your account email
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4122,15 +4290,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -4256,15 +4426,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -4421,6 +4593,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -4440,7 +4615,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &587595109
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4595,6 +4784,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -4614,7 +4806,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &622555687
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4801,15 +5007,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -4886,6 +5094,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -5077,7 +5287,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
+  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5163,6 +5374,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -5182,7 +5396,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &665818595
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5369,15 +5597,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -5534,6 +5764,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -5553,7 +5786,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &746426947
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5708,6 +5955,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -5727,7 +5977,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &804684324
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5919,6 +6183,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -5938,7 +6205,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &871069426
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6125,15 +6406,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -6220,6 +6503,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 79916487ef0620746a143ad93ae80421, type: 3}
+  m_Resource: {fileID: 8300000, guid: 79916487ef0620746a143ad93ae80421, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -6423,6 +6707,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -6430,7 +6717,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &917073560
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6617,15 +6918,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -6719,6 +7022,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -6738,7 +7044,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &930853530
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6925,15 +7245,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -7127,15 +7449,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -7211,6 +7535,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -7276,7 +7602,6 @@ MonoBehaviour:
   captured: {fileID: 8400000, guid: 1143044c53edc1847892c83b15a55eb7, type: 2}
   path: 
   playerCamera: {fileID: 1282932516}
-  BTSender: {fileID: 0}
   isStreaming: 0
 --- !u!4 &996430187
 Transform:
@@ -7361,6 +7686,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -7380,7 +7708,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1006575832
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7720,6 +8062,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -7739,7 +8084,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1025330304
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7886,7 +8245,8 @@ MonoBehaviour:
   m_text: yes
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -7926,15 +8286,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -8051,6 +8413,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -8058,7 +8423,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1062201010
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8376,6 +8755,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -8383,7 +8765,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1094937156
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8538,6 +8934,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -8557,7 +8956,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1096639984
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8744,15 +9157,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -8846,6 +9261,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -8865,7 +9283,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1166645389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9020,6 +9452,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -9039,7 +9474,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1182010354
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9183,7 +9632,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8278380930669122163, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
+  m_Sprite: {fileID: -8278380930669122163, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9457,15 +9907,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -9594,7 +10046,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -9673,12 +10125,12 @@ MonoBehaviour:
   m_RequiresColorTexture: 0
   m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
 --- !u!1 &1313836145
 GameObject:
   m_ObjectHideFlags: 0
@@ -9779,15 +10231,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -9881,6 +10335,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -9900,7 +10357,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1412027241
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10055,6 +10526,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -10074,7 +10548,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1412214655
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10261,15 +10749,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -10395,15 +10885,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -10497,6 +10989,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -10516,7 +11011,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1436291819
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10708,6 +11217,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -10739,7 +11251,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1476528350
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10856,6 +11382,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -10875,7 +11404,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1481212140
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11173,15 +11716,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -11264,7 +11809,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
+  m_Sprite: {fileID: -5633607064085580622, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -11350,6 +11896,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -11369,7 +11918,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1547572046
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11524,6 +12087,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -11543,7 +12109,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1559699915
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11698,6 +12278,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -11717,7 +12300,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1578092762
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11904,15 +12501,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -12171,6 +12770,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -12190,7 +12792,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1691892902
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12440,15 +13056,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -12635,6 +13253,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -12654,7 +13275,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1704028645
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -12822,6 +13457,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -12841,7 +13479,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1707614816
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13051,7 +13703,8 @@ MonoBehaviour:
   m_text: 'INCORRECT EMAIL, PLEASE TRY AGAIN '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13091,15 +13744,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -13182,7 +13837,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -934127045814069214, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef, type: 3}
+  m_Sprite: {fileID: -934127045814069214, guid: 4f3b4a4ae58ad484e9fc92ab68a8ffef,
+    type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13304,6 +13960,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls: []
@@ -13311,9 +13970,26 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
   writeText: {fileID: 1849907941}
   sampleText: {fileID: 558931038}
+  onTextWritten:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &1774652128
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13450,6 +14126,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -13551,6 +14229,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -13570,7 +14251,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1797704037
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13725,6 +14420,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -13744,7 +14442,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1806206509
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -13931,15 +14643,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -14033,6 +14747,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -14052,7 +14769,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1807938678
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14239,15 +14970,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -14307,12 +15040,24 @@ MonoBehaviour:
   ConnectionPopUp_go: {fileID: 425426189}
   MailCanvas: {fileID: 1082334115}
   logOutCanvas: {fileID: 1669166204}
+  SuccessObject: {fileID: 0}
+  emailText: {fileID: 0}
+  ShouldBeTraduced: 1
+  ShouldChangeSceneOnEnter: 1
   inputMail_text: {fileID: 543917579}
   incorrectMail_text: {fileID: 1759893314}
   badConnection_text: {fileID: 1969559235}
   yes_text: {fileID: 1056912292}
   no_text: {fileID: 281806392}
   logout_text: {fileID: 102686503}
+  lettersGrid: {fileID: 0}
+  numbersGrid: {fileID: 0}
+  EmailInputFieldText: {fileID: 0}
+  ConnectedDot: {fileID: 0}
+  WifiText: {fileID: 0}
+  OnLog:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1844007479
 Transform:
   m_ObjectHideFlags: 0
@@ -14428,15 +15173,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 6e72656b
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -14564,15 +15311,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -14666,6 +15415,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -14685,7 +15437,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1886273518
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14872,15 +15638,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -14957,6 +15725,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -15112,15 +15882,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -15197,6 +15969,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -15352,15 +16126,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -15454,6 +16230,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -15485,7 +16264,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &1962767333
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15634,7 +16427,8 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
-  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a, type: 2}
+  m_sharedMaterial: {fileID: 7004484755165902439, guid: fca602d14526ac9459f6352d2bc9e94a,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15674,15 +16468,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -15808,15 +16604,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -15942,15 +16740,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -16076,15 +16876,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -16178,6 +16980,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -16197,7 +17002,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &2103030034
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16384,15 +17203,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -16486,6 +17307,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -16505,7 +17329,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &2126017494
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16692,15 +17530,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -16827,6 +17667,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -16846,7 +17689,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!114 &262572009280520311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16910,15 +17767,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -17017,15 +17876,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -17106,15 +17967,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -17357,15 +18220,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -17525,15 +18390,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -17577,6 +18444,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -17596,7 +18466,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!114 &1285205992370510293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17713,6 +18597,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -17732,7 +18619,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!114 &1553637751746434613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17759,6 +18660,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -17778,7 +18682,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!224 &1611598659954216360
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18079,15 +18997,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -18168,15 +19088,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -18438,15 +19360,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -18547,15 +19471,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -18808,15 +19734,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -18894,6 +19822,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -18913,7 +19844,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!114 &4304263585314478409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19200,6 +20145,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -19219,7 +20167,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!65 &4953509052273322447
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19385,6 +20347,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -19404,7 +20369,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!54 &5342398047702535458
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19578,6 +20557,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -19597,7 +20579,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!222 &5998026341376082157
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19853,6 +20849,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -19872,7 +20871,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!222 &6748983242097747714
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20283,15 +21296,17 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_enableWordWrapping: 1
+  m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
+  m_ActiveFontFeatures: 00000000
   m_enableExtraPadding: 0
   checkPaddingRequired: 0
   m_isRichText: 1
+  m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
   m_isOrthographic: 1
   m_isCullingEnabled: 0
@@ -20335,6 +21350,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -20354,7 +21372,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!1 &8292513235403319048
 GameObject:
   m_ObjectHideFlags: 0
@@ -20424,6 +21456,9 @@ MonoBehaviour:
   onHover:
     m_PersistentCalls:
       m_Calls: []
+  onHoverExit:
+    m_PersistentCalls:
+      m_Calls: []
   onRelease:
     m_PersistentCalls:
       m_Calls:
@@ -20443,7 +21478,21 @@ MonoBehaviour:
   hasToFollow: 0
   normalPosition: {x: 0, y: 0, z: 0}
   pressedPosition: {x: 0, y: 0, z: 0}
+  colliderSize: {x: 0, y: 0, z: 0}
   bHasBeenClicked: 0
+  bClickByHover: 0
+  fTimeToClickByHover: 1.5
+  bUsesDefaultHoverEffect: 1
+  fillMethod: 0
+  IsBehind: 0
+  hoverScale: 1
+  bUsesParentAnchor: 1
+  anchorMin: {x: 0, y: 0}
+  anchorMax: {x: 0, y: 0}
+  anchorPosition: {x: 0, y: 0}
+  sizeDelta: {x: 0, y: 0}
+  ExternalImage: {fileID: 0}
+  ShouldSetSiblingIndex: 0
 --- !u!114 &8311092806265815545
 MonoBehaviour:
   m_ObjectHideFlags: 0
