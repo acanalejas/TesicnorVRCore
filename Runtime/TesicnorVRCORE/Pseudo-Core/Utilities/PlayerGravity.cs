@@ -133,7 +133,7 @@ public class PlayerGravity : MonoBehaviour
                 if (timer >= 0.05f) OnFallEnd.Invoke(IsPlayerAnchored());
                 timer = 0;
             }
-            AdjustHeight();
+            //AdjustHeight();
             yield return Frame;
         }
     }
@@ -147,7 +147,7 @@ public class PlayerGravity : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit))
         {
-            if (hit.distance < HMD_pd.positionInput.action.ReadValue<Vector3>().y)
+            if (hit.distance < HMD_pd.positionInput.action.ReadValue<Vector3>().y -0.2f)
             {
                 float difference = HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance;
 
