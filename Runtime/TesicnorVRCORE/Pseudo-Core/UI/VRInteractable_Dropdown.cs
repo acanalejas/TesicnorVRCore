@@ -19,7 +19,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     /// </summary>
     [Header(" =========== DROPDOWN PARAMETERS ==============")][Space(10)]
     
-    [Header("Las im·genes que se despliegar·n")]
+    [Header("Las im√°genes que se despliegar√°n")]
     public Sprite[] options_Sprites;
 
     /// <summary>
@@ -29,14 +29,14 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     public string[] options_Texts;
 
     /// <summary>
-    /// El espacio que habr· entre opciones
+    /// El espacio que habr√° entre opciones
     /// Medido en pixeles del canvas
     /// </summary>
     [Header("El espacio entre el Dropdown y las opciones")]
     [SerializeField] float spacing = 10;
 
     /// <summary>
-    /// AcciÛn que se lanza cuando cambia el valor del dropdown
+    /// Acci√≥n que se lanza cuando cambia el valor del dropdown
     /// </summary>
     [Header("Cuando se cambia el valor del dropdown")]
     public UnityEvent<int> onValueChanged;
@@ -51,7 +51,7 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     [SerializeField] private VRInteractable_Dropdown[] closingDropdowns;
 
     /// <summary>
-    /// El GameObject que contiene el layout donde aparecer·n las opciones
+    /// El GameObject que contiene el layout donde aparecer√°n las opciones
     /// </summary>
     public GameObject vl;
     /// <summary>
@@ -66,12 +66,12 @@ public class VRInteractable_Dropdown : VRInteractable_Button
     [HideInInspector] public bool Blocked = false;
 
     /// <summary>
-    /// La opciÛn que est· ahora seleccionada
+    /// La opci√≥n que est√° ahora seleccionada
     /// </summary>
     [HideInInspector] public int currentOption = 0;
 
     /// <summary>
-    /// La clase que se aÒade a cada opciÛn del dropdown
+    /// La clase que se a√±ade a cada opci√≥n del dropdown
     /// </summary>
     [RequireComponent(typeof(Image))]
     public class Dropdown_Item : VRInteractable_Button
