@@ -76,11 +76,11 @@ public class LocomotionComponent : MonoBehaviour
             {
                 if (joystickButton)
                 {
-                    if (controllerType == ControllerTypes.Movement)
+                    if (controllerType == ControllerTypes.Movement && coreInteraction != null)
                     {
                         MovePlayer(coreInteraction.Interaction.LeftJoystick.ReadValue<Vector2>());
                     }
-                    else
+                    else if (coreInteraction != null)
                     {
                         RotatePlayer(coreInteraction.Interaction.LeftJoystick.ReadValue<Vector2>());
                     }
@@ -135,7 +135,7 @@ public class LocomotionComponent : MonoBehaviour
     }
 
     /// <summary>
-    /// Nos da la dirección para el movimiento basado en el joystick y el forward de la camara.
+    /// Nos da la direcciï¿½n para el movimiento basado en el joystick y el forward de la camara.
     /// La da en espacio global
     /// </summary>
     /// <param name="joystick"> Direccion del joystick </param>
