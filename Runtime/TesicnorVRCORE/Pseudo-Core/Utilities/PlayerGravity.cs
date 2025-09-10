@@ -168,13 +168,14 @@ public class PlayerGravity : MonoBehaviour
 
     private bool CanPlayerFall()
     {
-        if (!IsPlayerAnchored()) return true;
+        return !IsPlayerAnchored();
+        //f (!IsPlayerAnchored()) return true;
 
-        foreach(var a in Anchors)
-        {
-            if (a.IsAnchored() && !a.bCanFallAnchored) return false;
-        }
-        return ShouldContinueFalling();
+        //foreach(var a in Anchors)
+        //{
+        //    if (a.IsAnchored()) return false;
+        //}
+        //return ShouldContinueFalling();
     }
 
     private bool ShouldContinueFalling()

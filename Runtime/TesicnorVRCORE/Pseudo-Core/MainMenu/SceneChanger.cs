@@ -57,19 +57,21 @@ public class SceneChanger : MonoBehaviour
 
     public void GoToMenu_Button()
     {
-        SceneData _data = new SceneData();
-        _data.SceneID = 0;
-
-        ChangeScene(_data);
+        SceneManager.LoadScene(0);
+        //SceneData _data = new SceneData();
+        //_data.SceneID = 0;
+//
+        //ChangeScene(_data);
     }
 
     public void Retry_Button()
     {
-        SceneData _data = new SceneData();
-        _data.SceneID = SceneManager.GetActiveScene().buildIndex;
-        _data.SceneName = SceneManager.GetActiveScene().name;
-
-        ChangeScene(_data);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        //SceneData _data = new SceneData();
+        //_data.SceneID = SceneManager.GetActiveScene().buildIndex;
+        //_data.SceneName = SceneManager.GetActiveScene().name;
+//
+        //ChangeScene(_data);
     }
     public void GoToMenu()
     {
