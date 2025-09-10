@@ -106,6 +106,7 @@ public class PlayerGravity : MonoBehaviour
     private int layerMask = 0;
     IEnumerator CustomUpdate()
     {
+        float initialHeight = - 10;
         float timer = 0;
         while (true)
         {
@@ -118,22 +119,24 @@ public class PlayerGravity : MonoBehaviour
 #endif
                 if (!cd.lastCollided || (cd.lastCollided && cd.lastCollided.tag != FloorTag) /*|| (!cd.lastCollided && ShouldContinueFalling())*/)
                 {
+                    if (timer <= 0) initialHeight = this.transform.position.y;
                     Vector3 velocity = Physics.gravity * timer;
                     this.transform.position += (velocity * Time.deltaTime);
                     timer += Time.deltaTime;
                 }
                 else if(timer != 0)
                 {
-                    if(timer >= 0.05f) OnFallEnd.Invoke(IsPlayerAnchored());
+                    float finalHeight = this.transform.position.y;
+                    if(timer >= 0.05f && initialHeight - finalHeight > 0.4f) OnFallEnd.Invoke(IsPlayerAnchored());
                     timer = 0;
                 }
                 if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
             }
-             else if(timer != 0) {
-
-                if (timer >= 0.05f) OnFallEnd.Invoke(IsPlayerAnchored());
-                timer = 0;
-            }
+            // else if(timer != 0) {
+//
+            //    if (timer >= 0.05f) OnFallEnd.Invoke(IsPlayerAnchored());
+            //    timer = 0;
+            //}
             AdjustHeight();
             yield return Frame;
         }
