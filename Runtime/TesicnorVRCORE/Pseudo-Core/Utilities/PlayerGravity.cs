@@ -99,10 +99,11 @@ public class PlayerGravity : MonoBehaviour
         SetupBodyGO();
         StartCoroutine(nameof(CustomUpdate));
 
-        
+        layerMask = LayerMask.GetMask("Floor");
     }
 
     WaitForEndOfFrame Frame = new WaitForEndOfFrame();
+    private int layerMask = 0;
     IEnumerator CustomUpdate()
     {
         float timer = 0;
@@ -123,14 +124,14 @@ public class PlayerGravity : MonoBehaviour
                 }
                 else if(timer != 0)
                 {
-                    if(timer >= 0.02f) OnFallEnd.Invoke(IsPlayerAnchored());
+                    if(timer >= 0.035f) OnFallEnd.Invoke(IsPlayerAnchored());
                     timer = 0;
                 }
                 if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
             }
              else if(timer != 0) {
 
-                if (timer >= 0.02f) OnFallEnd.Invoke(IsPlayerAnchored());
+                if (timer >= 0.035f) OnFallEnd.Invoke(IsPlayerAnchored());
                 timer = 0;
             }
             AdjustHeight();
@@ -145,15 +146,12 @@ public class PlayerGravity : MonoBehaviour
         RaycastHit hit;
         Ray ray = new Ray(Camera_T.position, Vector3.down);
         
-        int layer = 9;
-
-        int layerMask = 1 << layer;
         
-        if (Physics.Raycast(ray, out hit, 10, 2))
+        if (Physics.Raycast(ray, out hit, 10, layerMask))
         {
-            if (hit.distance < HMD_pd.positionInput.action.ReadValue<Vector3>().y -0.2f)
+            if (hit.distance < Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - 0.1f, 0.5f, 10)) 
             {
-                float difference = HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance;
+                float difference = Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance, 0.5f, 4);
 
                 this.transform.position += difference * Vector3.up;
             }
