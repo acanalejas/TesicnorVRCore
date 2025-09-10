@@ -9,15 +9,15 @@ public class PlayerManager : MonoBehaviour
     #region PARAMETERS
 
     /// <summary>
-    /// El canvas que enseña el mensaje de las manos
+    /// El canvas que enseï¿½a el mensaje de las manos
     /// </summary>
-    [Header("El canvas que enseña el mensaje de las manos")]
+    [Header("El canvas que enseï¿½a el mensaje de las manos")]
     [SerializeField] private GameObject useHandsCanvas;
 
     /// <summary>
-    /// El canvas que enseña el mensaje de los mandos
+    /// El canvas que enseï¿½a el mensaje de los mandos
     /// </summary>
-    [Header("El canvas que enseña el mensaje de los mandos")]
+    [Header("El canvas que enseï¿½a el mensaje de los mandos")]
     [SerializeField] private GameObject useControllersCanvas;
 
     [Header("El GameObject del escenario")]
@@ -75,15 +75,15 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private GameObject playerControllers;
 
     /// <summary>
-    /// El anchor de la cámara en el player de las manos
+    /// El anchor de la cï¿½mara en el player de las manos
     /// </summary>
-    [Header("El anchor de la cámara en el player de las manos")]
+    [Header("El anchor de la cï¿½mara en el player de las manos")]
     [SerializeField] private Transform playerHands_Camera;
 
     /// <summary>
-    /// El anchor de la cámara en el player que usa los mandos
+    /// El anchor de la cï¿½mara en el player que usa los mandos
     /// </summary>
-    [Header("El anchor de la cámara en el player que usa los mandos")]
+    [Header("El anchor de la cï¿½mara en el player que usa los mandos")]
     [SerializeField] private Transform playerControllers_Camera;
 
     /// <summary>
@@ -113,7 +113,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Están los mandos activos y en uso?
+    /// Estï¿½n los mandos activos y en uso?
     /// </summary>
     /// <returns></returns>
     bool areControllersEnabled()
@@ -132,7 +132,7 @@ public class PlayerManager : MonoBehaviour
 
     bool alreadyUsingHands = false;
     /// <summary>
-    /// Funcion que enseña y posiciona / desactiva el mensaje para soltar los mandos
+    /// Funcion que enseï¿½a y posiciona / desactiva el mensaje para soltar los mandos
     /// </summary>
     void ShowHandsMessage()
     {
@@ -142,8 +142,8 @@ public class PlayerManager : MonoBehaviour
             //playerHands.SetActive(false);
             playerControllers.SetActive(true);
             useHandsCanvas.SetActive(true);
-            rightHandAnchor.SetActive(false);
-            leftHandAnchor.SetActive(false);
+            //rightHandAnchor.SetActive(false);
+            //leftHandAnchor.SetActive(false);
             leftController.SetActive(true);
             rightController.SetActive(true);
 
@@ -155,8 +155,8 @@ public class PlayerManager : MonoBehaviour
         {
             playerHands.SetActive(true);
             useHandsCanvas.SetActive(false);
-            rightHandAnchor.SetActive(true);
-            leftHandAnchor.SetActive(true);
+            //rightHandAnchor.SetActive(true);
+            //leftHandAnchor.SetActive(true);
             leftController.SetActive(false);
             rightController.SetActive(false);
 
@@ -181,8 +181,8 @@ public class PlayerManager : MonoBehaviour
         if (!areControllersEnabled())
         {
             useControllersCanvas.SetActive(true);
-            rightHandAnchor.SetActive(false);
-            leftHandAnchor.SetActive(false);
+            //rightHandAnchor.SetActive(false);
+            //leftHandAnchor.SetActive(false);
             rightController.SetActive(false);
             leftController.SetActive(false);
 
