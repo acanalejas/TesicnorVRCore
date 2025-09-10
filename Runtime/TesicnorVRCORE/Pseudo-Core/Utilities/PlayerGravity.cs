@@ -123,17 +123,17 @@ public class PlayerGravity : MonoBehaviour
                 }
                 else if(timer != 0)
                 {
-                    if(timer >= 0.015f) OnFallEnd.Invoke(IsPlayerAnchored());
+                    if(timer >= 0.02f) OnFallEnd.Invoke(IsPlayerAnchored());
                     timer = 0;
                 }
                 if (HMD_pd && this.BodyColl) this.BodyColl.height = HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.2f;
             }
              else if(timer != 0) {
 
-                if (timer >= 0.015f) OnFallEnd.Invoke(IsPlayerAnchored());
+                if (timer >= 0.02f) OnFallEnd.Invoke(IsPlayerAnchored());
                 timer = 0;
             }
-            //AdjustHeight();
+            AdjustHeight();
             yield return Frame;
         }
     }
@@ -144,6 +144,10 @@ public class PlayerGravity : MonoBehaviour
         
         RaycastHit hit;
         Ray ray = new Ray(Camera_T.position, Vector3.down);
+        
+        int layer = 9;
+
+        int layerMask = 1 << layer;
         
         if (Physics.Raycast(ray, out hit, 10, 2))
         {
