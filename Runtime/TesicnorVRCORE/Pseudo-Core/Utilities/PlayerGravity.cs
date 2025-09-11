@@ -150,7 +150,7 @@ public class PlayerGravity : MonoBehaviour
         Ray ray = new Ray(Camera_T.position, Vector3.down);
         
         
-        if (Physics.Raycast(ray, out hit, 10, layerMask))
+        if (Physics.Raycast(ray, out hit, 2, layerMask))
         {
             
             if(Vector3.Distance(hit.point, Camera_T.transform.position) > HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.05f || 
