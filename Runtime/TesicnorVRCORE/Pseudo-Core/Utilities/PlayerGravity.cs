@@ -152,12 +152,20 @@ public class PlayerGravity : MonoBehaviour
         
         if (Physics.Raycast(ray, out hit, 10, layerMask))
         {
-            if (hit.distance < Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - 0.1f, 0.5f, 10)) 
+            
+            if(Vector3.Distance(hit.point, Camera_T.transform.position) > HMD_pd.positionInput.action.ReadValue<Vector3>().y + 0.05f || 
+               Vector3.Distance(hit.point, Camera_T.position) < HMD_pd.positionInput.action.ReadValue<Vector3>().y - 0.05f)
             {
-                float difference = Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance - 0.1f, 0.5f, 4);
-
+                float difference = HMD_pd.positionInput.action.ReadValue<Vector3>().y -
+                                   Vector3.Distance(hit.point, Camera_T.position);
                 this.transform.position += difference * Vector3.up;
             }
+            //if (hit.distance < Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - 0.1f, 0.5f, 10)) 
+            //{
+            //    float difference = Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance - 0.1f, 0.5f, 4);
+//
+            //    this.transform.position += difference * Vector3.up;
+            //}
         }
     }
 
