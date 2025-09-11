@@ -154,7 +154,7 @@ public class PlayerGravity : MonoBehaviour
         {
             if (hit.distance < Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - 0.1f, 0.5f, 10)) 
             {
-                float difference = Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance - 0-075f, 0.5f, 4);
+                float difference = Mathf.Clamp(HMD_pd.positionInput.action.ReadValue<Vector3>().y - hit.distance - 0.1f, 0.5f, 4);
 
                 this.transform.position += difference * Vector3.up;
             }
