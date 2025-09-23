@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net;
 using TMPro;
 using System.Text;
+using System.Threading.Tasks;
 
 [System.Serializable]
 public class VRExperience
@@ -105,7 +106,7 @@ public class BackendGetter : MonoBehaviour
         }
     }
 
-    public async virtual void SendDataToAPI(string jsonData, string url)
+    public async virtual Task SendDataToAPI(string jsonData, string url)
     {
         var cts = new System.Threading.CancellationTokenSource();
 

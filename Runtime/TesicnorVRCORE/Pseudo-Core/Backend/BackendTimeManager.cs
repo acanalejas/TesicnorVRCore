@@ -212,7 +212,7 @@ public class BackendTimeManager : BackendGetter
     /// <summary>
     /// Carga los datos que esten guardados en memoria para mandarlos al backend
     /// </summary>
-    public void LoadDataOnDisable()
+    public async void LoadDataOnDisable()
     {
         LoadPendingData();
 
@@ -226,14 +226,12 @@ public class BackendTimeManager : BackendGetter
 
         if (BackendConstants.bHasInternetConnection)                                                                // Validamos si hay conexión a Internet.
         {
-            Debug.Log("Amount of usage records to send is : " + dataToUpload.Count);
             //Envia cada dato guardado al backend
             SaveData_PP.SetStringList(BackendConstants.TimeQueueKey, dataToUpload);
-            Debug.Log("List in json is : " + PlayerPrefs.GetString(BackendConstants.TimeQueueKey));
 
             foreach (string jsString in dataToUpload)
             {
-                SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.
+                 await SendDataToAPI(jsString, BackendConstants.urlForPostTime);                                                 // Enviamos los datos por medio de la API.
             }
             PlayerPrefs.DeleteKey(BackendConstants.TimeQueueKey);
             StartCoroutine(nameof(UpdateTimeData));

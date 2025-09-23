@@ -5,7 +5,7 @@ using UnityEngine;
 public class Wind_Elevator_Gyro : MonoBehaviour
 {
     #region PARAMETERS
-    [Header("El multiplicador de dirección que sigue el giroscopio al ir hacia arriba")]
+    [Header("El multiplicador de direcciÃ³n que sigue el giroscopio al ir hacia arriba")]
     [SerializeField] private int DirectionMultiplier = 1;
 
     [Header("La velocidad a la que gira el giroscopio")]

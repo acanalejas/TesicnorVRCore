@@ -19,7 +19,7 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Cuando el elevador se para")]
     public UnityEvent OnElevatorStops;
 
-    [Header("Cuando el elevador llega a la altura máxima")]
+    [Header("Cuando el elevador llega a la altura mï¿½xima")]
     public UnityEvent OnElevatorTopReached;
 
     [Header("Cuando el elevador llega a la altura minima")]
@@ -72,7 +72,7 @@ public class Wind_Elevator : MonoBehaviour
     /// </summary>
     public float ElevatorBrakeSpeed { get { return elevatorBrakeSpeed; } }
 
-    [Header("La altura máxima a la que llega el elevador")]
+    [Header("La altura mï¿½xima a la que llega el elevador")]
     [SerializeField] protected float maxHeight = 20;
 
     [Header("La altura minima a la que llega el elevador")]
@@ -133,8 +133,14 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Esta el player dentro del elevador?")]
     public bool InsideElevator = false;
 
-    [Header("La electricidad está activada?")]
+    [Header("La electricidad estï¿½ activada?")]
     private bool IsElectricityOn = false;
+
+    [Header("El evento que se lanza al abrir la puerta")]
+    public UnityEvent OnDoorOpened;
+
+    [Header("El evento que se lanza al cerrar la puerta")]
+    public UnityEvent OnDoorClosed;
 
     private PlayerDetector InsideDetector;
 
@@ -170,7 +176,7 @@ public class Wind_Elevator : MonoBehaviour
         
         else if (direction == Direction.NoBrakes && !IsAtBottom()) OnElevatorBrake.Invoke();
         
-        else { return; }
+        else { Debug.Log("El elevador no se puede mover porque ha llegado al extremo de la direccion elegida");return; }
 
         StartCoroutine(nameof(MovementBroadcast));
     }
@@ -205,6 +211,18 @@ public class Wind_Elevator : MonoBehaviour
 
         if (IsElectricityOn) OnElectricityEnabled.Invoke();
         else OnElectricityDisabled.Invoke();
+    }
+
+    public virtual void OpenDoor()
+    {
+        DoorOpened = true;
+        OnDoorOpened.Invoke();
+    }
+
+    public virtual void CloseDoor()
+    {
+        DoorOpened = false;
+        OnDoorClosed.Invoke();
     }
 
     public virtual void StopElevator()
@@ -257,8 +275,8 @@ public class Wind_Elevator : MonoBehaviour
 
             isMoving = true;
 
-            if (CurrentDirection == Direction.Up && IsAtTop()) StopElevator();
-            if (CurrentDirection == Direction.Down && IsAtBottom()) StopElevator();
+            if (CurrentDirection == Direction.Up && IsAtTop()) {StopElevator(); OnElevatorTopReached.Invoke();}
+            if (CurrentDirection == Direction.Down && IsAtBottom()) {StopElevator(); OnElevatorBottomReached.Invoke();}
             if (Emergency) StopElevator();
             yield return Frame;
         }
