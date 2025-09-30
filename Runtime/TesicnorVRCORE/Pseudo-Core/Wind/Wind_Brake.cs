@@ -11,7 +11,7 @@ public class Wind_Brake : VRColliderPath
     #region METHODS
     private void Start()
     {
-        this.pathType = PathType.Rotation;
+        this.OnPathEndReached.AddListener(Brake);
     }
 
     public void Brake()
