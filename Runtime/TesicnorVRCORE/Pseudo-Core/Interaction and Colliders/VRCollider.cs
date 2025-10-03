@@ -27,15 +27,15 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [HideInInspector] public AudioSource targetSound;
 
     /// <summary>
-    /// Controla si al soltarlo cae, o se mantiene est醫ico
+    /// Controla si al soltarlo cae, o se mantiene est谩tico
     /// </summary>
-    [Header("Controla si al soltarlo cae, o se mantiene est醫ico")]
+    [Header("Controla si al soltarlo cae, o se mantiene est谩tico")]
     [HideInInspector] public bool simulateOnDrop = false;
 
     /// <summary>
-    /// Controla si se puede soltar sin m醩, o necesita alguna condici髇
+    /// Controla si se puede soltar sin m谩s, o necesita alguna condici贸n
     /// </summary>
-    [Header("Controla si se puede soltar sin m醩, o necesita alguna condici髇")]
+    [Header("Controla si se puede soltar sin m谩s, o necesita alguna condici贸n")]
     [HideInInspector] public bool canRelease = false;
 
     /// <summary>
@@ -61,7 +61,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     /// <summary>
     /// El offset en la posicion cuando se agarra el objeto
     /// </summary>
-    [Header("El offset en la posici髇 cuando se agarra el objeto")]
+    [Header("El offset en la posici贸n cuando se agarra el objeto")]
     [HideInInspector] public Vector3 positionOffset;
 
     /// <summary>
@@ -98,7 +98,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [HideInInspector] public bool grabbable = true;
 
     /// <summary>
-    /// Collider usado para tener colisi髇 con el escenario
+    /// Collider usado para tener colisi贸n con el escenario
     /// cuando el objeto se suelta y se cae
     /// </summary>
     private Collider dropCollider;
@@ -135,7 +135,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [HideInInspector] public float mass = 5;
 
     /// <summary>
-    /// Cantidad de rotaci髇 de la mano cada frame que se agarra
+    /// Cantidad de rotaci贸n de la mano cada frame que se agarra
     /// </summary>
     private Vector3 lastFrameRotation = Vector3.zero;
 
@@ -167,10 +167,10 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [HideInInspector] public bool ReparentOnRelease = true;
 
     /// <summary>
-    /// Si vuelve a una posicion fija, o a la posici髇 del 鷏timo agarre
+    /// Si vuelve a una posicion fija, o a la posici贸n del 煤ltimo agarre
     /// </summary>
     public enum releaseType { start, onGrab, holder}
-    [Header("Si vuelve a una posici髇 fija, o a la posici髇 de 鷏timo agarre")]
+    [Header("Si vuelve a una posici贸n fija, o a la posici贸n de 煤ltimo agarre")]
     [HideInInspector] public releaseType release = releaseType.start;
 
     /// <summary>
@@ -180,12 +180,12 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [HideInInspector] public Transform holder;
 
     /// <summary>
-    /// Posici髇 al iniciar la escena
+    /// Posici贸n al iniciar la escena
     /// </summary>
     private Vector3 startPosition;
 
     /// <summary>
-    /// Rotaci髇 al iniciar la escena
+    /// Rotaci贸n al iniciar la escena
     /// </summary>
     private Vector3 startRotation;
     #endregion
@@ -218,8 +218,8 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     }
 
     /// <summary>
-    /// Setea los par醡etros necesarios cuando se agarra el objeto
-    /// mayormente variables para simulaci髇
+    /// Setea los par谩metros necesarios cuando se agarra el objeto
+    /// mayormente variables para simulaci贸n
     /// </summary>
     /// <param name="hand"></param>
     protected void SetParamsOnGrab(GrippingHand hand)
@@ -252,7 +252,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     }
 
     /// <summary>
-    /// A馻de un impulso cuando se suelta el objeto,
+    /// A帽ade un impulso cuando se suelta el objeto,
     /// basado en la velocidad de la mano del jugador
     /// </summary>
     private void AddImpulseAtRelease()
@@ -363,7 +363,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         this.transform.parent = grippingHand.transform;
 
         //Rotation
-        //Si es el primer frame, no deber韆 rotar
+        //Si es el primer frame, no deber铆a rotar
         if (lastFrameRotation == Vector3.zero) lastFrameRotation = grippingHand.transform.rotation.eulerAngles;
 
         Vector3 rotationDistance = grippingHand.transform.rotation.eulerAngles - lastFrameRotation;
@@ -572,7 +572,7 @@ public class VRColliderEditor : Editor
 
         collider = target as VRCollider;
 
-        GUILayout.Label("Cuando se suelta tiene f韘icas?", EditorStyles.boldLabel);
+        GUILayout.Label("Cuando se suelta tiene f铆sicas?", EditorStyles.boldLabel);
         collider.simulateOnDrop = GUILayout.Toggle(collider.simulateOnDrop, "Simulate on drop");
 
         GUILayout.Space(10);
@@ -616,26 +616,26 @@ public class VRColliderEditor : Editor
 
         GUILayout.Space(10);
 
-        GUILayout.Label("El modo en el que se a馻de a la mano al ser agarrado", EditorStyles.boldLabel);
+        GUILayout.Label("El modo en el que se a帽ade a la mano al ser agarrado", EditorStyles.boldLabel);
         collider.attachmentMode = (VRCollider.AttachmentMode)EditorGUILayout.EnumPopup(collider.attachmentMode);
 
         if(collider.attachmentMode == VRCollider.AttachmentMode.positionOffset)
         {
             GUILayout.Space(10);
 
-            GUILayout.Label("Offset en la posici髇 local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
+            GUILayout.Label("Offset en la posici贸n local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
             collider.positionOffset = EditorGUILayout.Vector3Field("Position offset", collider.positionOffset);
         }
         else if(collider.attachmentMode == VRCollider.AttachmentMode.rotationAndPositionOffset)
         {
             GUILayout.Space(10);
 
-            GUILayout.Label("Offset en la posici髇 local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
+            GUILayout.Label("Offset en la posici贸n local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
             collider.positionOffset = EditorGUILayout.Vector3Field("Position offset", collider.positionOffset);
 
             GUILayout.Space(10);
 
-            GUILayout.Label("Offset en la rotaci髇 local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
+            GUILayout.Label("Offset en la rotaci贸n local del objeto respecto a la mano al agarrar", EditorStyles.boldLabel);
             collider.rotationOffset = EditorGUILayout.Vector3Field("Rotation offset", collider.rotationOffset);
         }
 
@@ -707,6 +707,17 @@ public class VRColliderEditor : Editor
 
         SerializedProperty onTargetReleased = serializedObject.FindProperty("OnTargetReleased");
         EditorGUILayout.PropertyField(onTargetReleased, new GUIContent("On Target Released"));
+
+        if (GUILayout.Button("Simulate Grab") && Application.isPlaying)
+        {
+            collider.Grab(GameObject.FindFirstObjectByType<GrippingHand>());
+        }
+        
+        if(GUILayout.Button("Simulate Release") && Application.isPlaying)
+        {
+            collider.Release();
+        }
+        
 
         serializedObject.ApplyModifiedProperties();
     }

@@ -366,7 +366,6 @@ public class MultiplayerCreation : MonoBehaviour
         HandPose_SO rightClosed = (HandPose_SO)AssetDatabase.LoadAssetAtPath(rightClosedSOPath, typeof(HandPose_SO));
         rightHandPoser.openedPose = rightOpened;
         rightHandPoser.closedPose = rightClosed;
-        rightHandPoser.controller = rightController.GetComponent<XRController>();
 
         //PARA LA MANO IZQUIERDA
         HandPoser leftHandPoser = leftController.GetComponent<HandPoser>();
@@ -391,7 +390,6 @@ public class MultiplayerCreation : MonoBehaviour
         HandPose_SO leftClosed = (HandPose_SO)AssetDatabase.LoadAssetAtPath(leftClosedSOPath, typeof(HandPose_SO));
         leftHandPoser.openedPose = leftOpened;
         leftHandPoser.closedPose = leftClosed;
-        leftHandPoser.controller = leftController.GetComponent<XRController>();
 
 
         // =============================================================================================================

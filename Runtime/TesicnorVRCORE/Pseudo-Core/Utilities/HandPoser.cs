@@ -21,22 +21,22 @@ public class HandPoser : MonoBehaviour
     public Transform parent;
 
     /// <summary>
-    /// El SO con la posición abierta
+    /// El SO con la posiciï¿½n abierta
     /// </summary>
-    [Header("El SO con la posición abierta")]
+    [Header("El SO con la posiciï¿½n abierta")]
     public HandPose_SO openedPose;
 
     /// <summary>
-    /// El SO con la posición cerrada
+    /// El SO con la posiciï¿½n cerrada
     /// </summary>
-    [Header("El SO con la posición cerrada")]
+    [Header("El SO con la posiciï¿½n cerrada")]
     public HandPose_SO closedPose;
 
     /// <summary>
     /// El componente XRController del mando
     /// </summary>
-    [Header("El componente XRController del mando")]
-    public XRController controller;
+    [Header("El componente GrippingHand del mando")]
+    public GrippingHand controller;
 
     /// <summary>
     /// La tecla con la que se guarda la pose abierta
@@ -71,7 +71,7 @@ public class HandPoser : MonoBehaviour
 
     private void Update()
     {
-        if (applyPoses) { CheckInput(); CheckInputTrigger(); }
+        if (applyPoses) { BindPosesToInput();}
         CheckInputEditor();
     }
 
@@ -103,33 +103,22 @@ public class HandPoser : MonoBehaviour
     }
 
     /// <summary>
-    /// Checkea el input para mover los huesos
+    /// Controla la posicion de la mano en funcion del input
     /// </summary>
-    private void CheckInput()
+    private void BindPosesToInput()
     {
-        float grip = 0;
-        
-        if(controller.inputDevice.TryGetFeatureValue(CommonUsages.grip, out grip) && grip > 0.02f)
+        if (controller.handType == GrippingHand.HandType.left)
         {
-            SetPose(grip);
-            //Debug.Log("grip  :  " + grip);
+            SetPose(TesicnorPlayer.Instance.coreInteraction.Interaction.Grab_Left.ReadValue<float>());
         }
-        
-    }
-
-    private void CheckInputTrigger()
-    {
-        float trigger = 0;
-
-        if (controller.inputDevice.TryGetFeatureValue(CommonUsages.trigger, out trigger) && trigger > 0.02f)
+        else
         {
-            SetPose(trigger);
-            //Debug.Log("trigger  :  " + trigger);
+            SetPose(TesicnorPlayer.Instance.coreInteraction.Interaction.Grab_Right.ReadValue<float>());
         }
     }
 
     /// <summary>
-    /// Devuelve la lista de las posiciones en las que debe estar cada hueso dependiendo de un parámetro que le pasemos de 0 a 1
+    /// Devuelve la lista de las posiciones en las que debe estar cada hueso dependiendo de un parï¿½metro que le pasemos de 0 a 1
     /// </summary>
     /// <param name="grip"></param>
     /// <returns></returns>
@@ -152,7 +141,7 @@ public class HandPoser : MonoBehaviour
     }
 
     /// <summary>
-    /// Devuelve las rotaciones actuales de los huesos dependiendo de un parámetro que le pasemos que vaya de 0 a 1
+    /// Devuelve las rotaciones actuales de los huesos dependiendo de un parï¿½metro que le pasemos que vaya de 0 a 1
     /// </summary>
     /// <param name="grip"></param>
     /// <returns></returns>
@@ -174,7 +163,7 @@ public class HandPoser : MonoBehaviour
     }
 
     /// <summary>
-    /// Setea cada posición y rotación de los huesos dependiendo de un parámetro que le demos de 0 a 1
+    /// Setea cada posiciï¿½n y rotaciï¿½n de los huesos dependiendo de un parï¿½metro que le demos de 0 a 1
     /// </summary>
     /// <param name="grip"></param>
     private void SetPose(float grip)
