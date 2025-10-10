@@ -184,7 +184,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             VRInteractableInterface interactable = other.GetComponent<VRInteractableInterface> ();
             if(interactable != null)
             {
-                if (hand.interactingObject != null) hand.interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
+                //if (hand.interactingObject != null) hand.interactingObject.GetComponent<VRInteractableInterface>().OnRelease();
+                interactable.OnRelease();
                 hand.interactingObject = null;
             }
         }

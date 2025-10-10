@@ -39,7 +39,7 @@ public class VRInteractable_Button : VR_Interactable
     [Header("La posicion del anchor")]
     [SerializeField, HideInInspector] protected Vector2 anchorPosition;
 
-    [Header("El tamaño en pixeles")]
+    [Header("El tamaÃ±o en pixeles")]
     [SerializeField, HideInInspector] protected Vector2 sizeDelta;
 
     [Header("Imagen a usar para en el efecto")]
@@ -286,7 +286,7 @@ public class VRInteractableButtonEditor: InteractableEditor
             {
                 SerializedProperty fillMethod = serializedObject.FindProperty("fillMethod");
 
-                GUILayout.Label("El método de rellenado de la imagen del hover", EditorStyles.boldLabel);
+                GUILayout.Label("El mÃ©todo de rellenado de la imagen del hover", EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(fillMethod);
 
                 GUILayout.Space(10);
@@ -329,7 +329,7 @@ public class VRInteractableButtonEditor: InteractableEditor
 
                     GUILayout.Space(10);
 
-                    GUILayout.Label("El tamaño del objeto en píxeles", EditorStyles.boldLabel);
+                    GUILayout.Label("El tamaÃ±o del objeto en pÃ­xeles", EditorStyles.boldLabel);
                     SerializedProperty sizeDelta = serializedObject.FindProperty("sizeDelta");
                     sizeDelta.vector2Value = EditorGUILayout.Vector2Field("sizeDelta", sizeDelta.vector2Value);
                 }

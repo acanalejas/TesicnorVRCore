@@ -311,12 +311,6 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         if (nextDistance < currentDistance && nextDistance < previousDistance) { _currentPoint = nextPoint; }
 
         return pathPoints[_currentPoint];
-        Vector3 pressDirection = pressedPosition - normalPosition;
-
-        Vector3 result = pressDirection.normalized * distanceSincePressed.magnitude +  normalPosition;
-        
-        Debug.Log("distance since pressed  :  " + distanceSincePressed + "\n" + "result  :  " + result);
-        return result;
        
     }
 

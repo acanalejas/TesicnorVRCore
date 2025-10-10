@@ -16,6 +16,9 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Cuando el elevador baja")]
     public UnityEvent WhileElevatorGoesDown;
 
+    [Header("Cuando el elevador baja sin frenos")]
+    public UnityEvent WhileElevatorNoBrakes;
+
     [Header("Cuando el elevador se para")]
     public UnityEvent OnElevatorStops;
 
@@ -115,6 +118,9 @@ public class Wind_Elevator : MonoBehaviour
 
     private bool emergency = false;
 
+    [Header("Esta dado el botón de marcha?")][SerializeField]
+    private bool marcha = true;
+
     [Header("Necesita que se pulse el boton de hombre muerto?")]
     public bool NeedsDeadManButton = true;
 
@@ -142,6 +148,9 @@ public class Wind_Elevator : MonoBehaviour
     [Header("El evento que se lanza al cerrar la puerta")]
     public UnityEvent OnDoorClosed;
 
+    [Header("EL animator de la puerta")] [SerializeField]
+    private Animator DoorAnim;
+
     private PlayerDetector InsideDetector;
 
     #endregion
@@ -166,7 +175,7 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void MoveElevator(Direction direction)
     {
-        if (Emergency ||(!IsElectricityOn && direction != Direction.NoBrakes)) return;
+        if ((Emergency || !marcha || !IsElectricityOn) && (direction != Direction.NoBrakes)) return;
 
         CurrentDirection = direction;
 
@@ -197,6 +206,16 @@ public class Wind_Elevator : MonoBehaviour
         else OnEmergencyExit.Invoke();
     }
 
+    public virtual void SetMarcha()
+    {
+        marcha = true;
+    }
+
+    public virtual void SetMarcha(bool _value)
+    {
+        marcha = _value;
+    }
+
     public virtual void SetElectricity(bool _value)
     {
         IsElectricityOn = _value;
@@ -225,6 +244,16 @@ public class Wind_Elevator : MonoBehaviour
         OnDoorClosed.Invoke();
     }
 
+    public virtual void ToggleDoor()
+    {
+        if (!this.IsAtBottom() && !this.IsAtTop()) return;
+        DoorOpened = !DoorOpened;
+        if(DoorOpened) OnDoorOpened.Invoke();
+        else OnDoorClosed.Invoke();;
+        
+        DoorAnim.SetTrigger("Open");
+    }
+
     public virtual void StopElevator()
     {
         OnElevatorStops.Invoke();
@@ -244,6 +273,7 @@ public class Wind_Elevator : MonoBehaviour
         var speed = CurrentDirection == Direction.NoBrakes ? elevatorBrakeSpeed : ElevatorSpeed;
 
         this.transform.position = Vector3.Lerp(this.transform.position, this.transform.position + direction, Time.deltaTime * speed);
+        if(InsideElevator) TesicnorPlayer.Instance.gameObject.transform.position = Vector3.Lerp(TesicnorPlayer.Instance.gameObject.transform.position, TesicnorPlayer.Instance.gameObject.transform.position + direction, Time.deltaTime * speed);
         Debug.Log("Moving elevator to " + direction.ToString());
     }
 
@@ -267,7 +297,7 @@ public class Wind_Elevator : MonoBehaviour
                     break;
 
                 case Direction.NoBrakes:
-
+                    WhileElevatorNoBrakes.Invoke();
                     break;
             }
 
@@ -276,7 +306,7 @@ public class Wind_Elevator : MonoBehaviour
             isMoving = true;
 
             if (CurrentDirection == Direction.Up && IsAtTop()) {StopElevator(); OnElevatorTopReached.Invoke();}
-            if (CurrentDirection == Direction.Down && IsAtBottom()) {StopElevator(); OnElevatorBottomReached.Invoke();}
+            if ((CurrentDirection == Direction.Down || CurrentDirection == Direction.NoBrakes) && IsAtBottom()) {StopElevator(); OnElevatorBottomReached.Invoke();}
             if (Emergency) StopElevator();
             yield return Frame;
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -15,12 +16,17 @@ public class Wind_BrakeCollection : MonoBehaviour
 
     #region METHODS
 
+    private void Start()
+    {
+        StartCoroutine(nameof(update));
+    }
+
     private WaitForEndOfFrame frame = new WaitForEndOfFrame();
     IEnumerator update()
     {
         while (true)
         {
-            if(IsBeingUsed()) Wind_Elevator.Instance.MoveElevator(Direction.NoBrakes);
+            if(IsBeingUsed() && !Wind_Elevator.Instance.IsMoving) Wind_Elevator.Instance.MoveElevator(Direction.NoBrakes);
             yield return frame;
         }
     }
