@@ -47,7 +47,8 @@ public class Wind_MoveButton : VRInteractable_Button
 
     protected bool CanBeClicked()
     {
-        return (bAfecta && bInsideElevator && Wind_Elevator.Instance.InsideElevator) || (bAfecta && !bInsideElevator && !Wind_Elevator.Instance.InsideElevator)
+        return (bAfecta && bInsideElevator && Wind_Elevator.Instance.InsideElevator && ((Wind_Elevator.Instance.bUsesExtIntSelector && Wind_Elevator.Instance.InteriorMode) || !Wind_Elevator.Instance.bUsesExtIntSelector)) || 
+               (bAfecta && !bInsideElevator && !Wind_Elevator.Instance.InsideElevator && ((Wind_Elevator.Instance.bUsesExtIntSelector && !Wind_Elevator.Instance.InteriorMode) || !Wind_Elevator.Instance.bUsesExtIntSelector))
             || !bAfecta;
     }
     #endregion

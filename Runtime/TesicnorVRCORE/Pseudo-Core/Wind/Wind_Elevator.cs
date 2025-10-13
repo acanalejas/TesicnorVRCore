@@ -95,9 +95,28 @@ public class Wind_Elevator : MonoBehaviour
     /// </summary>
     public float MinHeight { get { return minHeight; }}
 
+    /// <summary>
+    /// Se está moviendo el elevador?
+    /// </summary>
     public bool IsMoving { get { return isMoving; } }
 
     private bool isMoving;
+
+    [Header("Tiene selector de modo interior o exterior?")] [SerializeField]
+    protected bool UsesExtIntSelector = false;
+
+    [Header("Esta en modo interior?")] [SerializeField]
+    protected bool IntMode = false;
+    
+    public bool bUsesExtIntSelector
+    {
+        get { return UsesExtIntSelector; }
+    }
+
+    public bool InteriorMode
+    {
+        get { return IntMode; }
+    }
     #endregion
 
     #region Sounds
@@ -252,6 +271,11 @@ public class Wind_Elevator : MonoBehaviour
         else OnDoorClosed.Invoke();;
         
         DoorAnim.SetTrigger("Open");
+    }
+
+    public virtual void ToggleIntMode()
+    {
+        IntMode = !IntMode;
     }
 
     public virtual void StopElevator()
