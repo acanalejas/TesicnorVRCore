@@ -13,6 +13,9 @@ public class Wind_MoveButton : VRInteractable_Button
 
     [Header("Esta dentro del elevador?")]
     [SerializeField] private bool bInsideElevator;
+
+    [Header("Este botón necesita de hombre muerto?")] [SerializeField]
+    private bool bUsesDeadMan = true;
     #endregion
 
     #region METHODS
@@ -36,8 +39,8 @@ public class Wind_MoveButton : VRInteractable_Button
     public override void OnRelease()
     {
         base.OnRelease();
-        Wind_Elevator.Instance.DeadManButtonPressed = false;
-        if(Wind_Elevator.Instance.IsMoving) Wind_Elevator.Instance.StopElevator();
+        if(bUsesDeadMan) Wind_Elevator.Instance.DeadManButtonPressed = false;
+        if(Wind_Elevator.Instance.IsMoving && bUsesDeadMan) Wind_Elevator.Instance.StopElevator();
 
         Debug.Log("Elevator move button released");
     }
