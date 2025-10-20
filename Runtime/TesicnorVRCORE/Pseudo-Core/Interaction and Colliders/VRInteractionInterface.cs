@@ -3,38 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Interface para aÒadir a las manos o los mandos, es decir el sistema de input del jugador
+/// Interface para a√±adir a las manos o los mandos, es decir el sistema de input del jugador
 /// REQUIRE LINERENDERER
 /// </summary>
 public interface VRInteractionInterface 
 {
     /// <summary>
-    /// Para detectar el input de la interacciÛn, y el mÈtodo que tengamos para detectar los interactables usando las manos
+    /// Para detectar el input de la interacci√≥n, y el m√©todo que tengamos para detectar los interactables usando las manos
     /// /// </summary>
     void DetectInteraction_Hands();
     /// <summary>
-    ///  Para detectar el input de la interacciÛn, y el mÈtodo que tengamos para detectar los interactables usando los mandos
+    ///  Para detectar el input de la interacci√≥n, y el m√©todo que tengamos para detectar los interactables usando los mandos
     /// </summary>
     void DetectInteraction_Controllers();
     /// <summary>
-    /// Funcion para usar en el update para comprobar la interacciÛn con las dos funciones superiores DetectInteraction_Hands() & DetectInteraction_Controllers()
+    /// Funcion para usar en el update para comprobar la interacci√≥n con las dos funciones superiores DetectInteraction_Hands() & DetectInteraction_Controllers()
     /// </summary>
     void DetectInteraction();
 
     /// <summary>
-    /// La clase que herede esta interfaz debe tener un LineRenderer y esta funcion cambiar· su color 
+    /// La clase que herede esta interfaz debe tener un LineRenderer y esta funcion cambiar√° su color 
     /// </summary>
     /// <param name="detected"></param>
     void SetLineRendererColor(bool detected);
 
     /// <summary>
-    /// Para cuando se usen las manos se setean en los dedos lo necesario para la interacciÛn "fisica" con botones
-    /// es decir, setear colliders y dem·s
+    /// Para cuando se usen las manos se setean en los dedos lo necesario para la interacci√≥n "fisica" con botones
+    /// es decir, setear colliders y dem√°s
     /// </summary>
     void SetupFingers();
 
     /// <summary>
-    /// FunciÛn que determina que se hace en el evento del click
+    /// Funci√≥n que determina que se hace en el evento del click
     /// </summary>
     public void Click();
     /// <summary>
@@ -43,13 +43,13 @@ public interface VRInteractionInterface
     public void Release();
 
     /// <summary>
-    /// Bool que comprueba si est· pulsando alg˙n dedo alg˙n interactable
+    /// Bool que comprueba si est√° pulsando alg√∫n dedo alg√∫n interactable
     /// </summary>
     /// <returns></returns>
     bool isFingerPressing3DObject();
 
     /// <summary>
-    /// El raycast que usamos para la detecciÛn
+    /// El raycast que usamos para la detecci√≥n
     /// </summary>
     /// <param name="_origin"></param>
     /// <returns></returns>
@@ -86,7 +86,7 @@ public interface VRInteractableInterface
     void OnHovered();
 
     /// <summary>
-    /// Funcion que se lanza al dejar de seÒalar el objeto
+    /// Funcion que se lanza al dejar de se√±alar el objeto
     /// </summary>
     void OnExitHover();
     /// <summary>
@@ -101,7 +101,7 @@ public interface VRInteractableInterface
     void ChangeColor(int color);
 
     /// <summary>
-    /// Setea si el botÛn se puede pulsar o no
+    /// Setea si el bot√≥n se puede pulsar o no
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
@@ -113,7 +113,7 @@ public interface VRInteractableInterface
     bool GetCanBePressed();
 
     /// <summary>
-    /// Se est· pulsando el interactable?
+    /// Se est√° pulsando el interactable?
     /// </summary>
     /// <returns></returns>
     bool GetIsClicking();
