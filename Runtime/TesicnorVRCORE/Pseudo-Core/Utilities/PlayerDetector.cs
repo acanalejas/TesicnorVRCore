@@ -8,10 +8,10 @@ using UnityEngine.Events;
 public class PlayerDetector : MonoBehaviour
 {
     #region PARAMETERS
-    [Header("Tag que se usa para la detección del personaje")]
+    [Header("Tag que se usa para la detecciÃ³n del personaje")]
     [SerializeField] private string PlayerTag = "Player";
 
-    [Header("Evento usado para cuando el jugador entra en la detección")]
+    [Header("Evento usado para cuando el jugador entra en la detecciÃ³n")]
     public UnityEvent OnPlayerDetected;
 
     [Header("Evento usado para cuando se deja de detectar al jugador")]

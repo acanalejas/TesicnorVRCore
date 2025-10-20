@@ -161,6 +161,9 @@ public class Wind_Elevator : MonoBehaviour
     [Header("La electricidad est� activada?")]
     private bool IsElectricityOn = false;
 
+    [Header("La puerta necesita de electricidad para abrir?")] [SerializeField]
+    private bool DoorNeedsElectricity = false;
+
     [Header("El evento que se lanza al abrir la puerta")]
     public UnityEvent OnDoorOpened;
 
@@ -209,6 +212,15 @@ public class Wind_Elevator : MonoBehaviour
         StartCoroutine(nameof(MovementBroadcast));
     }
 
+    public virtual void SetDeadManButtonPressed(bool value)
+    {
+        DeadManButtonPressed = value;
+    }
+
+    public virtual void SetDeadManButtonNeeded(bool value)
+    {
+        NeedsDeadManButton = value;
+    }
     public virtual void SetEmergency()
     {
         emergency = !emergency;
@@ -265,12 +277,12 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void ToggleDoor()
     {
-        if (!this.IsAtBottom() && !this.IsAtTop()) return;
+        if ((!this.IsAtBottom() && !this.IsAtTop()) || (DoorNeedsElectricity && !IsElectricityOn)) return;
         DoorOpened = !DoorOpened;
         if(DoorOpened) OnDoorOpened.Invoke();
         else OnDoorClosed.Invoke();;
         
-        DoorAnim.SetTrigger("Open");
+        if(DoorAnim) DoorAnim.SetTrigger("Open");
     }
 
     public virtual void ToggleIntMode()
