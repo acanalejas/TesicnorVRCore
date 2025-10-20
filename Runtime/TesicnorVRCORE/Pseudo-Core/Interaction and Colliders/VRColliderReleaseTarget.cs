@@ -173,7 +173,7 @@ public class VRColliderReleaseTarget : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!conditionCompleted) CheckVRCollider(other.gameObject);
+        if (!conditionCompleted && other != null && other.gameObject != null) CheckVRCollider(other.gameObject);
     }
     protected virtual void OnTriggerExit(Collider other)
     {
