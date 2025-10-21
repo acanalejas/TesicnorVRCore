@@ -285,6 +285,31 @@ public class Wind_Elevator : MonoBehaviour
         if(DoorAnim) DoorAnim.SetTrigger("Open");
     }
 
+    public virtual void OpenDoorEmergency()
+    {
+        if (DoorOpened) return;
+        DoorOpened = true;
+        OnDoorOpened.Invoke();
+        if(DoorAnim) DoorAnim.SetTrigger("Open");
+    }
+
+    public virtual void CloseDoorEmergency()
+    {
+        if (!DoorOpened) return;
+        DoorOpened = false;
+        OnDoorClosed.Invoke();
+        if(DoorAnim) DoorAnim.SetTrigger("Open");
+    }
+
+    public virtual void ToggleDoorEmergency()
+    {
+        DoorOpened = !DoorOpened;
+        if(DoorOpened) OnDoorOpened.Invoke();
+        else OnDoorClosed.Invoke();
+        
+        if(DoorAnim) DoorAnim.SetTrigger("Open");
+    }
+
     public virtual void ToggleIntMode()
     {
         IntMode = !IntMode;
