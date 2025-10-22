@@ -95,8 +95,16 @@ public class PlayerGravity : MonoBehaviour
 
     private void Start()
     {
-        if (!IsGravtyActive) return;
         SetupBodyGO();
+        if (!IsGravtyActive) return;
+        StartCoroutine(nameof(CustomUpdate));
+
+        layerMask = LayerMask.GetMask("Floor");
+    }
+
+    public void EnableGravity()
+    {
+        IsGravtyActive = true;
         StartCoroutine(nameof(CustomUpdate));
 
         layerMask = LayerMask.GetMask("Floor");

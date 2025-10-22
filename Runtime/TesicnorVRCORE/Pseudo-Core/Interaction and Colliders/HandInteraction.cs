@@ -158,6 +158,8 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
         {
             interactionCollider = GetComponent<BoxCollider>();
             interactionCollider.isTrigger = true;
+
+            this.gameObject.tag = "Dedo";
         }
         /*private void Start()
         {

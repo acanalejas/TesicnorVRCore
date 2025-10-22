@@ -159,7 +159,7 @@ public class Wind_Elevator : MonoBehaviour
     public bool InsideElevator = false;
 
     [Header("La electricidad est� activada?")]
-    private bool IsElectricityOn = false;
+    public bool IsElectricityOn = false;
 
     [Header("La puerta necesita de electricidad para abrir?")] [SerializeField]
     private bool DoorNeedsElectricity = false;
