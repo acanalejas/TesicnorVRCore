@@ -277,7 +277,9 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void ToggleDoor()
     {
-        if ((!this.IsAtBottom() && !this.IsAtTop()) || (DoorNeedsElectricity && !IsElectricityOn)) return;
+        if (!this.IsAtBottom() && !this.IsAtTop()) return;
+        if (DoorNeedsElectricity == true && IsElectricityOn == false) return;
+        
         DoorOpened = !DoorOpened;
         if(DoorOpened) OnDoorOpened.Invoke();
         else OnDoorClosed.Invoke();;

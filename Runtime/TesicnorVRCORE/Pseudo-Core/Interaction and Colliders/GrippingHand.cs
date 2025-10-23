@@ -493,6 +493,11 @@ public class GrippingEditor : Editor
         {
             GUILayout.Label("Se oculta el mando al agarrar?", EditorStyles.boldLabel);
             grippingHand.hideOnGrab = GUILayout.Toggle(grippingHand.hideOnGrab, "The controller hides on grab?");
+            
+            GUILayout.Space(10);
+
+            SerializedProperty colliderBone = serializedObject.FindProperty("colliderBone");
+            EditorGUILayout.PropertyField(colliderBone, new GUIContent("El transform al que se adhiere el trigger"));
 
             //SerializedProperty xrController = serializedObject.FindProperty("handController");
             //EditorGUILayout.PropertyField(xrController, new GUIContent("XRController Component"));
