@@ -197,7 +197,7 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void MoveElevator(Direction direction)
     {
-        if ((Emergency || !marcha || !IsElectricityOn || isMoving) && (direction != Direction.NoBrakes)) return;
+        if ((Emergency || !marcha || !IsElectricityOn || isMoving || DoorOpened) && (direction != Direction.NoBrakes)) return;
 
         CurrentDirection = direction;
 
