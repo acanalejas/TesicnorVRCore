@@ -83,7 +83,7 @@ public class PlayerGravity : MonoBehaviour
         cd.FloorTag = FloorTag;
 
         BodyColl.height = 1.50f;
-        BodyColl.radius = 0.3f;
+        BodyColl.radius = 0.15f;
 
         BodyColl.isTrigger = true;
     }
