@@ -48,6 +48,18 @@ public class Wind_Elevator : MonoBehaviour
 
     [Header("Cuando el elevador deja de recibir electricidad")]
     public UnityEvent OnElectricityDisabled;
+
+    [Header(("Cuando una trampilla se abre"))]
+    public UnityEvent OnTrampOpened;
+
+    [Header("Cuando una trampilla se cierra")]
+    public UnityEvent OnTrampClosed;
+
+    [Header("Cuando se pasa a modo interior")]
+    public UnityEvent OnIntMode;
+
+    [Header("Cuando se pasa a modo exterior")]
+    public UnityEvent OnExtMode;
     #endregion
 
     #region Movement
@@ -149,6 +161,9 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Esta la puerta abierta?")]
     public bool DoorOpened = false;
 
+    [Header("Está alguna trampilla abierta?")]
+    public bool TrampOpened;
+
     [Header("Puede ir hacia arriba?")]
     public bool CanGoUp = true;
 
@@ -197,7 +212,7 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void MoveElevator(Direction direction)
     {
-        if ((Emergency || !marcha || !IsElectricityOn || isMoving || DoorOpened) && (direction != Direction.NoBrakes)) return;
+        if ((Emergency || !marcha || !IsElectricityOn || isMoving || DoorOpened || TrampOpened) && (direction != Direction.NoBrakes)) return;
 
         CurrentDirection = direction;
 
@@ -287,6 +302,26 @@ public class Wind_Elevator : MonoBehaviour
         if(DoorAnim) DoorAnim.SetTrigger("Open");
     }
 
+    public virtual void OpenTramp()
+    {
+        TrampOpened = true;
+        OnTrampOpened.Invoke();
+    }
+
+    public virtual void CloseTramp()
+    {
+        TrampOpened = false;
+        OnTrampClosed.Invoke();
+    }
+
+    public virtual void ToggelTramp()
+    {
+        TrampOpened = !TrampOpened;
+
+        if (TrampOpened) OnTrampOpened.Invoke();
+        else OnTrampClosed.Invoke();
+    }
+
     public virtual void OpenDoorEmergency()
     {
         if (DoorOpened) return;
@@ -315,6 +350,9 @@ public class Wind_Elevator : MonoBehaviour
     public virtual void ToggleIntMode()
     {
         IntMode = !IntMode;
+        
+        if(IntMode) OnIntMode.Invoke();
+        else OnExtMode.Invoke();
     }
 
     public virtual void StopElevator()
