@@ -176,6 +176,11 @@ public class Wind_Elevator : MonoBehaviour
     [Header("La electricidad est� activada?")]
     public bool IsElectricityOn = false;
 
+    /// <summary>
+    /// Puede encenderse la electricidad?
+    /// </summary>
+    private bool CanTheElectricityBeTurnedOn = true;
+    
     [Header("La puerta necesita de electricidad para abrir?")] [SerializeField]
     private bool DoorNeedsElectricity = false;
 
@@ -264,18 +269,25 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void SetElectricity(bool _value)
     {
+        if (!CanTheElectricityBeTurnedOn && !IsElectricityOn) return;
         IsElectricityOn = _value;
-
+        if (!CanTheElectricityBeTurnedOn) IsElectricityOn = false;
         if (IsElectricityOn) OnElectricityEnabled.Invoke();
         else OnElectricityDisabled.Invoke();
     }
 
     public virtual void SetElectricity()
     {
+        if (!CanTheElectricityBeTurnedOn && !IsElectricityOn) return;
         IsElectricityOn = !IsElectricityOn;
-
+        if (!CanTheElectricityBeTurnedOn) IsElectricityOn = false;
         if (IsElectricityOn) OnElectricityEnabled.Invoke();
         else OnElectricityDisabled.Invoke();
+    }
+
+    public void SetCanTheElectricityBeTurnedOn(bool value)
+    {
+        CanTheElectricityBeTurnedOn = value;
     }
 
     public virtual void OpenDoor()
