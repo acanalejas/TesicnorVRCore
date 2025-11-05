@@ -60,6 +60,12 @@ public class Wind_Elevator : MonoBehaviour
 
     [Header("Cuando se pasa a modo exterior")]
     public UnityEvent OnExtMode;
+
+    [Header("Cuando el elevador tiene el movimiento impedido")]
+    public UnityEvent OnCantBeMoved;
+
+    [Header("Cuando el elevador vuelve a tener permitido el moviemiento")]
+    public UnityEvent OnCanBeMoved;
     #endregion
 
     #region Movement
@@ -177,6 +183,11 @@ public class Wind_Elevator : MonoBehaviour
     public bool IsElectricityOn = false;
 
     /// <summary>
+    /// Se puede mover el elevador? Para estados de emergencia
+    /// </summary>
+    protected bool CanBeMoved = true;
+
+    /// <summary>
     /// Puede encenderse la electricidad?
     /// </summary>
     private bool CanTheElectricityBeTurnedOn = true;
@@ -288,6 +299,20 @@ public class Wind_Elevator : MonoBehaviour
     public void SetCanTheElectricityBeTurnedOn(bool value)
     {
         CanTheElectricityBeTurnedOn = value;
+    }
+
+    
+    /// <summary>
+    /// Solo usar para setear si el elevador se puede o no mover en estado de emergencia
+    /// </summary>
+    /// <param name="value"></param>
+    public void SetCanBeMoved(bool value)
+    {
+        bool previusValue = CanBeMoved;
+        CanBeMoved = value;
+        
+        if(CanBeMoved && !previusValue) OnCanBeMoved.Invoke();
+        else if(!CanBeMoved && previusValue) OnCantBeMoved.Invoke();
     }
 
     public virtual void OpenDoor()
