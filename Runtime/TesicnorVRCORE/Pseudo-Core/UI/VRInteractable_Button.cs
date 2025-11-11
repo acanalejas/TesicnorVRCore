@@ -253,6 +253,7 @@ public class VRInteractableButtonEditor: InteractableEditor
         base.OnInspectorGUI();
 
         Target = target as VRInteractable_Button;
+        bool pressed = false;
 
         SerializedProperty bUsesTimeByHover = serializedObject.FindProperty("bClickByHover");
         GUILayout.Label("Se puede clickar tambien al mantener en hover durante un tiempo?", EditorStyles.boldLabel);
@@ -336,6 +337,15 @@ public class VRInteractableButtonEditor: InteractableEditor
             }
         }
 
+        bool button = GUILayout.Button("Click Button");
+        
+        if(button) {Target.OnClick();
+            pressed = true;
+        }
+        else if(pressed){Target.OnRelease();
+            pressed = false;
+        }
+        
         serializedObject.ApplyModifiedProperties();
     }
 }
