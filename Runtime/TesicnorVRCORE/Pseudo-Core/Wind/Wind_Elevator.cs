@@ -226,6 +226,11 @@ public class Wind_Elevator : MonoBehaviour
         InsideDetector.OnPlayerExitDetection.AddListener(() => { InsideElevator = false; });
     }
 
+    public virtual void Brake()
+    {
+        this.MoveElevator(Direction.NoBrakes);
+    }
+
     public virtual void MoveElevator(Direction direction)
     {
         if (!CanBeMoved) return;
@@ -446,7 +451,7 @@ public class Wind_Elevator : MonoBehaviour
 
             if (CurrentDirection == Direction.Up && IsAtTop()) {StopElevator(); OnElevatorTopReached.Invoke();}
             if ((CurrentDirection == Direction.Down || CurrentDirection == Direction.NoBrakes) && IsAtBottom()) {StopElevator(); OnElevatorBottomReached.Invoke();}
-            if (Emergency) StopElevator();
+            if (((Emergency || !marcha) && CurrentDirection != Direction.NoBrakes) || !CanBeMoved) StopElevator();
             yield return Frame;
         }
     }

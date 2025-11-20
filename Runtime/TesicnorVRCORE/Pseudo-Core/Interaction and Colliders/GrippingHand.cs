@@ -93,6 +93,8 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
     private CoreInteraction coreInteraction;
 
+    private SphereCollider gripCollider;
+
     #endregion
 
     #region FUNCTIONS
@@ -101,7 +103,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     /// </summary>
     private void SetTrigger()
     {
-        SphereCollider gripCollider = GetComponent<SphereCollider>();
+        gripCollider = GetComponent<SphereCollider>();
 
         gripCollider.isTrigger = true;
         gripCollider.radius = colliderRadius;
@@ -308,6 +310,8 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     bool doOnce = false;
     public void DetectTheInput()
     {
+        if (colliderBone && gripCollider) gripCollider.center = -this.transform.InverseTransformPoint(colliderBone.position + positionOffset);
+        
         if (isController)
         {
             CheckIfControllerGrabs();
