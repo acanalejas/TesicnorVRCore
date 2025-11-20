@@ -32,8 +32,6 @@ public class Wind_MoveButton : VRInteractable_Button
         if (!CanBeClicked()) return;
         Wind_Elevator.Instance.DeadManButtonPressed = true;
         Wind_Elevator.Instance.MoveElevator(direction);
-
-        Debug.Log("Elevator move button pressed");
     }
 
     public override void OnRelease()
@@ -41,8 +39,6 @@ public class Wind_MoveButton : VRInteractable_Button
         base.OnRelease();
         if(bUsesDeadMan) Wind_Elevator.Instance.DeadManButtonPressed = false;
         if(Wind_Elevator.Instance.IsMoving && bUsesDeadMan) Wind_Elevator.Instance.StopElevator();
-
-        Debug.Log("Elevator move button released");
     }
 
     protected bool CanBeClicked()

@@ -112,7 +112,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         gameObject.GetComponent<Rigidbody>().useGravity = false;
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
-        if (colliderBone) gripCollider.center = -this.transform.InverseTransformPoint(colliderBone.position + positionOffset);
+        if (colliderBone) gripCollider.center = this.transform.InverseTransformPoint(colliderBone.position + positionOffset);
     }
 
     protected virtual void SetupInput()
@@ -310,7 +310,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     bool doOnce = false;
     public void DetectTheInput()
     {
-        if (colliderBone && gripCollider) gripCollider.center = -this.transform.InverseTransformPoint(colliderBone.position + positionOffset);
+        if (colliderBone && gripCollider) gripCollider.center = this.transform.InverseTransformPoint(colliderBone.position + positionOffset);
         
         if (isController)
         {
