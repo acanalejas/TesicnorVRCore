@@ -151,6 +151,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             rb = _rb;
             if (!rb) rb = GetComponent<Rigidbody>();
             rb.useGravity = false;
+            rb.isKinematic = true;
             hand = _hand;
         }
 
