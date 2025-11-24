@@ -159,11 +159,6 @@ public class HandPoser : MonoBehaviour
             Vector3 currentDistance = v + distance * grip;
             result.Add(currentDistance);
             i++;
-            
-            if(grip >= 0.5f) result.Add(closedPose.bonesRotations[i]);
-            else result.Add(openedPose.bonesRotations[i]);
-
-            i++;
         }
 
         return result;
@@ -181,11 +176,11 @@ public class HandPoser : MonoBehaviour
         int i = 0;
         foreach(Transform _transform in AllBones)
         {
-            //if (_transform.gameObject != RigRoot.gameObject || _transform.gameObject != rig.gameObject)
-            //{
-                _transform.position = rig.TransformPoint(positions[i]);
-                _transform.localRotation = Quaternion.Euler(rotations[i]);
-            //}
+            if (_transform.gameObject != RigRoot.gameObject || _transform.gameObject != rig.gameObject)
+            {
+              _transform.position = rig.TransformPoint(positions[i]);
+              _transform.localRotation = Quaternion.Euler(rotations[i]);
+            }
             i++;
         }
     }
