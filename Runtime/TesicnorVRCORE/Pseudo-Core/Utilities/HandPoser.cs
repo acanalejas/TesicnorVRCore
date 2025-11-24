@@ -99,7 +99,7 @@ public class HandPoser : MonoBehaviour
 
         foreach(Transform bone in allBones)
         {
-            pose.bonesPositions.Add(rig.InverseTransformPoint(bone.position));
+            pose.bonesPositions.Add(bone.localPosition);
             pose.bonesRotations.Add(bone.localRotation.eulerAngles);
         }
     }
@@ -131,11 +131,15 @@ public class HandPoser : MonoBehaviour
         int i = 0;
         foreach(Vector3 v in openedPose.bonesPositions)
         {
-            Vector3 distance =      closedPose.bonesPositions[i] - v;
+            //Vector3 distance =      closedPose.bonesPositions[i] - v;
+//
+            //Vector3 currentDistance = v + distance * grip;
+            ////currentDistance = new Vector3(currentDistance.x * parent.lossyScale.x, currentDistance.y * parent.lossyScale.y, currentDistance.z * parent.lossyScale.z);
+            //result.Add(currentDistance);
+            //i++;
 
-            Vector3 currentDistance = v + distance * grip;
-            //currentDistance = new Vector3(currentDistance.x * parent.lossyScale.x, currentDistance.y * parent.lossyScale.y, currentDistance.z * parent.lossyScale.z);
-            result.Add(currentDistance);
+            Vector3 currentPosition = grip >= 0.5f ? closedPose.bonesPositions[i] : openedPose.bonesPositions[i];
+            result.Add(currentPosition);
             i++;
         }
 
@@ -154,10 +158,14 @@ public class HandPoser : MonoBehaviour
         int i = 0;
         foreach(Vector3 v in openedPose.bonesRotations)
         {
-            Vector3 distance = closedPose.bonesRotations[i] - v;
-//
-            Vector3 currentDistance = v + distance * grip;
-            result.Add(currentDistance);
+            //Vector3 distance = closedPose.bonesRotations[i] - v;
+////
+            //Vector3 currentDistance = v + distance * grip;
+            //result.Add(currentDistance);
+            //i++;
+
+            Vector3 currentRotation = grip >= 0.5f ? closedPose.bonesRotations[i] : openedPose.bonesRotations[i];
+            result.Add(currentRotation);
             i++;
         }
 
@@ -178,7 +186,7 @@ public class HandPoser : MonoBehaviour
         {
             if (_transform.gameObject != RigRoot.gameObject || _transform.gameObject != rig.gameObject)
             {
-              _transform.position = rig.TransformPoint(positions[i]);
+              _transform.localPosition = positions[i];
               _transform.localRotation = Quaternion.Euler(rotations[i]);
             }
             i++;
