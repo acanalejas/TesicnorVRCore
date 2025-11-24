@@ -112,10 +112,16 @@ public class PlayerGravity : MonoBehaviour
 
     WaitForEndOfFrame Frame = new WaitForEndOfFrame();
     private int layerMask = 0;
+    float timer = 0;
+
+    public void ResetGravityTimer()
+    {
+        timer = 0;
+    }
     IEnumerator CustomUpdate()
     {
         float initialHeight = - 10;
-        float timer = 0;
+        
         while (true)
         {
             if (CanPlayerFall())
