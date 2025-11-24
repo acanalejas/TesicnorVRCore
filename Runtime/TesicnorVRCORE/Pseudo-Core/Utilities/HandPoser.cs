@@ -188,7 +188,7 @@ public class HandPoser : MonoBehaviour
         int i = 0;
         foreach(Transform _transform in AllBones)
         {
-            if (_transform.gameObject != RigRoot.gameObject || _transform.gameObject != rig.gameObject)
+            if (_transform != RigRoot && _transform != rig)
             {
                 _transform.position = rig.TransformPoint(positions[i]);
                 _transform.localRotation = Quaternion.Euler(rotations[i]);
