@@ -131,10 +131,9 @@ public class HandPoser : MonoBehaviour
         int i = 0;
         foreach(Vector3 v in openedPose.bonesPositions)
         {
-            //Vector3 distance =      closedPose.bonesPositions[i] - v;
+            Vector3 distance =      closedPose.bonesPositions[i] - v;
 
-            Vector3 currentDistance = /*v + distance * grip;*/
-                grip >= 0.5f ? closedPose.bonesPositions[i] : openedPose.bonesPositions[i];
+            Vector3 currentDistance = v + distance * grip;
             //currentDistance = new Vector3(currentDistance.x * parent.lossyScale.x, currentDistance.y * parent.lossyScale.y, currentDistance.z * parent.lossyScale.z);
             result.Add(currentDistance);
             i++;
@@ -155,11 +154,11 @@ public class HandPoser : MonoBehaviour
         int i = 0;
         foreach(Vector3 v in openedPose.bonesRotations)
         {
-            //Vector3 distance = closedPose.bonesRotations[i] - v;
+            Vector3 distance = closedPose.bonesRotations[i] - v;
 //
-            //Vector3 currentDistance = v + distance * grip;
-            //result.Add(currentDistance);
-            //i++;
+            Vector3 currentDistance = v + distance * grip;
+            result.Add(currentDistance);
+            i++;
             
             if(grip >= 0.5f) result.Add(closedPose.bonesRotations[i]);
             else result.Add(openedPose.bonesRotations[i]);
