@@ -167,6 +167,9 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Esta la puerta abierta?")]
     public bool DoorOpened = false;
 
+    [Header("Puede abrirse la puerta?")] 
+    public bool CanDoorBeOpened = true;
+
     [Header("Está alguna trampilla abierta?")]
     public bool TrampOpened;
 
@@ -323,12 +326,14 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void OpenDoor()
     {
+        if (!CanDoorBeOpened) return;
         DoorOpened = true;
         OnDoorOpened.Invoke();
     }
 
     public virtual void CloseDoor()
     {
+        if (!CanDoorBeOpened) return;
         DoorOpened = false;
         OnDoorClosed.Invoke();
     }
@@ -337,6 +342,7 @@ public class Wind_Elevator : MonoBehaviour
     {
         if (!this.IsAtBottom() && !this.IsAtTop()) return;
         if (DoorNeedsElectricity == true && IsElectricityOn == false) return;
+        if (!CanDoorBeOpened) return;
         
         DoorOpened = !DoorOpened;
         if(DoorOpened) OnDoorOpened.Invoke();
