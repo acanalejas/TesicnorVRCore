@@ -59,7 +59,7 @@ public class PlayerGravity : MonoBehaviour
         }
         private void OnTriggerExit(Collider other)
         {
-            if (other.gameObject == lastCollided) lastCollided = null;
+            if (other.gameObject == lastCollided && other.gameObject.tag == FloorTag) lastCollided = null;
         }
 
         public float ColliderDistance()

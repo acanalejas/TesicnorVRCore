@@ -143,9 +143,9 @@ public class ClimbableCollider : VRCollider
 
     public override void Release()
     {
-        base.Release();
         lastFrameHeight = 0;
         StopCoroutine("attach");
+        base.Release();
     }
 
     /// <summary>
