@@ -363,6 +363,11 @@ public class Wind_Elevator : MonoBehaviour
         OnTrampClosed.Invoke();
     }
 
+    public virtual void SetCanDoorBeOpened(bool value)
+    {
+        CanDoorBeOpened = value;
+    }
+
     public virtual void ToggelTramp()
     {
         TrampOpened = !TrampOpened;
