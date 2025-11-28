@@ -333,7 +333,7 @@ public class Wind_Elevator : MonoBehaviour
 
     public virtual void CloseDoor()
     {
-        if (!CanDoorBeOpened) return;
+        //if (!CanDoorBeOpened) return;
         DoorOpened = false;
         OnDoorClosed.Invoke();
     }
@@ -342,7 +342,7 @@ public class Wind_Elevator : MonoBehaviour
     {
         if (!this.IsAtBottom() && !this.IsAtTop()) return;
         if (DoorNeedsElectricity == true && IsElectricityOn == false) return;
-        if (!CanDoorBeOpened) return;
+        if (!CanDoorBeOpened && !DoorOpened) return;
         
         DoorOpened = !DoorOpened;
         if(DoorOpened) OnDoorOpened.Invoke();
