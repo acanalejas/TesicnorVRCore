@@ -30,6 +30,7 @@ public class Wind_MoveButton : VRInteractable_Button
     {
         base.OnClick();
         if (!CanBeClicked()) return;
+        if (!(this.bInsideElevator && Wind_Elevator.Instance.CanBeMovedWithSecondaryElectricity())) return;
         Wind_Elevator.Instance.DeadManButtonPressed = true;
         Wind_Elevator.Instance.MoveElevator(direction);
     }

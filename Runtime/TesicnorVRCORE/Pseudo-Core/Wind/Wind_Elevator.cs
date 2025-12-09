@@ -49,6 +49,12 @@ public class Wind_Elevator : MonoBehaviour
     [Header("Cuando el elevador deja de recibir electricidad")]
     public UnityEvent OnElectricityDisabled;
 
+    [Header("Cuando se activa la electricidad del cuadro interior")]
+    public UnityEvent OnSecondaryElectricityEnabled;
+
+    [Header("Cuando se desactiva la electricidad del cuadro interior")]
+    public UnityEvent OnSecondaryElectricityDisabled;
+
     [Header(("Cuando una trampilla se abre"))]
     public UnityEvent OnTrampOpened;
 
@@ -185,6 +191,12 @@ public class Wind_Elevator : MonoBehaviour
     [Header("La electricidad est� activada?")]
     public bool IsElectricityOn = false;
 
+    [Header("El cuadro interior tiene control propio de electricidad?")]
+    public bool UsesSecondaryElectricity = false;
+
+    [Header("Está la electricidad interior activada?")]
+    public bool IsSecondaryElectricityOn = false;
+
     /// <summary>
     /// Se puede mover el elevador? Para estados de emergencia
     /// </summary>
@@ -194,6 +206,11 @@ public class Wind_Elevator : MonoBehaviour
     /// Puede encenderse la electricidad?
     /// </summary>
     private bool CanTheElectricityBeTurnedOn = true;
+
+    /// <summary>
+    /// Se peude dar la electricidad del cuadro interior?
+    /// </summary>
+    private bool CanTheSecondaryElectricityBeTurnedOn = true;
     
     [Header("La puerta necesita de electricidad para abrir?")] [SerializeField]
     private bool DoorNeedsElectricity = false;
@@ -305,9 +322,32 @@ public class Wind_Elevator : MonoBehaviour
         else OnElectricityDisabled.Invoke();
     }
 
+    public virtual void SetSecondaryElectricity(bool _value)
+    {
+        if (!CanTheSecondaryElectricityBeTurnedOn && !IsSecondaryElectricityOn) return;
+        IsSecondaryElectricityOn = _value;
+        if (!CanTheSecondaryElectricityBeTurnedOn) IsSecondaryElectricityOn = false;
+        if(IsSecondaryElectricityOn) OnSecondaryElectricityEnabled.Invoke();
+        else OnSecondaryElectricityDisabled.Invoke();
+    }
+
+    public virtual void SetSecondaryElectricity()
+    {
+        if (!CanTheSecondaryElectricityBeTurnedOn && !IsSecondaryElectricityOn) return;
+        IsSecondaryElectricityOn = !IsSecondaryElectricityOn;
+        if (!CanTheSecondaryElectricityBeTurnedOn) IsSecondaryElectricityOn = false;
+        if(IsSecondaryElectricityOn) OnSecondaryElectricityEnabled.Invoke();
+        else OnSecondaryElectricityDisabled.Invoke();
+    }
+
     public void SetCanTheElectricityBeTurnedOn(bool value)
     {
         CanTheElectricityBeTurnedOn = value;
+    }
+
+    public void SetCanTheSecondaryElectricityBeTurnedOn(bool value)
+    {
+        CanTheSecondaryElectricityBeTurnedOn = value;
     }
 
     
@@ -483,6 +523,13 @@ public class Wind_Elevator : MonoBehaviour
     public bool IsAtTop()
     {
         return this.transform.position.y >= MaxHeight;
+    }
+
+    public bool CanBeMovedWithSecondaryElectricity()
+    {
+        if (!UsesSecondaryElectricity) return true;
+
+        return IsSecondaryElectricityOn;
     }
 
     #region Sounds
