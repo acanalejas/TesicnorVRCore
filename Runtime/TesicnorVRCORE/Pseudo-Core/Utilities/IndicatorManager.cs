@@ -25,8 +25,8 @@ public class IndicatorManager : MonoBehaviour
 
     protected virtual void FillDictionary()
     {
-        if (IndicatorsNames.Count <= 0) { Debug.LogError("La lista de nombres no puede estar vacía"); return; }
-        if (IndicatorsGOs.Count <= 0) { Debug.LogError("La lista de los objetos no puede estar vacía"); return; }
+        if (IndicatorsNames.Count <= 0) { Debug.LogError("La lista de nombres no puede estar vacÃ­a"); return; }
+        if (IndicatorsGOs.Count <= 0) { Debug.LogError("La lista de los objetos no puede estar vacÃ­a"); return; }
         if (IndicatorsNames.Count != IndicatorsGOs.Count) { Debug.LogError("Las listas de nombres y objetos deben tener la misma longitud"); return; }
 
         for (int i = 0; i < IndicatorsNames.Count; i++)
@@ -40,7 +40,7 @@ public class IndicatorManager : MonoBehaviour
         GameObject ind = null;
         bool isValid = Indicators.TryGetValue(name, out ind);
 
-        if (!isValid) { Debug.LogError("El valor de indicador " + name + " no existe, introduzca uno valido añadido a la lista"); return; }
+        if (!isValid) { Debug.LogError("El valor de indicador " + name + " no existe, introduzca uno valido aÃ±adido a la lista"); return; }
 
         ind.SetActive(true);
     }
@@ -50,19 +50,19 @@ public class IndicatorManager : MonoBehaviour
         GameObject ind = null;
         bool isValid = Indicators.TryGetValue(name, out ind);
 
-        if (!isValid) { Debug.LogError("El valor de indicador " + name + " no existe, introduzca uno valido añadido a la lista"); return; }
+        if (!isValid) { Debug.LogError("El valor de indicador " + name + " no existe, introduzca uno valido aÃ±adido a la lista"); return; }
 
         ind.SetActive(false);
     }
 
-    public virtual void ToggleIndicator(string name, bool value)
+    public virtual void ToggleIndicator(string name)
     {
         GameObject ind = null;
         bool isValid = Indicators.TryGetValue(name, out ind);
 
-        if (!isValid) { Debug.LogError("El valor de indicador " + name + " no existe, introduzca uno valido añadido a la lista"); return; }
+        if (!isValid) { Debug.LogError("El valor de indicador " + name + " no existe, introduzca uno valido aÃ±adido a la lista"); return; }
 
-        ind.SetActive(value);
+        ind.SetActive(!ind.activeSelf);
     }
 
     public void DisableAllIndicators()
