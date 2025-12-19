@@ -244,6 +244,7 @@ public class Wind_Elevator : MonoBehaviour
 
         InsideDetector.OnPlayerDetected.AddListener(() => { InsideElevator = true; });
         InsideDetector.OnPlayerExitDetection.AddListener(() => { InsideElevator = false; });
+        InsideDetector.OnPlayerStayDetection.AddListener(() => { if(!InsideElevator) InsideElevator = true;});
     }
 
     public virtual void Brake()
