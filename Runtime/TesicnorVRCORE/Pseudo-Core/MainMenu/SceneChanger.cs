@@ -55,6 +55,11 @@ public class SceneChanger : MonoBehaviour
         StartCoroutine("FadeIn");
     }
 
+    public void ChangeScene(int index)
+    {
+        SceneManager.LoadScene(index);
+    }
+
     public void GoToMenu_Button()
     {
         SceneManager.LoadScene(0);

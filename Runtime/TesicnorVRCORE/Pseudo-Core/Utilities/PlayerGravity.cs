@@ -110,6 +110,12 @@ public class PlayerGravity : MonoBehaviour
         layerMask = LayerMask.GetMask("Floor");
     }
 
+    public void DisableGravity()
+    {
+        IsGravtyActive = false;
+        StopCoroutine(nameof(CustomUpdate));
+    }
+
     WaitForEndOfFrame Frame = new WaitForEndOfFrame();
     private int layerMask = 0;
     float timer = 0;
