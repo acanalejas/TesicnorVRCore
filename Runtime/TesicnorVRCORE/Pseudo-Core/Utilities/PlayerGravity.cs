@@ -20,6 +20,9 @@ public class PlayerGravity : MonoBehaviour
     [Header("La tag que se usa para detectar el suelo")]
     [SerializeField] private string FloorTag = "Floor";
 
+    [Header("Multiplicador de velocidad de caida")] [SerializeField]
+    private float SpeedMultiplier = 1;
+
     [Header("El evento que se lanza al terminar una caida")]
     public UnityEngine.Events.UnityEvent<bool> OnFallEnd;
 
@@ -141,7 +144,7 @@ public class PlayerGravity : MonoBehaviour
                 {
                     if (timer <= 0) initialHeight = this.transform.position.y;
                     Vector3 velocity = Physics.gravity * timer;
-                    this.transform.position += (velocity * Time.deltaTime);
+                    this.transform.position += (velocity * Time.deltaTime * SpeedMultiplier);
                     timer += Time.deltaTime;
                 }
                 else if(timer != 0)
