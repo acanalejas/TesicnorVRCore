@@ -149,6 +149,12 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         DetectTheInput();
         CalculateVelocity();
         SetHandsTracking();
+        CheckGrabbedObj();
+    }
+
+    void CheckGrabbedObj()
+    {
+        if(!grippedObject.activeSelf) this.Release();
     }
     public void Update()
     {
@@ -192,7 +198,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
     private void CheckIfHandGrabs()
     {
-
+        
     }
 
     /// <summary>
