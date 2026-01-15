@@ -138,28 +138,43 @@ public class VRInteractable_Button : VR_Interactable
     {
         effectObject = new GameObject("HoverEffect", typeof(Image));
         effectObject.transform.parent = this.transform.parent;
+        effectObject.transform.localPosition = this.transform.localPosition;
+        effectObject.transform.localRotation = this.transform.localRotation;
+        effectObject.transform.localScale = this.transform.localScale * hoverScale;
+        
         if (effectObject.GetComponent<Image>()) effectImage = effectObject.GetComponent<Image>();
         else effectImage = effectObject.AddComponent<Image>();
 
         effectImage.raycastTarget = false;
         RectTransform objectRect = effectObject.GetComponent<RectTransform>();
         RectTransform selfRect = this.GetComponent<RectTransform>();
-        if (bUsesParentAnchor)
-        {
-            objectRect.anchorMin = selfRect.anchorMin;
-            objectRect.anchorMax = selfRect.anchorMax;
-            objectRect.anchoredPosition = selfRect.anchoredPosition;
-        }
+        //if (bUsesParentAnchor)
+        //{
+        //    objectRect.anchorMin = selfRect.anchorMin;
+        //    objectRect.anchorMax = selfRect.anchorMax;
+        //    objectRect.anchoredPosition = selfRect.anchoredPosition;
+        //}
+        //else
+        //{
+        //    objectRect.offsetMax = Vector2.zero;
+        //    objectRect.offsetMin = Vector2.zero;
+        //    objectRect.anchorMin = Vector2.zero;
+        //    objectRect.anchorMax = Vector3.zero;
+        //    objectRect.sizeDelta = selfRect.sizeDelta;
+        //}
         
-        objectRect.sizeDelta = selfRect.sizeDelta;
-
-        effectObject.transform.localPosition = this.transform.localPosition;
-        effectObject.transform.localRotation = this.transform.localRotation;
-        effectObject.transform.localScale = this.transform.localScale * hoverScale;
 
         if (IsBehind)
             this.transform.parent = effectObject.transform;
         else { effectObject.transform.SetParent(this.transform); effectObject.transform.SetSiblingIndex(0); }
+        
+        objectRect.pivot = Vector2.zero;
+        objectRect.offsetMax = Vector2.zero;
+        objectRect.offsetMin = Vector2.zero;
+        objectRect.anchorMin = Vector2.zero;
+        objectRect.anchorMax = Vector3.zero;
+        objectRect.sizeDelta = selfRect.sizeDelta;
+        objectRect.rect.Set(0,0, selfRect.sizeDelta.x, selfRect.sizeDelta.y);
 
         if (this.transform.GetSiblingIndex() > 0 && IsBehind)
             effectObject.transform.SetSiblingIndex(this.transform.GetSiblingIndex() - 1);

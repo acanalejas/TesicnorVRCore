@@ -65,6 +65,9 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
     [Header("El size del collider por si da fallos")]
     [HideInInspector] public Vector3 colliderSize;
 
+    [Header("Se deberia modificar el collider?")] [HideInInspector]
+    public bool shouldModifyCollider = true;
+
     [HideInInspector] public bool bHasBeenClicked = false;
 
     private BoxCollider boxCollider;
@@ -96,7 +99,7 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
 
         if (!isAnyHandInteractingWithThis()) ChangeColor(0);
 
-        if (colliderSize != Vector3.zero) boxCollider.size = colliderSize;
+        if (colliderSize != Vector3.zero && shouldModifyCollider) boxCollider.size = colliderSize;
     }
 
     bool isAnyHandInteractingWithThis()
@@ -113,6 +116,7 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
 
     public void SetupUICollider()
     {
+        if (!shouldModifyCollider) return;
         RectTransform rectTransform = this.GetComponent<RectTransform>();
 
         float width = rectTransform.rect.width;
@@ -323,6 +327,7 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(VR_Interactable), true)]
+[CanEditMultipleObjects]
 public class InteractableEditor : Editor
 {
     VR_Interactable interactable;
@@ -405,6 +410,12 @@ public class InteractableEditor : Editor
 
         GUILayout.Label("El tamaño del collider, solo rellenar si da fallo y no hay mas opcion", EditorStyles.boldLabel);
         interactable.colliderSize = EditorGUILayout.Vector3Field("Collider Size", interactable.colliderSize);
+        
+        GUILayout.Space(10);
+        
+        GUILayout.Label("Se debería modificar el collider en runtime?");
+        interactable.shouldModifyCollider =
+            GUILayout.Toggle(interactable.shouldModifyCollider, "Should modify collider");
         
 
         serializedObject.ApplyModifiedProperties();
