@@ -84,6 +84,12 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
     [Header("============ CUANDO SE USAN MANDOS =================")][Space(10)]
     [Header("El punto desde el que se lanza el rayo")]
     [SerializeField][HideInInspector] public Transform interactionOrigin;
+
+    [Header("Se usa el mismo transform para rayo y para colision?")] [SerializeField] [HideInInspector]
+    public bool bUsesSameTransform;
+
+    [Header("El punto desde el que se interacciona")] [SerializeField] [HideInInspector]
+    private Transform colliderOrigin;
     //[Header("El componente XRController de la mano")]
     //[SerializeField][HideInInspector] public XRController handController;
     #endregion
@@ -587,12 +593,14 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
     void SetupControllerCollider()
     {
-        interactionOrigin.gameObject.AddComponent<dedo>();
+        if (colliderOrigin == null || bUsesSameTransform) colliderOrigin = interactionOrigin;
+        if (interactionOrigin == null) return;
+        colliderOrigin.gameObject.AddComponent<dedo>();
 
-        interactionOrigin.GetComponent<BoxCollider>().size = fingerCube;
-        interactionOrigin.GetComponent<BoxCollider>().center = interactionOrigin.position;
+        colliderOrigin.GetComponent<BoxCollider>().size = fingerCube;
+        colliderOrigin.GetComponent<BoxCollider>().center = colliderOrigin.position;
 
-        interactionOrigin.GetComponent<dedo>().setVariables(interactionOrigin.GetComponent<BoxCollider>(), interactionOrigin.GetComponent<Rigidbody>(), this);
+        colliderOrigin.GetComponent<dedo>().setVariables(colliderOrigin.GetComponent<BoxCollider>(), colliderOrigin.GetComponent<Rigidbody>(), this);
     }
 #endregion
 
@@ -806,6 +814,16 @@ public class InteractionEditor : Editor
             EditorGUILayout.PropertyField(interactionOrigin, new GUIContent("Interaction Origin"));
 
             GUILayout.Space(10);
+
+            GUILayout.Label("El origen del rayo y del collider usan el mismo transform?");
+            handInteraction.bUsesSameTransform =
+                GUILayout.Toggle(handInteraction.bUsesSameTransform, "Uses the same transform");
+
+            if (!handInteraction.bUsesSameTransform)
+            {
+                SerializedProperty colliderTransform = serializedObject.FindProperty("colliderOrigin");
+                EditorGUILayout.PropertyField(colliderTransform);
+            }
 
             //SerializedProperty handController = serializedObject.FindProperty("handController");
             //EditorGUILayout.PropertyField(handController, new GUIContent("XRController Component"));
