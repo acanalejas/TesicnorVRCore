@@ -154,6 +154,7 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
 
     void CheckGrabbedObj()
     {
+        if (!grippedObject) return;
         if(!grippedObject.activeSelf) this.Release();
     }
     public void Update()
