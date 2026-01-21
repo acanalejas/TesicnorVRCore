@@ -113,7 +113,7 @@ public class PlayerPauseManager : MonoBehaviour
     }
     public void ReturnToMenu()
     {
-        FindObjectOfType<BackendTimeManager>().SpendTime();
+        if(FindFirstObjectByType<BackendTimeManager>())FindFirstObjectByType<BackendTimeManager>().SpendTime();
         OnReturnToMenu.Invoke();
         SceneManager.LoadScene(MenuBuildIndex);
     }
