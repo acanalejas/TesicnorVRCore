@@ -256,11 +256,9 @@ public class VR_Interactable : MonoBehaviour, VRInteractableInterface
         }
     }
 
-    public bool SetCanBePressed(bool value)
+    public void SetCanBePressed(bool value)
     {
         canBePressed = value;
-
-        return canBePressed;
     }
 
     public bool GetCanBePressed()

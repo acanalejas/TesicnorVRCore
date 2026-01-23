@@ -105,7 +105,7 @@ public interface VRInteractableInterface
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    bool SetCanBePressed(bool value);
+    void SetCanBePressed(bool value);
     /// <summary>
     /// Devuelve si el boton en este instante se puede pulsar o no
     /// </summary>
