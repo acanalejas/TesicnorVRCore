@@ -603,6 +603,11 @@ public class VRColliderEditor : Editor
                 DestroyImmediate(collider.gameObject.GetComponent<HighlightEffect>());
             }
         }
+        
+        GUILayout.Label("Se puede agarrar el collider?");
+        collider.grabbable = GUILayout.Toggle(collider.grabbable, "Can be grabbed?");
+        
+        GUILayout.Space(10);
 
         GUILayout.Label("Se puede soltar normal o tiene condiciones?", EditorStyles.boldLabel);
         collider.canRelease = GUILayout.Toggle(collider.canRelease, "Can be released?");
