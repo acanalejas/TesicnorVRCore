@@ -5,7 +5,7 @@ using UnityEngine;
 public interface VRGripInterface
 {
     /// <summary>
-    /// MÈtodo para agarrar el objeto
+    /// M√©todo para agarrar el objeto
     /// </summary>
     public void Grab(GrippingHand hand);
 
@@ -44,7 +44,7 @@ public interface VRGripInterface
     /// </returns>
     public bool canBeReleased();
     /// <summary>
-    /// MÈtodo para soltar el objeto
+    /// M√©todo para soltar el objeto
     /// </summary>
     public void Release();
 
@@ -56,7 +56,7 @@ public interface VRGripInterface
     public GrippingHand GetGrippingHand();
 
     /// <summary>
-    /// Setea lo necesario para que el objeto simule fÌsicas cuando deja de ser agarrado
+    /// Setea lo necesario para que el objeto simule f√≠sicas cuando deja de ser agarrado
     /// </summary>
     public void SetSimulateOnDrop();
 
@@ -84,7 +84,7 @@ public interface VRGripInterface
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public bool SetGrabbable(bool value);
+    public void SetGrabbable(bool value);
 }
 public interface VRHandInterface
 {
@@ -105,13 +105,13 @@ public interface VRHandInterface
     public bool canGrabSomething();
 
     /// <summary>
-    /// Devuelve el objeto m·s cercano a la mano para agarrarlo
+    /// Devuelve el objeto m√°s cercano a la mano para agarrarlo
     /// </summary>
     /// <returns></returns>
     public GameObject closestObjectToGrab();
 
     /// <summary>
-    /// Devuelve si la mano est· agarrando algo
+    /// Devuelve si la mano est√° agarrando algo
     /// </summary>
     /// <returns></returns>
     public bool isGrabbing();

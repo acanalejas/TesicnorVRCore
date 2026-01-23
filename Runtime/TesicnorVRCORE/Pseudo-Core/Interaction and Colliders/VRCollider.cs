@@ -532,11 +532,9 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     /// </summary>
     /// <param name="_value"></param>
     /// <returns></returns>
-    public bool SetGrabbable(bool _value)
+    public void SetGrabbable(bool _value)
     {
         grabbable = _value;
-
-        return _value;
     }
 
     public void SetAvailableEffects(bool value)
