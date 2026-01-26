@@ -1,15 +1,29 @@
+//#define MODOT
+//Descomenta esto para cambiar a modo trigonometria en vez de lanzamiento horizontal
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class LocomotionComponent : MonoBehaviour
 {
     #region PARAMETERS
-    private enum ControllerTypes { Movement, Rotation}
+    public enum ControllerTypes { Movement, Rotation}
     [Header("Este mando se usa para moverse o girar")]
-    [SerializeField] private ControllerTypes controllerType = ControllerTypes.Movement;
+    [SerializeField] public ControllerTypes controllerType = ControllerTypes.Movement;
+    
+    private enum MovementType {Teleport, Locomotion}
+
+    [Header("Que tipo de movimiento usa?")] [HideInInspector]
+    [SerializeField] private MovementType movementType = MovementType.Locomotion;
+
+    [Header("La tag que se usa para detectar el suelo")] [HideInInspector] [SerializeField]
+    private string FloorTag = "Floor";
 
     [Header("El mando del que se trata")]
     [SerializeField] private GrippingHand.HandType handType = GrippingHand.HandType.right;
@@ -30,6 +44,19 @@ public class LocomotionComponent : MonoBehaviour
 
     bool joystickButton = false;
 
+    #region Teleport Visuals
+
+    [Header("La altura del arco")] [SerializeField] [HideInInspector]
+    private float arcHeight = 2f;
+
+    [Header("La cantidad de puntos del arco")] [SerializeField] [HideInInspector]
+    private int resolution = 20;
+
+    [Header("El lineRenderer encargado de hacer la preview")] [SerializeField] [HideInInspector]
+    private LineRenderer teleportRenderer;
+
+    #endregion
+
     //private XRController controller;
     #endregion
 
@@ -38,6 +65,21 @@ public class LocomotionComponent : MonoBehaviour
     {
         //controller = GetComponent<XRController>();
         //if (!controller) controller = gameObject.AddComponent<XRController>();
+        
+        CreateTeleportVisuals();
+    }
+
+    private void CreateTeleportVisuals()
+    {
+        if (teleportRenderer != null) return;
+
+        GameObject lineRendererHolder = new GameObject("TeleportVisuals", typeof(LineRenderer));
+        lineRendererHolder.transform.parent = this.transform;
+        lineRendererHolder.transform.localPosition = Vector3.zero;
+        lineRendererHolder.transform.localRotation = Quaternion.identity;
+
+        teleportRenderer = lineRendererHolder.GetComponent<LineRenderer>();
+        teleportRenderer.positionCount = resolution;
     }
 
     private void SetupInput()
@@ -56,16 +98,30 @@ public class LocomotionComponent : MonoBehaviour
             {
                 if (joystickButton)
                 {
-                    if (controllerType == ControllerTypes.Movement)
+                    if (controllerType == ControllerTypes.Movement && movementType == MovementType.Locomotion)
                     {
                         MovePlayer(coreInteraction.Interaction.RightJoystick.ReadValue<Vector2>());
                     }
-                    else
+                    else if(controllerType == ControllerTypes.Rotation)
                     {
                         RotatePlayer(coreInteraction.Interaction.RightJoystick.ReadValue<Vector2>());
                     }
                 }
             };
+
+            if (this.controllerType == ControllerTypes.Movement && movementType == MovementType.Teleport)
+            {
+                coreInteraction.Interaction.Teleport.performed += (context =>
+                {
+                    ToggleTeleportVisuals(true);
+                });
+
+                coreInteraction.Interaction.Teleport.canceled += (context =>
+                {
+                    ToggleTeleportVisuals(false);
+                    TeleportPlayer();
+                });
+            }
         }
         else
         {
@@ -76,11 +132,11 @@ public class LocomotionComponent : MonoBehaviour
             {
                 if (joystickButton)
                 {
-                    if (controllerType == ControllerTypes.Movement && coreInteraction != null)
+                    if (controllerType == ControllerTypes.Movement && coreInteraction != null && movementType == MovementType.Locomotion)
                     {
                         MovePlayer(coreInteraction.Interaction.LeftJoystick.ReadValue<Vector2>());
                     }
-                    else if (coreInteraction != null)
+                    else if (coreInteraction != null && controllerType == ControllerTypes.Rotation)
                     {
                         RotatePlayer(coreInteraction.Interaction.LeftJoystick.ReadValue<Vector2>());
                     }
@@ -152,5 +208,154 @@ public class LocomotionComponent : MonoBehaviour
 
         return direction;
     }
+
+    #region TELEPORT
+
+    private bool bvalidHit = false;
+
+    private float initialVelocity = 5;
+
+    private float gravity = 9.81f;
+
+    private Vector3 TeleportPoint;
+    
+    Vector3 GetTeleportPoint()
+    {
+        bvalidHit = false;
+        
+        Vector3 result = Vector3.zero;
+
+        Vector3 direction = this.transform.forward;
+        Vector3 position = this.transform.position;
+
+        float height = 0;
+
+        RaycastHit groundHit;
+
+        //altura objetivo del suelo por si es irregular
+        if (Physics.Raycast(position, direction, out groundHit) && groundHit.collider && groundHit.collider.gameObject.CompareTag(FloorTag))
+        {
+            bvalidHit = true;
+        }
+        else if (Physics.Raycast(position, Vector3.down, out groundHit) && groundHit.collider &&
+                 groundHit.collider.gameObject.CompareTag(FloorTag))
+        {
+            bvalidHit = true;
+        }
+
+        if (groundHit.collider != null) height = groundHit.point.y;
+        
+        //Punto de intersección con el suelo trigonometria
+        #if MODOT
+        if (Math.Abs(direction.y) > 0.0001f)
+        {
+            float t = (height - position.y) / direction.y;
+            if (t > 0)
+            {
+                result = position + direction * t;
+            }
+        }
+        #else
+        //Punto de intersección con el suelo lanzamiento horizontal imaginario
+        Vector3 vInitialVelocity = direction * initialVelocity;
+
+
+        float time = vInitialVelocity.y + Mathf.Sqrt((vInitialVelocity.y * vInitialVelocity.y) -
+                                                     2 * gravity * (height - position.y));
+
+        result = position + vInitialVelocity * time;
+        result.y = height;
+
+        #endif
+        
+        return result;
+    }
+
+    private void TeleportPlayer()
+    {
+        player.position = TeleportPoint;
+    }
+    
+    //TELEPORT VISUALS
+
+    Vector3 Bezier(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+    {
+        float u = 1 - t;
+        return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+    }
+
+    private void DrawBezier()
+    {
+        Vector3 p0 = this.transform.position;
+        Vector3 p2 = GetTeleportPoint();
+        TeleportPoint = p2;
+
+        Vector3 mid = (p0 + p2) * 0.5f;
+        Vector3 p1 = mid + Vector3.up * arcHeight;
+
+        for (int i = 0; i < teleportRenderer.positionCount; i++)
+        {
+            float t = i / (float)(teleportRenderer.positionCount - 1);
+            Vector3 point = Bezier(p0, p1, p2, t);
+            teleportRenderer.SetPosition(i, point);
+        }
+    }
+
+    private WaitForEndOfFrame frame = new WaitForEndOfFrame();
+    IEnumerator TeleportVisualsUpdate()
+    {
+        while (true)
+        {
+            DrawBezier();
+            yield return frame;
+        }
+    }
+
+    public void ToggleTeleportVisuals(bool _value)
+    {
+        teleportRenderer.enabled = _value;
+        if(_value) StartCoroutine(nameof(TeleportVisualsUpdate));
+        else StopCoroutine(nameof(TeleportVisualsUpdate));
+    }
+    #endregion
     #endregion
 }
+#if UNITY_EDITOR
+[CustomEditor(typeof(LocomotionComponent), true)]
+[CanEditMultipleObjects]
+public class LocomotionComponentEditor : Editor
+{
+    private LocomotionComponent Target;
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        
+        Target = target as LocomotionComponent;
+
+        if (Target.controllerType == LocomotionComponent.ControllerTypes.Movement)
+        {
+            SerializedProperty movementType = serializedObject.FindProperty("movementType");
+            EditorGUILayout.PropertyField(movementType);
+            
+            GUILayout.Space(10);
+            SerializedProperty floorTag = serializedObject.FindProperty("FloorTag");
+            EditorGUILayout.PropertyField(floorTag);
+            
+            GUILayout.Space(10);
+            SerializedProperty arcHeight = serializedObject.FindProperty("arcHeight");
+            EditorGUILayout.PropertyField(arcHeight);
+            
+            GUILayout.Space(10);
+            SerializedProperty resolution = serializedObject.FindProperty("resolution");
+            EditorGUILayout.PropertyField(resolution);
+            
+            GUILayout.Space(10);
+            SerializedProperty teleportRenderer = serializedObject.FindProperty("teleportRenderer");
+            EditorGUILayout.PropertyField(teleportRenderer);
+        }
+
+        serializedObject.ApplyModifiedProperties();
+    }
+}
+#endif
