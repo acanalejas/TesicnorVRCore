@@ -71,7 +71,7 @@ public class LocomotionComponent : MonoBehaviour
 
     private void CreateTeleportVisuals()
     {
-        if (teleportRenderer != null) return;
+        if (teleportRenderer != null || controllerType != ControllerTypes.Movement || movementType != MovementType.Locomotion) return;
 
         GameObject lineRendererHolder = new GameObject("TeleportVisuals", typeof(LineRenderer));
         lineRendererHolder.transform.parent = this.transform;

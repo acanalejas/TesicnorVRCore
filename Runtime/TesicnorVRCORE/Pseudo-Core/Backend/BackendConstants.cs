@@ -10,17 +10,17 @@ public static class BackendConstants
     public static string urlNoParams { get { return "https://app.e-xtinguisher.com/api/vr-users/public?"; } }
 
     /// <summary>
-    /// Url base usada para añadir el campo de parámetro para recibir datos especificos de un usuario
+    /// Url base usada para aÃ±adir el campo de parÃ¡metro para recibir datos especificos de un usuario
     /// </summary>
     public static string urlForParams { get { return "https://app.e-xtinguisher.com/api/public/"; } }
 
     /// <summary>
-    /// Parámetro de tiempo de uso del usuario
+    /// ParÃ¡metro de tiempo de uso del usuario
     /// </summary>
     public static string TimeParam { get { return "client-time-uses?"; } }
 
     /// <summary>
-    /// Parámetro para el post del tiempo de uso
+    /// ParÃ¡metro para el post del tiempo de uso
     /// </summary>
     public static string TimePostParam { get { return "usage-records?"; } }
 
@@ -60,7 +60,7 @@ public static class BackendConstants
     public static string NoLimitType { get { return "NO_LIMIT_TYPE"; }}
 
     /// <summary>
-    /// La aplicación tiene conexion a internet?
+    /// La aplicaciÃ³n tiene conexion a internet?
     /// </summary>
     public static bool bHasInternetConnection { get { return Application.internetReachability != NetworkReachability.NotReachable; } }
 
