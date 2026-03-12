@@ -8,7 +8,6 @@ using System.IO;
 #endif
 
 [DisallowMultipleComponent]
-[SerializeField]
 public class ReplicatedObject : MonoBehaviour
 {
     #region PARAMETERS

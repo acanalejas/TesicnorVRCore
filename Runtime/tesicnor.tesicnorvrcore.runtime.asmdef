@@ -9,22 +9,25 @@
         "GUID:a9420e37d7990b54abdef6688edbe313",
         "GUID:fe685ec1767f73d42b749ea8045bfe43",
         "GUID:92703082f92b41ba80f0d6912de66115",
-        "GUID:d0574574baafe9d4aa78d8df4a5e3e5e"
+        "GUID:d0574574baafe9d4aa78d8df4a5e3e5e",
+        "GUID:f64c9ebcd7899c3448a08dc9f9ddbe30",
+        "GUID:2a230cb87a1d3ba4a98bdc0ddae76e6c",
+        "GUID:da48b4fc4ed07ff45bd973316e2991be"
     ],
     "includePlatforms": [],
     "excludePlatforms": [
-        "GameCoreScarlett",
-        "GameCoreXboxOne",
         "iOS",
         "LinuxStandalone64",
         "CloudRendering",
         "macOSStandalone",
+        "Switch",
         "PS4",
         "PS5",
-        "Switch",
         "tvOS",
         "WebGL",
-        "XboxOne"
+        "GameCoreXboxOne",
+        "XboxOne",
+        "GameCoreScarlett"
     ],
     "allowUnsafeCode": false,
     "overrideReferences": false,

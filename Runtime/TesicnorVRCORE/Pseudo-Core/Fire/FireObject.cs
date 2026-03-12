@@ -26,16 +26,16 @@ namespace TesicFire
     {
         #region PARAMETERS
         /// <summary>
-        /// Prefab de las partículas de fuego
+        /// Prefab de las partï¿½culas de fuego
         /// </summary>
         [SerializeField][HideInInspector] public FireParticles fire_SystemPrefab;
         /// <summary>
-        /// El sistema de partículas del fuego
+        /// El sistema de partï¿½culas del fuego
         /// </summary>
         [SerializeField][HideInInspector] public ParticleSystem fire_System;
 
         /// <summary>
-        /// El GameObject de las partículas del fuego
+        /// El GameObject de las partï¿½culas del fuego
         /// </summary>
         [SerializeField][HideInInspector] public GameObject fire_GO;
 
@@ -44,12 +44,12 @@ namespace TesicFire
         /// </summary>
         [SerializeField][HideInInspector] public MeshRenderer fire_MR;
         /// <summary>
-        /// El sistema de partículas del humo
+        /// El sistema de partï¿½culas del humo
         /// </summary>
         [SerializeField][HideInInspector] public ParticleSystem smoke_System;
 
         /// <summary>
-        /// El GameObject de las partículas del humo
+        /// El GameObject de las partï¿½culas del humo
         /// </summary>
         [SerializeField][HideInInspector] public GameObject smoke_GO;
 
@@ -63,7 +63,7 @@ namespace TesicFire
         [SerializeField][HideInInspector] public bool UsesSparks = true;
         #region Para el fuego
         [SerializeField][HideInInspector] public float Delay = 4;
-        [SerializeField][HideInInspector] public float FireSpeed { get { return fireSpeed; } set { fireSpeed = value; fireSpeed = Mathf.Clamp(fireSpeed, 0.05f, 10f); } }
+        [HideInInspector] public float FireSpeed { get { return fireSpeed; } set { fireSpeed = value; fireSpeed = Mathf.Clamp(fireSpeed, 0.05f, 10f); } }
         [SerializeField][HideInInspector] private float fireSpeed = 1;
         [SerializeField][HideInInspector] public float PropDistance = 1;
         [SerializeField][HideInInspector] public float MaxTimeToExtinguish = 2;
@@ -277,7 +277,7 @@ namespace TesicFire
 
             if (mesh.isReadable)
             {
-                //Almacenamos sus vértices y triángulos
+                //Almacenamos sus vï¿½rtices y triï¿½ngulos
                 meshData_original.vertex.Clear();
                 mesh.GetVertices(meshData_original.vertex);
 

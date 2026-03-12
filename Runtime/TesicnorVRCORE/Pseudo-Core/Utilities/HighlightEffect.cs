@@ -10,7 +10,6 @@ public class HighlightEffect : MonoBehaviour
     [SerializeField]
     [HideInInspector] public Color highlightColor = Color.green;
 
-    [SerializeField]
     [HideInInspector] public float scaleMultiplier 
     { 
         get { return scale; } 
