@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.IO;
 
-    public class ImageByteConverter
+public class ImageByteConverter
     {
-        public static byte[] ImageToBytes(Image input)
+        public static byte[] ImageToBytes(System.Drawing.Image input)
         {
             using(var ms = new MemoryStream())
             {

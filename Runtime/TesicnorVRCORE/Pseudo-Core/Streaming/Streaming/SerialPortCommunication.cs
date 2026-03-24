@@ -6,7 +6,7 @@ using System.IO.Ports;
 public class SerialPortCommunication : MonoBehaviour
 {
     #region PARAMETERS
-    SerialPort Port;
+    System.IO.Ports.SerialPort Port;
 
     bool portDetected;
 

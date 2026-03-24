@@ -45,6 +45,9 @@ public class LocomotionComponent : MonoBehaviour
     bool joystickButton = false;
 
     #region Teleport Visuals
+    
+    [Header("El material que se asigna al LineRenderer de la preview del teleport")]
+    [SerializeField] [HideInInspector] private Material RendererMaterial;
 
     [Header("La altura del arco")] [SerializeField] [HideInInspector]
     private float arcHeight = 2f;
@@ -80,6 +83,8 @@ public class LocomotionComponent : MonoBehaviour
 
         teleportRenderer = lineRendererHolder.GetComponent<LineRenderer>();
         teleportRenderer.positionCount = resolution;
+        teleportRenderer.material = RendererMaterial;
+        teleportRenderer.useWorldSpace = true;
     }
 
     private void SetupInput()
@@ -267,6 +272,8 @@ public class LocomotionComponent : MonoBehaviour
         result.y = height;
 
         #endif
+
+        if (!bvalidHit) return player.position;
         
         return result;
     }
@@ -349,6 +356,11 @@ public class LocomotionComponentEditor : Editor
             GUILayout.Space(10);
             SerializedProperty resolution = serializedObject.FindProperty("resolution");
             EditorGUILayout.PropertyField(resolution);
+            
+            GUILayout.Space(10);
+
+            SerializedProperty material = serializedObject.FindProperty("RendererMaterial");
+            EditorGUILayout.PropertyField(material);
             
             GUILayout.Space(10);
             SerializedProperty teleportRenderer = serializedObject.FindProperty("teleportRenderer");
