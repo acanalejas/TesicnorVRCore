@@ -3,9 +3,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR;
+using Quaternion = UnityEngine.Quaternion;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -49,6 +53,9 @@ public class LocomotionComponent : MonoBehaviour
     [Header("El material que se asigna al LineRenderer de la preview del teleport")]
     [SerializeField] [HideInInspector] private Material RendererMaterial;
 
+    [Header("El material para punto incorrecto de teletransporte")] [SerializeField] [HideInInspector]
+    private Material IncorrectRendererMaterial;
+
     [Header("La altura del arco")] [SerializeField] [HideInInspector]
     private float arcHeight = 2f;
 
@@ -85,6 +92,8 @@ public class LocomotionComponent : MonoBehaviour
         teleportRenderer.positionCount = resolution;
         teleportRenderer.material = RendererMaterial;
         teleportRenderer.useWorldSpace = true;
+        teleportRenderer.startWidth = 0.05f;
+        teleportRenderer.endWidth = 0.05f;
     }
 
     private void SetupInput()
@@ -218,7 +227,9 @@ public class LocomotionComponent : MonoBehaviour
 
     private bool bvalidHit = false;
 
-    private float initialVelocity = 5;
+    private bool bValidPosition = false;
+
+    private float initialVelocity = 1f;
 
     private float gravity = 9.81f;
 
@@ -272,23 +283,43 @@ public class LocomotionComponent : MonoBehaviour
         result.y = height;
 
         #endif
-
-        if (!bvalidHit) return player.position;
         
+        //Checkeo de que la posición esté en el suelo
+        RaycastHit positionHit;
+        if (Physics.Raycast(result + Vector3.up, Vector3.down, out positionHit))
+        {
+            bValidPosition = positionHit.collider.CompareTag("Floor");
+        }
+        else bValidPosition = false;
+
         return result;
     }
 
     private void TeleportPlayer()
     {
-        player.position = TeleportPoint;
+        if (bValidPosition)
+        {
+            Vector3 diff = player.position - camera.position;
+            diff.y = 0;
+            player.position = TeleportPoint + diff;
+        }
+            
     }
     
     //TELEPORT VISUALS
 
     Vector3 Bezier(Vector3 p0, Vector3 p1, Vector3 p2, float t)
     {
+        // Fórmula: B(t) = (1-t)^2 * P0 + 2(1-t)t * P1 + t^2 * P2
         float u = 1 - t;
-        return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+        float tt = t * t;
+        float uu = u * u;
+
+        Vector3 p = uu * p0; // Término 1
+        p += 2 * u * t * p1; // Término 2
+        p += tt * p2;        // Término 3
+
+        return p;
     }
 
     private void DrawBezier()
@@ -314,6 +345,8 @@ public class LocomotionComponent : MonoBehaviour
         while (true)
         {
             DrawBezier();
+            if (bValidPosition) teleportRenderer.material = RendererMaterial;
+            else teleportRenderer.material = IncorrectRendererMaterial;
             yield return frame;
         }
     }
@@ -361,6 +394,11 @@ public class LocomotionComponentEditor : Editor
 
             SerializedProperty material = serializedObject.FindProperty("RendererMaterial");
             EditorGUILayout.PropertyField(material);
+            
+            GUILayout.Space(10);
+
+            SerializedProperty incorrectMaterial = serializedObject.FindProperty("IncorrectRendererMaterial");
+            EditorGUILayout.PropertyField(incorrectMaterial);
             
             GUILayout.Space(10);
             SerializedProperty teleportRenderer = serializedObject.FindProperty("teleportRenderer");
