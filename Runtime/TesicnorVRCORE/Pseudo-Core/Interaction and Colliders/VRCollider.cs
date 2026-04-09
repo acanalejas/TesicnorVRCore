@@ -116,17 +116,19 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     /// <summary>
     /// La distancia del objeto a la mano en el momento de agarre
     /// </summary>
-    private float distanceOnGrab;
+    protected float distanceOnGrab;
 
     /// <summary>
     /// Posicion de este objeto cuando se agarra
     /// </summary>
-    private Vector3 positionOnGrab;
+    protected Vector3 positionOnGrab;
+
+    protected Vector3 handPositionOnGrab;
 
     /// <summary>
     /// Rotacion de este objeto cuando se agarra
     /// </summary>
-    private Vector3 rotationOnGrab;
+    protected Vector3 rotationOnGrab;
 
     /// <summary>
     /// Masa del objeto en kg
@@ -230,6 +232,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
         grippingHand = hand;
         distanceOnGrab = Vector3.Distance(grippingHand.transform.position, this.transform.position);
         positionOnGrab = this.transform.position;
+        handPositionOnGrab = hand.transform.position;
         rotationOnGrab = this.transform.rotation.eulerAngles;
     }
 
