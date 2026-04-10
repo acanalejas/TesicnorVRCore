@@ -50,7 +50,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     [Header("Se ilumina el objeto al ser seleccionable?")]
     [HideInInspector] public bool hasHighlight = false;
 
-    public enum AttachmentMode { Normal, positionOffset, rotationAndPositionOffset, Animation, None};
+    public enum AttachmentMode { Normal, positionOffset, rotationAndPositionOffset, Animation, Holder, None};
 
     /// <summary>
     /// El modo en el que se pega a la mano al agarrar
@@ -363,7 +363,7 @@ public class VRCollider : MonoBehaviour, VRGripInterface
     public void RepositionOnGrab()
     {
         //Position
-        this.transform.parent = grippingHand.transform;
+        this.transform.parent = grippingHand.GrabHolder != null ? grippingHand.GrabHolder : grippingHand.transform;
 
         //Rotation
         //Si es el primer frame, no debería rotar

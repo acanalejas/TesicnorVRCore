@@ -57,6 +57,9 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
     [Space(10)]
     [HideInInspector]public Transform colliderBone;
 
+    [Header("OPCIONAL : El holder donde se emparentan los objetos al agarrarlos")] [HideInInspector] [SerializeField]
+    public Transform GrabHolder;
+
     /// <summary>
     /// El transform del player en general
     /// </summary>
@@ -496,6 +499,10 @@ public class GrippingEditor : Editor
 
         SerializedProperty player = serializedObject.FindProperty("player");
         EditorGUILayout.PropertyField(player, new GUIContent("El player que contiene esta mano"));
+        
+        GUILayout.Space(10);
+        SerializedProperty grabHolder = serializedObject.FindProperty("GrabHolder");
+        EditorGUILayout.PropertyField(grabHolder);
 
         GUILayout.Space(10);
 

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR;
 using Quaternion = UnityEngine.Quaternion;
@@ -64,6 +65,9 @@ public class LocomotionComponent : MonoBehaviour
 
     [Header("El lineRenderer encargado de hacer la preview")] [SerializeField] [HideInInspector]
     private LineRenderer teleportRenderer;
+
+    [Header("Evento que salta al teletransportarse")] [SerializeField] [HideInInspector]
+    public UnityEvent OnTeleport;
 
     #endregion
 
@@ -302,6 +306,7 @@ public class LocomotionComponent : MonoBehaviour
             Vector3 diff = player.position - camera.position;
             diff.y = 0;
             player.position = TeleportPoint + diff;
+            OnTeleport.Invoke();
         }
             
     }
@@ -403,6 +408,11 @@ public class LocomotionComponentEditor : Editor
             GUILayout.Space(10);
             SerializedProperty teleportRenderer = serializedObject.FindProperty("teleportRenderer");
             EditorGUILayout.PropertyField(teleportRenderer);
+            
+            GUILayout.Space(10);
+
+            SerializedProperty OnTeleport = serializedObject.FindProperty("OnTeleport");
+            EditorGUILayout.PropertyField(OnTeleport);
         }
 
         serializedObject.ApplyModifiedProperties();
