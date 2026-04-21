@@ -1,4 +1,4 @@
-//#define MODOT
+#define MODOT
 //Descomenta esto para cambiar a modo trigonometria en vez de lanzamiento horizontal
 using System;
 using System.Collections;
@@ -68,6 +68,15 @@ public class LocomotionComponent : MonoBehaviour
 
     [Header("Evento que salta al teletransportarse")] [SerializeField] [HideInInspector]
     public UnityEvent OnTeleport;
+
+    [Header("El indicator del punto de teletransporte")] [SerializeField] [HideInInspector]
+    private Transform TeleportPointVisuals;
+
+    [Header("Se usa la curva o no?")] [HideInInspector]
+    public bool UsesCurve = true;
+
+    [Header("Distancia del indicador de dirección en el mando")] [SerializeField][HideInInspector]
+    private float distance = 0.5f;
 
     #endregion
 
@@ -267,13 +276,25 @@ public class LocomotionComponent : MonoBehaviour
         
         //Punto de intersección con el suelo trigonometria
         #if MODOT
-        if (Math.Abs(direction.y) > 0.0001f)
+        LayerMask mask = new LayerMask();
+        mask.value = LayerMask.GetMask("Floor");
+        RaycastHit rayHit;
+        if (Physics.Raycast(this.transform.position, direction, out rayHit, 10, mask))
         {
-            float t = (height - position.y) / direction.y;
-            if (t > 0)
+            if(rayHit.collider.CompareTag("Floor"))
+                result = rayHit.point;
+            else
             {
-                result = position + direction * t;
+                bValidPosition = false;
+                result = this.transform.position + direction;
+                return result;
             }
+        }
+        else
+        {
+            bValidPosition = false;
+            result = this.transform.position + direction;
+            return result;
         }
         #else
         //Punto de intersección con el suelo lanzamiento horizontal imaginario
@@ -344,12 +365,32 @@ public class LocomotionComponent : MonoBehaviour
         }
     }
 
+    private void DrawDirection()
+    {
+        Vector3 p0 = this.transform.position;
+        Vector3 p2 = GetTeleportPoint();
+        TeleportPoint = p2;
+
+        Vector3 direction = (p2 - p0).normalized;
+        teleportRenderer.positionCount = 2;
+        teleportRenderer.SetPosition(0, p0);
+        teleportRenderer.SetPosition(1, p0 + distance * direction);
+        teleportRenderer.endColor = teleportRenderer.startColor - new Color(0, 0, 0, 1);
+
+    }
+
     private WaitForEndOfFrame frame = new WaitForEndOfFrame();
     IEnumerator TeleportVisualsUpdate()
     {
         while (true)
         {
-            DrawBezier();
+            if(UsesCurve) DrawBezier();
+            else DrawDirection();
+            if (TeleportPointVisuals)
+            {
+                TeleportPointVisuals.gameObject.SetActive(bValidPosition);
+                TeleportPointVisuals.transform.position = TeleportPoint;
+            }
             if (bValidPosition) teleportRenderer.material = RendererMaterial;
             else teleportRenderer.material = IncorrectRendererMaterial;
             yield return frame;
@@ -359,6 +400,7 @@ public class LocomotionComponent : MonoBehaviour
     public void ToggleTeleportVisuals(bool _value)
     {
         teleportRenderer.enabled = _value;
+        TeleportPointVisuals.gameObject.SetActive(_value);
         if(_value) StartCoroutine(nameof(TeleportVisualsUpdate));
         else StopCoroutine(nameof(TeleportVisualsUpdate));
     }
@@ -408,6 +450,21 @@ public class LocomotionComponentEditor : Editor
             GUILayout.Space(10);
             SerializedProperty teleportRenderer = serializedObject.FindProperty("teleportRenderer");
             EditorGUILayout.PropertyField(teleportRenderer);
+            
+            GUILayout.Space(10);
+            SerializedProperty teleportVisuals = serializedObject.FindProperty("TeleportPointVisuals");
+            EditorGUILayout.PropertyField(teleportVisuals);
+            
+            GUILayout.Space(10);
+            GUILayout.Label("Se usa la curva como visual?", EditorStyles.boldLabel);
+            Target.UsesCurve = GUILayout.Toggle(Target.UsesCurve, "UsesCurve");
+
+            if (!Target.UsesCurve)
+            {
+                GUILayout.Space(10);
+                SerializedProperty distance = serializedObject.FindProperty("distance");
+                EditorGUILayout.PropertyField(distance);
+            }
             
             GUILayout.Space(10);
 
