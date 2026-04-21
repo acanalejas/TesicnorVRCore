@@ -77,6 +77,7 @@ namespace TesicFire
         [HideInInspector] public BoxCollider collider;
 
         [HideInInspector] public UnityEvent OnFireStarted;
+        [HideInInspector] public UnityEvent OnFireEnded;
 
         private float timeOnFire = 0;
 
@@ -338,6 +339,7 @@ namespace TesicFire
             timeOnFire = 0;
             StopCoroutine("burning");
             CancelInvoke(nameof(reconstruct));
+            OnFireEnded.Invoke();
             fire_System.Stop();
             smoke_System.Stop();
         }
@@ -371,8 +373,8 @@ namespace TesicFire
             }
             if (fire_Source)
             {
-                fire_Source.volume = fire_MR.localBounds.extents.magnitude;
-                fire_Source.maxDistance = fire_MR.localBounds.extents.magnitude;
+                //fire_Source.volume = fire_MR.localBounds.extents.magnitude;
+                //fire_Source.maxDistance = fire_MR.localBounds.extents.magnitude;
             }
         }
 
@@ -427,6 +429,7 @@ namespace TesicFire
                 if (sparks_System) sparks_System.Stop();
                 if (fire_Source) fire_Source.Stop();
 
+                OnFireEnded.Invoke();
                 Collider[] colliders = GetComponents<Collider>();
                 foreach (Collider col in colliders) col.enabled = false;
             }

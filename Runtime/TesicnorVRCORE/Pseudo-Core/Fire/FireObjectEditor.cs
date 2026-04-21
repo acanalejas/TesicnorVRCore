@@ -82,13 +82,13 @@ public class FireObjectEditor : Editor
 
         GUILayout.Space(20);
 
-        #region Zona de parámetros
+        #region Zona de parï¿½metros
         GUILayout.BeginVertical(EditorStyles.helpBox);
 
         #region Ajustes del fuego
         if (fireSettings)
         {
-            GUILayout.Label("El prefab de las partículas de fuego");
+            GUILayout.Label("El prefab de las partï¿½culas de fuego");
             SerializedProperty firePrefab = serializedObject.FindProperty("fire_SystemPrefab");
             EditorGUILayout.PropertyField(firePrefab);
 
@@ -120,17 +120,17 @@ public class FireObjectEditor : Editor
 
             GUILayout.Space(10);
 
-            GUILayout.Label("El offset en el collider para la propagación del fuego", EditorStyles.boldLabel);
+            GUILayout.Label("El offset en el collider para la propagaciï¿½n del fuego", EditorStyles.boldLabel);
             manager.PropOffset = EditorGUILayout.Vector3Field("Propagation Offset", manager.PropOffset);
 
             GUILayout.Space(10);
 
-            GUILayout.Label("La emissión de referencia", EditorStyles.boldLabel);
+            GUILayout.Label("La emissiï¿½n de referencia", EditorStyles.boldLabel);
             manager.MaxEmission = EditorGUILayout.FloatField(manager.MaxEmission, EditorStyles.miniTextField);
 
             GUILayout.Space(10);
 
-            GUILayout.Label("El tamaño de referencia", EditorStyles.boldLabel);
+            GUILayout.Label("El tamaï¿½o de referencia", EditorStyles.boldLabel);
             manager.MaxSize = EditorGUILayout.FloatField(manager.MaxSize, EditorStyles.miniTextField);
 
             GUILayout.Space(10);
@@ -138,6 +138,11 @@ public class FireObjectEditor : Editor
             GUILayout.Label("Evento que se lanza cuando se prende el objeto");
             SerializedProperty onFireStart = serializedObject.FindProperty("OnFireStarted");
             EditorGUILayout.PropertyField(onFireStart);
+            
+            GUILayout.Space(10);
+            GUILayout.Label("Evento que se lanza cuando el fuego se extingue");
+            SerializedProperty onFireEnded = serializedObject.FindProperty("OnFireEnded");
+            EditorGUILayout.PropertyField(onFireEnded);
 
             GUILayout.Space(20);
 

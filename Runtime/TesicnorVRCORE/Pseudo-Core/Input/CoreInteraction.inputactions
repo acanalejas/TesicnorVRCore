@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "CoreInteraction",
     "maps": [
         {
@@ -211,6 +212,17 @@
                     "name": "",
                     "id": "13c95334-5b07-4aed-aa98-748b0664dc1a",
                     "path": "<XRController>{RightHand}/{TriggerButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Click_right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30a50e4b-ee7b-4665-a17f-591961202c40",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -133,5 +133,10 @@ public class SceneChanger : MonoBehaviour
     {
         isGuided = _value;
     }
+
+    public void AppQuit()
+    {
+        Application.Quit();
+    }
     #endregion
 }
