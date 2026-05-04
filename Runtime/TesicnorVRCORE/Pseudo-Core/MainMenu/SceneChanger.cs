@@ -35,7 +35,7 @@ public class SceneChanger : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
         CheckSingleton();
     }
 

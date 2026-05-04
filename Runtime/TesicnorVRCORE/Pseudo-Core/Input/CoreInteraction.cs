@@ -180,6 +180,15 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Teleport_Left"",
+                    ""type"": ""Button"",
+                    ""id"": ""957a9d7f-c076-4425-88ac-321a11ba3135"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -325,6 +334,17 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
                     ""action"": ""Teleport"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ae8072f-6dfd-4a31-ae88-52ce356492c0"",
+                    ""path"": ""<XRController>{LeftHand}/{PrimaryButton}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Teleport_Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -343,6 +363,7 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         m_Interaction_Click_right = m_Interaction.FindAction("Click_right", throwIfNotFound: true);
         m_Interaction_Click_Left = m_Interaction.FindAction("Click_Left", throwIfNotFound: true);
         m_Interaction_Teleport = m_Interaction.FindAction("Teleport", throwIfNotFound: true);
+        m_Interaction_Teleport_Left = m_Interaction.FindAction("Teleport_Left", throwIfNotFound: true);
     }
 
     ~@CoreInteraction()
@@ -433,6 +454,7 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Interaction_Click_right;
     private readonly InputAction m_Interaction_Click_Left;
     private readonly InputAction m_Interaction_Teleport;
+    private readonly InputAction m_Interaction_Teleport_Left;
     /// <summary>
     /// Provides access to input actions defined in input action map "Interaction".
     /// </summary>
@@ -484,6 +506,10 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Interaction/Teleport".
         /// </summary>
         public InputAction @Teleport => m_Wrapper.m_Interaction_Teleport;
+        /// <summary>
+        /// Provides access to the underlying input action "Interaction/Teleport_Left".
+        /// </summary>
+        public InputAction @Teleport_Left => m_Wrapper.m_Interaction_Teleport_Left;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -540,6 +566,9 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
             @Teleport.started += instance.OnTeleport;
             @Teleport.performed += instance.OnTeleport;
             @Teleport.canceled += instance.OnTeleport;
+            @Teleport_Left.started += instance.OnTeleport_Left;
+            @Teleport_Left.performed += instance.OnTeleport_Left;
+            @Teleport_Left.canceled += instance.OnTeleport_Left;
         }
 
         /// <summary>
@@ -581,6 +610,9 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
             @Teleport.started -= instance.OnTeleport;
             @Teleport.performed -= instance.OnTeleport;
             @Teleport.canceled -= instance.OnTeleport;
+            @Teleport_Left.started -= instance.OnTeleport_Left;
+            @Teleport_Left.performed -= instance.OnTeleport_Left;
+            @Teleport_Left.canceled -= instance.OnTeleport_Left;
         }
 
         /// <summary>
@@ -691,5 +723,12 @@ public partial class @CoreInteraction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnTeleport(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Teleport_Left" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTeleport_Left(InputAction.CallbackContext context);
     }
 }

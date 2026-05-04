@@ -169,6 +169,19 @@ public class LocomotionComponent : MonoBehaviour
                     }
                 }
             };
+            if (this.controllerType == ControllerTypes.Movement && movementType == MovementType.Teleport)
+            {
+                coreInteraction.Interaction.Teleport_Left.performed += (context =>
+                {
+                    ToggleTeleportVisuals(true);
+                });
+
+                coreInteraction.Interaction.Teleport_Left.canceled += (context =>
+                {
+                    ToggleTeleportVisuals(false);
+                    TeleportPlayer();
+                });
+            }
         }
     }
 
@@ -375,7 +388,7 @@ public class LocomotionComponent : MonoBehaviour
         teleportRenderer.positionCount = 2;
         teleportRenderer.SetPosition(0, p0);
         teleportRenderer.SetPosition(1, p0 + distance * direction);
-        teleportRenderer.endColor = teleportRenderer.startColor - new Color(0, 0, 0, 1);
+        teleportRenderer.endColor = teleportRenderer.startColor - new Color(0, 0, 0, 256);
 
     }
 
