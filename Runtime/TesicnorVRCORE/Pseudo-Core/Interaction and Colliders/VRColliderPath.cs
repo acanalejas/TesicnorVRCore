@@ -33,6 +33,9 @@ public class VRColliderPath : VRCollider
     [Header("Evento que se lanza al volver al principio del camino")]
     public UnityEvent OnPathBeginingReached;
 
+    [Header("Evento que se lanza al mover el objeto")]
+    public UnityEvent OnObjectMoved;
+
     [Header("Se deberia desactivar al llegar al final?")]
     public bool bShouldDisableOnEnd;
 
@@ -325,9 +328,9 @@ public class VRColliderPath : VRCollider
 
         if(_previousDistance < _currentDistance || _nextDistance < _currentDistance)
         {
-            if (_previousDistance < _nextDistance) { currentPoint = previousIndex; return previousIndex; }
+            if (_previousDistance < _nextDistance) { currentPoint = previousIndex; OnObjectMoved.Invoke(); return previousIndex; }
 
-            else if (_nextDistance < _previousDistance) { currentPoint = nextIndex; return nextIndex; }
+            else if (_nextDistance < _previousDistance) { currentPoint = nextIndex; OnObjectMoved.Invoke(); return nextIndex; }
         }
 
         return currentPoint;
