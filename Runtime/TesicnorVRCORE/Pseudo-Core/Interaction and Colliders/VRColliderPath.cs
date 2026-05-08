@@ -262,6 +262,7 @@ public class VRColliderPath : VRCollider
             handDistance = this.transform.parent.InverseTransformPoint(grippingHand.transform.position) - initialHandPosition;
             Debug.Log("Hand distance is : " + handDistance);
             this.transform.localPosition = pathPoints[pointToMove(handDistance)];
+            Debug.Log("Current point of the path is : " + currentPoint);
             if (isPathCompleted()) OnPathEndReached.Invoke();
             yield return frame;
         }
