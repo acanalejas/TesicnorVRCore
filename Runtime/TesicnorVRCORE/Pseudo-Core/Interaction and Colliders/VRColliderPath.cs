@@ -164,7 +164,7 @@ public class VRColliderPath : VRCollider
     private void DisableOnEnd()
     {
         this.Release();
-        this.GetComponent<Collider>().enabled = false;
+        this.SetGrabbable(false);
     }
 
     /// <summary>
@@ -411,7 +411,7 @@ public class VRColliderPath : VRCollider
             if (target.conditionCompleted) return true;
         }
 
-        return currentPoint == pathPoints.Count - 1;
+        return currentPoint == (pathPoints.Count - 1);
     }
 
     public bool IsPathBegining()
