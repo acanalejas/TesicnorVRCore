@@ -379,9 +379,15 @@ public class VRColliderPath : VRCollider
 
         if (_previousDistance < _currentDistance || _nextDistance < _currentDistance)
         {
-            if (_previousDistance < _nextDistance) { currentPoint = previousIndex; initialHandPosition = grippingHand.transform.position; return previousIndex; }
+            if (_previousDistance < _nextDistance) { currentPoint = previousIndex;
+                if (this.transform.parent)
+                    initialHandPosition = this.transform.parent.InverseTransformPoint(grippingHand.transform.position);
+                else initialHandPosition = grippingHand.transform.position; return previousIndex; }
 
-            else if (_nextDistance < _previousDistance) { currentPoint = nextIndex; initialHandPosition = grippingHand.transform.position; return nextIndex; }
+            else if (_nextDistance < _previousDistance) { currentPoint = nextIndex;
+                if (this.transform.parent)
+                    initialHandPosition = this.transform.parent.InverseTransformPoint(grippingHand.transform.position);
+                else initialHandPosition = grippingHand.transform.position; return nextIndex; }
         }
 
         return currentPoint;
