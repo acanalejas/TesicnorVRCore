@@ -39,7 +39,7 @@ public class VRColliderPath : VRCollider
     /// <summary>
     /// Numero de puntos en los que se divide el camino
     /// </summary>
-    [Header("Número de puntos en los que se divide el camino")]
+    [Header("NÃºmero de puntos en los que se divide el camino")]
     [SerializeField] protected int pointNumber = 30;
 
     /// <summary>
@@ -64,7 +64,7 @@ public class VRColliderPath : VRCollider
     /// <summary>
     /// La posicion inicial del camino
     /// </summary>
-    [Header("La posición inicial del camino")]
+    [Header("La posiciÃ³n inicial del camino")]
     public Vector3 initialPosition;
 
     /// <summary>
@@ -88,7 +88,7 @@ public class VRColliderPath : VRCollider
     /// </summary>
     [Header("========= FOR ROTATION =========")]
     [Space(10)]
-    [Header("Si empieza en la rotación inicial del objeto")]
+    [Header("Si empieza en la rotaciÃ³n inicial del objeto")]
     [SerializeField] bool initOnRotation;
 
     /// <summary>
@@ -110,15 +110,15 @@ public class VRColliderPath : VRCollider
     [SerializeField] private float Threshold = 20;
 
     /// <summary>
-    /// El pivote de la rotación
+    /// El pivote de la rotaciÃ³n
     /// </summary>
     [Header("El pivote de la rotacion")]
     [SerializeField] Transform rotationPivot;
 
     /// <summary>
-    /// Si la rotación va en positivo o en negativo
+    /// Si la rotaciÃ³n va en positivo o en negativo
     /// </summary>
-    [Header("Si la rotación va en positivo o en negativo")]
+    [Header("Si la rotaciÃ³n va en positivo o en negativo")]
     [SerializeField] bool isPositive = true;
 
     /// <summary>
@@ -127,7 +127,7 @@ public class VRColliderPath : VRCollider
     private Vector3 initialDistance;
 
     /// <summary>
-    /// Los ángulos girados 
+    /// Los Ã¡ngulos girados 
     /// </summary>
     private float currentAngles = 0;
 
@@ -187,7 +187,7 @@ public class VRColliderPath : VRCollider
         float pathMult = Vector3.Distance(_initialPosition, finalPosition) / pointNumber;
         Vector3 direction = (finalPosition - _initialPosition).normalized;
 
-        //Añado cada punto al camino para poder seguirlo
+        //AÃ±ado cada punto al camino para poder seguirlo
         pathPoints.Add(initialPosition);
         for(int i = 1; i < pointNumber - 1; i++)
         {
@@ -198,6 +198,7 @@ public class VRColliderPath : VRCollider
 
     void SetRotationPath()
     {
+        if (pathType != PathType.Rotation) return;
         //if (axis != Axis.z || axis != Axis.x) return;
 
         float xExtent = this.GetComponent<MeshRenderer>() ? this.GetComponent<MeshRenderer>().bounds.extents.x : this.GetComponent<BoxCollider>().bounds.extents.x;
@@ -301,7 +302,7 @@ public class VRColliderPath : VRCollider
     }
 
     /// <summary>
-    /// Detecta el punto al que moverse, como no se puede mover a cualquier punto del camino, se mira que esté
+    /// Detecta el punto al que moverse, como no se puede mover a cualquier punto del camino, se mira que estÃ©
     /// entre el siguiente y el anterior para evitar grandes saltos
     /// </summary>
     /// <returns></returns>
