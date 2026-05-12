@@ -367,10 +367,16 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
         float minDistance = 0;
         GameObject selectedObject = null;
 
+        List<GameObject> toRemove = new List<GameObject>();
         foreach (GameObject Object in overlappingObjects)
         {
             if (!Object) continue;
-
+            
+            if (Object.activeSelf == false || Object.GetComponent<Collider>().enabled == false)
+            {
+                toRemove.Add(Object);
+                continue;
+            }
             Vector3 handCenter = transform.TransformVector(GetComponent<SphereCollider>().center);
             Vector3 otherCenter = transform.TransformVector(Object.GetComponent<Collider>().bounds.center);
 
@@ -381,6 +387,11 @@ public class GrippingHand : MonoBehaviour, VRHandInterface
                 minDistance = distance;
                 selectedObject = Object;
             }
+        }
+
+        foreach (var r in toRemove)
+        {
+            overlappingObjects.Remove(r);
         }
         return selectedObject;
     }
