@@ -20,7 +20,7 @@ public class ConfigManager : MonoBehaviour
 }
 
 /// <summary>
-/// Atributo que se usa para exclusivamente bools static, que nos añade los eventos necesarios de configuracion a la clase deseada
+/// Atributo que se usa para exclusivamente bools static, que nos aÃ±ade los eventos necesarios de configuracion a la clase deseada
 /// </summary>
 public class EventHandlerAttribute : Attribute
 {

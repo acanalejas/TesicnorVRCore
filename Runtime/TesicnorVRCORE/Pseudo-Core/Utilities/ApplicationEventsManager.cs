@@ -5,20 +5,20 @@ using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Clase usada para tener eventos en cada punto importante de la ejecución de la aplicación
+/// Clase usada para tener eventos en cada punto importante de la ejecuciï¿½n de la aplicaciï¿½n
 /// </summary>
 
 public class ApplicationEventsManager : MonoBehaviour
 {
     #region PARAMETERS
 
-    [Header("Evento usado cuando se cierra la aplicación")]
+    [Header("Evento usado cuando se cierra la aplicaciï¿½n")]
     public UnityEvent onApplicationQuit;
 
-    [Header("Evento usado cuando se pausa o reanuda la aplicación")]
+    [Header("Evento usado cuando se pausa o reanuda la aplicaciï¿½n")]
     public UnityEvent<bool> onApplicationPause;
 
-    [Header("Evento usado cuando se vuelve o se deja en segundo plano a la aplicación")]
+    [Header("Evento usado cuando se vuelve o se deja en segundo plano a la aplicaciï¿½n")]
     public UnityEvent<bool> onApplicationFocus;
 
     [Header("Evento usado cuando se cambia la escena activa")]
@@ -40,12 +40,6 @@ public class ApplicationEventsManager : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
         CheckSingleton();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space)) SceneManager.LoadScene("Menu");
-        if (Input.GetKeyDown(KeyCode.I)) SceneManager.LoadScene("Avanti");
     }
 
     private void OnApplicationQuit()

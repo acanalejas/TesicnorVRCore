@@ -6,6 +6,10 @@ using System.Collections;
 public class StreamingSender : MonoBehaviour
 {
     #region PARAMETERS
+    public static StreamingSender Instance
+    {
+        get { return instance; }
+    }
     private static StreamingSender instance;
     public RenderTexture captured;
     public string path;
@@ -24,13 +28,25 @@ public class StreamingSender : MonoBehaviour
         if (instance == null) instance = this;
         else Destroy(this);
         HttpClient_Custom.IntializeClient();
+        
+        
     }
     private void Start()
     {
         //BTSender = this.gameObject.AddComponent<StreamingBTSender>();
-
+        CheckCamera();
         SetTextureForCamera();
         StartCoroutine("update");
+    }
+
+    private void CheckCamera()
+    {
+        if (this.playerCamera) return;
+
+        TesicnorPlayer player = TesicnorPlayer.Instance;
+
+        Camera _camera = player.Camera_GO.GetComponent<Camera>();
+        if (player.Camera_GO && _camera) this.playerCamera = _camera;
     }
 
     private void SetTextureForCamera()

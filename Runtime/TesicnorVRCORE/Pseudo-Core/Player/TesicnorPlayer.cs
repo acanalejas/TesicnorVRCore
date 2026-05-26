@@ -63,7 +63,7 @@ public class TesicnorPlayer : MonoBehaviour
     private void Awake()
     {
         CheckSingleton();
-
+        
         SetupInput();
 
         if (!bShouldSearch) return;

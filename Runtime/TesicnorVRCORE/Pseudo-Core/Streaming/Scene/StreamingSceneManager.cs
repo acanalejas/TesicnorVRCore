@@ -141,6 +141,8 @@ public class StreamingSceneManager : MonoBehaviour
 
         if(ShouldChangeSceneOnEnter)
             GoToNextScene();
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     #endregion
