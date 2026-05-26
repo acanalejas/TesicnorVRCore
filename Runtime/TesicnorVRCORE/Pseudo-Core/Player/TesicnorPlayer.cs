@@ -60,6 +60,7 @@ public class TesicnorPlayer : MonoBehaviour
             }
         };
     }
+
     private void Awake()
     {
         CheckSingleton();
