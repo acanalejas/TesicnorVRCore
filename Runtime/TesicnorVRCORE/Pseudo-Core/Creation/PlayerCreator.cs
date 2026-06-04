@@ -46,13 +46,13 @@ public static class PlayerCreator
         cameraOffset.transform.localScale = Vector3.one;
 
         GameObject rightController = new GameObject("Right Controller", typeof(TrackedPoseDriver), typeof(UnityEngine.XR.Interaction.Toolkit.XRController), typeof(HandInteraction), typeof(GrippingHand), typeof(HandPoser));
-        rightController.transform.parent = playerControllers.transform;
+        rightController.transform.parent = cameraOffset.transform;
         rightController.transform.localPosition = Vector3.zero;
         rightController.transform.localRotation = Quaternion.Euler(Vector3.zero);
         rightController.transform.localScale = Vector3.one;
 
         GameObject leftController = new GameObject("Left Controller", typeof(TrackedPoseDriver), typeof(UnityEngine.XR.Interaction.Toolkit.XRController), typeof(HandInteraction), typeof(GrippingHand), typeof(HandPoser));
-        leftController.transform.parent = playerControllers.transform;
+        leftController.transform.parent = cameraOffset.transform;
         leftController.transform.localPosition = Vector3.zero;
         leftController.transform.localRotation = Quaternion.Euler(Vector3.zero);
         leftController.transform.localScale = Vector3.one;
@@ -242,13 +242,13 @@ public static class PlayerCreator
         cameraOffset.transform.localScale = Vector3.one;
 
         GameObject rightController = new GameObject("Right Controller", typeof(TrackedPoseDriver), typeof(UnityEngine.XR.Interaction.Toolkit.XRController), typeof(HandInteraction), typeof(GrippingHand));
-        rightController.transform.parent = playerControllers.transform;
+        rightController.transform.parent = cameraOffset.transform;
         rightController.transform.localPosition = Vector3.zero;
         rightController.transform.localRotation = Quaternion.Euler(Vector3.zero);
         rightController.transform.localScale = Vector3.one;
 
         GameObject leftController = new GameObject("Left Controller", typeof(TrackedPoseDriver), typeof(UnityEngine.XR.Interaction.Toolkit.XRController), typeof(HandInteraction), typeof(GrippingHand));
-        leftController.transform.parent = playerControllers.transform;
+        leftController.transform.parent = cameraOffset.transform;
         leftController.transform.localPosition = Vector3.zero;
         leftController.transform.localRotation = Quaternion.Euler(Vector3.zero);
         leftController.transform.localScale = Vector3.one;

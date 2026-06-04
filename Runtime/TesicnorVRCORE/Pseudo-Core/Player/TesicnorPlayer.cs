@@ -49,8 +49,6 @@ public class TesicnorPlayer : MonoBehaviour
     private void SetupInput()
     {
         coreInteraction = new CoreInteraction();
-        coreInteraction.Enable();
-
         coreInteraction.Interaction.Pause.started += (UnityEngine.InputSystem.InputAction.CallbackContext context) => {
             if (bUsePause)
             {
@@ -59,10 +57,12 @@ public class TesicnorPlayer : MonoBehaviour
                 TogglePause(!PauseScreen.activeSelf);
             }
         };
+        coreInteraction.Enable();
     }
 
     private void Awake()
     {
+        if (!Camera_GO) Camera_GO = PauseParent;
         CheckSingleton();
         
         SetupInput();

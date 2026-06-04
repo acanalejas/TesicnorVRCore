@@ -1,5 +1,4 @@
 {
-    "version": 1,
     "name": "CoreInteraction",
     "maps": [
         {
@@ -155,6 +154,61 @@
                     "name": "",
                     "id": "3a378f69-15f6-48b6-af30-251f2a5b9b9f",
                     "path": "<XRController>{LeftHand}/{MenuButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "996ec17c-1d3b-4e75-91f5-f21d3deaca42",
+                    "path": "<PICO4TouchController>{LeftHand}/menu",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c530655d-c754-4550-aa64-8589020ade14",
+                    "path": "<PICO4UltraController>{LeftHand}/menu",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0997b2e1-2625-4fc6-af9f-0156a9254b8b",
+                    "path": "<PICO4UltraController>{LeftHand}/{MenuButton}",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a64d868e-9346-4750-8b85-738f17ac6ad1",
+                    "path": "<PICO4UltraController>/system",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04ef99df-e03a-4678-a1a7-0bb8da48b88f",
+                    "path": "<PICO4UltraController>{LeftHand}/primaryButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

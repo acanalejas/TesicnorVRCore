@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -137,7 +138,9 @@ public class StreamingSceneManager : MonoBehaviour
         url = sWhitespace.Replace(url, "");
         Debug.Log(url);
         StreamingCSharp.HttpClient_Custom.url = url;
-        StreamingCSharp.HttpClient_Custom.IntializeClient();
+        //StreamingCSharp.HttpClient_Custom.IntializeClient();
+        StreamingCSharp.UDPClient.ip = ip;
+        StreamingCSharp.UDPClient.InitializeClient();
 
         if(ShouldChangeSceneOnEnter)
             GoToNextScene();

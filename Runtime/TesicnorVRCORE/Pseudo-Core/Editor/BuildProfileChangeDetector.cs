@@ -23,6 +23,7 @@ public static class BuildProfileChangeDetector
             lastProfile = s;
             currentPlatform = type;
         };
+        CheckBuildProfile();
     }
 
     static void CheckBuildProfile()

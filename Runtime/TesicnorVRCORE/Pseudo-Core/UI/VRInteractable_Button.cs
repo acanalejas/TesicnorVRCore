@@ -168,13 +168,13 @@ public class VRInteractable_Button : VR_Interactable
             this.transform.parent = effectObject.transform;
         else { effectObject.transform.SetParent(this.transform); effectObject.transform.SetSiblingIndex(0); }
         
-        objectRect.pivot = Vector2.zero;
+        //objectRect.pivot = Vector2.zero;
+        objectRect.pivot = new Vector2(0.5f, 0.5f);
+        objectRect.anchorMin = Vector2.zero;
+        objectRect.anchorMax = Vector3.one;
         objectRect.offsetMax = Vector2.zero;
         objectRect.offsetMin = Vector2.zero;
-        objectRect.anchorMin = Vector2.zero;
-        objectRect.anchorMax = Vector3.zero;
-        objectRect.sizeDelta = selfRect.sizeDelta;
-        objectRect.rect.Set(0,0, selfRect.sizeDelta.x, selfRect.sizeDelta.y);
+        objectRect.sizeDelta = Vector2.zero;
 
         if (this.transform.GetSiblingIndex() > 0 && IsBehind)
             effectObject.transform.SetSiblingIndex(this.transform.GetSiblingIndex() - 1);
@@ -198,7 +198,7 @@ public class VRInteractable_Button : VR_Interactable
             effectImage.fillAmount = timeHovered / fTimeToClickByHover;
         }
         
-        if(bUsesDefaultHoverEffect)effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
+        //if(bUsesDefaultHoverEffect)effectImage.rectTransform.sizeDelta = GetComponent<Image>().rectTransform.sizeDelta;
         //if (bUsesDefaultHoverEffect) effectImage.transform.localScale = this.transform.localScale * hoverScale;
     }
 

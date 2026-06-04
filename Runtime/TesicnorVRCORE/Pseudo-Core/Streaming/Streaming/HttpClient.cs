@@ -17,6 +17,7 @@ namespace StreamingCSharp
 
         public static void IntializeClient()
         {
+            if(client != null) client.Dispose();
             client = new HttpClient();
             client.Timeout = new TimeSpan(0, 1, 0);
             client.MaxResponseContentBufferSize = 15000;

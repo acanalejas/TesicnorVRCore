@@ -1,7 +1,12 @@
+using System;
 using UnityEngine;
 using StreamingCSharp;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
+using System.Net.Sockets;
+using System.Threading;
+using UnityEngine.Rendering;
 
 public class StreamingSender : MonoBehaviour
 {
@@ -19,7 +24,17 @@ public class StreamingSender : MonoBehaviour
     Texture2D parse;
     //private StreamingBTSender BTSender;
 
-    public bool isStreaming = false;
+    public bool isStreaming
+    {
+        get { return streaming; }
+    }
+
+    private static bool streaming = false;
+
+    //Objetos necesarios para la funcionalidad multihilo
+    private Thread uploadThread;
+    private Queue<byte[]> rawFrameQueue = new Queue<byte[]>();
+    private readonly object queueLock = new object();
     #endregion
 
     #region FUNCTIONS
@@ -27,16 +42,41 @@ public class StreamingSender : MonoBehaviour
     {
         if (instance == null) instance = this;
         else Destroy(this);
-        HttpClient_Custom.IntializeClient();
-        
-        
+        //HttpClient_Custom.IntializeClient();
+        //UDPClient.InitializeClient();
     }
     private void Start()
     {
         //BTSender = this.gameObject.AddComponent<StreamingBTSender>();
+        if (!streaming) return;
+        UDPClient.InitializeClient();
         CheckCamera();
         SetTextureForCamera();
+        PrepareThread();
         StartCoroutine("update");
+    }
+
+    public void InitializeStreaming()
+    {
+        streaming = true;
+        UDPClient.InitializeClient();
+        CheckCamera();
+        SetTextureForCamera();
+        PrepareThread();
+        StartCoroutine("update");
+    }
+
+    public void EndStreaming()
+    {
+        UDPClient.CloseSocket();
+        StopCoroutine(nameof(update));
+    }
+
+    void PrepareThread()
+    {
+        uploadThread = new Thread(new ThreadStart(SendData));
+        uploadThread.IsBackground = true;
+        uploadThread.Start();
     }
 
     private void CheckCamera()
@@ -65,50 +105,114 @@ public class StreamingSender : MonoBehaviour
 
         capturadora.targetTexture = captured;
         //capturadora.targetTexture = captured;
-        parse = new Texture2D(640, 480, TextureFormat.RGB565, false);
+        parse = new Texture2D(640, 360, TextureFormat.RGB24, false);
     }
 
 
-    WaitForSeconds frame = new WaitForSeconds(1 / 50);
+    WaitForSeconds frame = new WaitForSeconds(1 / 30);
     private IEnumerator update()
     {
         while (true)
         {
-            isStreaming = HttpClient_Custom.isStreaming;
-            this.WriteTXTFile();
             yield return frame;
+            this.WriteTXTFile();
         }
     }
 
     
-    Rect rect = new Rect(0, 0, 640, 480);
+    Rect rect = new Rect(0, 0, 640, 360);
 
-    private async void GetTextureTraduction()
+    private void GetTextureTraduction()
     {
+        //RenderTexture.active = captured;
+        //AsyncGPUReadback.Request(captured, 0, TextureFormat.RGB565, OnCompletedReadback);
         try
         {
             //Capture the screen
+            if(!parse) parse = new Texture2D(640, 360, TextureFormat.RGB24, false);
             RenderTexture.active = this.capturadora.targetTexture;
             parse.ReadPixels(rect, 0, 0, false);
-
+            parse.Apply(false);
+        
             //Get the jpg byte array
-            byte[] _data = parse.EncodeToJPG(40);
-
-
+            //byte[] _data = parse.EncodeToJPG(50);
+            byte[] _data = parse.EncodeToJPG(50);
+        
+            lock (queueLock)
+            {
+                if (rawFrameQueue.Count < 2)
+                {
+                    rawFrameQueue.Enqueue(_data);
+                }
+            }
+        
             //Send it to the receiver
-            await HttpClient_Custom.SendData(_data);
+            //await UDPClient.SendBytes(_data);
+            //await HttpClient_Custom.SendData(_data);
+            
             alreadySent = true;
-
-            //string str_data = "";
-            //foreach(byte number in _data)
-            //{
-            //    str_data += number.ToString();
-            //}
-            //BTSender.SendData(str_data);
         }
-        catch
+        catch(Exception e)
         {
-            Debug.LogError("No se ha podido enviar la imagen");
+            Debug.LogError("No se ha podido enviar la imagen debido a : " + e.Message);
+        }
+    }
+
+    /*void OnCompletedReadback(AsyncGPUReadbackRequest request)
+    {
+        if (request.hasError)
+        {
+            Debug.LogError("Ha habido un error con la lectura de GPU");
+            return;
+        }
+        if(!parse) parse = new Texture2D(1280, 720, TextureFormat.RGB565, false);
+
+        var nativeBytes = request.GetData<byte>();
+        byte[] rawBytes = nativeBytes.ToArray();
+        
+        parse.LoadRawTextureData(rawBytes);
+        parse.Apply(false);
+        byte[] jpg = parse.EncodeToJPG();
+
+        lock (queueLock)
+        {
+            if (rawFrameQueue.Count < 2)
+            {
+                rawFrameQueue.Enqueue(jpg);
+            }
+        }
+
+        alreadySent = true;
+    }*/
+
+    private void SendData()
+    {
+        while (true)
+        {
+            byte[] frameToSend = null;
+            lock (queueLock)
+            {
+                if (rawFrameQueue.Count > 0)
+                {
+                    frameToSend = rawFrameQueue.Dequeue();
+                }
+            }
+
+            if (frameToSend != null)
+            {
+                try
+                {
+                    UDPClient.SendBytes(frameToSend);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("Error en el hilo de red " + e.Message);
+                }
+            }
+            else
+            {
+                Thread.Sleep(5);
+            }
         }
     }
 
