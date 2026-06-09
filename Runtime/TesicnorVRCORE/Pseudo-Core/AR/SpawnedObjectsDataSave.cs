@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -38,7 +39,7 @@ public class SpawnedObjectsDataSave : MonoBehaviour
 
     private static string CreatedObjects = "";
 
-    private char separator = '¿';
+    private char separator = 'ï¿½';
     #endregion
 
     #region METHODS

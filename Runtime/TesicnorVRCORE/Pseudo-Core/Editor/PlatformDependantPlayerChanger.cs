@@ -86,7 +86,7 @@ public static class PlatformDependantPlayerChanger
 
     static void SaveChangesOnScene()
     {
-        EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
+        EditorSceneManager.SaveOpenScenes();
     }
 }
 #endif

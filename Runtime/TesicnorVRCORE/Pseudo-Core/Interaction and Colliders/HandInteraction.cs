@@ -314,6 +314,7 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
 
         ARPreviewMF.mesh = AR_PointRay.spawnObject.previewMesh;
         ARPreviewObject.transform.position = GetARRaycastPosition();
+        this.lineRenderer.SetPosition(1, ARPreviewObject.transform.position);
         ARPreviewObject.transform.localScale = AR_PointRay.spawnObject.prefab.transform.localScale;
         Vector3 _forward = (this.transform.position - ARPreviewObject.transform.position).normalized;
         _forward.y = 0;
@@ -348,6 +349,12 @@ public class HandInteraction : MonoBehaviour, VRInteractionInterface
             {
                 return visual.lineLength * this.interactionOrigin.transform.forward + this.interactionOrigin.transform.position;
             }
+        }
+
+        RaycastHit _hit;
+        if (Physics.Raycast(this.interactionOrigin.transform.position, interactionOrigin.forward, out _hit))
+        {
+            return _hit.point;
         }
 
         return this.interactionOrigin.position;
